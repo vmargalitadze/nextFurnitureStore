@@ -1,0 +1,161 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+.s-py-100-50 {
+    padding-top: 100px;
+    padding-bottom: 50px;
+}
+
+.pacifico-regular {
+    font-family: "Pacifico", cursive;
+    font-weight: 400;
+    font-style: normal;
+  }
+.text-primary {
+    --tw-text-opacity: 1;
+    color: rgb(187 151 109 / var(--tw-text-opacity));
+}
+.container {
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    width: 100%;
+    max-width: 1720px; /* Adjust based on your design needs */
+  }
+  
+
+
+
+
+
+.icon-buttons {
+    position: absolute;
+    bottom: 20px; 
+    left: 50%;
+    transform: translate(-50%, 20px);
+    display: flex;
+    gap: 8px;
+    opacity: 0;
+    visibility: hidden;
+    transition: transform .3s ease, opacity .5s ease, visibility .5s ease;
+  }
+  .product-card:hover .icon-buttons {
+    transform: translate(-50%, 0);
+    opacity: 1;
+    visibility: visible;
+  }
+  
+ 
+
+  element.style {
+  }
+
+
+  @media (min-width: 768px) {
+    .btn-all {
+        padding: 17px 25px;
+        font-size: 1.125rem;
+        line-height: 1.75rem;
+    }
+}
+  .btn-all {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+      overflow: hidden;
+      border-width: 1px;
+      --tw-border-opacity: 1;
+      border-color: rgb(23 36 48 / var(--tw-border-opacity));
+      padding-left: 1.25rem;
+      padding-right: 1.25rem;
+      padding-top: 14px;
+      padding-bottom: 14px;
+      text-align: center;
+      font-size: 1rem;
+      line-height: 1.5rem;
+      font-weight: 500;
+      line-height: 1;
+      --tw-text-opacity: 1;
+      color: rgb(23 36 48 / var(--tw-text-opacity));
+      transition-property: all;
+      transition-timing-function: cubic-bezier(.4,0,.2,1);
+      transition-duration: .3s;
+      position: relative;
+      overflow: hidden;
+  }
+
+  .btn-all span {
+    position: relative;
+    z-index: 10;
+    transition: color .3s ease;
+  }
+ 
+  .btn-all span, .btn-all:before {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+    transition-duration: .3s;
+    transition-timing-function: cubic-bezier(.75,0,.125,1);
+}
+@media (min-width: 768px) {
+    .btn-all:before {
+        content: var(--tw-content);
+        font-size: 1.125rem;
+        line-height: 1.75rem;
+    }
+}
+.btn-all:before {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #172430;          /* ან border-color–ის ფერი */
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateX(-100%); /* გადატანილი მარცხნივ */
+  transition: transform .3s cubic-bezier(.75,0,.125,1);
+}
+.btn-all:hover:before {
+  transform: translateX(0);
+}
+.btn-all:hover span {
+
+ color: white;
+}
+
+  .tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 6px;
+    padding: 4px 8px;
+    background: #fff;
+    color: #333;
+    font-size: 12px;
+    border-radius: 4px;
+    white-space: nowrap;
+    display: none;
+    z-index: 20;
+  }
+  
+
+  .tooltip-arrow {
+    position: absolute;
+    width: 0.75rem;          
+    height: 0.75rem;          
+    background-color: #fff;  
+    bottom: -0.25rem;         
+    left: 50%;              
+    transform: translateX(-50%) rotate(45deg); 
+  }
+
+  .icon-button:hover .tooltip {
+    display: block;
+  }
+
