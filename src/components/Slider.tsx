@@ -34,13 +34,13 @@ const slides = [
 const Slider = () => {
   const [current, setCurrent] = useState(0);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-    }, 3000);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+  //   }, 3000);
 
-    return () => clearInterval(interval);
-  }, []);
+  //   return () => clearInterval(interval);
+  // }, []);
   return (
     <div className="h-[calc(100vh-80px)] overflow-hidden">
       <div
@@ -49,15 +49,15 @@ const Slider = () => {
       >
         {slides.map((slide) => (
           <div
-            className={`${slide.bg} w-screen h-full flex flex-col gap-16 xl:flex-row`}
+            className={`${slide.bg} w-screen h-full flex flex-col xl:flex-row`}
             key={slide.id}
           >
-            {/* TEXT CONTAINER */}
+ 
             <div className="h-1/2 xl:w-1/2 xl:h-full flex flex-col items-center justify-center gap-8 2xl:gap-12 text-center">
               <h2 className="text-xl lg:text-3xl 2xl:text-5xl">
                 {slide.description}
               </h2>
-              <h1 className="text-5xl lg:text-6xl 2xl:text-8xl font-semibold">
+              <h1 className="text-2xl lg:text-4xl 2xl:text-6xl font-semibold">
                 {slide.title}
               </h1>
               <Link href={slide.url}>
@@ -79,10 +79,10 @@ const Slider = () => {
           </div>
         ))}
       </div>
-      <div className="absolute m-auto left-1/2 bottom-8 flex gap-4">
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center justify-center mx-auto gap-4">
         {slides.map((slide, index) => (
           <div
-            className={`w-3 h-3  rounded-full ring-1 ring-gray-600 cursor-pointer flex items-center justify-center ${
+            className={`w-3 h-3   rounded-full ring-1 ring-gray-600 cursor-pointer flex items-center justify-center ${
               current === index ? "scale-150" : ""
             }`}
             key={slide.id}
