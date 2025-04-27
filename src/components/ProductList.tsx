@@ -9,10 +9,10 @@ function ProductList() {
         <div className="container mx-auto">
           <div className="flex justify-center items-center mb-[40px] md:mb-12 ">
             <div>
-              <span className="text-primary font-secondary font-normal text-6xl sm:text-7xl block -ml-5 -mb-3 sm:-mb-[30px] leading-normal sm:leading-normal">
+              <span className="text-primary font-secondary font-normal text-5xl sm:text-7xl block -ml-5 -mb-3 sm:-mb-[30px] leading-normal sm:leading-normal">
                 ახალი
               </span>
-              <h6 className="font-normal leading-none tracking-[.5em] lg:mt-2 sm:tracking-[1em] uppercase">
+              <h6 className="font-normal leading-none tracking-[.5em] lg:mt-4 sm:tracking-[1em] uppercase">
                 პროდუქტები
               </h6>
             </div>
@@ -20,7 +20,9 @@ function ProductList() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-8 ">
             <div className="relative overflow-hidden group">
               <Link href={"#"}>
-                <Image width={100} height={100}
+                <Image
+                  width={100}
+                  height={100}
                   className="w-full transform duration-300 group-hover:scale-110"
                   alt="product-card"
                   src="/chair.jpg"
@@ -75,7 +77,9 @@ function ProductList() {
 
             <div className="relative overflow-hidden group">
               <Link href={"#"}>
-                <Image width={100} height={100}
+                <Image
+                  width={100}
+                  height={100}
                   className="w-full transform duration-300 group-hover:scale-110"
                   alt="product-card"
                   src="/chair.jpg"
@@ -130,7 +134,9 @@ function ProductList() {
 
             <div className="relative overflow-hidden group">
               <Link href={"#"}>
-                <Image width={100} height={100}
+                <Image
+                  width={100}
+                  height={100}
                   className="w-full transform duration-300 group-hover:scale-110"
                   alt="product-card"
                   src="/chair.jpg"
@@ -182,11 +188,12 @@ function ProductList() {
                 </Link>
               </div>
             </div>
-
 
             <div className="relative overflow-hidden group">
               <Link href={"#"}>
-                <Image width={100} height={100}
+                <Image
+                  width={100}
+                  height={100}
                   className="w-full transform duration-300 group-hover:scale-110"
                   alt="product-card"
                   src="/chair.jpg"
@@ -238,12 +245,15 @@ function ProductList() {
                 </Link>
               </div>
             </div>
-
-        
           </div>
 
           <div className="text-center mt-7 md:mt-12">
-            <Link className="btn-all btn-outline"  href="/shop-v1" data-discover="true"><span>ნახე ყველა პროდუქტი</span>
+            <Link
+              className="btn-all btn-outline"
+              href="/shop-v1"
+              data-discover="true"
+            >
+              <span>ნახე ყველა პროდუქტი</span>
             </Link>
           </div>
         </div>
