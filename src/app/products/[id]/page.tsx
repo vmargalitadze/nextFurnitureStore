@@ -1,8 +1,12 @@
 import React from 'react'
 
-function page() {
+const page = async(props: {
+  params:Promise< {id:string,locale: string} >
+}) => {
+  const { id, locale } = await props.params;
+  
   return (
-    <div>page</div>
+    <div> {id} </div>
   )
 }
 

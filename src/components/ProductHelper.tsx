@@ -4,7 +4,7 @@ import Image from "next/image";
 
 interface ProductItem {
   id: string;
-  image: string;
+  image: string[];
   price: number;
   title: string;
 }
@@ -24,13 +24,13 @@ function ProductHelper({ items }: ProductListProps  ) {
       {items.map((item) => (
         <div key={item.id}>
          <div className="relative overflow-hidden group">
-              <Link href={"#"}>
+              <Link href={`/products/${item.id}`} >
                 <Image
                   width={100}
                   height={100}
                   className="w-full transform duration-300 group-hover:scale-110"
                   alt="product-card"
-                  src="/chair.jpg"
+                  src={item.image[0]}
                 />
               </Link>
 
@@ -54,7 +54,7 @@ function ProductHelper({ items }: ProductListProps  ) {
                   </span>
                 </button>
                 <Link
-                  href="/#"
+                  href={`/products/${item.id}`}
                   className="icon-button relative w-9 lg:w-12 h-9 p-2 lg:h-12 bg-white bg-title bg-opacity-80 flex items-center justify-center rounded-full"
                 >
                   <svg
