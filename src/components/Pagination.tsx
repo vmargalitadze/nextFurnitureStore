@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FC, useCallback } from "react";
+import React, { FC, Suspense, useCallback } from "react";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 
 
@@ -36,7 +36,7 @@ const PaginationArrow: FC<PaginationArrowProps> = React.memo(
 // ✅ Fix ESLint warning
 PaginationArrow.displayName = "PaginationArrow";
 
-const PaginationComponent: FC<PaginationProps> = ({ pageCount }) => {
+const PaginationHelper: FC<PaginationProps> = ({ pageCount }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -80,4 +80,13 @@ const PaginationComponent: FC<PaginationProps> = ({ pageCount }) => {
   );
 };
 
-export default React.memo(PaginationComponent);
+
+export default function PaginationComponent() {
+  
+  
+    return (
+      <Suspense fallback={<div className="flex justify-center items-center h-screen">Loading...</div>}>
+        <PaginationHelper pageCount={3}/>
+      </Suspense>
+    );
+  }

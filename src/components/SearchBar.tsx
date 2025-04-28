@@ -3,10 +3,10 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 
-function SearchBar() {
+function SearchHelper() {
   const searchParams = useSearchParams();
   const { replace, push } = useRouter();
   const pathname = usePathname();
@@ -47,4 +47,14 @@ function SearchBar() {
   )
 }
 
-export default SearchBar
+
+
+export default function SearchBar() {
+  
+  
+    return (
+      <Suspense fallback={<div className="flex justify-center items-center h-screen">Loading...</div>}>
+        <SearchHelper/>
+      </Suspense>
+    );
+  }
