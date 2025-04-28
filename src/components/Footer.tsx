@@ -18,7 +18,7 @@ const Footer = () => {
           </p>
           <span className="font-semibold">hello@lama.dev</span>
           <span className="font-semibold">+1 234 567 890</span>
-          <div className="flex gap-6">
+          <div className="flex mx-auto gap-6">
             <a href="" target="_blank" className="text-black text-2xl ">
               <FaFacebook className="w-8 h-8 " />
             </a>
