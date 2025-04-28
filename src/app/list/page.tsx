@@ -2,13 +2,13 @@
 
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import React from "react";
+import React, { Suspense } from "react";
 import Products from "@/lib/product"; 
 import Link from "next/link";
 import ProductHelper from "@/components/ProductHelper";
 
 
-function Page() {
+function PageContentWrapper() {
   const searchParams = useSearchParams();
   const category = searchParams.get("cat");
 
@@ -61,4 +61,12 @@ function Page() {
   );
 }
 
-export default Page;
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div className="flex justify-center items-center h-screen">Loading...</div>}>
+      <PageContentWrapper />
+    </Suspense>
+  );
+}
+
