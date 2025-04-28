@@ -1,31 +1,43 @@
 "use client";
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React, { useState, useEffect, Suspense, useMemo } from 'react';
 import Image from 'next/image';
+import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import Products from '@/lib/product';
 import ProductHelper from '@/components/ProductHelper';
 import Filter from '@/components/Filter';
+import Pagination from '@/components/Pagination';
 
-function AllPage() {
+const PRODUCT_PER_PAGE = 3;
+
+function PageContentWrapper({ currentPage }: { currentPage: number }) {
+    const searchParams = useSearchParams();
     const [open, setOpen] = useState(false);
     const [selectedType, setSelectedType] = useState<string>("");
     const [selectedPrice, setSelectedPrice] = useState<{ min: number | null; max: number | null }>({ min: null, max: null });
     const [selectedBrand, setSelectedBrand] = useState<string>("");
 
+    const query = searchParams.get("query") || "";
 
-
-    
     const filteredProducts = Products.filter((product) => {
-        const byBrand = !selectedBrand || product.Brand === selectedBrand;  
+        const byBrand = !selectedBrand || product.Brand === selectedBrand;
         const byType = !selectedType || product.type === selectedType;
         const byMinPrice = selectedPrice.min === null || product.price >= selectedPrice.min;
         const byMaxPrice = selectedPrice.max === null || product.price <= selectedPrice.max;
-    
-        return byBrand && byType && byMinPrice && byMaxPrice;
-    });
+        const byQuery = !query || product.title.toLowerCase().includes(query.toLowerCase());
+        
+        return byBrand && byType && byMinPrice && byMaxPrice && byQuery;
+      });
+
+    const pageCount = Math.ceil(filteredProducts.length / PRODUCT_PER_PAGE);
+    const currentPageProducts = filteredProducts.slice(
+        (currentPage - 1) * PRODUCT_PER_PAGE,
+        currentPage * PRODUCT_PER_PAGE
+    );
 
     return (
         <>
+            
             <div className="relative min-h-[400px] flex items-center justify-center bg-overlay p-14 sm:p-16 before:bg-title before:bg-opacity-70 overflow-hidden">
                 <Image
                     src="/bedroom.jpg"
@@ -50,6 +62,8 @@ function AllPage() {
                     </ul>
                 </div>
             </div>
+
+            {/* Content */}
             <div className="container mt-[50px]">
                 <Filter
                     selectedBrand={selectedBrand}
@@ -61,10 +75,25 @@ function AllPage() {
                     open={open}
                     setOpen={setOpen}
                 />
-                <ProductHelper items={filteredProducts} />
+                <ProductHelper items={currentPageProducts} />
+
+            </div>
+            <div className="mt-9">
+
+
+                <Pagination pageCount={pageCount} />
             </div>
         </>
     );
 }
-
-export default AllPage;
+export default function Page() {
+    const searchParams = useSearchParams();
+    const pageParam = searchParams.get("page") || "1";
+    const currentPage = Number(pageParam);
+  
+    return (
+      <Suspense fallback={<div className="flex justify-center items-center h-screen">Loading...</div>}>
+        <PageContentWrapper key={currentPage} currentPage={currentPage} />
+      </Suspense>
+    );
+  }

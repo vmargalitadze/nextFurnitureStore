@@ -57,7 +57,7 @@ function Categories() {
             className="w-full"
           />
           <div className="absolute bottom-7 left-0 px-5 transform w-full flex justify-center">
-            <div className="min-w-[250px] bg-white bg-opacity-80 bg-title bg-opacity-80 p-5 z-10">
+            <div className="min-w-[250px] bg-white bg-title bg-opacity-80 p-5 z-10">
               <h4 className="leading-[1.5] font-semibold"> {item.label} </h4>
               <p className="leading-none mt-[10px]">222</p>
             </div>

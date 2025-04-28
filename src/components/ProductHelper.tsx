@@ -6,7 +6,7 @@ interface ProductItem {
   id: string;
   image: string;
   price: number;
-  label: string;
+  title: string;
 }
 
 interface ProductListProps {
@@ -34,13 +34,13 @@ function ProductHelper({ items }: ProductListProps  ) {
                 />
               </Link>
 
-              <div className="flex flex-col items-start gap-3 md:gap-4 absolute z-20 w-11/12 bottom-3 xl:bottom-5 left-1/2 transform -translate-x-1/2 p-4 xl:p-5 bg-white bg-title bg-opacity-[85%] bg-opacity-[85%] group-hover:-translate-y-1/2 duration-500 group-hover:opacity-0 group-hover:invisible">
+              <div className="flex flex-col items-start gap-3 md:gap-4 absolute z-20 w-11/12 bottom-3 xl:bottom-5 left-1/2 transform -translate-x-1/2 p-4 xl:p-5 bg-white bg-title  bg-opacity-[85%] group-hover:-translate-y-1/2 duration-500 group-hover:opacity-0 group-hover:invisible">
                 <h4 className="font-medium leading-none text-black text-lg">
                   {item.price}₾ 
                 </h4>
                 <h5 className="font-normal text-black text-paragraph leading-[1.5]">
                   <Link href="/product-details" className="text-2xl" data-discover="true">
-                    {item.label}
+                    {item.title}
                   </Link>
                 </h5>
               </div>

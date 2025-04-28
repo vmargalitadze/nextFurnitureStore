@@ -12,11 +12,16 @@ function PageContentWrapper() {
   const searchParams = useSearchParams();
   const category = searchParams.get("cat");
 
-  const filteredProducts = category
-    ? Products.filter((product) => product.label?.toLowerCase() === category.toLowerCase())
-    : Products; 
-
-    console.log();
+const query = searchParams.get("query") || "";
+const filteredProducts = Products.filter((product) => {
+  const matchesCategory = category
+    ? product.title?.toLowerCase() === category.toLowerCase()
+    : true;
+  const matchesQuery = query
+    ? product.title.toLowerCase().includes(query.toLowerCase())
+    : true;
+  return matchesCategory && matchesQuery;
+});
     
   return (
     <>
@@ -35,9 +40,7 @@ function PageContentWrapper() {
 
 
       <div className="relative z-20 text-center w-full">
-        <h2 className="text-white text-8 md:text-[40px] font-normal leading-none text-center">
-          Room Interior
-        </h2>
+      
         <ul className="flex items-center justify-center gap-[10px] text-base md:text-lg leading-none font-normal text-white mt-3 md:mt-4">
           <li>
             <Link href="/" data-discover="true">
