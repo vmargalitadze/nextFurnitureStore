@@ -14,7 +14,7 @@ function Categories() {
   <div className="mx-auto">
     <div className="flex justify-center items-center mb-[40px] md:mb-[52px]">
       <div>
-        <span className="text-primary font-secondary font-normal text-5xl sm:text-7xl block sm:-mb-[30px] leading-normal sm:leading-normal">
+        <span className="text-primary font-secondary font-normal text-4xl sm:text-7xl block sm:-mb-[30px] leading-normal sm:leading-normal">
           კატეგორიები
         </span>
       </div>
@@ -22,11 +22,11 @@ function Categories() {
 
  
     <Swiper
-  spaceBetween={16}
+
   slidesPerView={1}  
 
   autoplay={{
-    delay: 2000,  
+    delay: 3000,  
     disableOnInteraction: false, 
   }}
   modules={[ Autoplay]}
@@ -46,8 +46,9 @@ function Categories() {
 >
   {CategoriesList.map((item) => (
     <SwiperSlide key={item.id}>
+
       <div className="w-full">
-        <Link className="relative" href="/product-category" data-discover="true">
+        <Link className="relative" href={`/list?cat=${item.type}`} data-discover="true">
           <Image
             src={item.image}
             alt="category image"
@@ -57,7 +58,7 @@ function Categories() {
           />
           <div className="absolute bottom-7 left-0 px-5 transform w-full flex justify-center">
             <div className="min-w-[250px] bg-white bg-opacity-80 dark:bg-title dark:bg-opacity-80 p-5 z-10">
-              <h4 className="leading-[1.5] font-semibold">დდდ</h4>
+              <h4 className="leading-[1.5] font-semibold"> {item.label} </h4>
               <p className="leading-none mt-[10px]">222</p>
             </div>
           </div>
