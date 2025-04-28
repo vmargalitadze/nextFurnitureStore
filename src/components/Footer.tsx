@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <div className="py-24 px-4 md:px-8 lg:px-16 xl:32 2xl:px-64 bg-gray-100 text-sm mt-24">
      
-      <div className="flex flex-col md:flex-row items-center text-center justify-between gap-24">
+      <div className="flex flex-col md:flex-row text-center justify-between gap-24">
       
         <div className="w-full md:w-1/2 lg:w-1/4 flex flex-col gap-8">
           <Link href="/">

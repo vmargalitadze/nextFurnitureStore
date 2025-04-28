@@ -1,9 +1,7 @@
 "use client";
 
-import React, { FC, Suspense, useCallback } from "react";
+import React, { FC, useCallback, Suspense } from "react";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
-
-
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 interface PaginationProps {
@@ -23,20 +21,19 @@ const PaginationArrow: FC<PaginationArrowProps> = React.memo(
     return (
       <button
         onClick={onClick}
-        className="bg-gray-100 cursor-pointer text-gray-500  disabled:opacity-50 disabled:cursor-not-allowed"
+        className="bg-gray-100 cursor-pointer text-gray-500 disabled:opacity-50 disabled:cursor-not-allowed p-2 rounded"
         aria-label={isLeft ? "Previous page" : "Next page"}
         disabled={isDisabled}
       >
-        {isLeft ?  < FaArrowLeft /> :   < FaArrowRight /> }
+        {isLeft ? <FaArrowLeft /> : <FaArrowRight />}
       </button>
     );
   }
 );
 
-
 PaginationArrow.displayName = "PaginationArrow";
 
-const PaginationHelper: FC<PaginationProps> = ({ pageCount }) => {
+const PaginationContent: FC<PaginationProps> = ({ pageCount }) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -69,7 +66,7 @@ const PaginationHelper: FC<PaginationProps> = ({ pageCount }) => {
         isDisabled={currentPage <= 1}
       />
       <span className="p-2 font-semibold text-gray-500">
-       გვერდი{currentPage}
+        გვერდი {currentPage}
       </span>
       <PaginationArrow
         direction="right"
@@ -80,13 +77,13 @@ const PaginationHelper: FC<PaginationProps> = ({ pageCount }) => {
   );
 };
 
+// ეს არის საბოლოო export-ერი კომპონენტი
+const PaginationComponent: FC<PaginationProps> = ({ pageCount }) => {
+  return (
+    <Suspense fallback={<div className="flex justify-center items-center">Loading pagination...</div>}>
+      <PaginationContent pageCount={pageCount} />
+    </Suspense>
+  );
+};
 
-export default function PaginationComponent({ pageCount }: PaginationProps) {
-  
-  
-    return (
-      <Suspense fallback={<div className="flex justify-center items-center h-screen">Loading...</div>}>
-        <PaginationHelper pageCount={10} />
-      </Suspense>
-    );
-  }
+export default React.memo(PaginationComponent);
