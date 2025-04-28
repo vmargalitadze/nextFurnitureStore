@@ -8,6 +8,11 @@ import ProductHelper from '@/components/ProductHelper';
 import Filter from '@/components/Filter';
 import Pagination from '@/components/Pagination';
 
+interface PaginationProps {
+    pageCount: number;
+}
+
+
 const PRODUCT_PER_PAGE = 3;
 
 function PageContentWrapper({ currentPage }: { currentPage: number }) {

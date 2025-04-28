@@ -33,7 +33,7 @@ const PaginationArrow: FC<PaginationArrowProps> = React.memo(
   }
 );
 
-// ✅ Fix ESLint warning
+
 PaginationArrow.displayName = "PaginationArrow";
 
 const PaginationHelper: FC<PaginationProps> = ({ pageCount }) => {
@@ -81,12 +81,12 @@ const PaginationHelper: FC<PaginationProps> = ({ pageCount }) => {
 };
 
 
-export default function PaginationComponent() {
+export default function PaginationComponent({ pageCount }: PaginationProps) {
   
   
     return (
       <Suspense fallback={<div className="flex justify-center items-center h-screen">Loading...</div>}>
-        <PaginationHelper pageCount={3}/>
+        <PaginationHelper pageCount={10} />
       </Suspense>
     );
   }
