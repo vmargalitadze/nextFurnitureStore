@@ -60,7 +60,7 @@ const Filter = ({
                                 onClick={() => handleCategoryChange(item.type)}
                                 data-discover="true"
                             >
-                                <span>{item.label}</span>
+                                <span className="text-[18px]">{item.label}</span>
                             </button>
                         ))}
                     </div>

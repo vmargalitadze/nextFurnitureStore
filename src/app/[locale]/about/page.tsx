@@ -47,7 +47,7 @@ function AboutPage() {
       </div>
 
     
-      <div className="flex items-center py-8 sm:py-12 px-5 sm:px-12 md:px-8 lg:pr-12 lg:pl-16 2xl:pl-[160px] bg-[#F8F8F9] dark:bg-dark-secondary">
+      <div className="flex items-center py-8 sm:py-12 px-5 sm:px-12 md:px-8 lg:pr-12 lg:pl-16 2xl:pl-[160px] bg-[#F8F8F9] ">
       <div className="lg:max-w-[600px] text-center ">
                   <h3 className="font-medium leading-none mt-4 md:mt-6 text-2xl md:text-3xl">
                     About Us

@@ -80,11 +80,11 @@ function ContactPage() {
               />
             </div>
             <div>
-              <label className="text-base md:text-lg text-title dark:text-white leading-none mb-2.5 block">
+              <label className="text-base md:text-lg text-title text-black leading-none mb-2.5 block">
                 Phone No.
               </label>
               <input
-                className="w-full h-12 md:h-14 bg-snow dark:bg-dark-secondary border border-[#E3E5E6] text-title text-black focus:border-primary p-4 outline-none duration-300"
+                className="w-full h-12 md:h-14 bg-snow  border border-[#E3E5E6] text-title text-black focus:border-primary p-4 outline-none duration-300"
                 placeholder="Type your phone number"
                 type="number"
               />

@@ -25,7 +25,7 @@ function ProductList() {
         <div className="container mx-auto">
           <div className="flex justify-center items-center mb-[40px] md:mb-12 ">
             <div>
-              <span className="text-primary font-secondary font-normal text-5xl sm:text-7xl block -ml-5 -mb-3 sm:-mb-[30px] leading-normal sm:leading-normal">
+              <span className="text-primary font-secondary font-normal text-4xl md:text-[60px] block -ml-5 -mb-3 sm:-mb-[30px] leading-normal sm:leading-normal">
                 ახალი
               </span>
               <h6 className="font-normal leading-none tracking-[.5em] lg:mt-4 sm:tracking-[1em] uppercase">

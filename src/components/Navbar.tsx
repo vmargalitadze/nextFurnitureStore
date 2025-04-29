@@ -4,7 +4,9 @@ import Menu from './Menu'
 import Image from 'next/image'
 import SearchBar from './SearchBar'
 import NavIcons from './NavIcons'
+import { useTranslations } from "next-intl";
 function Navbar() {
+  const t = useTranslations("navitems");
   return (
     <div className='fixed top-0 left-0 w-full z-50 h-20 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 bg-white shadow-sm'>
 
@@ -24,10 +26,10 @@ function Navbar() {
           </Link>
           <div className="hidden xl:flex gap-4">
             
-            <Link href="/all">Products</Link>
+            <Link href="/all">  {t('products')} </Link>
           
-            <Link href="/about">About</Link>
-            <Link href="/contact">Contact</Link>
+            <Link href="/about"> {t('about')}</Link>
+            <Link href="/contact"> {t('contact')}</Link>
           </div>
     </div>
 
