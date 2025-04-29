@@ -6,14 +6,14 @@ import SearchBar from './SearchBar'
 import NavIcons from './NavIcons'
 function Navbar() {
   return (
-    <div className='h-20 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 '>
-      {/* Mobile */}
+    <div className='fixed top-0 left-0 w-full z-50 h-20 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 bg-white shadow-sm'>
+
       <div className="h-full flex items-center justify-between md:hidden">
 
       <Link className="text-2xl tracking-wide" href='/' >Store</Link>
       <Menu />
       </div>
-{/* big */}
+
 
 <div className="hidden md:flex items-center justify-between  gap-8 h-full">
 
@@ -23,11 +23,11 @@ function Navbar() {
             <div className="text-2xl tracking-wide">Store</div>
           </Link>
           <div className="hidden xl:flex gap-4">
-            <Link href="/">Homepage</Link>
-            <Link href="/">Shop</Link>
-            <Link href="/">Deals</Link>
-            <Link href="/">About</Link>
-            <Link href="/">Contact</Link>
+            
+            <Link href="/all">Products</Link>
+          
+            <Link href="/about">About</Link>
+            <Link href="/contact">Contact</Link>
           </div>
     </div>
 

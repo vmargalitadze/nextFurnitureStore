@@ -11,7 +11,13 @@
   flex-direction: column !important;
 }
   
-
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
 
 
 .pacifico-regular {
