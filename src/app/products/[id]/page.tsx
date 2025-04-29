@@ -13,24 +13,24 @@ const Page = (props: { params: { id: string; locale: string } }) => {
     );
   }
   function incrementCount() {
-    setCount(prev => prev + 1);
+    setCount((prev) => prev + 1);
   }
-  
+
   function decrementCount() {
-    setCount(prev => (prev > 0 ? prev - 1 : 0));
+    setCount((prev) => (prev > 0 ? prev - 1 : 0));
   }
   return (
     <>
-      <div className="bg-[#F8F5F0] bg-dark-secondary py-5 md:py-[30px]">
-        <div className="container">
-          <ul className="flex items-center gap-[10px] text-base md:text-lg leading-none font-normal text-title text-black max-w-[1720px] mx-auto flex-wrap">
+      <div className="bg-[#F8F5F0] mt-[80px]   py-5 md:py-[30px]">
+        <div className="container mx-auto">
+          <ul className="flex justify-center items-center gap-2 text-2xl md:text-lg font-normal text-black flex-wrap text-center">
             <li>
               <Link href="/" data-discover="true">
                 Home
               </Link>
             </li>
             <li>/</li>
-            <li className="text-primary text-2xl"> {product.title} </li>
+            <li className="text-primary text-2xl">{product.title}</li>
           </ul>
         </div>
       </div>
@@ -47,17 +47,14 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                 </h2>
 
                 <span className="text-2xl pb-5 sm:text-3xl  leading-none block">
-               
                   ბრენდი: {product.Brand}
                 </span>
 
                 <span className="text-2xl pb-5 sm:text-3xl  leading-none block">
-                 
                   ფასი: {product.price} ₾
                 </span>
 
                 <span className="text-2xl pb-5 sm:text-3xl  leading-none block">
-                
                   რაოდენობა: 10 ცალი
                 </span>
 
@@ -73,15 +70,14 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                 <div className="flex items-center gap-3">
                   <div className="inc-dec flex items-center gap-2">
                     <div className="dec w-6 h-6 bg-[#E8E9EA] bg-dark-secondary flex items-center justify-center">
-                    <button onClick={decrementCount}>-</button>
-                     
+                      <button onClick={decrementCount}>-</button>
                     </div>
                   </div>
 
                   <div>{count}</div>
 
                   <div className="inc w-6 h-6 bg-[#E8E9EA] bg-dark-secondary flex items-center justify-center">
-                  <button onClick={incrementCount}>+</button>
+                    <button onClick={incrementCount}>+</button>
                   </div>
                 </div>
 
