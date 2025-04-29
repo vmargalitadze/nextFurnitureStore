@@ -48,7 +48,7 @@ function Categories() {
     <SwiperSlide key={item.id}>
 
       <div className="w-full">
-        <Link className="relative" href={`/list?cat=${item.type}`} data-discover="true">
+        <Link className="relative"  href={item.type === "all" ? "/all" : `/list?cat=${item.type}`}>
           <Image
             src={item.image}
             alt="category image"
@@ -59,7 +59,7 @@ function Categories() {
           <div className="absolute bottom-7 left-0 px-5 transform w-full flex justify-center">
             <div className="min-w-[250px] bg-white bg-title bg-opacity-80 p-5 z-10">
               <h4 className="leading-[1.5] font-semibold"> {item.label} </h4>
-              <p className="leading-none mt-[10px]">222</p>
+              <p className="leading-none mt-[10px]"> {item.quantity} </p>
             </div>
           </div>
         </Link>
