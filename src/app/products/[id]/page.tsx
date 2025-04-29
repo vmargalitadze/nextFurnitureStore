@@ -69,15 +69,15 @@ const Page = (props: { params: { id: string; locale: string } }) => {
               <div className="py-5 sm:py-6  ">
                 <div className="flex items-center gap-3">
                   <div className="inc-dec flex items-center gap-2">
-                    <div className="dec w-6 h-6 bg-[#E8E9EA] bg-dark-secondary flex items-center justify-center">
-                      <button onClick={decrementCount}>-</button>
+                    <div className="dec w-8 h-8 bg-[#E8E9EA] bg-dark-secondary flex items-center justify-center">
+                      <button onClick={decrementCount}>  <span className="text-2xl"> - </span> </button>
                     </div>
                   </div>
 
                   <div>{count}</div>
 
-                  <div className="inc w-6 h-6 bg-[#E8E9EA] bg-dark-secondary flex items-center justify-center">
-                    <button onClick={incrementCount}>+</button>
+                  <div className="inc w-8 h-8 bg-[#E8E9EA] bg-dark-secondary flex items-center justify-center">
+                    <button onClick={incrementCount}><span className="text-2xl"> + </span></button>
                   </div>
                 </div>
 
@@ -86,9 +86,7 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                     <span> Add to Cart </span>
                   </button>
 
-                  <button className="btn-all btn-outline">
-                    <span> Add to Washlist </span>
-                  </button>
+              
                 </div>
               </div>
             </div>
