@@ -7,7 +7,7 @@ const Footer = () => {
     <div className="py-24 px-4 md:px-8  lg:px-16 xl:32 2xl:px-64 bg-gray-100 text-sm mt-24">
      
      <div className="flex flex-col md:flex-row justify-center items-start gap-16 text-center md:text-left">
-  {/* Left Section */}
+
   <div className="w-full md:w-1/2 lg:w-1/3 flex flex-col gap-6 mx-auto">
     <Link href="/">
       <div className="text-2xl tracking-wide">LAMA</div>
@@ -30,15 +30,16 @@ const Footer = () => {
     </div>
   </div>
 
-  {/* Right Section */}
-  <div className="w-full md:w-1/2 lg:w-1/3 flex flex-col gap-6 mx-auto">
-    <h1 className="font-medium text-lg">COMPANY</h1>
-    <div className="flex flex-col gap-4 mt-4">
+  
+  <div className="hidden md:flex w-full md:w-1/2 lg:w-1/3 flex-col gap-6 mx-auto">
+  <h1 className="font-medium text-lg">COMPANY</h1>
+  <div className="flex flex-col gap-4 mt-4">
     <Link href="/all">Products</Link>
-      <Link href="/about">About Us</Link>
-      <Link href="/contact">Contact</Link>
-    </div>
+    <Link href="/about">About Us</Link>
+    <Link href="/contact">Contact</Link>
   </div>
+</div>
+
 </div>
 
       

@@ -14,7 +14,7 @@ function Categories() {
   <div className="mx-auto">
     <div className="flex justify-center items-center mb-[40px] md:mb-[52px]">
       <div>
-        <span className="text-primary font-secondary font-normal text-4xl sm:text-7xl block sm:-mb-[30px] leading-normal sm:leading-normal">
+        <span className="text-primary font-secondary font-normal text-3xl sm:text-7xl block sm:-mb-[30px] leading-normal sm:leading-normal">
           კატეგორიები
         </span>
       </div>
