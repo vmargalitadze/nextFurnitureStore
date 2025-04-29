@@ -10,13 +10,13 @@ function AboutPage() {
           alt="Background"
           fill
           quality={80}
-          className="object-cover z-0"
+          className="object-cover  z-0"
         />
 
         <div className="absolute inset-0 bg-black/60 z-10" />
 
         <div className="relative z-20 text-center w-full">
-          <h2 className="text-white text-8 md:text-[40px] font-normal leading-none text-center">
+          <h2 className="text-white text-8 text-2xl md:text-[40px] font-normal leading-none text-center">
             About Us
           </h2>
           <ul className="flex items-center justify-center gap-[10px] text-base md:text-lg leading-none font-normal text-white mt-3 md:mt-4">
@@ -40,7 +40,7 @@ function AboutPage() {
         <Image
           width={860}
           height={960}
-          className="object-cover w-full h-full"
+          className="object-cover rounded-md w-full h-full"
           alt="about"
           src="/aboutbg.jpg"
         />

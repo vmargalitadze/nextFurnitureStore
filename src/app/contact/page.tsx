@@ -16,7 +16,7 @@ function ContactPage() {
         <div className="absolute inset-0 bg-black/60 z-10" />
 
         <div className="relative z-20 text-center w-full">
-          <h2 className="text-white text-8 md:text-[40px] font-normal leading-none text-center">
+          <h2 className="text-white  text-2xl md:text-[40px] font-normal leading-none text-center">
             Contact
           </h2>
           <ul className="flex items-center justify-center gap-[10px] text-base md:text-lg leading-none font-normal text-white mt-3 md:mt-4">
@@ -42,13 +42,13 @@ function ContactPage() {
           alt="contact"
           width={700}
           height={500}
-          className="w-full h-auto"
+          className="w-full rounded-md h-auto"
         />
       </div>
 
 
       <div className="max-w-[725px] w-full">
-        <h3 className="leading-none font-medium mt-3 md:mt-6 text-2xl">
+        <h3 className="leading-none font-medium mt-3 md:mt-6 text-[22px]">
           დაგვიკავშირდით
         </h3>
         <p className="max-w-[474px] mt-3 md:mt-4 font-medium">
@@ -116,7 +116,7 @@ function ContactPage() {
 
     
         <div className="mt-5">
-          <button className="btn-all text-black btn-outline">
+          <button  className="btn-all rounded-md text-black btn-outline">
             <span>გამოაგზავნე</span>
           </button>
         </div>

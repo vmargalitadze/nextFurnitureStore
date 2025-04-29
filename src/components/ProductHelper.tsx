@@ -20,7 +20,7 @@ function ProductHelper({ items }: ProductListProps  ) {
       }
   return (
    <>
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-8">
+    <div className="grid grid-cols-1  sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-8">
       {items.map((item) => (
         <div key={item.id}>
          <div className="relative overflow-hidden group">
@@ -28,13 +28,13 @@ function ProductHelper({ items }: ProductListProps  ) {
                 <Image
                   width={100}
                   height={100}
-                  className="w-full transform duration-300 group-hover:scale-110"
+                  className="w-full rounded-md transform duration-300 group-hover:scale-110"
                   alt="product-card"
                   src={item.image[0]}
                 />
               </Link>
 
-              <div className="flex flex-col items-start gap-3 md:gap-4 absolute z-20 w-11/12 bottom-3 xl:bottom-5 left-1/2 transform -translate-x-1/2 p-4 xl:p-5 bg-white bg-title  bg-opacity-[85%] group-hover:-translate-y-1/2 duration-500 group-hover:opacity-0 group-hover:invisible">
+              <div className="flex rounded-md flex-col items-start gap-3 md:gap-4 absolute z-20 w-11/12 bottom-3 xl:bottom-5 left-1/2 transform -translate-x-1/2 p-4 xl:p-5 bg-white bg-title  bg-opacity-[85%] group-hover:-translate-y-1/2 duration-500 group-hover:opacity-0 group-hover:invisible">
                 <h4 className="font-medium leading-none text-black text-[18px] md:text-2xl ">
                   {item.price}₾ 
                 </h4>

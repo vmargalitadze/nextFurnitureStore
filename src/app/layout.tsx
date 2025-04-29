@@ -7,7 +7,7 @@ import Footer from "@/components/Footer";
 const inter = Josefin_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Lama Dev E-Commerce Application",
+  title: "Store Dev E-Commerce Application",
   description: "A complete e-commerce application with Next.js and Wix",
 };
 

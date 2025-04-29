@@ -10,7 +10,7 @@ const Footer = () => {
 
   <div className="w-full md:w-1/2 lg:w-1/3 flex flex-col gap-6 mx-auto">
     <Link href="/">
-      <div className="text-2xl tracking-wide">LAMA</div>
+      <div className="text-2xl tracking-wide">Store</div>
     </Link>
     <p>
       3252 Winding Way, Central Plaza, Willowbrook, CA 90210, United States
