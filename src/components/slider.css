@@ -1,0 +1,33 @@
+@keyframes slide {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.logos {
+  display: flex;
+  overflow: hidden;
+  background: white;
+  position: relative;
+  padding: 40px 0;
+}
+
+.logos-slide {
+  display: flex;
+  animation: slide 20s linear infinite;
+}
+
+.logos-slide img {
+  height: 50px;
+  margin: 0 30px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.logos-slide img:hover {
+  transform: scale(1.1);
+}
