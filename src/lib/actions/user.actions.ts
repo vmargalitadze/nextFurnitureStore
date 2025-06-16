@@ -18,7 +18,6 @@ import { Prisma } from '@prisma/client';
 import { getMyCart } from './cart.actions';
 
 
-// Sign in the user with credentials
 export async function signInWithCredentials(
   prevState: unknown,
   formData: FormData

@@ -1,7 +1,7 @@
 
 import React from "react";
 import Products from "@/lib/product"
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import ProductHelper from "./ProductHelper";
 
 interface ProductItem {

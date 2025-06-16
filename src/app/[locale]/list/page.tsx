@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import React, { Suspense } from "react";
 import Products from "@/lib/product"; 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import ProductHelper from "@/components/ProductHelper";
 
 

@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import React, { useState } from "react";
 import Products from "@/lib/product";
 import ProductImage from "../ProductImage";

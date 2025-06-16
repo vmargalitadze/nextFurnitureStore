@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { FaFacebook, FaInstagram, FaTiktok } from "react-icons/fa";
 
 const Footer = () => {

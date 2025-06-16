@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import React from "react";
 import Image from "next/image";
 
@@ -48,7 +48,7 @@ function ProductHelper({ items }: ProductListProps  ) {
               <div className="absolute z-10 flex gap-2 justify-center bottom-5 md:bottom-7 w-full transform translate-y-5 opacity-0 duration-500 invisible group-hover:translate-y-0 group-hover:opacity-100 group-hover:visible">
                 <button className="icon-button relative w-9 lg:w-12 h-9 p-2 lg:h-12 bg-white bg-title bg-opacity-80 flex items-center justify-center rounded-full">
                   <Image src="/cart.png" alt="" width={22} height={22} />
-                  <span className="tooltip">
+                  <span className="tooltip ">
                     დაამატე კალათაში
                     <span className="tooltip-arrow"></span>
                   </span>

@@ -1,6 +1,6 @@
 "use client";
 
-import Link from 'next/link';
+import { Link } from "@/i18n/navigation";
 import React, { useState, Suspense } from 'react';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
