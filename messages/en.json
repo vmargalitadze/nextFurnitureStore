@@ -1,10 +1,25 @@
 {
- 
   "navitems": {
     "products": "Products",
     "about": "About",
     "contact": "Contact"
+  },
+  "categories": {
+    "title": "Categories",
+    "subtitle": "Discover our wide selection of quality furniture and home decor",
+    "allCategories": "All Categories",
+    "products": "Products"
+  },
+  "brands": {
+    "title": "Our Partners",
+    "subtitle": "Trusted by leading brands in the furniture industry"
+ 
+  },
+  "hero": {
+ 
+    "title": "Premium Lounge Sofa Chair",
+    "description": "We offer you an extremely comfortable lounge sofa chair. Taking the time to relax at home or the office will be more appealing than ever when you choose a modern lounge sofa chair.",
+    "cta": "Let's Shop Now"
   }
-
-  }
+}
   

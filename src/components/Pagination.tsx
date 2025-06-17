@@ -21,11 +21,11 @@ const PaginationArrow: FC<PaginationArrowProps> = React.memo(
     return (
       <button
         onClick={onClick}
-        className="bg-gray-100 cursor-pointer text-gray-500 disabled:opacity-50 disabled:cursor-not-allowed p-2 rounded"
+        className="flex items-center justify-center w-10 h-10 bg-white border border-gray-300 text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed rounded-md transition-colors"
         aria-label={isLeft ? "Previous page" : "Next page"}
         disabled={isDisabled}
       >
-        {isLeft ? <FaArrowLeft /> : <FaArrowRight />}
+        {isLeft ? <FaArrowLeft className="w-4 h-4" /> : <FaArrowRight className="w-4 h-4" />}
       </button>
     );
   }
@@ -58,16 +58,71 @@ const PaginationContent: FC<PaginationProps> = ({ pageCount }) => {
     [currentPage, createPageURL, pageCount, router]
   );
 
+  // Generate page numbers to show
+  const getPageNumbers = () => {
+    const pages = [];
+    const maxVisible = 5;
+    
+    if (pageCount <= maxVisible) {
+      for (let i = 1; i <= pageCount; i++) {
+        pages.push(i);
+      }
+    } else {
+      if (currentPage <= 3) {
+        for (let i = 1; i <= 4; i++) {
+          pages.push(i);
+        }
+        pages.push('...');
+        pages.push(pageCount);
+      } else if (currentPage >= pageCount - 2) {
+        pages.push(1);
+        pages.push('...');
+        for (let i = pageCount - 3; i <= pageCount; i++) {
+          pages.push(i);
+        }
+      } else {
+        pages.push(1);
+        pages.push('...');
+        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+          pages.push(i);
+        }
+        pages.push('...');
+        pages.push(pageCount);
+      }
+    }
+    
+    return pages;
+  };
+
+  const pageNumbers = getPageNumbers();
+
   return (
-    <div className="flex justify-center mb-9 lg:mb-0 cursor-pointer items-center gap-2 lg:mt-8">
+    <div className="flex justify-center items-center gap-2">
       <PaginationArrow
         direction="left"
         onClick={() => goToPage(currentPage - 1)}
         isDisabled={currentPage <= 1}
       />
-      <span className="p-2 font-semibold text-gray-500">
-        გვერდი {currentPage}
-      </span>
+      
+      {pageNumbers.map((page, index) => (
+        <React.Fragment key={index}>
+          {page === '...' ? (
+            <span className="px-3 py-2 text-gray-500">...</span>
+          ) : (
+            <button
+              onClick={() => goToPage(page as number)}
+              className={`flex items-center justify-center w-10 h-10 rounded-md transition-colors ${
+                currentPage === page
+                  ? 'bg-primary text-white border border-primary'
+                  : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+              }`}
+            >
+              {page}
+            </button>
+          )}
+        </React.Fragment>
+      ))}
+      
       <PaginationArrow
         direction="right"
         onClick={() => goToPage(currentPage + 1)}
@@ -77,10 +132,16 @@ const PaginationContent: FC<PaginationProps> = ({ pageCount }) => {
   );
 };
 
-// ეს არის საბოლოო export-ერი კომპონენტი
+// Main export component
 const PaginationComponent: FC<PaginationProps> = ({ pageCount }) => {
+  if (pageCount <= 1) return null;
+  
   return (
-    <Suspense fallback={<div className="flex justify-center items-center">Loading pagination...</div>}>
+    <Suspense fallback={
+      <div className="flex justify-center items-center py-4">
+        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+      </div>
+    }>
       <PaginationContent pageCount={pageCount} />
     </Suspense>
   );

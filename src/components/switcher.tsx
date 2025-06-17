@@ -37,7 +37,15 @@ export default function LocaleSwitcher() {
         onClick={() => setOpen(prev => !prev)}
         className="inline-flex items-center gap-2  h-[40px] px-3 w-[140px] py-2 border rounded bg-white  text-black"
       >
-        <Image src={currentLocale?.flag || "/America.png"} alt="flag" width={20} height={20} className="rounded-full" />
+        <div className="w-5 h-5 flex-shrink-0">
+          <Image 
+            src={currentLocale?.flag || "/America.png"} 
+            alt="flag" 
+            width={20} 
+            height={20} 
+            className="rounded-full w-full h-full object-cover" 
+          />
+        </div>
         {currentLocale?.label}
       </button>
 
@@ -49,7 +57,15 @@ export default function LocaleSwitcher() {
               className="flex items-center gap-2 px-3 text-black py-2 hover:bg-gray-100 cursor-pointer"
               onClick={() => handleChange(locale.code)}
             >
-              <Image src={locale.flag} alt={`${locale.label} flag`} width={20} height={20} className="rounded-full" />
+              <div className="w-5 h-5 flex-shrink-0">
+                <Image 
+                  src={locale.flag} 
+                  alt={`${locale.label} flag`} 
+                  width={20} 
+                  height={20} 
+                  className="rounded-full w-full h-full object-cover" 
+                />
+              </div>
               {locale.label}
             </li>
           ))}

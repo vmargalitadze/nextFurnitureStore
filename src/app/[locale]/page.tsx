@@ -2,14 +2,14 @@ import BrandSlider from "@/components/BrandSlider";
 import Categories from "@/components/Categories";
 import ProductList from "@/components/ProductList";
 
-import Slider from "@/components/Slider";
+import Hero from "@/components/Slider";
 
 
 const HomePage = () => {
  
   return (
     <>
-      <Slider />
+      <Hero />
 
       <ProductList  />
       <Categories />
