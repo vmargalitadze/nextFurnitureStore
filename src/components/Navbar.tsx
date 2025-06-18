@@ -5,6 +5,7 @@ import Image from 'next/image'
 import SearchBar from './SearchBar'
 import NavIcons from './NavIcons'
 import { useTranslations } from "next-intl";
+
 function Navbar() {
   const t = useTranslations("navitems");
   return (
@@ -31,6 +32,7 @@ function Navbar() {
             <Link href="/about"> {t('about')}</Link>
             <Link href="/contact"> {t('contact')}</Link>
           </div>
+        
     </div>
 
     <div className="w-2/3 flex items-center justify-between  gap-8 ">

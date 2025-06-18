@@ -9,7 +9,7 @@ const Hero = () => {
   const t = useTranslations('hero');
 
   return (
-    <section className="relative min-h-screen bg-white overflow-hidden">
+    <section className="relative  bg-white overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0" style={{
@@ -18,7 +18,7 @@ const Hero = () => {
       </div>
 
       {/* Main Container */}
-      <div className="relative z-10 min-h-screen flex items-center pt-20 lg:pt-0">
+      <div className="relative z-10 mt-32 mb-28 flex items-center ">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
             

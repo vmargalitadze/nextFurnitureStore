@@ -52,7 +52,7 @@ function ProductList() {
             </div>
             
             {/* Category Buttons */}
-            <div className="flex flex-wrap justify-center gap-4 md:gap-6 mb-8">
+            <div className="flex md:flex-row flex-col flex-wrap justify-center gap-4 md:gap-6 mb-8">
               <button
                 onClick={() => setActiveCategory("new-arrival")}
                 className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${

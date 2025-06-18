@@ -4,17 +4,14 @@ import ProductList from "@/components/ProductList";
 
 import Hero from "@/components/Slider";
 
-
 const HomePage = () => {
- 
   return (
     <>
       <Hero />
+      <BrandSlider />
 
-      <ProductList  />
+      <ProductList />
       <Categories />
-
-    <BrandSlider />
     </>
   );
 };

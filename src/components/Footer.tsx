@@ -8,7 +8,7 @@ const Footer = () => {
      
      <div className="flex flex-col md:flex-row justify-center items-start gap-16 text-center md:text-left">
 
-  <div className="w-full md:w-1/2 lg:w-1/3 flex flex-col gap-6 mx-auto">
+  <div className="w-full md:w-1/2 lg:w-1/3 items-center flex flex-col gap-6 mx-auto">
     <Link href="/">
     <Image className="rounded-full" src="/logo.png" alt="" width={70} height={70} />
     </Link>
