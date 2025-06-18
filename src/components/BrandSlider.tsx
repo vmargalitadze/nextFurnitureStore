@@ -28,11 +28,11 @@ function BrandSlider() {
     <section className=" bg-gradient-to-br from-gray-50 to-white">
       <div className="container mx-auto px-4">
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-4">
+        <div className="text-center mb-20">
+          <h2 className="text-primary font-secondary font-normal text-4xl md:text-[60px] block -ml-5 -mb-3 sm:-mb-[30px] leading-normal sm:leading-normal">
             {t('title')}
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg mt-7 text-gray-600 max-w-2xl mx-auto font-secondary">
             {t('subtitle')}
           </p>
         </div>

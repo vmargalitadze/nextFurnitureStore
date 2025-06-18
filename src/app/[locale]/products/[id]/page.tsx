@@ -12,13 +12,7 @@ const Page = (props: { params: { id: string; locale: string } }) => {
       <div className="text-center text-lg font-bold">Product not found</div>
     );
   }
-  function incrementCount() {
-    setCount((prev) => prev + 1);
-  }
-
-  function decrementCount() {
-    setCount((prev) => (prev > 0 ? prev - 1 : 0));
-  }
+  
   return (
     <>
       <div className="bg-[#F8F5F0] mt-[80px]   py-5 md:py-[30px]">
@@ -54,9 +48,7 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                   ფასი: {product.price} ₾
                 </span>
 
-                <span className="text-2xl pb-5 sm:text-3xl  leading-none block">
-                  რაოდენობა: 10 ცალი
-                </span>
+            
 
                 <p className="text-base  pb-5 md:text-lg leading-6 font-normal text-title text-black mt-2">
                   Lorem ipsum dolor sit amet consectetur adipisicing elit.
@@ -67,19 +59,7 @@ const Page = (props: { params: { id: string; locale: string } }) => {
               </div>
 
               <div className="py-5 sm:py-6  ">
-                <div className="flex items-center gap-3">
-                  <div className="inc-dec flex items-center gap-2">
-                    <div className="dec w-8 h-8 bg-[#E8E9EA] bg-dark-secondary flex items-center justify-center">
-                      <button onClick={decrementCount}>  <span className="text-2xl"> - </span> </button>
-                    </div>
-                  </div>
-
-                  <div>{count}</div>
-
-                  <div className="inc w-8 h-8 bg-[#E8E9EA] bg-dark-secondary flex items-center justify-center">
-                    <button onClick={incrementCount}><span className="text-2xl"> + </span></button>
-                  </div>
-                </div>
+              
 
                 <div className="flex gap-5 mt-4 sm:mt-6">
                   <button className="btn-all   text-black  btn-outline">

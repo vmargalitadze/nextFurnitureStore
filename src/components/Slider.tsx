@@ -165,15 +165,7 @@ const Hero = () => {
               </div>
 
               {/* Floating Card */}
-              <motion.div
-                className="absolute -bottom-4 -right-4 sm:-bottom-6 sm:-right-6 bg-white rounded-lg sm:rounded-xl p-4 sm:p-6 shadow-xl border border-gray-100 max-w-xs"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.5, duration: 0.8 }}
-                whileHover={{ y: -5 }}
-              >
-               
-              </motion.div>
+        
             </motion.div>
           </div>
         </div>
