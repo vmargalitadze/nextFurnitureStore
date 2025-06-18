@@ -12,7 +12,7 @@ function Navbar() {
 
       <div className="h-full flex items-center justify-between md:hidden">
 
-      <Link className="text-2xl tracking-wide" href='/' >Store</Link>
+      <Link className="text-2xl tracking-wide" href='/' >  <Image className="rounded-full" src="/logo.png" alt="" width={70} height={70} /></Link>
       <Menu />
       </div>
 
