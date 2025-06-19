@@ -104,6 +104,8 @@ export default function ProductForm() {
           />
 
           {/* titleEn */}
+          console.log('dsadsadas');
+          
           <FormField
             control={form.control}
             name="titleEn"
