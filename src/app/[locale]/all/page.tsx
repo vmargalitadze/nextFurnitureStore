@@ -1,17 +1,37 @@
 "use client";
 
 import { Link } from "@/i18n/navigation";
-import React, { useState, Suspense } from 'react';
+import React, { useState, Suspense, useEffect } from 'react';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
-import Products from '@/lib/product';
 import ProductHelper from '@/components/ProductHelper';
 import Filter from '@/components/Filter';
 import Pagination from '@/components/Pagination';
+import { Decimal } from "@prisma/client/runtime/library";
+import { getAllProducts } from "@/lib/actions/actions";
 
 const PRODUCT_PER_PAGE = 12;
 
+interface Product {
+  id: string;
+  title: string;
+  titleEn: string;
+  category: string;
+  images: string[];
+  brand: string;
+  description: string;
+  descriptionEn: string;
+  size: string;
+  price: Decimal;
+  popular: boolean;
+  createdAt: Date;
+  tbilisi: boolean;
+  batumi: boolean;
+  qutaisi: boolean;
+}
+
 function PageContent() {
+  const [products, setProducts] = useState<Product[]>([]);
   const searchParams = useSearchParams();
   const [open, setOpen] = useState(false);
   const [selectedType, setSelectedType] = useState<string>("");
@@ -23,11 +43,11 @@ function PageContent() {
   const pageParam = searchParams.get("page") || "1";
   const currentPage = Number(pageParam);
 
-  const filteredProducts = Products.filter((product) => {
-    const byBrand = !selectedBrand || product.Brand === selectedBrand;
-    const byType = !selectedType || product.type === selectedType;
-    const byMinPrice = selectedPrice.min === null || product.price >= selectedPrice.min;
-    const byMaxPrice = selectedPrice.max === null || product.price <= selectedPrice.max;
+  const filteredProducts = products.filter((product) => {
+    const byBrand = !selectedBrand || product.brand === selectedBrand;
+    const byType = !selectedType || product.category === selectedType;
+    const byMinPrice = selectedPrice.min === null || Number(product.price) >= selectedPrice.min;
+    const byMaxPrice = selectedPrice.max === null || Number(product.price) <= selectedPrice.max;
     const byQuery = !query || product.title.toLowerCase().includes(query.toLowerCase());
     
     return byBrand && byType && byMinPrice && byMaxPrice && byQuery;
@@ -37,9 +57,9 @@ function PageContent() {
   const sortedProducts = [...filteredProducts].sort((a, b) => {
     switch (sortBy) {
       case "price-low":
-        return a.price - b.price;
+        return Number(a.price) - Number(b.price);
       case "price-high":
-        return b.price - a.price;
+        return Number(b.price) - Number(a.price);
       case "name":
         return a.title.localeCompare(b.title);
       default:
@@ -52,6 +72,23 @@ function PageContent() {
     (currentPage - 1) * PRODUCT_PER_PAGE,
     currentPage * PRODUCT_PER_PAGE
   );
+
+  // Transform database products to match ProductHelper interface
+  const transformedProducts = currentPageProducts.map(product => ({
+    id: product.id,
+    image: product.images,
+    price: Number(product.price),
+    title: product.title
+  }));
+
+  const fetchProducts = async () => {
+    const data = await getAllProducts();
+    setProducts(data);
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   return (
     <>
@@ -101,7 +138,7 @@ function PageContent() {
                   >
                     ყველა კატეგორია
                   </button>
-                  {Array.from(new Set(Products.map(p => p.type))).map((type) => (
+                  {Array.from(new Set(products.map(p => p.category))).map((type) => (
                     <button
                       key={type}
                       className={`w-full text-left px-3 py-2 rounded-md transition-colors ${
@@ -159,7 +196,7 @@ function PageContent() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
                 >
                   <option value="">ყველა ბრენდი</option>
-                  {Array.from(new Set(Products.map(p => p.Brand))).map((brand) => (
+                  {Array.from(new Set(products.map(p => p.brand))).map((brand) => (
                     <option key={brand} value={brand}>{brand}</option>
                   ))}
                 </select>
@@ -205,8 +242,8 @@ function PageContent() {
             </div>
 
             {/* Products Grid using ProductHelper */}
-            {currentPageProducts.length > 0 ? (
-              <ProductHelper items={currentPageProducts} />
+            {transformedProducts.length > 0 ? (
+              <ProductHelper items={transformedProducts} />
             ) : (
               <div className="text-center py-12">
                 <div className="text-gray-400 mb-4">

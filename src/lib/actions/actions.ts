@@ -4,6 +4,11 @@ import { Prisma } from "@prisma/client";
 import { prisma } from "../prisma";
 import { ProductSchema, updateProductSchema } from "../validators";
 import { revalidatePath } from "next/cache";
+
+export async function convertToPlainObject<T>(value: T): Promise<T> {
+  return JSON.parse(JSON.stringify(value));
+}
+
 export async function getSingleProduct(id:string) {
     return await prisma.product.findFirst({
         where: { id: id },
@@ -107,3 +112,18 @@ export async function createProduct(data: z.infer<typeof ProductSchema>) {
         }
       }
       
+      export async function getAllProducts() {
+        const products = await prisma.product.findMany({
+          orderBy: { createdAt: "desc" },
+        });
+      
+        return Promise.all(products.map((product) => convertToPlainObject(product)));
+      }
+      
+      export async function getProductById(productId: string) {
+        const data = await prisma.product.findFirst({
+          where: { id: productId },
+        });
+      
+        return convertToPlainObject(data);
+      }
