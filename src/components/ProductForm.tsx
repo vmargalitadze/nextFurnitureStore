@@ -28,7 +28,7 @@ export async function formatError(error: any) {
 export default function ProductForm() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
-  console.log('dsadsadas');
+  
   const form = useForm<ProductFormValues>({
     resolver: zodResolver(ProductSchema),
     defaultValues: {
