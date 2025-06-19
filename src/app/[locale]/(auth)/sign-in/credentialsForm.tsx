@@ -1,91 +1,68 @@
 "use client"
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { useState } from "react";
+import { signIn } from "next-auth/react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Link } from "@/i18n/navigation";
 
-import { Link } from '@/i18n/navigation'
-import React, { useEffect, useState } from 'react'
-import { signInWithCredentials } from '@/lib/actions/user.actions'
-import { useActionState } from 'react'
-import { useFormState, useFormStatus } from 'react-dom'
-
-import { useRouter, useSearchParams } from 'next/navigation';
-export const signInDefaultValues = {
-  email: 'admin@example.com',
-  password: '123456',
-};
-
-const initialState = {
-  success: false,
-  message: '',
-};
-
-function CredentialsForm({ callbackUrl }: { callbackUrl: string }) {
-  const [redirecting, setRedirecting] = useState(false);
-  const [data, action] = useFormState(signInWithCredentials, initialState);
-  const searchParams = useSearchParams();
+export default function CredentialsForm({ callbackUrl }: { callbackUrl: string }) {
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
-    useEffect(() => {
-      if (data.success) {
-        setRedirecting(true);
-        router.push('/'); 
-      }
-    }, [data.success, callbackUrl, router]);
- 
+  const searchParams = useSearchParams();
 
-  const SignInButton = () => {
-    const { pending } = useFormStatus();
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
 
-    return (
-      <Button disabled={pending} className='w-full' variant='default'>
-        {pending ? 'Signing In...' : 'Sign In'}
-      </Button>
-    );
-  };
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+
+    const result = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+      callbackUrl: callbackUrl || "/",
+    });
+
+    setLoading(false);
+
+    if (result?.error) {
+      setError(result.error === "CredentialsSignin" ? "Invalid email or password" : result.error);
+    } else if (result?.ok && result.url) {
+      router.push(result.url);
+    }
+  }
 
   return (
-    <form action={action}>
-    <input type='hidden' name='callbackUrl' value={callbackUrl} />
-    <div className='space-y-6'>
-      <div>
-        <Label htmlFor='email'>Email</Label>
-        <Input
-          id='email'
-          name='email'
-          type='email'
-          required
-          autoComplete='email'
-          defaultValue={signInDefaultValues.email}
-        />
+    <form onSubmit={handleSubmit}>
+      <input type="hidden" name="callbackUrl" value={callbackUrl} />
+      <div className="space-y-6">
+        <div>
+          <Label htmlFor="email">Email</Label>
+          <Input id="email" name="email" type="email" required autoComplete="email" />
+        </div>
+        <div>
+          <Label htmlFor="password">Password</Label>
+          <Input id="password" name="password" type="password" required autoComplete="password" />
+        </div>
+        <div>
+          <Button disabled={loading} className="w-full" variant="default">
+            {loading ? "Signing In..." : "Sign In"}
+          </Button>
+        </div>
+        {error && <div className="text-center text-destructive">{error}</div>}
+        <div className="text-sm text-center text-muted-foreground">
+          Don&apos;t have an account?{" "}
+          <Link href="/sign-up" target="_self" className="link">
+            Sign Up
+          </Link>
+        </div>
       </div>
-      <div>
-        <Label htmlFor='password'>Password</Label>
-        <Input
-          id='password'
-          name='password'
-          type='password'
-          required
-          autoComplete='password'
-          defaultValue={signInDefaultValues.password}
-        />
-      </div>
-      <div>
-        <SignInButton />
-      </div>
-
-      {data && !data.success && (
-        <div className='text-center text-destructive'>{data.message}</div>
-      )}
-
-      <div className='text-sm text-center text-muted-foreground'>
-        Don&apos;t have an account?{' '}
-        <Link href='/sign-up' target='_self' className='link'>
-          Sign Up
-        </Link>
-      </div>
-    </div>
-  </form>
-  )
+    </form>
+  );
 }
-
-export default CredentialsForm

@@ -1,3 +1,4 @@
+
 import { Link } from "@/i18n/navigation";
 import React from 'react'
 import Menu from './Menu'
@@ -6,8 +7,12 @@ import SearchBar from './SearchBar'
 import NavIcons from './NavIcons'
 import { useTranslations } from "next-intl";
 
+
+
 function Navbar() {
   const t = useTranslations("navitems");
+
+
   return (
     <div className='fixed top-0 left-0 w-full z-50 h-20 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 bg-white shadow-sm'>
 
@@ -37,7 +42,8 @@ function Navbar() {
 
     <div className="w-2/3 flex items-center justify-between  gap-8 ">
     <SearchBar />
-    <NavIcons />
+     <NavIcons />
+   
     </div>
 
 </div>

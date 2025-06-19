@@ -1,36 +1,38 @@
 "use client";
-import React, { useState } from 'react'
-import Image from 'next/image';
+import React, { useState } from "react";
 
-import CartModel from './CartModel';
-import LocaleSwitcher from './switcher';
+import { Link } from "@/i18n/navigation";
+
+import LocaleSwitcher from "./switcher";
+import DropdownMenuCheckboxes from "./Dropdown";
+import { useSession } from "next-auth/react";
 function NavIcons() {
 
-  const [isCartOpen, setIsCartOpen] = useState(false);
 
-
-
-
-
-
+  const { data: session } = useSession();
 
   return (
-    <div className='flex items-center gap-4 xl:gap-6 relative'>
-    
-    
-             <div
-        className="relative cursor-pointer"
-        onClick={() => setIsCartOpen((prev) => !prev)}
-      >
-        <Image src="/cart.png" alt="" width={22} height={22} />
-        <div className="absolute -top-4 -right-4 w-6 h-6 bg-[#BB976D] rounded-full text-white text-sm flex items-center justify-center">
-          2
-        </div>
-      </div>
-      <LocaleSwitcher />
-      {isCartOpen && <CartModel />}
+    <div className="flex items-center gap-4 xl:gap-6 relative">
+      <>
+      {!session && (
+        <Link href="/sign-in" className="text-sm">
+          Login
+        </Link>
+      )}
+        {session && (
+          <>
+        
+
+            <DropdownMenuCheckboxes />
+
+           
+
+            <LocaleSwitcher />
+          </>
+        )}
+      </>
     </div>
-  )
+  );
 }
 
-export default NavIcons
+export default NavIcons;

@@ -28,6 +28,14 @@
     "sales": "Sales",
     "trending": "Trending",
     "viewAll": "View All Products"
+  },
+  "categorySlider": {
+    "bedroom": "Bedroom",
+    "living": "Living",
+    "dining": "Dining",
+    "lounge": "Lounge",
+    "officeChair": "Office Chair",
+    "kitchen": "Kitchen"
   }
 }
   
