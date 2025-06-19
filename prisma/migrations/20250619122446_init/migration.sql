@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "ProductType" AS ENUM ('MATTRESS', 'PILLOW', 'QUILT', 'PAD');
+CREATE TYPE "ProductType" AS ENUM ('MATTRESS', 'PILLOW', 'QUILT', 'PAD', 'bundle');
 
 -- CreateTable
 CREATE TABLE "Session" (
@@ -10,31 +10,6 @@ CREATE TABLE "Session" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Session_pkey" PRIMARY KEY ("sessionToken")
-);
-
--- CreateTable
-CREATE TABLE "Product" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "title" TEXT NOT NULL,
-    "category" TEXT NOT NULL,
-    "images" TEXT[],
-    "type" "ProductType" NOT NULL,
-    "brand" TEXT NOT NULL,
-    "description" TEXT NOT NULL,
-    "material" TEXT NOT NULL,
-    "materialEn" TEXT NOT NULL,
-    "height" INTEGER NOT NULL,
-    "weight" INTEGER NOT NULL,
-    "descriptionEn" TEXT NOT NULL,
-    "stock" INTEGER NOT NULL,
-    "price" DECIMAL(12,2) NOT NULL DEFAULT 0,
-    "rating" DECIMAL(3,2) NOT NULL DEFAULT 0,
-    "numReviews" INTEGER NOT NULL DEFAULT 0,
-    "isFeatured" BOOLEAN NOT NULL DEFAULT false,
-    "banner" TEXT,
-    "createdAt" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "Product_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -50,8 +25,31 @@ CREATE TABLE "User" (
     "paymentMethod" TEXT,
     "createdAt" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "resetToken" TEXT,
+    "resetTokenExpiry" TIMESTAMP(3),
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Product" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "title" TEXT NOT NULL,
+    "titleEn" TEXT NOT NULL,
+    "category" "ProductType" NOT NULL,
+    "images" TEXT[],
+    "brand" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "descriptionEn" TEXT NOT NULL,
+    "size" TEXT NOT NULL,
+    "tbilisi" BOOLEAN NOT NULL DEFAULT false,
+    "batumi" BOOLEAN NOT NULL DEFAULT false,
+    "qutaisi" BOOLEAN NOT NULL DEFAULT false,
+    "price" DECIMAL(12,2) NOT NULL DEFAULT 0,
+    "popular" BOOLEAN NOT NULL DEFAULT false,
+    "createdAt" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Product_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -71,15 +69,6 @@ CREATE TABLE "Account" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Account_pkey" PRIMARY KEY ("provider","providerAccountId")
-);
-
--- CreateTable
-CREATE TABLE "VerificationToken" (
-    "identifier" TEXT NOT NULL,
-    "token" TEXT NOT NULL,
-    "expires" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "VerificationToken_pkey" PRIMARY KEY ("identifier","token")
 );
 
 -- CreateTable
@@ -129,22 +118,11 @@ CREATE TABLE "OrderItem" (
     CONSTRAINT "orderitems_orderId_productId_pk" PRIMARY KEY ("orderId","productId")
 );
 
--- CreateTable
-CREATE TABLE "Review" (
-    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
-    "userId" UUID NOT NULL,
-    "productId" UUID NOT NULL,
-    "rating" INTEGER NOT NULL,
-    "title" TEXT NOT NULL,
-    "description" TEXT NOT NULL,
-    "isVerifiedPurchase" BOOLEAN NOT NULL DEFAULT true,
-    "createdAt" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "Review_pkey" PRIMARY KEY ("id")
-);
-
 -- CreateIndex
 CREATE UNIQUE INDEX "user_email_idx" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_resetToken_key" ON "User"("resetToken");
 
 -- AddForeignKey
 ALTER TABLE "Session" ADD CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -163,9 +141,3 @@ ALTER TABLE "OrderItem" ADD CONSTRAINT "OrderItem_orderId_fkey" FOREIGN KEY ("or
 
 -- AddForeignKey
 ALTER TABLE "OrderItem" ADD CONSTRAINT "OrderItem_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Review" ADD CONSTRAINT "Review_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Review" ADD CONSTRAINT "Review_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

@@ -10,7 +10,7 @@ export async function getSingleProduct(id:string) {
       });
 }
 
-export function formatError(error: any) {
+export async function formatError(error: any) {
     if (error.name === 'ZodError') {
       // Handle Zod error
       const fieldErrors = Object.keys(error.errors).map(
@@ -40,7 +40,8 @@ export async function createProduct(data: z.infer<typeof ProductSchema>) {
       const product = ProductSchema.parse(data);
       console.log("Parsed product:", product);
       
-      const productWithCategory = { ...product, category: data.category }; 
+      const normalizedCategory = data.category === "BUNDLE" ? "bundle" : data.category;
+      const productWithCategory = { ...product, category: normalizedCategory as any };
       
       await prisma.product.create({ data: productWithCategory });
   
@@ -89,9 +90,10 @@ export async function createProduct(data: z.infer<typeof ProductSchema>) {
       
           if (!productExists) throw new Error('Product not found');
       
+          const normalizedCategory = product.category === "BUNDLE" ? "bundle" : product.category;
           await prisma.product.update({
             where: { id: product.id },
-            data: product,
+            data: { ...product, category: normalizedCategory as any },
           });
       
           revalidatePath('/admin/products');
