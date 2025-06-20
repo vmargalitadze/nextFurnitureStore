@@ -17,20 +17,29 @@ const currency = z
 export const ProductSchema = z.object({
   title: z.string().min(1),
   titleEn: z.string().min(1),
-  category: z.enum(["MATTRESS", "PILLOW", "BUNDLE", "QUILT", "PAD"]),
+  category: z.enum(["MATTRESS", "PILLOW", "bundle", "QUILT", "PAD"]),
   images: z.array(z.string()).min(1),
 
   brand: z.string().min(1),
   description: z.string().min(1),
   descriptionEn: z.string().min(1),
-  size: z.string().min(1),
+  sizes: z.array(z.object({
+    size: z.enum([
+      "SIZE_80_190", "SIZE_80_200", "SIZE_90_190", "SIZE_90_200", "SIZE_100_190", 
+      "SIZE_100_200", "SIZE_110_190", "SIZE_110_200", "SIZE_120_190", "SIZE_120_200", 
+      "SIZE_130_190", "SIZE_130_200", "SIZE_140_190", "SIZE_140_200", "SIZE_150_190", 
+      "SIZE_150_200", "SIZE_160_190", "SIZE_160_200", "SIZE_170_190", "SIZE_170_200", 
+      "SIZE_180_190", "SIZE_180_200", "SIZE_190_190", "SIZE_190_200", "SIZE_200_200"
+    ]),
+    price: z.number().positive()
+  })).min(1, "At least one size with price is required"),
 
   tbilisi: z.boolean().optional(),
   batumi: z.boolean().optional(),
   qutaisi: z.boolean().optional(),
 
-  price: z.number().positive(),
   popular: z.boolean().optional(),
+  sales: z.number().int().nonnegative().optional(),
 });
 
 export const updateProductSchema = ProductSchema.extend({
@@ -56,7 +65,7 @@ export const signInFormSchema = z.object({
 // Schema for signing up a user
 export const signUpFormSchema = z
   .object({
-    name: z.string().min(3, "Name must be at least 3 characters"),
+    name: z.string().min(3, "Name must be at least 3 characters").max(15, "Name must be at most 20 characters"),
     email: z.string().email("Invalid email address"),
     password: z
       .string()

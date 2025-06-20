@@ -45,10 +45,24 @@ export async function createProduct(data: z.infer<typeof ProductSchema>) {
       const product = ProductSchema.parse(data);
       console.log("Parsed product:", product);
       
-      const normalizedCategory = data.category === "BUNDLE" ? "bundle" : data.category;
-      const productWithCategory = { ...product, category: normalizedCategory as any };
+      const normalizedCategory = product.category === "bundle" ? "bundle" : product.category;
+      const { sizes, ...productData } = product;
       
-      await prisma.product.create({ data: productWithCategory });
+      const createdProduct = await prisma.product.create({ 
+        data: { 
+          ...productData, 
+          category: normalizedCategory as any,
+          sizes: {
+            create: sizes.map(sizeData => ({
+              size: sizeData.size,
+              price: new Prisma.Decimal(sizeData.price)
+            }))
+          }
+        },
+        include: {
+          sizes: true
+        }
+      });
   
       revalidatePath('/admin');
   
@@ -95,10 +109,23 @@ export async function createProduct(data: z.infer<typeof ProductSchema>) {
       
           if (!productExists) throw new Error('Product not found');
       
-          const normalizedCategory = product.category === "BUNDLE" ? "bundle" : product.category;
+          const normalizedCategory = product.category === "bundle" ? "bundle" : product.category;
           await prisma.product.update({
             where: { id: product.id },
-            data: { ...product, category: normalizedCategory as any },
+            data: {
+              title: product.title,
+              titleEn: product.titleEn,
+              description: product.description, 
+              descriptionEn: product.descriptionEn,
+              brand: product.brand,
+              images: product.images,
+              category: normalizedCategory,
+              sales: product.sales,
+              sizes: {
+                deleteMany: {},
+                create: product.sizes
+              }
+            },
           });
       
           revalidatePath('/admin/products');
@@ -114,6 +141,9 @@ export async function createProduct(data: z.infer<typeof ProductSchema>) {
       
       export async function getAllProducts() {
         const products = await prisma.product.findMany({
+          include: {
+            sizes: true
+          },
           orderBy: { createdAt: "desc" },
         });
       
@@ -123,6 +153,9 @@ export async function createProduct(data: z.infer<typeof ProductSchema>) {
       export async function getProductById(productId: string) {
         const data = await prisma.product.findFirst({
           where: { id: productId },
+          include: {
+            sizes: true
+          }
         });
       
         return convertToPlainObject(data);

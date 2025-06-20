@@ -12,6 +12,12 @@ import { getAllProducts } from "@/lib/actions/actions";
 
 const PRODUCT_PER_PAGE = 12;
 
+interface ProductSize {
+  id: string;
+  size: string;
+  price: Decimal;
+}
+
 interface Product {
   id: string;
   title: string;
@@ -21,45 +27,84 @@ interface Product {
   brand: string;
   description: string;
   descriptionEn: string;
-  size: string;
-  price: Decimal;
   popular: boolean;
   createdAt: Date;
   tbilisi: boolean;
   batumi: boolean;
   qutaisi: boolean;
+  sizes?: ProductSize[];
+  // Keep old fields for backward compatibility during migration
+  size?: string;
+  price?: Decimal;
 }
 
 function PageContent() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const searchParams = useSearchParams();
   const [open, setOpen] = useState(false);
   const [selectedType, setSelectedType] = useState<string>("");
   const [selectedPrice, setSelectedPrice] = useState<{ min: number | null; max: number | null }>({ min: null, max: null });
   const [selectedBrand, setSelectedBrand] = useState<string>("");
+  const [selectedSize, setSelectedSize] = useState<string>("");
   const [sortBy, setSortBy] = useState<string>("newest");
 
   const query = searchParams.get("query") || "";
   const pageParam = searchParams.get("page") || "1";
   const currentPage = Number(pageParam);
 
+  // Helper function to get product price range
+  const getProductPriceRange = (product: Product) => {
+    if (product.sizes && product.sizes.length > 0) {
+      const prices = product.sizes.map(s => Number(s.price));
+      return {
+        min: Math.min(...prices),
+        max: Math.max(...prices)
+      };
+    }
+    // Fallback to old structure
+    if (product.price) {
+      const price = Number(product.price);
+      return { min: price, max: price };
+    }
+    return { min: 0, max: 0 };
+  };
+
+  // Helper function to check if product has specific size
+  const hasProductSize = (product: Product, sizeFilter: string) => {
+    if (!sizeFilter) return true;
+    
+    if (product.sizes && product.sizes.length > 0) {
+      return product.sizes.some(s => s.size === sizeFilter);
+    }
+    // Fallback to old structure
+    return product.size === sizeFilter;
+  };
+
   const filteredProducts = products.filter((product) => {
     const byBrand = !selectedBrand || product.brand === selectedBrand;
     const byType = !selectedType || product.category === selectedType;
-    const byMinPrice = selectedPrice.min === null || Number(product.price) >= selectedPrice.min;
-    const byMaxPrice = selectedPrice.max === null || Number(product.price) <= selectedPrice.max;
+    const bySize = hasProductSize(product, selectedSize);
+    
+    const priceRange = getProductPriceRange(product);
+    const byMinPrice = selectedPrice.min === null || priceRange.max >= selectedPrice.min;
+    const byMaxPrice = selectedPrice.max === null || priceRange.min <= selectedPrice.max;
+    
     const byQuery = !query || product.title.toLowerCase().includes(query.toLowerCase());
     
-    return byBrand && byType && byMinPrice && byMaxPrice && byQuery;
+    return byBrand && byType && bySize && byMinPrice && byMaxPrice && byQuery;
   });
 
   // Sort products
   const sortedProducts = [...filteredProducts].sort((a, b) => {
+    const aPriceRange = getProductPriceRange(a);
+    const bPriceRange = getProductPriceRange(b);
+    
     switch (sortBy) {
       case "price-low":
-        return Number(a.price) - Number(b.price);
+        return aPriceRange.min - bPriceRange.min;
       case "price-high":
-        return Number(b.price) - Number(a.price);
+        return bPriceRange.max - aPriceRange.max;
       case "name":
         return a.title.localeCompare(b.title);
       default:
@@ -74,21 +119,126 @@ function PageContent() {
   );
 
   // Transform database products to match ProductHelper interface
-  const transformedProducts = currentPageProducts.map(product => ({
-    id: product.id,
-    image: product.images,
-    price: Number(product.price),
-    title: product.title
-  }));
+  const transformedProducts = currentPageProducts.map(product => {
+    const priceRange = getProductPriceRange(product);
+    return {
+      id: product.id,
+      image: product.images,
+      price: priceRange.min, // Show minimum price for display
+      title: product.title
+    };
+  });
+
+  // Get all available sizes from products
+  const getAllAvailableSizes = () => {
+    const sizes = new Set<string>();
+    products.forEach(product => {
+      if (product.sizes && product.sizes.length > 0) {
+        product.sizes.forEach(s => sizes.add(s.size));
+      } else if (product.size) {
+        sizes.add(product.size);
+      }
+    });
+    return Array.from(sizes).sort();
+  };
+
+  // Format size display
+  const formatSizeDisplay = (sizeEnum: string) => {
+    return sizeEnum.replace('SIZE_', '').replace('_', '-');
+  };
 
   const fetchProducts = async () => {
-    const data = await getAllProducts();
-    setProducts(data);
+    try {
+      setLoading(true);
+      const data = await getAllProducts();
+      setProducts(data as Product[]);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     fetchProducts();
   }, []);
+
+  // Loading state
+  if (loading) {
+    return (
+      <>
+        {/* Hero Section */}
+        <div className="relative min-h-[300px] flex items-center justify-center bg-overlay p-8 sm:p-12 before:bg-title before:bg-opacity-70 overflow-hidden">
+          <Image
+            src="/bedroom.jpg"
+            alt="Background"
+            fill
+            quality={80}
+            className="object-cover z-0"
+          />
+          <div className="absolute inset-0 bg-black/50 z-10" />
+          <div className="relative z-20 text-center w-full">
+            <h1 className="text-white text-3xl md:text-5xl font-bold leading-tight text-center mb-4">
+              ჩვენი პროდუქტები
+            </h1>
+            <nav className="flex items-center justify-center gap-2 text-base md:text-lg text-white/80">
+              <Link href="/" className="hover:text-white transition-colors">
+                მთავარი
+              </Link>
+              <span>/</span>
+              <span className="text-primary font-medium">პროდუქტები</span>
+            </nav>
+          </div>
+        </div>
+
+        {/* Loading Content */}
+        <div className="container mx-auto px-4 py-12">
+          <div className="flex flex-col lg:flex-row gap-8">
+            {/* Sidebar Filter Skeleton */}
+            <div className="lg:w-1/4">
+              <div className="bg-white rounded-lg shadow-lg p-6 sticky top-4">
+                <div className="animate-pulse">
+                  <div className="h-6 bg-gray-200 rounded mb-6"></div>
+                  <div className="space-y-4">
+                    <div className="h-4 bg-gray-200 rounded"></div>
+                    <div className="h-4 bg-gray-200 rounded"></div>
+                    <div className="h-4 bg-gray-200 rounded"></div>
+                    <div className="h-4 bg-gray-200 rounded"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Main Product Area Loading */}
+            <div className="lg:w-3/4">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
+                <div className="animate-pulse">
+                  <div className="h-4 bg-gray-200 rounded w-48"></div>
+                </div>
+                <div className="animate-pulse">
+                  <div className="h-8 bg-gray-200 rounded w-32"></div>
+                </div>
+              </div>
+
+              {/* Products Grid Skeleton */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {Array.from({ length: 8 }).map((_, index) => (
+                  <div key={index} className="animate-pulse">
+                    <div className="bg-gray-200 rounded-lg h-48 mb-4"></div>
+                    <div className="space-y-2">
+                      <div className="h-4 bg-gray-200 rounded"></div>
+                      <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                      <div className="h-6 bg-gray-200 rounded w-1/2"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -154,6 +304,36 @@ function PageContent() {
                 </div>
               </div>
 
+              {/* Size Filter */}
+              <div className="mb-8">
+                <h4 className="text-lg font-semibold text-gray-800 mb-4">ზომები</h4>
+                <div className="space-y-2">
+                  <button
+                    className={`w-full text-left px-3 py-2 rounded-md transition-colors ${
+                      selectedSize === "" 
+                        ? "bg-primary text-white" 
+                        : "text-gray-600 hover:bg-gray-100"
+                    }`}
+                    onClick={() => setSelectedSize("")}
+                  >
+                    ყველა ზომა
+                  </button>
+                  {getAllAvailableSizes().map((size) => (
+                    <button
+                      key={size}
+                      className={`w-full text-left px-3 py-2 rounded-md transition-colors ${
+                        selectedSize === size 
+                          ? "bg-primary text-white" 
+                          : "text-gray-600 hover:bg-gray-100"
+                      }`}
+                      onClick={() => setSelectedSize(size)}
+                    >
+                      {formatSizeDisplay(size)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               {/* Price Range */}
               <div className="mb-8">
                 <h4 className="text-lg font-semibold text-gray-800 mb-4">ფასის დიაპაზონი</h4>
@@ -208,6 +388,7 @@ function PageContent() {
                   setSelectedType("");
                   setSelectedPrice({ min: null, max: null });
                   setSelectedBrand("");
+                  setSelectedSize("");
                 }}
                 className="w-full bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300 transition-colors"
               >

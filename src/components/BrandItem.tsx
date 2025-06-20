@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { motion, useAnimation } from 'framer-motion';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import { Link } from "@/i18n/navigation";
 
@@ -11,14 +10,16 @@ interface BrandData {
 
 interface BrandItemProps {
   images: string[];
-  from: number | string;
-  to: number | string;
+  from?: number | string;
+  to?: number | string;
   brands?: BrandData[];
 }
 
 function BrandItem({ images, from, to, brands }: BrandItemProps) {
   const [isHovered, setIsHovered] = useState(false);
-  const controls = useAnimation();
+  const [isAnimating, setIsAnimating] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const animationRef = useRef<number>();
 
   // Use provided brands data or fallback to images with default names
   const brandData = brands || images.map((image, index) => ({
@@ -27,34 +28,89 @@ function BrandItem({ images, from, to, brands }: BrandItemProps) {
     type: `brand${index + 1}`
   }));
 
+  // Create multiple copies of the brands for seamless infinite scroll
+  const repeatedBrands = [...brandData, ...brandData, ...brandData, ...brandData];
+
+  const startAnimation = useCallback(() => {
+    if (!containerRef.current || isHovered) return;
+
+    setIsAnimating(true);
+    let startTime: number;
+    let currentX = 0;
+
+    const animate = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const elapsed = timestamp - startTime;
+
+      // Calculate the distance to move for one complete cycle
+      const itemWidth = 192; // w-48 (48 * 4px = 192px)
+      const gap = 64; // space-x-16 (16 * 4px = 64px)
+      const totalItemWidth = itemWidth + gap;
+      const cycleDistance = brandData.length * totalItemWidth;
+      
+      // Speed: pixels per second (adjust this value to control speed)
+      const speed = 50; // 50px per second
+      const distance = (elapsed / 1000) * speed;
+      
+      // Calculate current position with seamless loop
+      currentX = -(distance % cycleDistance);
+
+      if (containerRef.current) {
+        containerRef.current.style.transform = `translateX(${currentX}px)`;
+      }
+
+      if (!isHovered) {
+        animationRef.current = requestAnimationFrame(animate);
+      }
+    };
+
+    animationRef.current = requestAnimationFrame(animate);
+  }, [isHovered, brandData.length]);
+
+  const stopAnimation = useCallback(() => {
+    if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current);
+      animationRef.current = undefined;
+    }
+    setIsAnimating(false);
+  }, []);
+
   useEffect(() => {
     if (isHovered) {
-      controls.stop();
+      stopAnimation();
     } else {
-      controls.start({
-        x: to,
-        transition: {
-          duration: 30,
-          repeat: Infinity,
-          ease: 'linear',
-          repeatDelay: 0,
-        },
-      });
+      startAnimation();
     }
-  }, [isHovered, controls, to]);
+
+    return () => {
+      stopAnimation();
+    };
+  }, [isHovered, startAnimation, stopAnimation]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div 
-      className="relative overflow-hidden "
+      className="relative overflow-hidden"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <motion.div
-        initial={{ x: from }}
-        animate={controls}
+      <div
+        ref={containerRef}
         className="flex items-center space-x-16"
+        style={{
+          transform: 'translateX(0px)',
+          willChange: 'transform',
+        }}
       >
-        {[...brandData, ...brandData].map((brand, index) => (
+        {repeatedBrands.map((brand, index) => (
           <Link 
             key={`${brand.type}-${index}`}
             href={`/list?brand=${brand.type}`}
@@ -67,12 +123,13 @@ function BrandItem({ images, from, to, brands }: BrandItemProps) {
                 alt={`${brand.name} logo`}
                 fill
                 className="object-contain p-4 group-hover:filter group-hover:brightness-110 transition-all duration-300"
+                priority={index < 10} // Prioritize first 10 images for better loading
               />
               <div className="absolute inset-0 bg-gradient-to-t from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
             </div>
           </Link>
         ))}
-      </motion.div>
+      </div>
     </div>
   );
 }

@@ -10,7 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { createProduct } from "@/lib/actions/actions";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ImageUpload  from "@/components/CloudinaryUploader";
 import { useRouter } from "next/navigation";
@@ -39,13 +39,18 @@ export default function ProductForm() {
       brand: "",
       description: "",
       descriptionEn: "",
-      size: "",
+      sizes: [{ size: "SIZE_80_190", price: 0 }],
       tbilisi: false,
       batumi: false,
       qutaisi: false,
-      price: 0,
       popular: false,
+      sales: 0,
     },
+  });
+
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "sizes",
   });
 
   const onSubmit = async (data: ProductFormValues) => {
@@ -67,6 +72,16 @@ export default function ProductForm() {
     } catch (error) {
       console.error("Error creating product:", error);
       setError("Failed to create product. Please try again.");
+    }
+  };
+
+  const addSize = () => {
+    append({ size: "SIZE_80_190", price: 0 });
+  };
+
+  const removeSize = (index: number) => {
+    if (fields.length > 1) {
+      remove(index);
     }
   };
 
@@ -104,8 +119,6 @@ export default function ProductForm() {
           />
 
           {/* titleEn */}
-       
-          
           <FormField
             control={form.control}
             name="titleEn"
@@ -131,7 +144,7 @@ export default function ProductForm() {
                   <select {...field} className="w-full border rounded px-3 py-2">
                     <option value="MATTRESS">MATTRESS</option>
                     <option value="PILLOW">PILLOW</option>
-                    <option value="bundle">bundle</option>
+                    <option value="bundle">BUNDLE</option>
                     <option value="QUILT">QUILT</option>
                     <option value="PAD">PAD</option>
                   </select>
@@ -164,7 +177,14 @@ export default function ProductForm() {
               <FormItem>
                 <FormLabel>ბრენდი</FormLabel>
                 <FormControl>
-                  <Input placeholder="ბრენდი" {...field} />
+                  <select {...field} className="w-full border rounded px-3 py-2">
+                    <option value="">აირჩიეთ ბრენდი</option>
+                    <option value="Sevyat">Sevyat</option>
+                    <option value="IDAŞ">IDAŞ</option>
+                    <option value="İsbiryatak">İsbiryatak</option>
+                    <option value="Sleepnice">Sleepnice</option>
+                    <option value="Sleepandbed">Sleepandbed</option>
+                  </select>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -201,20 +221,97 @@ export default function ProductForm() {
             )}
           />
 
-          {/* size */}
-          <FormField
-            control={form.control}
-            name="size"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>ზომა</FormLabel>
-                <FormControl>
-                  <Input placeholder="ზომა" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {/* Sizes and Prices */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <FormLabel className="text-base font-medium">ზომები და ფასები</FormLabel>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={addSize}
+                className="text-sm"
+              >
+                + ზომის დამატება
+              </Button>
+            </div>
+            
+            {fields.map((field, index) => (
+              <div key={field.id} className="flex gap-4 items-end p-4 border rounded-lg">
+                <FormField
+                  control={form.control}
+                  name={`sizes.${index}.size`}
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel className="text-sm">ზომა</FormLabel>
+                      <FormControl>
+                        <select {...field} className="w-full border rounded px-3 py-2">
+                          <option value="SIZE_80_190">80-190</option>
+                          <option value="SIZE_80_200">80-200</option>
+                          <option value="SIZE_90_190">90-190</option>
+                          <option value="SIZE_90_200">90-200</option>
+                          <option value="SIZE_100_190">100-190</option>
+                          <option value="SIZE_100_200">100-200</option>
+                          <option value="SIZE_110_190">110-190</option>
+                          <option value="SIZE_110_200">110-200</option>
+                          <option value="SIZE_120_190">120-190</option>
+                          <option value="SIZE_120_200">120-200</option>
+                          <option value="SIZE_130_190">130-190</option>
+                          <option value="SIZE_130_200">130-200</option>
+                          <option value="SIZE_140_190">140-190</option>
+                          <option value="SIZE_140_200">140-200</option>
+                          <option value="SIZE_150_190">150-190</option>
+                          <option value="SIZE_150_200">150-200</option>
+                          <option value="SIZE_160_190">160-190</option>
+                          <option value="SIZE_160_200">160-200</option>
+                          <option value="SIZE_170_190">170-190</option>
+                          <option value="SIZE_170_200">170-200</option>
+                          <option value="SIZE_180_190">180-190</option>
+                          <option value="SIZE_180_200">180-200</option>
+                          <option value="SIZE_190_190">190-190</option>
+                          <option value="SIZE_190_200">190-200</option>
+                          <option value="SIZE_200_200">200-200</option>
+                        </select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={form.control}
+                  name={`sizes.${index}.price`}
+                  render={({ field }) => (
+                    <FormItem className="flex-1">
+                      <FormLabel className="text-sm">ფასი</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          step="0.01"
+                          placeholder="ფასი"
+                          {...field}
+                          onChange={(e) => field.onChange(Number(e.target.value))}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                {fields.length > 1 && (
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="sm"
+                    onClick={() => removeSize(index)}
+                    className="text-sm"
+                  >
+                    წაშლა
+                  </Button>
+                )}
+              </div>
+            ))}
+          </div>
 
           {/* tbilisi */}
           <FormField
@@ -264,18 +361,17 @@ export default function ProductForm() {
             )}
           />
 
-          {/* price */}
+          {/* sales */}
           <FormField
             control={form.control}
-            name="price"
+            name="sales"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>ფასი</FormLabel>
+                <FormLabel>ფასდაკლება</FormLabel>
                 <FormControl>
                   <Input
                     type="number"
-                    step="0.01"
-                    placeholder="ფასი"
+                    placeholder="ფასდაკლება"
                     {...field}
                     onChange={(e) => field.onChange(Number(e.target.value))}
                   />

@@ -5,6 +5,12 @@ import ProductImage from "../ProductImage";
 import { getProductById } from "@/lib/actions/actions";
 import { Decimal } from "@prisma/client/runtime/library";
 
+interface ProductSize {
+  id: string;
+  size: string;
+  price: Decimal;
+}
+
 interface Product {
   id: string;
   title: string;
@@ -14,26 +20,33 @@ interface Product {
   brand: string;
   description: string;
   descriptionEn: string;
-  size: string;
-  price: Decimal;
   popular: boolean;
   createdAt: Date;
   tbilisi: boolean;
   batumi: boolean;
   qutaisi: boolean;
+  sizes?: ProductSize[];
+  // Keep old fields for backward compatibility during migration
+  size?: string;
+  price?: Decimal;
 }
 
 const Page = (props: { params: { id: string; locale: string } }) => {
   const { id, locale } = props.params;
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [count, setCount] = useState(0);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const data = await getProductById(id);
-        setProduct(data);
+        setProduct(data as Product);
+        // Set the first size as default selected
+        if (data && 'sizes' in data && Array.isArray(data.sizes) && data.sizes.length > 0) {
+          setSelectedSize(data.sizes[0].id);
+        }
       } catch (error) {
         console.error("Error fetching product:", error);
       } finally {
@@ -43,6 +56,16 @@ const Page = (props: { params: { id: string; locale: string } }) => {
 
     fetchProduct();
   }, [id]);
+
+  const getSelectedSizeData = () => {
+    if (!product || !selectedSize || !product.sizes) return null;
+    return product.sizes.find(size => size.id === selectedSize);
+  };
+
+  const formatSizeDisplay = (sizeEnum: string) => {
+    // Convert SIZE_80_190 to 80-190 format
+    return sizeEnum.replace('SIZE_', '').replace('_', '-');
+  };
 
   if (loading) {
     return (
@@ -57,6 +80,9 @@ const Page = (props: { params: { id: string; locale: string } }) => {
       <div className="text-center text-lg font-bold mt-20">Product not found</div>
     );
   }
+  
+  const selectedSizeData = getSelectedSizeData();
+  const hasNewStructure = product.sizes && Array.isArray(product.sizes) && product.sizes.length > 0;
   
   return (
     <>
@@ -89,19 +115,38 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                   ბრენდი: {product.brand}
                 </span>
 
-                <span className="text-2xl pb-5 sm:text-3xl leading-none block">
-                  ფასი: {Number(product.price)} ₾
-                </span>
+                {/* Size Selection */}
+                {hasNewStructure && (
+                  <div className="mb-4">
+                    <span className="text-lg font-medium block mb-2">ზომა:</span>
+                    <div className="flex flex-wrap gap-2">
+                      {product.sizes?.map((size) => (
+                        <button
+                          key={size.id}
+                          onClick={() => setSelectedSize(size.id)}
+                          className={`px-4 py-2 border rounded-lg text-sm font-medium transition-colors ${
+                            selectedSize === size.id
+                              ? 'bg-primary text-white border-primary'
+                              : 'bg-white text-gray-700 border-gray-300 hover:border-primary'
+                          }`}
+                        >
+                          {formatSizeDisplay(size.size)}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Price Display */}
+                {selectedSizeData && (
+                  <span className="text-2xl pb-5 sm:text-3xl leading-none block text-primary font-semibold">
+                    ფასი: {Number(selectedSizeData.price)} ₾
+                  </span>
+                )}
 
                 <span className="text-lg pb-3 leading-none block text-gray-600">
                   კატეგორია: {product.category}
                 </span>
-
-                {product.size && (
-                  <span className="text-lg pb-3 leading-none block text-gray-600">
-                    ზომა: {product.size}
-                  </span>
-                )}
 
                 <p className="text-base pb-5 md:text-lg leading-6 font-normal text-title text-black mt-2">
                   {product.description || "Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid, hic. Dolores commodi nulla, assumenda sit nostrum voluptatem eveniet, velit odio tempora placeat hic. Veniam dolorum totam earum vitae nesciunt voluptatum."}
@@ -156,7 +201,10 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                     
               <div className="py-5 sm:py-6">
                 <div className="flex gap-5 mt-4 sm:mt-6">
-                  <button className="btn-all text-black btn-outline">
+                  <button 
+                    className="btn-all text-black btn-outline"
+                    disabled={!selectedSize}
+                  >
                     <span>Add to Cart</span>
                   </button>
                 </div>

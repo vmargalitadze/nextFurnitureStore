@@ -21,7 +21,7 @@ export default function DropdownMenuCheckboxes() {
   };
   const firstLetter = session?.user?.name?.charAt(0).toUpperCase() || "?";
   return (
-    <div className="flex justify-center gap-2 items-center ">
+    <div className="flex justify-center  gap-2 items-center ">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <div className="flex items-center">
@@ -35,7 +35,13 @@ export default function DropdownMenuCheckboxes() {
             </Button>
           </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56" align="end" forceMount>
+        <DropdownMenuContent
+          className="w-full mr-14"
+          align="center"
+          side="bottom"
+          sideOffset={8}
+          forceMount
+        >
           <DropdownMenuItem>
             <Link
               href="/profile"
@@ -52,19 +58,6 @@ export default function DropdownMenuCheckboxes() {
               <FaShoppingCart /> Cart
             </Link>
           </DropdownMenuItem>
-
-          {session?.user?.role === "admin" && (
-            <>
-              <DropdownMenuItem>
-                <Link
-                  href="/new"
-                  className="w-full flex justify-center items-center gap-2"
-                >
-                  add new
-                </Link>
-              </DropdownMenuItem>
-            </>
-          )}
 
           <DropdownMenuItem>
             <Button

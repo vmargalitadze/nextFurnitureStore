@@ -1,6 +1,9 @@
 -- CreateEnum
 CREATE TYPE "ProductType" AS ENUM ('MATTRESS', 'PILLOW', 'QUILT', 'PAD', 'bundle');
 
+-- CreateEnum
+CREATE TYPE "Size" AS ENUM ('SIZE_80_190', 'SIZE_80_200', 'SIZE_90_190', 'SIZE_90_200', 'SIZE_100_190', 'SIZE_100_200', 'SIZE_110_190', 'SIZE_110_200', 'SIZE_120_190', 'SIZE_120_200', 'SIZE_130_190', 'SIZE_130_200', 'SIZE_140_190', 'SIZE_140_200', 'SIZE_150_190', 'SIZE_150_200', 'SIZE_160_190', 'SIZE_160_200', 'SIZE_170_190', 'SIZE_170_200', 'SIZE_180_190', 'SIZE_180_200', 'SIZE_190_190', 'SIZE_190_200', 'SIZE_200_200');
+
 -- CreateTable
 CREATE TABLE "Session" (
     "sessionToken" TEXT NOT NULL,
@@ -41,15 +44,24 @@ CREATE TABLE "Product" (
     "brand" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "descriptionEn" TEXT NOT NULL,
-    "size" TEXT NOT NULL,
     "tbilisi" BOOLEAN NOT NULL DEFAULT false,
     "batumi" BOOLEAN NOT NULL DEFAULT false,
     "qutaisi" BOOLEAN NOT NULL DEFAULT false,
-    "price" DECIMAL(12,2) NOT NULL DEFAULT 0,
     "popular" BOOLEAN NOT NULL DEFAULT false,
+    "sales" INTEGER DEFAULT 0,
     "createdAt" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Product_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "ProductSize" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "productId" UUID NOT NULL,
+    "size" "Size" NOT NULL,
+    "price" DECIMAL(12,2) NOT NULL,
+
+    CONSTRAINT "ProductSize_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -124,8 +136,14 @@ CREATE UNIQUE INDEX "user_email_idx" ON "User"("email");
 -- CreateIndex
 CREATE UNIQUE INDEX "User_resetToken_key" ON "User"("resetToken");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "ProductSize_productId_size_key" ON "ProductSize"("productId", "size");
+
 -- AddForeignKey
 ALTER TABLE "Session" ADD CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "ProductSize" ADD CONSTRAINT "ProductSize_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
