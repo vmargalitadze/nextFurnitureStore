@@ -104,11 +104,11 @@ export default function EditProductForm({ productId }: EditProductFormProps) {
         router.push("/adminall");
         router.refresh();
       } else {
-        setError(res.message || "Failed to update product");
+        setError((res.message as string) ?? "Failed to update product");
       }
     } catch (error) {
       console.error("Error updating product:", error);
-      setError("Failed to update product. Please try again.");
+      setError("Failed to update product. Please try again." as const);
     }
   };
 
