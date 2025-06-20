@@ -5,10 +5,12 @@ import { Link } from "@/i18n/navigation";
 import { useState } from "react";
 import LocaleSwitcher from "./switcher";
 import { useTranslations } from "next-intl";
+import { useSession } from "next-auth/react";
 
 const Menu = () => {
   const [open, setOpen] = useState(false);
   const t = useTranslations("navitems");
+  const { data: session } = useSession();
   const handleClose = () => setOpen(false);
 
   return (
@@ -27,6 +29,18 @@ const Menu = () => {
             <Link href="/all" onClick={handleClose}>{t('products')} </Link>
             <Link href="/about" onClick={handleClose}> {t('about')}</Link>
             <Link href="/contact" onClick={handleClose}> {t('contact')} </Link>
+            
+        
+            {session ? (
+              <Link href="/profile" onClick={handleClose}>
+                {t('profile')}
+              </Link>
+            ) : (
+              <Link href="/sign-in" onClick={handleClose}>
+                {t('login')}
+              </Link>
+            )}
+            
             <LocaleSwitcher />
           </div>
         </div>

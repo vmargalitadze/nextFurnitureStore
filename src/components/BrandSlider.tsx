@@ -32,7 +32,7 @@ function BrandSlider() {
           <h2 className="text-primary font-secondary font-normal text-4xl md:text-[60px] block -ml-5 -mb-3 sm:-mb-[30px] leading-normal sm:leading-normal">
             {t("title")}
           </h2>
-          <p className="text-lg mt-7 text-gray-600 max-w-2xl mx-auto font-secondary">
+          <p className="text-xl text-gray-600 mt-7 max-w-3xl mx-auto leading-relaxed">
             {t("subtitle")}
           </p>
         </div>

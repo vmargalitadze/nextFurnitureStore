@@ -5,6 +5,7 @@ import ProductHelper from "./ProductHelper";
 import { useTranslations } from "next-intl";
 import { getAllProducts } from "@/lib/actions/actions";
 import { Decimal } from "@prisma/client/runtime/library";
+import { useParams } from "next/navigation";
 
 interface ProductSize {
   id: string;
@@ -34,6 +35,8 @@ interface Product {
 
 function ProductList() {
   const t = useTranslations("productList");
+  const params = useParams();
+  const locale = params.locale as string;
   const [activeCategory, setActiveCategory] = useState("new-arrival");
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -71,6 +74,14 @@ function ProductList() {
     return { min: 0, max: 0 };
   };
 
+  // Get localized title based on locale
+  const getLocalizedTitle = (product: Product): string => {
+    if (locale === 'en') {
+      return product.titleEn ?? product.title;
+    }
+    return product.title ?? product.titleEn ?? '';
+  };
+
   // Filter products based on category
   const getFilteredProducts = () => {
     if (!products.length) return [];
@@ -106,7 +117,8 @@ function ProductList() {
         id: product.id,
         image: product.images,
         price: priceRange.min,
-        title: product.title,
+        title: getLocalizedTitle(product),
+        titleEn: product.titleEn,
       };
     });
   };
@@ -115,11 +127,11 @@ function ProductList() {
   const transformedProducts = transformProducts(filteredProducts);
 
   return (
-    <section className="py-24 bg-gradient-to-br from-gray-50 via-white to-gray-50">
+    <section className="mt-16 bg-gradient-to-br from-gray-50 via-white to-gray-50">
       <div className="container mx-auto px-4">
         <div className="max-w-7xl mx-auto">
           {/* Modern Section Header */}
-          <div className="text-center mb-20">
+          <div className="text-center mb-16">
             <h2 className="text-primary font-secondary font-normal text-4xl md:text-[60px] block -ml-5 -mb-3 sm:-mb-[30px] leading-normal sm:leading-normal">
               {t("title")}
             </h2>
@@ -129,7 +141,7 @@ function ProductList() {
           </div>
 
           {/* Category Buttons */}
-          <div className="flex flex-wrap flex-col sm:flex-row justify-center gap-4 md:gap-6 mb-16">
+          <div className="flex flex-wrap flex-col sm:flex-row justify-center gap-4 md:gap-6 mb-16 ">
             <button
               onClick={() => setActiveCategory("new-arrival")}
               className={`px-8 py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 ${

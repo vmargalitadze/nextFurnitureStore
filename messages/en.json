@@ -2,7 +2,9 @@
   "navitems": {
     "products": "Products",
     "about": "About",
-    "contact": "Contact"
+    "contact": "Contact",
+    "login": "Login",
+    "profile": "Profile"
   },
   "categories": {
     "title": "Categories",
@@ -13,10 +15,8 @@
   "brands": {
     "title": "Our Partners",
     "subtitle": "Trusted by leading brands in the furniture industry"
- 
   },
   "hero": {
- 
     "title": "Premium Lounge Sofa Chair",
     "description": "We offer you an extremely comfortable lounge sofa chair. Taking the time to relax at home or the office will be more appealing than ever when you choose a modern lounge sofa chair.",
     "cta": "Let's Shop Now"
@@ -36,6 +36,121 @@
     "lounge": "Lounge",
     "officeChair": "Office Chair",
     "kitchen": "Kitchen"
+  },
+  "productDetail": {
+    "breadcrumb": {
+      "home": "Home"
+    },
+    "product": {
+      "brand": "Brand",
+      "size": "Size",
+      "price": "Price",
+      "category": "Category",
+      "availability": "Availability",
+      "addToCart": "Add to Cart",
+      "productNotFound": "Product not found",
+      "loading": "Loading...",
+      "outOfStock": "Out of stock at all locations"
+    },
+    "locations": {
+      "tbilisi": "Tbilisi",
+      "batumi": "Batumi",
+      "qutaisi": "Kutaisi",
+      "tbilisiAddress": "Tbilisi, T. Eristavi 1",
+      "batumiAddress": "Batumi, A. Pushkin 117",
+      "qutaisiAddress": "Kutaisi, Z. Purtzeladze 15"
+    }
+  },
+  "allPage": {
+    "hero": {
+      "title": "Our Products",
+      "breadcrumb": {
+        "home": "Home",
+        "products": "Products"
+      }
+    },
+    "filters": {
+      "title": "Filters",
+      "categories": {
+        "title": "Categories",
+        "allCategories": "All Categories"
+      },
+      "sizes": {
+        "title": "Sizes",
+        "allSizes": "All Sizes"
+      },
+      "priceRange": {
+        "title": "Price Range",
+        "minimumPrice": "Minimum Price",
+        "maximumPrice": "Maximum Price"
+      },
+      "brand": {
+        "title": "Brand",
+        "allBrands": "All Brands"
+      },
+      "clearFilters": "Clear Filters"
+    },
+    "results": {
+      "found": "Found",
+      "products": "Products",
+      "noProductsFound": "No products found",
+      "tryDifferentFilters": "Try different filters or search for another product"
+    },
+    "sorting": {
+      "sortBy": "Sort by:",
+      "newest": "Newest",
+      "priceLowToHigh": "Price: Low to High",
+      "priceHighToLow": "Price: High to Low",
+      "nameAZ": "Name: A-Z"
+    }
+  },
+  "footer": {
+    "companyDescription": "Premium furniture store offering high-quality, stylish pieces for every room.",
+    "quickLinks": "Quick Links",
+    "allProducts": "All Products",
+    "aboutUs": "About Us",
+    "contact": "Contact",
+    "followUs": "Follow Us",
+    "copyright": "© 2024 Furniture Store. All rights reserved.",
+    "privacy": "Privacy",
+    "terms": "Terms"
+  },
+  "profile": {
+    "title": "Profile Dashboard",
+    "welcome": "Welcome back, {name}!",
+    "user": "User",
+    "admin": "Admin",
+    "email": "Email",
+    "memberSince": "Member Since",
+    "address": "Address",
+    "addressSaved": "Address saved",
+    "paymentMethod": "Payment Method",
+    "totalOrders": "Total Orders",
+    "cartItems": "Cart Items",
+    "accountType": "Account Type",
+    "signOut": "Sign Out",
+    "adminActions": {
+      "title": "Admin Actions",
+      "description": "Manage your store and products",
+      "addNewProduct": "Add New Product",
+      "manageAllProducts": "Manage All Products"
+    },
+    "recentOrders": {
+      "title": "Recent Orders",
+      "description": "Your latest order history",
+      "orderNumber": "Order #{number}",
+      "total": "Total: ${amount}",
+      "paid": "Paid",
+      "pending": "Pending",
+      "delivered": "Delivered",
+      "noOrders": "No orders yet",
+      "noOrdersDescription": "Start shopping to see your orders here"
+    },
+    "quickActions": {
+      "title": "Quick Actions",
+      "description": "Common tasks and navigation",
+      "viewCart": "View Cart",
+      "browseProducts": "Browse Products"
+    }
   }
 }
-  

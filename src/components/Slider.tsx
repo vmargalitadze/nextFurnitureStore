@@ -18,7 +18,7 @@ const Hero = () => {
       </div>
 
       {/* Main Container */}
-      <div className="relative z-10 mt-32 mb-28 flex items-center ">
+      <div className="relative z-10 mt-24 mb-16 flex items-center ">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
             
@@ -118,12 +118,12 @@ const Hero = () => {
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.5, duration: 1 }}
-              className="relative mt-8 lg:mt-0"
+              className="relative  lg:mt-0"
             >
               <div className="grid grid-cols-2  gap-3 sm:gap-4 h-[400px] sm:h-[500px] lg:h-[600px]">
                 {/* Main Image */}
                 <motion.div
-                  className="relative mt-10 col-span-2 h-48 sm:h-64 lg:h-80 rounded-xl sm:rounded-2xl overflow-hidden shadow-xl sm:shadow-2xl"
+                  className="relative mt-5 col-span-2 h-48 sm:h-64 lg:h-80 rounded-xl sm:rounded-2xl overflow-hidden shadow-xl sm:shadow-2xl"
                   whileHover={{ scale: 1.02 }}
                   transition={{ duration: 0.3 }}
                 >

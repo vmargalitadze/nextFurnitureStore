@@ -7,12 +7,19 @@ interface ProductItem {
   image: string[];
   price: number;
   title: string;
+  titleEn?: string;
 }
 
 interface ProductListProps {
   items: ProductItem[]; 
 }
 
+const getLocalizedTitle = (product: ProductItem, locale: string): string => {
+  if (locale === 'en') {
+    return product.title ?? product.titleEn;
+  }
+  return product.title ?? product.titleEn ?? '';
+};
 
 function ProductHelper({ items }: ProductListProps  ) {
     if (!items || items.length === 0) {
@@ -40,7 +47,7 @@ function ProductHelper({ items }: ProductListProps  ) {
                 </h4>
                 <h5 className="font-normal text-black text-paragraph leading-[1.5]">
                   <Link href="/product-details" className="text-xl md:text-2xl" data-discover="true">
-                    {item.title}
+                    {getLocalizedTitle(item, 'en')}
                   </Link>
                 </h5>
               </div>

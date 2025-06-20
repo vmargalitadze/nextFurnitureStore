@@ -1,5 +1,5 @@
 import { FaUser, FaShoppingCart, FaSignOutAlt } from "react-icons/fa";
-import Image from "next/image";
+
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,

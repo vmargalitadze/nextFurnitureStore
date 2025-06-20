@@ -19,6 +19,8 @@ import {
 import { Link } from "@/i18n/navigation";
 import { prisma } from "@/lib/prisma";
 import { format } from "date-fns";
+import { getTranslations } from "next-intl/server";
+import SignOutButton from "@/components/SignOutButton";
 
 async function getCurrentUser() {
   const session = await auth();
@@ -40,6 +42,7 @@ async function getCurrentUser() {
 
 export default async function ProfilePage() {
   const user = await getCurrentUser();
+  const t = await getTranslations("profile");
   
   if (!user) {
     redirect("/sign-in");
@@ -50,12 +53,12 @@ export default async function ProfilePage() {
   const cartItemCount = user.Cart?.[0]?.items?.length || 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-20 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen mt-9 bg-gradient-to-br from-blue-50 via-white to-purple-50 py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
         {/* Header Section */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Profile Dashboard</h1>
-          <p className="text-lg text-gray-600">Welcome back, {user.name}!</p>
+          <h1 className="text-4xl font-bold text-[#bba588] mb-4">{t('title')}</h1>
+          <p className="text-lg text-gray-600">{t('welcome', { name: user.name })}</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -72,10 +75,10 @@ export default async function ProfilePage() {
                     {isAdmin ? (
                       <>
                         <FaCrown className="mr-1" />
-                        Admin
+                        {t('admin')}
                       </>
                     ) : (
-                      "User"
+                      t('user')
                     )}
                   </Badge>
                 </div>
@@ -84,7 +87,7 @@ export default async function ProfilePage() {
                 <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                   <FaEnvelope className="text-gray-500" />
                   <div>
-                    <p className="text-sm text-gray-500">Email</p>
+                    <p className="text-sm text-gray-500">{t('email')}</p>
                     <p className="font-medium">{user.email}</p>
                   </div>
                 </div>
@@ -92,7 +95,7 @@ export default async function ProfilePage() {
                 <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                   <FaCalendarAlt className="text-gray-500" />
                   <div>
-                    <p className="text-sm text-gray-500">Member Since</p>
+                    <p className="text-sm text-gray-500">{t('memberSince')}</p>
                     <p className="font-medium">
                       {format(new Date(user.createdAt), "MMM dd, yyyy")}
                     </p>
@@ -103,11 +106,11 @@ export default async function ProfilePage() {
                   <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                     <FaMapMarkerAlt className="text-gray-500" />
                     <div>
-                      <p className="text-sm text-gray-500">Address</p>
+                      <p className="text-sm text-gray-500">{t('address')}</p>
                       <p className="font-medium text-sm">
                         {typeof user.address === 'object' && user.address !== null
                           ? `${(user.address as any).street || ''} ${(user.address as any).city || ''}`
-                          : 'Address saved'
+                          : t('addressSaved')
                         }
                       </p>
                     </div>
@@ -118,11 +121,16 @@ export default async function ProfilePage() {
                   <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                     <FaCreditCard className="text-gray-500" />
                     <div>
-                      <p className="text-sm text-gray-500">Payment Method</p>
+                      <p className="text-sm text-gray-500">{t('paymentMethod')}</p>
                       <p className="font-medium text-sm">•••• •••• •••• {user.paymentMethod.slice(-4)}</p>
                     </div>
                   </div>
                 )}
+
+                {/* Sign Out Button */}
+                <div className="pt-4">
+                  <SignOutButton />
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -135,7 +143,7 @@ export default async function ProfilePage() {
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-blue-100 text-sm">Total Orders</p>
+                      <p className="text-blue-100 text-sm">{t('totalOrders')}</p>
                       <p className="text-2xl font-bold">{orderCount}</p>
                     </div>
                     <FaList className="text-2xl text-blue-200" />
@@ -147,7 +155,7 @@ export default async function ProfilePage() {
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-green-100 text-sm">Cart Items</p>
+                      <p className="text-green-100 text-sm">{t('cartItems')}</p>
                       <p className="text-2xl font-bold">{cartItemCount}</p>
                     </div>
                     <FaShoppingCart className="text-2xl text-green-200" />
@@ -159,8 +167,8 @@ export default async function ProfilePage() {
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-purple-100 text-sm">Account Type</p>
-                      <p className="text-2xl font-bold">{isAdmin ? 'Admin' : 'User'}</p>
+                      <p className="text-purple-100 text-sm">{t('accountType')}</p>
+                      <p className="text-2xl font-bold">{isAdmin ? t('admin') : t('user')}</p>
                     </div>
                     <FaUser className="text-2xl text-purple-200" />
                   </div>
@@ -174,10 +182,10 @@ export default async function ProfilePage() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <FaCrown className="text-yellow-500" />
-                    Admin Actions
+                    {t('adminActions.title')}
                   </CardTitle>
                   <CardDescription>
-                    Manage your store and products
+                    {t('adminActions.description')}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -185,13 +193,13 @@ export default async function ProfilePage() {
                     <Link href="/new">
                       <Button className="w-full h-16 text-lg" variant="default">
                         <FaPlus className="mr-2" />
-                        Add New Product
+                        {t('adminActions.addNewProduct')}
                       </Button>
                     </Link>
                     <Link href="/adminall">
                       <Button className="w-full h-16 text-lg" variant="outline">
                         <FaList className="mr-2" />
-                        Manage All Products
+                        {t('adminActions.manageAllProducts')}
                       </Button>
                     </Link>
                   </div>
@@ -202,9 +210,9 @@ export default async function ProfilePage() {
             {/* Recent Orders */}
             <Card>
               <CardHeader>
-                <CardTitle>Recent Orders</CardTitle>
+                <CardTitle>{t('recentOrders.title')}</CardTitle>
                 <CardDescription>
-                  Your latest order history
+                  {t('recentOrders.description')}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -213,21 +221,21 @@ export default async function ProfilePage() {
                     {user.Order.map((order) => (
                       <div key={order.id} className="flex items-center justify-between p-4 border rounded-lg">
                         <div>
-                          <p className="font-medium">Order #{order.id.slice(-8)}</p>
+                          <p className="font-medium">{t('recentOrders.orderNumber', { number: order.id.slice(-8) })}</p>
                           <p className="text-sm text-gray-500">
                             {format(new Date(order.createdAt), "MMM dd, yyyy")}
                           </p>
                           <p className="text-sm text-gray-500">
-                            Total: ${order.totalPrice.toString()}
+                            {t('recentOrders.total', { amount: order.totalPrice.toString() })}
                           </p>
                         </div>
                         <div className="text-right">
                           <Badge variant={order.isPaid ? "default" : "secondary"}>
-                            {order.isPaid ? 'Paid' : 'Pending'}
+                            {order.isPaid ? t('recentOrders.paid') : t('recentOrders.pending')}
                           </Badge>
                           {order.isDelivered && (
                             <Badge variant="outline" className="ml-2">
-                              Delivered
+                              {t('recentOrders.delivered')}
                             </Badge>
                           )}
                         </div>
@@ -237,8 +245,8 @@ export default async function ProfilePage() {
                 ) : (
                   <div className="text-center py-8 text-gray-500">
                     <FaShoppingCart className="mx-auto text-4xl mb-4 text-gray-300" />
-                    <p>No orders yet</p>
-                    <p className="text-sm">Start shopping to see your orders here</p>
+                    <p>{t('recentOrders.noOrders')}</p>
+                    <p className="text-sm">{t('recentOrders.noOrdersDescription')}</p>
                   </div>
                 )}
               </CardContent>
@@ -247,9 +255,9 @@ export default async function ProfilePage() {
             {/* Quick Actions */}
             <Card>
               <CardHeader>
-                <CardTitle>Quick Actions</CardTitle>
+                <CardTitle>{t('quickActions.title')}</CardTitle>
                 <CardDescription>
-                  Common tasks and navigation
+                  {t('quickActions.description')}
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -257,13 +265,13 @@ export default async function ProfilePage() {
                   <Link href="/cart">
                     <Button className="w-full" variant="outline">
                       <FaShoppingCart className="mr-2" />
-                      View Cart
+                      {t('quickActions.viewCart')}
                     </Button>
                   </Link>
                   <Link href="/all">
                     <Button className="w-full" variant="outline">
                       <FaList className="mr-2" />
-                      Browse Products
+                      {t('quickActions.browseProducts')}
                     </Button>
                   </Link>
                 </div>

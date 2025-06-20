@@ -2,7 +2,9 @@
   "navitems": {
     "products": "პროდუქტები",
     "about": "შესახებ",
-    "contact": "კონტაქტები"
+    "contact": "კონტაქტები",
+    "login": "შესვლა",
+    "profile": "პროფილი"
   },
   "categories": {
     "title": "კატეგორიები",
@@ -36,6 +38,123 @@
     "lounge": "ლაუნჯი",
     "officeChair": "ოფისის სავარძელი",
     "kitchen": "სამზარეულო"
+  },
+
+  "productDetail": {
+    "breadcrumb": {
+      "home": "მთავარი"
+    },
+    "product": {
+      "brand": "ბრენდი",
+      "size": "ზომა",
+      "price": "ფასი",
+      "category": "კატეგორია",
+      "availability": "ხელმისაწვდომია",
+      "addToCart": "კალათაში დამატება",
+      "productNotFound": "პროდუქტი ვერ მოიძებნა",
+      "loading": "იტვირთება...",
+      "outOfStock": "ამოწურულია ყველა ლოკაციაზე"
+    },
+    "locations": {
+      "tbilisi": "თბილისი",
+      "batumi": "ბათუმი",
+      "qutaisi": "ქუთაისი",
+      "tbilisiAddress": "ქ.თბილისი თ.ერისთავის 1",
+      "batumiAddress": "ქ.ბათუმი ა.პუშკინის 117",
+      "qutaisiAddress": "ქ.ქუთაისი ზ.ფურცელაძის 15"
+    }
+  },
+  "allPage": {
+    "hero": {
+      "title": "ჩვენი პროდუქტები",
+      "breadcrumb": {
+        "home": "მთავარი",
+        "products": "პროდუქტები"
+      }
+    },
+    "filters": {
+      "title": "ფილტრები",
+      "categories": {
+        "title": "კატეგორიები",
+        "allCategories": "ყველა კატეგორია"
+      },
+      "sizes": {
+        "title": "ზომები",
+        "allSizes": "ყველა ზომა"
+      },
+      "priceRange": {
+        "title": "ფასის დიაპაზონი",
+        "minimumPrice": "მინიმალური ფასი",
+        "maximumPrice": "მაქსიმალური ფასი"
+      },
+      "brand": {
+        "title": "ბრენდი",
+        "allBrands": "ყველა ბრენდი"
+      },
+      "clearFilters": "ფილტრების გასუფთავება"
+    },
+    "results": {
+      "found": "ნაპოვნია",
+      "products": "პროდუქტი",
+      "noProductsFound": "პროდუქტი ვერ მოიძებნა",
+      "tryDifferentFilters": "სცადეთ სხვა ფილტრები ან მოძებნეთ სხვა პროდუქტი"
+    },
+    "sorting": {
+      "sortBy": "სორტირება:",
+      "newest": "უახლესი",
+      "priceLowToHigh": "ფასი: დაბლიდან მაღლა",
+      "priceHighToLow": "ფასი: მაღლიდან დაბლა",
+      "nameAZ": "სახელი: A-Z"
+    }
+  },
+  "footer": {
+    "companyDescription": "პრემიუმ ავეჯის მაღაზია, რომელიც გთავაზობთ მაღალი ხარისხის, სტილურ ნაწარმს ყველა ოთახისთვის.",
+    "quickLinks": "სწრაფი ბმულები",
+    "allProducts": "ყველა პროდუქტი",
+    "aboutUs": "ჩვენს შესახებ",
+    "contact": "კონტაქტი",
+    "followUs": "გამოგვყევით",
+    "copyright": "© 2024 ავეჯის მაღაზია. ყველა უფლება დაცულია.",
+    "privacy": "კონფიდენციალურობა",
+    "terms": "წესები"
+  },
+  "profile": {
+    "title": "პროფილის დეშბორდი",
+    "welcome": "კეთილი იყოს თქვენი დაბრუნება, {name}!",
+    "user": "მომხმარებელი",
+    "admin": "ადმინისტრატორი",
+    "email": "ელ-ფოსტა",
+    "memberSince": "წევრია",
+    "address": "მისამართი",
+    "addressSaved": "მისამართი შენახულია",
+    "paymentMethod": "გადახდის მეთოდი",
+    "totalOrders": "სულ შეკვეთები",
+    "cartItems": "კალათის ნაწარმი",
+    "accountType": "ანგარიშის ტიპი",
+    "signOut": "გასვლა",
+    "adminActions": {
+      "title": "ადმინისტრატორის ქმედებები",
+      "description": "მართეთ თქვენი მაღაზია და პროდუქტები",
+      "addNewProduct": "ახალი პროდუქტის დამატება",
+      "manageAllProducts": "ყველა პროდუქტის მართვა"
+    },
+    "recentOrders": {
+      "title": "ბოლო შეკვეთები",
+      "description": "თქვენი ბოლო შეკვეთების ისტორია",
+      "orderNumber": "შეკვეთა #{number}",
+      "total": "სულ: ${amount}",
+      "paid": "გადახდილი",
+      "pending": "მიმდინარე",
+      "delivered": "მიწოდებული",
+      "noOrders": "შეკვეთები არ არის",
+      "noOrdersDescription": "დაიწყეთ შოპინგი შეკვეთების სანახავად"
+    },
+    "quickActions": {
+      "title": "სწრაფი ქმედებები",
+      "description": "საერთო ამოცანები და ნავიგაცია",
+      "viewCart": "კალათის ნახვა",
+      "browseProducts": "პროდუქტების ნახვა"
+    }
   }
 }
   

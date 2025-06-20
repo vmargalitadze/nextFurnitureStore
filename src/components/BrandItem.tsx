@@ -104,7 +104,7 @@ function BrandItem({ images, from, to, brands }: BrandItemProps) {
     >
       <div
         ref={containerRef}
-        className="flex items-center space-x-16"
+        className="flex items-center space-x-8 sm:space-x-12 md:space-x-16"
         style={{
           transform: 'translateX(0px)',
           willChange: 'transform',
@@ -117,7 +117,7 @@ function BrandItem({ images, from, to, brands }: BrandItemProps) {
             className="flex-shrink-0 group"
             data-discover="true"
           >
-            <div className="relative w-32 h-20 sm:w-40 sm:h-24 md:w-48 md:h-28 lg:w-56 lg:h-32 bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 transform hover:scale-105 border border-gray-100">
+            <div className="relative w-40 h-24 sm:w-48 sm:h-28 md:w-56 md:h-32 lg:w-64 lg:h-36 bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 transform hover:scale-105 border border-gray-100">
               <Image
                 src={brand.src}
                 alt={`${brand.name} logo`}
