@@ -219,7 +219,7 @@ function ProductList() {
           {/* View All Button */}
           <div className="text-center mx-auto mt-7 md:mt-12">
             <Link
-              className="btn-all btn-outline"
+              className="inline-block px-8 py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 bg-gradient-to-r from-primary to-primary/80 text-white shadow-lg shadow-primary/25 hover:shadow-xl"
               href="/all"
               data-discover="true"
             >

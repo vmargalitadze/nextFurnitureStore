@@ -6,8 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle, XCircle, Loader2 } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
 
 export default function VerifyEmailForm() {
+  const t = useTranslations('auth.verifyEmail');
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
   const [message, setMessage] = useState('');
   const searchParams = useSearchParams();
@@ -23,7 +25,7 @@ export default function VerifyEmailForm() {
       if (!token) {
         console.log('❌ No token provided');
         setStatus('error');
-        setMessage('No verification token provided');
+        setMessage(t('noToken'));
         return;
       }
 
@@ -52,19 +54,19 @@ export default function VerifyEmailForm() {
         } else {
           console.log('❌ Verification failed:', data.error);
           setStatus('error');
-          setMessage(data.error || 'Verification failed');
+          setMessage(data.error || t('verificationFailed'));
         }
       } catch (error) {
         console.log('❌ Error during verification:', error);
         setStatus('error');
-        setMessage('An error occurred during verification. Please try again or contact support.');
+        setMessage(t('errorOccurred'));
       }
     };
 
     // Add a small delay to ensure the component is fully mounted
     const timer = setTimeout(verifyEmail, 100);
     return () => clearTimeout(timer);
-  }, [token]);
+  }, [token, t]);
 
   const handleResendVerification = async () => {
     try {
@@ -82,13 +84,13 @@ export default function VerifyEmailForm() {
       const data = await response.json();
 
       if (response.ok) {
-        alert('Verification email sent successfully! Please check your inbox.');
+        alert(t('resendSuccess'));
       } else {
-        alert(data.error || 'Failed to resend verification email');
+        alert(data.error || t('resendError'));
       }
     } catch (error) {
       console.error('Error resending verification:', error);
-      alert('Failed to resend verification email');
+      alert(t('resendError'));
     }
   };
 
@@ -100,9 +102,9 @@ export default function VerifyEmailForm() {
             <div className="flex justify-center mb-4">
               <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </div>
-            <CardTitle>Verifying Email</CardTitle>
+            <CardTitle>{t('verifying')}</CardTitle>
             <CardDescription>
-              Please wait while we verify your email address...
+              {t('verifyingDescription')}
             </CardDescription>
           </CardHeader>
         </Card>
@@ -122,7 +124,7 @@ export default function VerifyEmailForm() {
             )}
           </div>
           <CardTitle>
-            {status === 'success' ? 'Email Verified!' : 'Verification Failed'}
+            {status === 'success' ? t('success') : t('error')}
           </CardTitle>
           <CardDescription>{message}</CardDescription>
         </CardHeader>
@@ -131,7 +133,7 @@ export default function VerifyEmailForm() {
             <div className="space-y-2">
               <Button asChild className="w-full">
                 <Link href="/sign-in">
-                  Continue to Sign In
+                  {t('continueToSignIn')}
                 </Link>
               </Button>
             </div>
@@ -142,11 +144,11 @@ export default function VerifyEmailForm() {
                 variant="outline"
                 className="w-full"
               >
-                Resend Verification Email
+                {t('resendVerification')}
               </Button>
               <Button asChild variant="outline" className="w-full">
                 <Link href="/sign-in">
-                  Back to Sign In
+                  {t('backToSignIn')}
                 </Link>
               </Button>
             </div>

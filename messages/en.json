@@ -16,6 +16,120 @@
   "helper": {
     "details": "Details"
   },
+  "contact": {
+    "title": "Contact",
+    "breadcrumb": {
+      "home": "Home",
+      "contact": "Contact"
+    },
+    "hero": {
+      "title": "Contact",
+      "subtitle": "Get in touch with us"
+    },
+    "form": {
+      "title": "Contact Us",
+      "description": "We are here to address your inquiries, feedback, and partnership opportunities promptly and effectively.",
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Enter your full name",
+      "email": "Email",
+      "emailPlaceholder": "Enter your email address",
+      "phone": "Phone No.",
+      "phonePlaceholder": "Type your phone number",
+      "subject": "Subject",
+      "subjectOptions": {
+        "payment": "Payment Problem",
+        "furniture": "Furniture Problem",
+        "agreement": "Agreement Problem",
+        "carrying": "Carrying Problem"
+      },
+      "message": "Your Message",
+      "messagePlaceholder": "Type your message",
+      "submit": "Send Message"
+    },
+    "info": {
+      "address": "ADDRESS",
+      "email": "EMAIL",
+      "phone": "PHONE",
+      "batumiAddress": "Batumi: A. Pushkin St. 44",
+      "tbilisiAddress": "Tbilisi: T. Eristavi St. 1",
+      "emailAddress": "Sleepandbedgeorgia@gmail.com",
+      "phoneNumber": "123-456-7890"
+    }
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "empty": "Your cart is empty",
+    "emptyDescription": "Start shopping to add items to your cart",
+    "continueShopping": "Continue Shopping",
+    "items": "Items",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "tax": "Tax",
+    "total": "Total",
+    "checkout": "Proceed to Checkout",
+    "remove": "Remove",
+    "quantity": "Quantity",
+    "price": "Price"
+  },
+  "productForm": {
+    "title": "Add Product",
+
+    "name": "Name",
+    "namePlaceholder": "Product name",
+    "nameEn": "Name (English)",
+    "nameEnPlaceholder": "Product name in English",
+    "category": "Category",
+    "images": "Images",
+    "brand": "Brand",
+    "brandPlaceholder": "Select brand",
+    "description": "Description",
+    "descriptionPlaceholder": "Description",
+    "descriptionEn": "Description (English)",
+    "descriptionEnPlaceholder": "Description in English",
+    "sizesAndPrices": "Sizes and Prices",
+    "addSize": "Add Size",
+    "size": "Size",
+    "price": "Price",
+    "location": "Location",
+    "tbilisi": "Tbilisi",
+    "batumi": "Batumi",
+    "qutaisi": "Kutaisi",
+    "popular": "Popular",
+    "sales": "Sales",
+    "submit": "Add Product",
+    "error": "Error occurred while adding product"
+  },
+  "editProductForm": {
+    "title": "Edit Product",
+    "description": "Update product information",
+    "submit": "Update Product",
+    "error": "Error occurred while updating product"
+  },
+  "filter": {
+    "title": "Choose Category",
+    "price": "Price",
+    "min": "Min:",
+    "max": "Max:",
+    "brand": "Brand",
+    "brandPlaceholder": "Select brand"
+  },
+  "cloudinaryUploader": {
+    "title": "Upload Images",
+    "uploadButton": "Upload Images",
+    "uploadedImages": "Uploaded Images",
+    "noImages": "No images uploaded yet."
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page",
+    "of": "of"
+  },
+  "dropdown": {
+    "selectSize": "Select Size",
+    "selectBrand": "Select Brand"
+  },
+
   "auth": {
     "forgotPassword": {
       "title": "Forgot Password",
@@ -39,6 +153,22 @@
       "backToSignIn": "Back to Sign In",
       "invalidLink": "Invalid Reset Link",
       "requestNewLink": "Request New Link"
+    },
+    "verifyEmail": {
+      "title": "Verify Email",
+      "description": "Verify your email address to complete your account setup",
+      "verifying": "Verifying Email",
+      "verifyingDescription": "Please wait while we verify your email address...",
+      "success": "Email Verified!",
+      "error": "Verification Failed",
+      "noToken": "No verification token provided",
+      "verificationFailed": "Verification failed",
+      "errorOccurred": "An error occurred during verification. Please try again or contact support.",
+      "continueToSignIn": "Continue to Sign In",
+      "resendVerification": "Resend Verification Email",
+      "backToSignIn": "Back to Sign In",
+      "resendSuccess": "Verification email sent successfully! Please check your inbox.",
+      "resendError": "Failed to resend verification email"
     }
   },
   "categories": {
@@ -84,6 +214,7 @@
       "size": "Size",
       "price": "Price",
       "category": "Category",
+      "description": "Description",
       "availability": "Availability",
       "addToCart": "Add to Cart",
       "productNotFound": "Product not found",
@@ -167,6 +298,7 @@
     "cartItems": "Cart Items",
     "accountType": "Account Type",
     "signOut": "Sign Out",
+    "recoverPassword": "Recover Password",
     "adminActions": {
       "title": "Admin Actions",
       "description": "Manage your store and products",

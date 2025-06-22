@@ -17,7 +17,7 @@ function ProductImage({ image }: { image: string[] }) {
       <div className="flex flex-col lg:grid lg:grid-cols-[3fr_auto] gap-4 items-start">
         
         {/* Main Image */}
-        <div className="relative w-full h-[400px] sm:h-[500px] lg:h-[600px] rounded-xl overflow-hidden shadow-lg">
+        <div className="relative w-full aspect-square rounded-lg overflow-hidden bg-gray-50">
           <motion.div
             key={current}
             initial="exit"
@@ -30,22 +30,22 @@ function ProductImage({ image }: { image: string[] }) {
               src={image[current]}
               alt="main-image"
               fill
-              className="object-cover rounded-xl"
+              className="object-cover"
               priority
             />
           </motion.div>
         </div>
 
         {/* Thumbnail Navigation */}
-        <div className="flex lg:flex-col gap-3 justify-center items-center overflow-x-auto w-full py-2 lg:w-auto lg:py-0">
+        <div className="flex justify-center gap-4 mt-6">
           {image.map((img, index) => (
             <button
               key={index}
               onClick={() => setCurrent(index)}
-              className={`relative w-16 h-16 lg:w-20 lg:h-20 border-2 rounded-lg overflow-hidden transition-all duration-200 hover:scale-105 shrink-0 ${
+              className={`relative w-16 h-16 rounded-lg overflow-hidden transition-all duration-200 ${
                 current === index 
-                  ? 'border-primary shadow-lg' 
-                  : 'border-gray-200 hover:border-primary/50'
+                  ? 'ring-2 ring-gray-900' 
+                  : 'hover:opacity-80'
               }`}
             >
               <Image

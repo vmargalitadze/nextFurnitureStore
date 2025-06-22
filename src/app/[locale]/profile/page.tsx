@@ -123,6 +123,16 @@ export default async function ProfilePage() {
                   </div>
                 )}
 
+       <Link 
+              href="/forgot-password" 
+              className="inline-block px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 text-gray-700   "
+            >
+            <Button className="w-full h-16 text-lg" variant="default">
+                      
+                      {t('recoverPassword')}
+                      </Button>
+            </Link>
+            
                 {/* Sign Out Button */}
                 <div className="pt-4">
                   <SignOutButton />
