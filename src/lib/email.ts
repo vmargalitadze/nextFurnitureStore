@@ -8,6 +8,7 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASSWORD, // Your email password or app password
   },
 });
+console.log('a');
 
 export const sendVerificationEmail = async (email: string, token: string) => {
   // Use dynamic URL that works on both development and Vercel
