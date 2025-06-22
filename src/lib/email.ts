@@ -11,9 +11,18 @@ const transporter = nodemailer.createTransport({
 
 export const sendVerificationEmail = async (email: string, token: string) => {
   // Use dynamic URL that works on both development and Vercel
-  const baseUrl =
-  process.env.NEXTAUTH_URL ||
-  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
+  let baseUrl = process.env.NEXTAUTH_URL;
+  
+  if (!baseUrl) {
+    // On Vercel, VERCEL_URL is provided without protocol
+    if (process.env.VERCEL_URL) {
+      baseUrl = `https://next-furniture-store.vercel.app/ge`;
+    } else {
+      // Fallback for local development
+      baseUrl = 'http://localhost:3000';
+    }
+  }
+  
   const verificationUrl = `${baseUrl}/en/verify-email?token=${token}`;
 
   const mailOptions = {
@@ -58,7 +67,18 @@ export const sendVerificationEmail = async (email: string, token: string) => {
 
 export const sendPasswordResetEmail = async (email: string, token: string) => {
   // Use dynamic URL that works on both development and Vercel
-  const baseUrl = process.env.NEXTAUTH_URL || process.env.VERCEL_URL || 'http://localhost:3000';
+  let baseUrl = process.env.NEXTAUTH_URL;
+  
+  if (!baseUrl) {
+    // On Vercel, VERCEL_URL is provided without protocol
+    if (process.env.VERCEL_URL) {
+      baseUrl = `https://${process.env.VERCEL_URL}`;
+    } else {
+      // Fallback for local development
+      baseUrl = 'http://localhost:3000';
+    }
+  }
+  
   const resetUrl = `${baseUrl}/reset-password?token=${token}`;
 
   const mailOptions = {
