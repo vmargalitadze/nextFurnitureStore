@@ -106,7 +106,7 @@ function PageContentWrapper() {
   if (loading) {
     return (
       <>
-        <div className="relative min-h-[400px] flex items-center justify-center bg-overlay p-14 sm:p-16 before:bg-title before:bg-opacity-70 overflow-hidden">
+        <div className="relative min-h-screen flex items-center justify-center bg-overlay p-14 sm:p-16 before:bg-title before:bg-opacity-70 overflow-hidden">
           <Image
             src="/bed.jpg"
             alt="Background"
@@ -133,7 +133,7 @@ function PageContentWrapper() {
           </div>
         </div>
 
-        <div className="container mt-[50px]">
+        <div className="container min-h-screen mt-[50px]">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {Array.from({ length: 8 }).map((_, index) => (
               <div key={index} className="animate-pulse">
@@ -153,7 +153,7 @@ function PageContentWrapper() {
     
   return (
     <>
-      <div className="relative min-h-[400px] flex items-center justify-center bg-overlay p-14 sm:p-16 before:bg-title before:bg-opacity-70 overflow-hidden">
+      <div className="relative min-h-screen flex items-center justify-center bg-overlay p-14 sm:p-16 before:bg-title before:bg-opacity-70 overflow-hidden">
         <Image
           src="/bed.jpg"
           alt="Background"
@@ -180,7 +180,7 @@ function PageContentWrapper() {
         </div>
       </div>
 
-      <div className="container mt-[50px]">
+      <div className="container min-h-screen mt-[50px]">
         {transformedProducts.length > 0 ? (
           <ProductHelper items={transformedProducts} />
         ) : (

@@ -57,6 +57,11 @@ export const config = {
 
         if (!user || !user.password) return null;
 
+        // Check if email is verified
+        if (!user.emailVerified) {
+          throw new Error("Please verify your email address before signing in. Check your inbox for a verification link.");
+        }
+
         const isPasswordValid = await compare(
           credentials.password as string,
           user.password

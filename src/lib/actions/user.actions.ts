@@ -16,6 +16,8 @@ import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { Prisma } from '@prisma/client';
 import { getMyCart } from './cart.actions';
+import { generateVerificationToken } from '../token';
+import { sendVerificationEmail } from '../email';
 
 
 export async function signInWithCredentials(
@@ -48,24 +50,51 @@ export async function signUpUser(prevState: any, formData: FormData) {
       confirmPassword: formData.get('confirmPassword'),
     });
 
+    // Check if user already exists before creating
+    const existingUser = await prisma.user.findUnique({
+      where: { email: user.email }
+    });
+
+    if (existingUser) {
+      return { 
+        success: false, 
+        message: 'Email already exists. Please use a different email or sign in with your existing account.' 
+      };
+    }
+
     const hashedPassword = await hash(user.password);
 
+    // Create user without email verification
     await prisma.user.create({
       data: {
         name: user.name,
         email: user.email,
         password: hashedPassword,
       },
-
-      
     });
+
+    // Generate verification token
+    const verificationToken = await generateVerificationToken(user.email);
+
+    // Send verification email
+    const emailResult = await sendVerificationEmail(user.email, verificationToken.token);
+
+    if (!emailResult.success) {
+      // If email fails, delete the user and return error
+      await prisma.user.delete({
+        where: { email: user.email }
+      });
+      return { 
+        success: false, 
+        message: emailResult.error || 'Failed to send verification email. Please try again.' 
+      };
+    }
 
     return {
       success: true,
       email: user.email,
-      password: user.password,
+      message: 'Account created successfully. Please check your email to verify your account.',
     };
-    redirect('/');
   } catch (error) {
     return { success: false, message: formatError(error) };
   }
@@ -84,5 +113,4 @@ export async function signOutUser() {
 }
 
 // Sign up user
-
 
