@@ -10,8 +10,9 @@ const transporter = nodemailer.createTransport({
 });
 
 export const sendVerificationEmail = async (email: string, token: string) => {
-  // Use the correct URL with locale parameter
-  const verificationUrl = `${process.env.NEXTAUTH_URL}/en/verify-email?token=${token}`;
+  // Use dynamic URL that works on both development and Vercel
+  const baseUrl = process.env.NEXTAUTH_URL || process.env.VERCEL_URL || 'http://localhost:3000';
+  const verificationUrl = `${baseUrl}/en/verify-email?token=${token}`;
 
   const mailOptions = {
     from: process.env.EMAIL_USER,
@@ -29,7 +30,8 @@ export const sendVerificationEmail = async (email: string, token: string) => {
           </a>
         </div>
         
-       
+        <p>If the button doesn't work, you can copy and paste this link into your browser:</p>
+        <p style="word-break: break-all; color: #666;">${verificationUrl}</p>
         
         <p>This link will expire in 1 hour.</p>
         
@@ -53,7 +55,9 @@ export const sendVerificationEmail = async (email: string, token: string) => {
 };
 
 export const sendPasswordResetEmail = async (email: string, token: string) => {
-  const resetUrl = `${process.env.NEXTAUTH_URL}/reset-password?token=${token}`;
+  // Use dynamic URL that works on both development and Vercel
+  const baseUrl = process.env.NEXTAUTH_URL || process.env.VERCEL_URL || 'http://localhost:3000';
+  const resetUrl = `${baseUrl}/reset-password?token=${token}`;
 
   const mailOptions = {
     from: process.env.EMAIL_USER,
