@@ -74,7 +74,7 @@ function ProductHelper({ items }: ProductListProps  ) {
                     <circle cx="12" cy="12" r="3"></circle>
                   </svg>
                   <span className="tooltip">
-                    {t("details")}
+                    {t("helper.details")}
                     <span className="tooltip-arrow"></span>
                   </span>
                 </Link>

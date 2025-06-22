@@ -87,10 +87,10 @@ function Categories() {
         <div className="max-w-7xl mx-auto">
           {/* Modern Section Header */}
           <div className="text-center mb-16">
-            <h2 className="text-primary font-secondary font-normal text-4xl md:text-[60px] block -ml-5 -mb-3 sm:-mb-[30px] leading-normal sm:leading-normal">
+            <h2 className="text-primary font-secondary font-normal text-4xl md:text-[70px] block -ml-5 -mb-3 sm:-mb-[30px] leading-normal sm:leading-normal">
               {t("title")}
             </h2>
-            <h6 className="text-lg mt-7 text-gray-600 max-w-2xl mx-auto font-secondary">
+            <h6 className="text-base mt-10 sm:text-lg lg:text-xl text-gray-600 max-w-lg leading-relaxed mx-auto ">
               {t("subtitle")}
             </h6>
           </div>
@@ -100,16 +100,7 @@ function Categories() {
             <ProductHelper items={categoryProducts} />
           </div>
 
-          {/* Call to Action */}
-          <div className="text-center mx-auto mt-7 md:mt-12">
-            <Link
-              className="inline-flex items-center justify-center px-8 py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 bg-gradient-to-r from-primary to-primary/80 text-white shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30"
-              href="/all"
-              data-discover="true"
-            >
-              <span>{t("viewAll")}</span>
-            </Link>
-          </div>
+      
         </div>
       </div>
     </section>

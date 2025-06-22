@@ -34,7 +34,7 @@ function Navbar() {
             
             <Link href="/all">  {t('products')} </Link>
           
-            <Link href="/about"> {t('about')}</Link>
+        
             <Link href="/contact"> {t('contact')}</Link>
           </div>
         

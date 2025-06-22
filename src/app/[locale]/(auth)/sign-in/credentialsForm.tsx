@@ -55,6 +55,14 @@ export default function CredentialsForm({ callbackUrl }: { callbackUrl: string }
             required 
             autoComplete="current-password" 
           />
+          <div className="text-right mt-2">
+            <Link 
+              href="/forgot-password" 
+              className="text-sm text-gray-600 hover:text-gray-900"
+            >
+              Forgot Password?
+            </Link>
+          </div>
         </div>
         <div>
           <Button disabled={loading} className="w-full" variant="default">

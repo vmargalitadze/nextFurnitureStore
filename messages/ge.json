@@ -6,6 +6,31 @@
     "login": "შესვლა",
     "profile": "პროფილი"
   },
+  "auth": {
+    "forgotPassword": {
+      "title": "პაროლის აღდგენა",
+      "description": "შეიყვანეთ თქვენი ელ-ფოსტა და ჩვენ გამოგიგზავნით ბმულს პაროლის აღსადგენად.",
+      "email": "ელ-ფოსტა",
+      "emailPlaceholder": "შეიყვანეთ თქვენი ელ-ფოსტა",
+      "sendResetLink": "აღდგენის ბმულის გაგზავნა",
+      "sending": "იგზავნება...",
+      "backToSignIn": "შესვლაზე დაბრუნება"
+    },
+    "resetPassword": {
+      "title": "პაროლის შეცვლა",
+      "description": "შეიყვანეთ თქვენი ახალი პაროლი ქვემოთ.",
+      "newPassword": "ახალი პაროლი",
+      "passwordPlaceholder": "შეიყვანეთ თქვენი ახალი პაროლი",
+      "confirmPassword": "პაროლის დადასტურება",
+      "confirmPasswordPlaceholder": "დაადასტურეთ თქვენი ახალი პაროლი",
+      "resetPassword": "პაროლის შეცვლა",
+      "resetting": "იცვლება...",
+      "signIn": "შესვლა",
+      "backToSignIn": "შესვლაზე დაბრუნება",
+      "invalidLink": "არასწორი აღდგენის ბმული",
+      "requestNewLink": "ახალი ბმულის მოთხოვნა"
+    }
+  },
   "helper": {
     "details": "დეტალები"
   },
@@ -17,12 +42,7 @@
     "viewAll": "ნახე ყველა კატეგორია",
     "viewCategory": "კატეგორიის ნახვა"
   },
-  "productHelper": {
-    "addToCart": "კალათაში დამატება",
- 
-    "products": "პროდუქტი",
-    "currency": "₾"
-  },
+
   "brands": {
     "title": "ჩვენი პარტნიორები",
     "subtitle": "სანდო ბრენდები ავეჯის ინდუსტრიაში"
@@ -163,5 +183,12 @@
       "viewCart": "კალათის ნახვა",
       "browseProducts": "პროდუქტების ნახვა"
     }
+  },
+  "search": {
+    "placeholder": "პროდუქტების ძიება...",
+    "suggestions": "ძიების შემოთავაზებები",
+    "inMattresses": "მატრასებში",
+    "inPillows": "ბალიშებში",
+    "inQuilts": "საბანებში"
   }
 }

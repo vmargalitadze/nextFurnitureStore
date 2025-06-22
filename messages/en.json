@@ -6,6 +6,41 @@
     "login": "Login",
     "profile": "Profile"
   },
+  "search": {
+    "placeholder": "Search products...",
+    "suggestions": "Search suggestions for",
+    "inMattresses": "in mattresses",
+    "inPillows": "in pillows",
+    "inQuilts": "in quilts"
+  },
+  "helper": {
+    "details": "Details"
+  },
+  "auth": {
+    "forgotPassword": {
+      "title": "Forgot Password",
+      "description": "Enter your email address and we'll send you a link to reset your password.",
+      "email": "Email",
+      "emailPlaceholder": "Enter your email address",
+      "sendResetLink": "Send Reset Link",
+      "sending": "Sending...",
+      "backToSignIn": "Back to Sign In"
+    },
+    "resetPassword": {
+      "title": "Reset Password",
+      "description": "Enter your new password below.",
+      "newPassword": "New Password",
+      "passwordPlaceholder": "Enter your new password",
+      "confirmPassword": "Confirm Password",
+      "confirmPasswordPlaceholder": "Confirm your new password",
+      "resetPassword": "Reset Password",
+      "resetting": "Resetting...",
+      "signIn": "Sign In",
+      "backToSignIn": "Back to Sign In",
+      "invalidLink": "Invalid Reset Link",
+      "requestNewLink": "Request New Link"
+    }
+  },
   "categories": {
     "title": "Categories",
     "subtitle": "Discover our wide selection of quality furniture and home decor",
@@ -14,12 +49,7 @@
     "viewAll": "View All Categories",
     "viewCategory": "View Category"
   },
-  "productHelper": {
-    "addToCart": "Add to Cart",
-    "viewDetails": "View Details",
-    "products": "Products",
-    "currency": "₾"
-  },
+
   "brands": {
     "title": "Our Partners",
     "subtitle": "Trusted by leading brands in the furniture industry"
@@ -97,9 +127,6 @@
         "allBrands": "All Brands"
       },
       "clearFilters": "Clear Filters"
-    },
-    "helper": {
-      "details": "Details"
     },
     "results": {
       "found": "Found",

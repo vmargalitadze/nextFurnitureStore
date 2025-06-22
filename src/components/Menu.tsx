@@ -27,7 +27,7 @@ const Menu = () => {
         <div className="absolute bg-white text-black left-0 w-full h-screen flex flex-col items-center justify-start gap-8 text-xl z-10">
           <div className="mt-[100px] flex flex-col items-center gap-8">
             <Link href="/all" onClick={handleClose}>{t('products')} </Link>
-            <Link href="/about" onClick={handleClose}> {t('about')}</Link>
+      
             <Link href="/contact" onClick={handleClose}> {t('contact')} </Link>
             
         
