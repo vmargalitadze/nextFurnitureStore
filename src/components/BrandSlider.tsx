@@ -14,7 +14,7 @@ import six from "../../public/logos/6.png";
 
 const logos = [
   { src: one.src, name: "Sevyat", type: "sevyat" },
-  { src: two.src, name: "İDAŞ", type: "idas" },
+  { src: two.src, name: "idaş", type: "idaş" },
   { src: four.src, name: "İsbiryatak", type: "isbiryatak" },
   { src: five.src, name: "SleepNice", type: "sleepnice" },
 

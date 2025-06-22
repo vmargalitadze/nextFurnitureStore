@@ -17,6 +17,10 @@ const config: Config = {
   			secondary: [
   				'Pacifico',
   				'cursive'
+  			],
+  			sans: [
+  				'Manrope',
+  				'sans-serif'
   			]
   		},
   		borderRadius: {

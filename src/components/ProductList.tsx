@@ -132,7 +132,7 @@ function ProductList() {
         <div className="max-w-7xl mx-auto">
           {/* Modern Section Header */}
           <div className="text-center mb-16">
-            <h2 className="text-primary font-secondary font-normal text-4xl md:text-[70px] block -ml-5 -mb-3 sm:-mb-[30px] leading-normal sm:leading-normal">
+            <h2 className="text-primary  font-normal text-4xl md:text-[50px] block -ml-5 -mb-3 sm:-mb-[30px] leading-normal sm:leading-normal">
               {t("title")}   {t("subtitle")}
             </h2>
             {/* <h6 className="text-lg mt-7 text-gray-600 max-w-2xl mx-auto font-secondary">

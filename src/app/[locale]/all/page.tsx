@@ -47,6 +47,7 @@ function PageContent() {
   const [loading, setLoading] = useState(true);
   const searchParams = useSearchParams();
   const [open, setOpen] = useState(false);
+  const [filterOpen, setFilterOpen] = useState(false);
   const [selectedType, setSelectedType] = useState<string>("");
   const [selectedPrice, setSelectedPrice] = useState<{ min: number | null; max: number | null }>({ min: null, max: null });
   const [selectedBrand, setSelectedBrand] = useState<string>("");
@@ -56,6 +57,19 @@ function PageContent() {
   const query = searchParams.get("query") || "";
   const pageParam = searchParams.get("page") || "1";
   const currentPage = Number(pageParam);
+
+  // Calculate active filters count
+  const getActiveFiltersCount = () => {
+    let count = 0;
+    if (selectedType) count++;
+    if (selectedSize) count++;
+    if (selectedBrand) count++;
+    if (selectedPrice.min !== null) count++;
+    if (selectedPrice.max !== null) count++;
+    return count;
+  };
+
+  const activeFiltersCount = getActiveFiltersCount();
 
   // Helper function to get product price range
   const getProductPriceRange = (product: Product) => {
@@ -291,8 +305,182 @@ function PageContent() {
       {/* Main Content */}
       <div className="container mx-auto px-4 py-12">
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Sidebar Filter */}
-          <div className="lg:w-1/4">
+          {/* Mobile Filter Button - Only visible on small screens */}
+          <div className="lg:hidden mb-6">
+            <button
+              onClick={() => setFilterOpen(!filterOpen)}
+              className="w-full bg-white border border-gray-300 rounded-lg p-4 flex items-center justify-between shadow-sm hover:shadow-md transition-all duration-200"
+            >
+              <div className="flex items-center gap-3">
+                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z" />
+                </svg>
+                <span className="font-medium text-gray-900">
+                  {t('filters.title')}
+                  {activeFiltersCount > 0 && (
+                    <span className="ml-2 bg-primary text-white text-xs px-2 py-1 rounded-full">
+                      {activeFiltersCount}
+                    </span>
+                  )}
+                </span>
+              </div>
+              <svg 
+                className={`w-5 h-5 text-gray-600 transition-transform duration-200 ${filterOpen ? 'rotate-180' : ''}`}
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Mobile Filter Panel - Collapsible on small screens */}
+          <div className={`lg:hidden ${filterOpen ? 'block' : 'hidden'} mb-6`}>
+            <div className="bg-white rounded-lg shadow-lg p-6 border border-gray-200">
+              <h3 className="text-xl font-bold text-gray-900 mb-6">
+                {t('filters.title')}
+              </h3>
+              
+              {/* Categories */}
+              <div className="mb-8">
+                <h4 className="text-lg font-semibold text-gray-800 mb-4">
+                  {t('filters.categories.title')}
+                </h4>
+                <div className="space-y-2">
+                  <button
+                    className={`w-full text-left px-3 py-2 rounded-md transition-colors ${
+                      selectedType === "" 
+                        ? "bg-primary text-white" 
+                        : "text-gray-600 hover:bg-gray-100"
+                    }`}
+                    onClick={() => setSelectedType("")}
+                  >
+                    {t('filters.categories.allCategories')}
+                  </button>
+                  {Array.from(new Set(products.map(p => p.category))).map((type) => (
+                    <button
+                      key={type}
+                      className={`w-full text-left px-3 py-2 rounded-md transition-colors ${
+                        selectedType === type 
+                          ? "bg-primary text-white" 
+                          : "text-gray-600 hover:bg-gray-100"
+                      }`}
+                      onClick={() => setSelectedType(type)}
+                    >
+                      {type}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Size Filter */}
+              <div className="mb-8">
+                <h4 className="text-lg font-semibold text-gray-800 mb-4">
+                  {t('filters.sizes.title')}
+                </h4>
+                <div className="space-y-2">
+                  <button
+                    className={`w-full text-left px-3 py-2 rounded-md transition-colors ${
+                      selectedSize === "" 
+                        ? "bg-primary text-white" 
+                        : "text-gray-600 hover:bg-gray-100"
+                    }`}
+                    onClick={() => setSelectedSize("")}
+                  >
+                    {t('filters.sizes.allSizes')}
+                  </button>
+                  {getAllAvailableSizes().map((size) => (
+                    <button
+                      key={size}
+                      className={`w-full text-left px-3 py-2 rounded-md transition-colors ${
+                        selectedSize === size 
+                          ? "bg-primary text-white" 
+                          : "text-gray-600 hover:bg-gray-100"
+                      }`}
+                      onClick={() => setSelectedSize(size)}
+                    >
+                      {formatSizeDisplay(size)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Price Range */}
+              <div className="mb-8">
+                <h4 className="text-lg font-semibold text-gray-800 mb-4">
+                  {t('filters.priceRange.title')}
+                </h4>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-sm text-gray-600 mb-1">
+                      {t('filters.priceRange.minimumPrice')}
+                    </label>
+                    <input
+                      type="number"
+                      placeholder="0"
+                      value={selectedPrice.min ?? ""}
+                      onChange={(e) => setSelectedPrice({
+                        ...selectedPrice,
+                        min: e.target.value === "" ? null : Number(e.target.value)
+                      })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm text-gray-600 mb-1">
+                      {t('filters.priceRange.maximumPrice')}
+                    </label>
+                    <input
+                      type="number"
+                      placeholder="10000"
+                      value={selectedPrice.max ?? ""}
+                      onChange={(e) => setSelectedPrice({
+                        ...selectedPrice,
+                        max: e.target.value === "" ? null : Number(e.target.value)
+                      })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Brand Filter */}
+              <div className="mb-8">
+                <h4 className="text-lg font-semibold text-gray-800 mb-4">
+                  {t('filters.brand.title')}
+                </h4>
+                <select
+                  value={selectedBrand}
+                  onChange={(e) => setSelectedBrand(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                >
+                  <option value="">
+                    {t('filters.brand.allBrands')}
+                  </option>
+                  {Array.from(new Set(products.map(p => p.brand))).map((brand) => (
+                    <option key={brand} value={brand}>{brand}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Clear Filters */}
+              <button
+                onClick={() => {
+                  setSelectedType("");
+                  setSelectedPrice({ min: null, max: null });
+                  setSelectedBrand("");
+                  setSelectedSize("");
+                }}
+                className="w-full bg-gray-200 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-300 transition-colors"
+              >
+                {t('filters.clearFilters')}
+              </button>
+            </div>
+          </div>
+
+          {/* Desktop Sidebar Filter - Only visible on large screens */}
+          <div className="hidden lg:block lg:w-1/4">
             <div className="bg-white rounded-lg shadow-lg p-6 sticky top-4">
               <h3 className="text-xl font-bold text-gray-900 mb-6">
                 {t('filters.title')}
@@ -436,7 +624,7 @@ function PageContent() {
           </div>
 
           {/* Main Product Area */}
-          <div className="lg:w-3/4">
+          <div className="lg:w-3/4 ">
             {/* Header with results and sort */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
               <div className="mb-4 sm:mb-0">
@@ -445,7 +633,7 @@ function PageContent() {
                 </p>
               </div>
               
-              <div className="flex items-center gap-4">
+              <div className="flex flex-col sm:flex-row items-center gap-4">
                 <label className="text-sm text-gray-600">
                   {t('sorting.sortBy')}
                 </label>
