@@ -46,7 +46,11 @@ const Filter = ({
                     <h4 className="font-medium leading-none text-xl sm:text-2xl mb-5 sm:mb-6">აირჩიე კატეგორია</h4>
                     <div className="flex  justify-center flex-wrap gap-[10px] md:gap-[15px]">
                         <button
-                            className={`btn-all rounded-md btn-outline ${selectedType === "" ? "bg-[#BB976D] text-white" : ""}`}
+                            className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 ${
+                                selectedType === "" 
+                                    ? "bg-gradient-to-r from-primary to-primary/80 text-white shadow-lg shadow-primary/25" 
+                                    : "bg-white text-gray-700 hover:bg-gray-50 shadow-md hover:shadow-lg border border-gray-200"
+                            }`}
                             onClick={() => handleCategoryChange("")}
                             data-discover="true"
                         >
@@ -56,7 +60,11 @@ const Filter = ({
                         {CategoriesList.map((item) => (
                             <button
                                 key={item.id}
-                                className={`btn-all rounded-md btn-outline ${selectedType === item.type ? "bg-[#BB976D] text-white" : ""}`}
+                                className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 ${
+                                    selectedType === item.type 
+                                        ? "bg-gradient-to-r from-primary to-primary/80 text-white shadow-lg shadow-primary/25" 
+                                        : "bg-white text-gray-700 hover:bg-gray-50 shadow-md hover:shadow-lg border border-gray-200"
+                                }`}
                                 onClick={() => handleCategoryChange(item.type)}
                                 data-discover="true"
                             >

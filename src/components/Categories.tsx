@@ -5,6 +5,7 @@ import React, { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
 import CategoriesList from "./CategoriesList";
+import ProductHelper from "./ProductHelper";
 import { getAllProducts } from "@/lib/actions/actions";
 import { Decimal } from "@prisma/client/runtime/library";
 
@@ -67,68 +68,48 @@ function Categories() {
     fetchProductCounts();
   }, []);
 
+  // Transform categories to match ProductHelper interface
+  const transformCategoriesToProducts = () => {
+    return CategoriesList.map((item) => ({
+      id: item.id,
+      image: [item.image], // Convert single image to array
+      price: productCounts[item.type] || 0,
+      title: locale === "en" ? item.labelEn : item.label,
+      titleEn: item.labelEn,
+    }));
+  };
+
+  const categoryProducts = transformCategoriesToProducts();
+
   return (
-    <section className="py-14 bg-gradient-to-br from-gray-50 via-white to-gray-50">
+    <section className="mt-16 bg-gradient-to-br from-gray-50 via-white to-gray-50">
       <div className="container mx-auto px-4">
         <div className="max-w-7xl mx-auto">
           {/* Modern Section Header */}
-          <div className="text-center mb-20">
-            
+          <div className="text-center mb-16">
             <h2 className="text-primary font-secondary font-normal text-4xl md:text-[60px] block -ml-5 -mb-3 sm:-mb-[30px] leading-normal sm:leading-normal">
               {t("title")}
             </h2>
-           
-            <p className="text-xl text-gray-600 mt-7 max-w-3xl mx-auto leading-relaxed">
+            <h6 className="text-lg mt-7 text-gray-600 max-w-2xl mx-auto font-secondary">
               {t("subtitle")}
-            </p>
+            </h6>
           </div>
 
-          {/* Modern Categories Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {CategoriesList.map((item, index) => (
-              <Link
-                key={item.id}
-                href={item.type === "all" ? "/all" : `/list?cat=${item.type}`}
-                className="group relative overflow-hidden rounded-2xl bg-white shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2"
-                data-discover="true"
-                style={{
-                  animationDelay: `${index * 100}ms`
-                }}
-              >
-                {/* Background Image with Overlay */}
-                <div className="relative h-80 overflow-hidden">
-                  <Image
-                    src={item.image}
-                    alt={locale === "en" ? item.labelEn : item.label}
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                  {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300"></div>
-                  
-                  {/* Floating Badge with Real Quantity */}
-                  <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 text-sm font-semibold text-gray-800 shadow-lg">
-                    {productCounts[item.type] || 0} {t("products")}
-                  </div>
-                </div>
-
-                {/* Content Card */}
-                <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                  <div className="transform translate-y-2  transition-transform duration-300">
-                    <h3 className="text-2xl font-bold mb-2 group-hover:text-[#bba588] transition-colors duration-300">
-                      {locale === "en" ? item.labelEn : item.label}
-                    </h3>
-                 
-                  </div>
-                </div>
-
-             
-              </Link>
-            ))}
+          {/* Categories Grid - Using ProductHelper */}
+          <div className="mb-16">
+            <ProductHelper items={categoryProducts} />
           </div>
 
           {/* Call to Action */}
-      
+          <div className="text-center mx-auto mt-7 md:mt-12">
+            <Link
+              className="inline-flex items-center justify-center px-8 py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 bg-gradient-to-r from-primary to-primary/80 text-white shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30"
+              href="/all"
+              data-discover="true"
+            >
+              <span>{t("viewAll")}</span>
+            </Link>
+          </div>
         </div>
       </div>
     </section>

@@ -10,7 +10,15 @@
     "title": "Categories",
     "subtitle": "Discover our wide selection of quality furniture and home decor",
     "allCategories": "All Categories",
-    "products": "Products"
+    "products": "Products",
+    "viewAll": "View All Categories",
+    "viewCategory": "View Category"
+  },
+  "productHelper": {
+    "addToCart": "Add to Cart",
+    "viewDetails": "View Details",
+    "products": "Products",
+    "currency": "₾"
   },
   "brands": {
     "title": "Our Partners",
@@ -89,6 +97,9 @@
         "allBrands": "All Brands"
       },
       "clearFilters": "Clear Filters"
+    },
+    "helper": {
+      "details": "Details"
     },
     "results": {
       "found": "Found",

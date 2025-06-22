@@ -10,6 +10,8 @@ const Footer = () => {
     <footer className="bg-gray-900 text-white">
       {/* Main Footer Content */}
       <div className="container mx-auto px-4 py-12">
+        <div className="max-w-7xl mx-auto">
+
         <div className="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
           
           {/* Logo and Company Info */}
@@ -28,30 +30,7 @@ const Footer = () => {
             </p>
           </div>
 
-          {/* Quick Links */}
-          <div className="flex flex-col items-center md:items-start space-y-4">
-            <h3 className="text-lg font-semibold">{t('quickLinks')}</h3>
-            <div className="flex flex-col space-y-2 text-center md:text-left">
-              <Link 
-                href="/products" 
-                className="text-gray-300 hover:text-[#bba588] transition-colors duration-300 text-sm"
-              >
-                {t('allProducts')}
-              </Link>
-              <Link 
-                href="/about" 
-                className="text-gray-300 hover:text-[#bba588] transition-colors duration-300 text-sm"
-              >
-                {t('aboutUs')}
-              </Link>
-              <Link 
-                href="/contact" 
-                className="text-gray-300 hover:text-[#bba588] transition-colors duration-300 text-sm"
-              >
-                {t('contact')}
-              </Link>
-            </div>
-          </div>
+    
 
           {/* Contact Info */}
           <div className="flex flex-col items-center md:items-start space-y-4">
@@ -105,6 +84,7 @@ const Footer = () => {
               </a>
             </div>
           </div>
+        </div>
         </div>
       </div>
 

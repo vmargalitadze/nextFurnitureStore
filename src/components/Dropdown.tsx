@@ -26,7 +26,7 @@ export default function DropdownMenuCheckboxes() {
         <DropdownMenuTrigger asChild>
           <div className="flex items-center">
             <Button
-              className="relative cursor-pointer w-10 h-10 text-center rounded-full ml-2 overflow-hidden p-0 bg-gray-200 text-gray-800 hover:bg-gray-300"
+              className="relative cursor-pointer w-9 lg:w-12 h-9 p-2 lg:h-12 text-center rounded-full ml-2 overflow-hidden p-0 bg-gray-200 text-gray-800 hover:bg-gray-300"
               variant="ghost"
             >
               <span className="w-full h-full flex text-center items-center justify-center font-semibold text-lg">
@@ -36,7 +36,7 @@ export default function DropdownMenuCheckboxes() {
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent
-          className="w-full mr-14"
+          className="w-[200px] "
           align="center"
           side="bottom"
           sideOffset={8}
@@ -45,7 +45,7 @@ export default function DropdownMenuCheckboxes() {
           <DropdownMenuItem>
             <Link
               href="/profile"
-              className="w-full flex justify-center items-center gap-2"
+              className="w-full text-[18px] flex justify-start items-center gap-2"
             >
               <FaUser /> User Profile
             </Link>
@@ -53,7 +53,7 @@ export default function DropdownMenuCheckboxes() {
           <DropdownMenuItem>
             <Link
               href="/cart"
-              className="w-full flex justify-center items-center gap-2"
+              className="w-full flex text-[18px] justify-start items-center gap-2"
             >
               <FaShoppingCart /> Cart
             </Link>
@@ -61,7 +61,7 @@ export default function DropdownMenuCheckboxes() {
 
           <DropdownMenuItem>
             <Button
-              className="cursor-pointer justify-center mx-auto"
+              className="cursor-pointer text-[18px]  justify-start mx-auto"
               onClick={handleSignOut}
             >
               <FaSignOutAlt /> Sign Out

@@ -56,11 +56,7 @@ export default async function ProfilePage() {
     <div className="min-h-screen mt-9 bg-gradient-to-br from-blue-50 via-white to-purple-50 py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
         {/* Header Section */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-[#bba588] mb-4">{t('title')}</h1>
-          <p className="text-lg text-gray-600">{t('welcome', { name: user.name })}</p>
-        </div>
-
+       
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* User Info Card */}
           <div className="lg:col-span-1">

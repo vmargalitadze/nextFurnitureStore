@@ -1,6 +1,7 @@
 import { Link } from "@/i18n/navigation";
 import React from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 interface ProductItem {
   id: string;
@@ -13,7 +14,6 @@ interface ProductItem {
 interface ProductListProps {
   items: ProductItem[]; 
 }
-
 const getLocalizedTitle = (product: ProductItem, locale: string): string => {
   if (locale === 'en') {
     return product.title ?? product.titleEn;
@@ -22,9 +22,10 @@ const getLocalizedTitle = (product: ProductItem, locale: string): string => {
 };
 
 function ProductHelper({ items }: ProductListProps  ) {
-    if (!items || items.length === 0) {
-        return null; 
-      }
+  if (!items || items.length === 0) {
+    return null; 
+  }
+  const t = useTranslations();
   return (
    <>
     <div className="grid grid-cols-1  sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-8">
@@ -42,9 +43,7 @@ function ProductHelper({ items }: ProductListProps  ) {
               </Link>
 
               <div className="flex rounded-md flex-col items-start gap-3 md:gap-4 absolute z-20 w-11/12 bottom-3 xl:bottom-5 left-1/2 transform -translate-x-1/2 p-4 xl:p-5 bg-gray-200 bg-title  bg-opacity-[85%] group-hover:-translate-y-1/2 duration-500 group-hover:opacity-0 group-hover:invisible">
-                <h4 className="font-medium leading-none text-black text-[18px] md:text-2xl ">
-                  {item.price}₾ 
-                </h4>
+               
                 <h5 className="font-normal text-black text-paragraph leading-[1.5]">
                   <Link href="/product-details" className="text-xl md:text-2xl" data-discover="true">
                     {getLocalizedTitle(item, 'en')}
@@ -53,13 +52,7 @@ function ProductHelper({ items }: ProductListProps  ) {
               </div>
 
               <div className="absolute z-10 flex gap-2 justify-center bottom-5 md:bottom-7 w-full transform translate-y-5 opacity-0 duration-500 invisible group-hover:translate-y-0 group-hover:opacity-100 group-hover:visible">
-                <button className="icon-button relative w-9 lg:w-12 h-9 p-2 lg:h-12 bg-white bg-title bg-opacity-80 flex items-center justify-center rounded-full">
-                  <Image src="/cart.png" alt="" width={22} height={22} />
-                  <span className="tooltip ">
-                    დაამატე კალათაში
-                    <span className="tooltip-arrow"></span>
-                  </span>
-                </button>
+              
                 <Link
                   href={`/products/${item.id}`}
                   className="icon-button relative w-9 lg:w-12 h-9 p-2 lg:h-12 bg-white bg-title bg-opacity-80 flex items-center justify-center rounded-full"
@@ -80,7 +73,7 @@ function ProductHelper({ items }: ProductListProps  ) {
                     <circle cx="12" cy="12" r="3"></circle>
                   </svg>
                   <span className="tooltip">
-                    დეტალები
+                    {t("details")}
                     <span className="tooltip-arrow"></span>
                   </span>
                 </Link>

@@ -23,7 +23,7 @@ const LanguageSwitcher = () => {
   return (
     <button
       onClick={toggleLocale}
-      className="font-medium text-black bg-transparent py-2 px-4 rounded focus:outline-none"
+      className="px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 bg-white text-gray-700 hover:bg-gray-50 shadow-md hover:shadow-lg border border-gray-200"
     >
       {localeActive === 'en' ? 'ქართული | English' : 'ქართული | English'}
     </button>

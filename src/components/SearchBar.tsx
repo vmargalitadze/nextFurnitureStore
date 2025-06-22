@@ -42,7 +42,9 @@ function SearchHelper() {
     setQuery(e.target.value);
     handleSearch(e.target.value);
   }} name='name' type='text' className="flex-1 bg-transparent outline-none" placeholder='Search' />
-    <button className='cursor-pointer' > <Image src='/search.png' width={16} height={16} alt='search'/></button>
+    <button className='cursor-pointer p-2 rounded-full transition-all duration-300 transform hover:scale-105 bg-white text-gray-700 hover:bg-gray-50 shadow-md hover:shadow-lg border border-gray-200' > 
+      <Image src='/search.png' width={16} height={16} alt='search'/>
+    </button>
    </div>
   )
 }

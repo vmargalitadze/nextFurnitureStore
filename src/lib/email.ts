@@ -8,7 +8,6 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASSWORD, // Your email password or app password
   },
 });
-console.log('a');
 
 export const sendVerificationEmail = async (email: string, token: string) => {
   // Use dynamic URL that works on both development and Vercel
@@ -17,7 +16,7 @@ export const sendVerificationEmail = async (email: string, token: string) => {
   if (!baseUrl) {
     // On Vercel, VERCEL_URL is provided without protocol
     if (process.env.VERCEL_URL) {
-      baseUrl = `https://next-furniture-store.vercel.app/ge`;
+      baseUrl = `https://${process.env.VERCEL_URL}`;
     } else {
       // Fallback for local development
       baseUrl = 'http://localhost:3000';

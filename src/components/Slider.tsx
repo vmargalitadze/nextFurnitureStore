@@ -11,6 +11,9 @@ const Hero = () => {
   return (
     <section className="relative  bg-white overflow-hidden">
       {/* Background Pattern */}
+      <div className="container mx-auto">
+        <div className="max-w-7xl mx-auto">
+
       <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0" style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
@@ -80,34 +83,13 @@ const Hero = () => {
                   <motion.button
                     whileHover={{ scale: 1.02, y: -2 }}
                     whileTap={{ scale: 0.98 }}
-                    className="group relative bg-gray-900 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-medium text-base sm:text-lg overflow-hidden shadow-lg"
+                    className="px-8 py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 bg-gradient-to-r from-primary to-primary/80 text-white shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30"
                   >
-                    <span className="relative z-10">{t('cta')}</span>
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-gray-800 to-gray-900"
-                      initial={{ scaleX: 0 }}
-                      whileHover={{ scaleX: 1 }}
-                      transition={{ duration: 0.3 }}
-                      style={{ originX: 0 }}
-                    />
+                    <span>{t('cta')}</span>
                   </motion.button>
                 </Link>
 
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="group flex items-center gap-3 text-gray-700 hover:text-gray-900 transition-colors duration-300"
-                >
-                  <motion.div
-                    className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 rounded-full flex items-center justify-center group-hover:bg-gray-200 transition-colors duration-300"
-                    whileHover={{ scale: 1.1 }}
-                  >
-                    <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </motion.div>
-                  <span className="font-medium text-sm sm:text-base">Watch Story</span>
-                </motion.button>
+         
               </motion.div>
 
            
@@ -168,6 +150,9 @@ const Hero = () => {
         
             </motion.div>
           </div>
+        </div>
+      </div>
+
         </div>
       </div>
 

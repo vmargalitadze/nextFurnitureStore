@@ -23,6 +23,7 @@ function NavIcons() {
       {t('login')}
         </Link>
       )}
+      <LocaleSwitcher />
         {session && (
           <>
         
@@ -33,7 +34,6 @@ function NavIcons() {
 
           </>
         )}
-        <LocaleSwitcher />
       </>
     </div>
     </>

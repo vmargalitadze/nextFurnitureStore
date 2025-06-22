@@ -21,7 +21,7 @@ const PaginationArrow: FC<PaginationArrowProps> = React.memo(
     return (
       <button
         onClick={onClick}
-        className="flex items-center justify-center w-10 h-10 bg-white border border-gray-300 text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed rounded-md transition-colors"
+        className="flex items-center justify-center w-10 h-10 bg-white text-gray-700 hover:bg-gray-50 shadow-md hover:shadow-lg border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed rounded-full transition-all duration-300 transform hover:scale-105"
         aria-label={isLeft ? "Previous page" : "Next page"}
         disabled={isDisabled}
       >
@@ -111,10 +111,10 @@ const PaginationContent: FC<PaginationProps> = ({ pageCount }) => {
           ) : (
             <button
               onClick={() => goToPage(page as number)}
-              className={`flex items-center justify-center w-10 h-10 rounded-md transition-colors ${
+              className={`flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 transform hover:scale-105 ${
                 currentPage === page
-                  ? 'bg-primary text-white border border-primary'
-                  : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                  ? 'bg-gradient-to-r from-primary to-primary/80 text-white shadow-lg shadow-primary/25'
+                  : 'bg-white text-gray-700 hover:bg-gray-50 shadow-md hover:shadow-lg border border-gray-200'
               }`}
             >
               {page}

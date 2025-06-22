@@ -153,7 +153,7 @@ function PageContentWrapper() {
     
   return (
     <>
-      <div className="relative min-h-screen flex items-center justify-center bg-overlay p-14 sm:p-16 before:bg-title before:bg-opacity-70 overflow-hidden">
+      <div className="relative min-h-[50vh] flex items-center justify-center bg-overlay p-14 sm:p-16 before:bg-title before:bg-opacity-70 overflow-hidden">
         <Image
           src="/bed.jpg"
           alt="Background"
