@@ -74,7 +74,7 @@ function SignupForm({ callbackUrl }: { callbackUrl: string }) {
           </div>
           <CardTitle className="text-2xl font-bold">Check Your Email</CardTitle>
           <CardDescription>
-            We've sent a verification link to <strong>{data.email}</strong>
+            We have sent a verification link to <strong>{data.email}</strong>
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
