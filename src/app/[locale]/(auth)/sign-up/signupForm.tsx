@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { PasswordInput } from '@/components/ui/password-input';
 import { Link } from "@/i18n/navigation";
 import { useFormState, useFormStatus } from 'react-dom';
 import { signUpUser } from '@/lib/actions/user.actions';
@@ -116,11 +117,21 @@ function SignupForm({ callbackUrl }: { callbackUrl: string }) {
         </div>
         <div>
           <Label htmlFor="password">Password</Label>
-          <Input id="password" name="password" type="password" autoComplete="password" defaultValue={signUpDefaultValues.password} />
+          <PasswordInput 
+            id="password" 
+            name="password" 
+            autoComplete="new-password" 
+            defaultValue={signUpDefaultValues.password} 
+          />
         </div>
         <div>
           <Label htmlFor="confirmPassword">Confirm Password</Label>
-          <Input id="confirmPassword" name="confirmPassword" type="password" autoComplete="confirmPassword" defaultValue={signUpDefaultValues.confirmPassword} />
+          <PasswordInput 
+            id="confirmPassword" 
+            name="confirmPassword" 
+            autoComplete="new-password" 
+            defaultValue={signUpDefaultValues.confirmPassword} 
+          />
         </div>
         <div>
           <SignUpButton />
