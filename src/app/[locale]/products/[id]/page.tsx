@@ -182,23 +182,23 @@ const Page = (props: { params: { id: string; locale: string } }) => {
 
               {/* Product Description */}
               <div className="pb-2">
-                <h3 className="text-[18px] font-semibold text-gray-900 mb-2">{getTranslation('product.description', 'Description')}</h3>
-                <p className="text-[18px] leading-relaxed text-gray-700 line-clamp-3">
+                <h3 className="text-[18px] sm:text-[16px] font-semibold text-gray-900 mb-2">{getTranslation('product.description', 'Description')}</h3>
+                <p className="text-[18px] sm:text-[16px] leading-relaxed text-gray-700 line-clamp-3">
                   {localizedDescription || "Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid, hic. Dolores commodi nulla, assumenda sit nostrum voluptatem eveniet, velit odio tempora placeat hic. Veniam dolorum totam earum vitae nesciunt voluptatum."}
                 </p>
               </div>
 
               {/* Availability */}
               <div className="pb-2">
-                <h3 className="text-text-[18px] font-semibold text-gray-900 mb-2">{getTranslation('product.availability', 'Availability')}</h3>
+                <h3 className="text-[15px] md:text-[18px] sm:text-base font-semibold text-gray-900 mb-2">{getTranslation('product.availability', 'Availability')}</h3>
                 <div className="space-y-1">
                   {product?.tbilisi && (
                     <div className="flex items-center justify-between p-2 bg-[#f8f5f0] rounded-lg border border-gray-200">
                       <div className="flex items-center space-x-2">
                         <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                        <span className="text-[18px] font-medium text-gray-900">{getTranslation('locations.tbilisi', 'Tbilisi')}</span>
+                        <span className="text-sm md:text-[18px] font-medium text-gray-900">{getTranslation('locations.tbilisi', 'Tbilisi')}</span>
                       </div>
-                      <span className="text-[18px] text-gray-600">{getTranslation('locations.tbilisiAddress', 'Tbilisi, T. Eristavi 1')}</span>
+                      <span className=" text-sm md:text-[18px] text-gray-600">{getTranslation('locations.tbilisiAddress', 'Tbilisi, T. Eristavi 1')}</span>
                     </div>
                   )}
 
@@ -206,9 +206,9 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                     <div className="flex items-center justify-between p-2 bg-[#f8f5f0] rounded-lg border border-gray-200">
                       <div className="flex items-center space-x-2">
                         <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                        <span className="text-[18px] font-medium text-gray-900">{getTranslation('locations.batumi', 'Batumi')}</span>
+                        <span className="text-sm md:text-[18px] sm:text-base font-medium text-gray-900">{getTranslation('locations.batumi', 'Batumi')}</span>
                       </div>
-                      <span className="text-[18px] text-gray-600">{getTranslation('locations.batumiAddress', 'Batumi, A. Pushkin 117')}</span>
+                      <span className="text-sm md:text-[18px] text-gray-600">{getTranslation('locations.batumiAddress', 'Batumi, A. Pushkin 117')}</span>
                     </div>
                   )}
 
@@ -216,9 +216,9 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                     <div className="flex items-center justify-between p-2 bg-[#f8f5f0] rounded-lg border border-gray-200">
                       <div className="flex items-center space-x-2">
                         <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                        <span className="text-[18px] font-medium text-gray-900">{getTranslation('locations.qutaisi', 'Kutaisi')}</span>
+                        <span className="text-sm md:text-[18px] font-medium text-gray-900">{getTranslation('locations.qutaisi', 'Kutaisi')}</span>
                       </div>
-                      <span className="text-[18px] text-gray-600">{getTranslation('locations.qutaisiAddress', 'Kutaisi, Z. Purtzeladze 15')}</span>
+                      <span className="text-sm md:text-[18px] text-gray-600">{getTranslation('locations.qutaisiAddress', 'Kutaisi, Z. Purtzeladze 15')}</span>
                     </div>
                   )}
 
@@ -228,7 +228,7 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                         <svg className="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
                         </svg>
-                        <span className="text-[18px] text-red-700 font-medium">{getTranslation('product.outOfStock', 'Out of stock at all locations')}</span>
+                        <span className="text-[18px] sm:text-base text-red-700 font-medium">{getTranslation('product.outOfStock', 'Out of stock at all locations')}</span>
                       </div>
                     </div>
                   )}

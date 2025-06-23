@@ -132,7 +132,7 @@ function ProductList() {
         <div className="max-w-7xl mx-auto">
           {/* Modern Section Header */}
           <div className="text-center mb-16">
-            <h2 className="text-primary  font-normal text-4xl md:text-[50px] block -ml-5 -mb-3 sm:-mb-[30px] leading-normal sm:leading-normal">
+            <h2 className="text-primary  font-normal text-center text-3xl md:text-[50px] block -ml-5 -mb-3 sm:-mb-[30px] leading-normal sm:leading-normal">
               {t("title")}   {t("subtitle")}
             </h2>
             {/* <h6 className="text-lg mt-7 text-gray-600 max-w-2xl mx-auto font-secondary">
@@ -144,7 +144,7 @@ function ProductList() {
           <div className="flex flex-wrap flex-col sm:flex-row justify-center gap-4 md:gap-6 mb-16 ">
             <button
               onClick={() => setActiveCategory("new-arrival")}
-              className={`px-8 py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 ${
+              className={`px-8 py-4 text-xl rounded-full font-semibold transition-all duration-300 transform hover:scale-105 ${
                 activeCategory === "new-arrival"
                   ? "bg-gradient-to-r from-primary to-primary/80 text-white shadow-lg shadow-primary/25"
                   : "bg-white text-gray-700 hover:bg-gray-50 shadow-md hover:shadow-lg border border-gray-200"
@@ -154,7 +154,7 @@ function ProductList() {
             </button>
             <button
               onClick={() => setActiveCategory("sales")}
-              className={`px-8 py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 ${
+              className={`px-8 py-4 text-xl rounded-full font-semibold transition-all duration-300 transform hover:scale-105 ${
                 activeCategory === "sales"
                   ? "bg-gradient-to-r from-primary to-primary/80 text-white shadow-lg shadow-primary/25"
                   : "bg-white text-gray-700 hover:bg-gray-50 shadow-md hover:shadow-lg border border-gray-200"
@@ -164,7 +164,7 @@ function ProductList() {
             </button>
             <button
               onClick={() => setActiveCategory("trending")}
-              className={`px-8 py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 ${
+              className={`px-8 py-4 text-xl rounded-full font-semibold transition-all duration-300 transform hover:scale-105 ${
                 activeCategory === "trending"
                   ? "bg-gradient-to-r from-primary to-primary/80 text-white shadow-lg shadow-primary/25"
                   : "bg-white text-gray-700 hover:bg-gray-50 shadow-md hover:shadow-lg border border-gray-200"
@@ -189,7 +189,7 @@ function ProductList() {
               ))}
             </div>
           ) : transformedProducts.length > 0 ? (
-            <div className="mb-16">
+            <div className="mb-16 text-xl">
               <ProductHelper items={transformedProducts} />
             </div>
           ) : (
@@ -219,7 +219,7 @@ function ProductList() {
           {/* View All Button */}
           <div className="text-center mx-auto mt-7 md:mt-12">
             <Link
-              className="inline-block px-8 py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 bg-gradient-to-r from-primary to-primary/80 text-white shadow-lg shadow-primary/25 hover:shadow-xl"
+              className="inline-block text-xl px-8 py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 bg-gradient-to-r from-primary to-primary/80 text-white shadow-lg shadow-primary/25 hover:shadow-xl"
               href="/all"
               data-discover="true"
             >

@@ -29,7 +29,7 @@ function BrandSlider() {
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-20">
-          <h2 className="text-primary font-secondary font-normal text-4xl md:text-[60px] block -ml-5 -mb-3 sm:-mb-[30px] leading-normal sm:leading-normal">
+          <h2 className="text-primary font-secondary font-normal text-3xl md:text-[50px] block -ml-5 -mb-3 sm:-mb-[30px] leading-normal sm:leading-normal">
             {t("title")}
           </h2>
           <p className="text-xl text-gray-600 mt-7 max-w-3xl mx-auto leading-relaxed">

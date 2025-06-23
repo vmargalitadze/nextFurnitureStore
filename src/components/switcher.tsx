@@ -25,8 +25,8 @@ export default function LocaleSwitcher() {
   };
 
   const locales = [
-    { code: 'en', label: 'English', flag: "/America.png" },
-    { code: 'ge', label: 'ქართული', flag: "/Georgia.png" },
+    { code: 'en', label: 'English', className: 'text-xl', flag: "/America.png" },
+    { code: 'ge', label: 'ქართული', className: 'text-xl', flag: "/Georgia.png" },
   ];
 
   const currentLocale = locales.find(l => l.code === localeActive);
@@ -46,7 +46,10 @@ export default function LocaleSwitcher() {
             className="rounded-full w-full h-full object-cover" 
           />
         </div>
-        {currentLocale?.label}
+        
+        <div className="text-xl">
+          {currentLocale?.label}
+        </div>
       </button>
 
       {open && (

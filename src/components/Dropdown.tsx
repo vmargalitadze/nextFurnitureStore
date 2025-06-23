@@ -45,7 +45,7 @@ export default function DropdownMenuCheckboxes() {
           <DropdownMenuItem>
             <Link
               href="/profile"
-              className="w-full text-[18px] flex justify-start items-center gap-2"
+              className="w-full text-xl flex justify-start items-center gap-2"
             >
               <FaUser /> User Profile
             </Link>
@@ -53,7 +53,7 @@ export default function DropdownMenuCheckboxes() {
           <DropdownMenuItem>
             <Link
               href="/cart"
-              className="w-full flex text-[18px] justify-start items-center gap-2"
+              className="w-full flex text-xl justify-start items-center gap-2"
             >
               <FaShoppingCart /> Cart
             </Link>
@@ -61,7 +61,7 @@ export default function DropdownMenuCheckboxes() {
 
           <DropdownMenuItem>
             <Button
-              className="cursor-pointer text-[18px]  justify-start mx-auto"
+              className="cursor-pointer text-xl  justify-start mx-auto"
               onClick={handleSignOut}
             >
               <FaSignOutAlt /> Sign Out

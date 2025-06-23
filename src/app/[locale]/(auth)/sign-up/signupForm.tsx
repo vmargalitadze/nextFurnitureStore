@@ -11,6 +11,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle, Mail } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 const signUpDefaultValues = {
   name: '',
@@ -30,6 +31,7 @@ function SignupForm({ callbackUrl }: { callbackUrl: string }) {
   const [showVerificationMessage, setShowVerificationMessage] = useState(false);
   const { pending } = useFormStatus();
   const router = useRouter();
+  const t = useTranslations("auth.signUp");
 
   useEffect(() => {
     if (data.success && data.email) {
@@ -38,8 +40,8 @@ function SignupForm({ callbackUrl }: { callbackUrl: string }) {
   }, [data.success, data.email]);
 
   const SignUpButton = () => (
-    <Button disabled={pending} className="w-full" variant="default">
-      {pending ? 'Creating Account...' : 'Sign Up'}
+    <Button disabled={pending} className="w-full text-xl" variant="default">
+      {pending ? t("creatingAccount") : t("signUpButton")}
     </Button>
   );
 
@@ -57,12 +59,12 @@ function SignupForm({ callbackUrl }: { callbackUrl: string }) {
       
       if (response.ok) {
         // Show success message
-        alert('Verification email sent successfully! Please check your inbox.');
+        alert(t("verificationSent"));
       } else {
-        alert(result.error || 'Failed to resend verification email');
+        alert(result.error || t("verificationError"));
       }
     } catch (error) {
-      alert('Failed to resend verification email');
+      alert(t("verificationError"));
     }
   };
 
@@ -73,15 +75,15 @@ function SignupForm({ callbackUrl }: { callbackUrl: string }) {
           <div className="flex justify-center">
             <Mail className="h-12 w-12 text-primary" />
           </div>
-          <CardTitle className="text-2xl font-bold">Check Your Email</CardTitle>
-          <CardDescription>
-            We have sent a verification link to <strong>{data.email}</strong>
+          <CardTitle className="text-xl font-bold">{t("checkEmail")}</CardTitle>
+          <CardDescription className='text-xl'>
+            {t("checkEmailDescription")} <strong>{data.email}</strong>
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="text-center space-y-4">
             <p className="text-sm text-muted-foreground">
-              Please check your email and click the verification link to complete your account setup.
+              {t("checkEmailInstructions")}
             </p>
             <div className="space-y-2">
               <Button 
@@ -89,11 +91,11 @@ function SignupForm({ callbackUrl }: { callbackUrl: string }) {
                 variant="outline"
                 className="w-full"
               >
-                Resend Verification Email
+                {t("resendVerification")}
               </Button>
               <Button asChild variant="outline" className="w-full">
                 <Link href="/sign-in">
-                  Back to Sign In
+                  {t("backToSignIn")}
                 </Link>
               </Button>
             </div>
@@ -108,29 +110,45 @@ function SignupForm({ callbackUrl }: { callbackUrl: string }) {
       <input type="hidden" name="callbackUrl" value={callbackUrl} />
       <div className="space-y-6">
         <div>
-          <Label htmlFor="name">Name</Label>
-          <Input id="name" name="name" type="text" autoComplete="name" defaultValue={signUpDefaultValues.name} />
+          <Label className='text-xl' htmlFor="name">{t("name")}</Label>
+          <Input 
+            id="name" 
+            name="name" 
+            type="text" 
+            autoComplete="name" 
+            defaultValue={signUpDefaultValues.name} 
+            placeholder={t("namePlaceholder")}
+          />
         </div>
         <div>
-          <Label htmlFor="email">Email</Label>
-          <Input id="email" name="email" type="email" autoComplete="email" defaultValue={signUpDefaultValues.email} />
+          <Label className='text-xl' htmlFor="email">{t("email")}</Label>
+          <Input 
+            id="email" 
+            name="email" 
+            type="email" 
+            autoComplete="email" 
+            defaultValue={signUpDefaultValues.email} 
+            placeholder={t("emailPlaceholder")}
+          />
         </div>
         <div>
-          <Label htmlFor="password">Password</Label>
+          <Label className='text-xl' htmlFor="password">{t("password")}</Label>
           <PasswordInput 
             id="password" 
             name="password" 
             autoComplete="new-password" 
             defaultValue={signUpDefaultValues.password} 
+            placeholder={t("passwordPlaceholder")}
           />
         </div>
         <div>
-          <Label htmlFor="confirmPassword">Confirm Password</Label>
+          <Label className='text-xl' htmlFor="confirmPassword">{t("confirmPassword")}</Label>
           <PasswordInput 
             id="confirmPassword" 
             name="confirmPassword" 
             autoComplete="new-password" 
             defaultValue={signUpDefaultValues.confirmPassword} 
+            placeholder={t("confirmPasswordPlaceholder")}
           />
         </div>
         <div>
@@ -141,10 +159,10 @@ function SignupForm({ callbackUrl }: { callbackUrl: string }) {
           <div className="text-center text-destructive">{data.message}</div>
         )}
 
-        <div className="text-sm text-center text-muted-foreground">
-          Already have an account?{' '}
+        <div className="text-xl text-center text-muted-foreground">
+          {t("alreadyHaveAccount")}{' '}
           <Link href="/sign-in" className="link">
-            Sign In
+            {t("signIn")}
           </Link>
         </div>
       </div>

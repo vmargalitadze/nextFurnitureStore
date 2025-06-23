@@ -32,10 +32,10 @@ function Navbar() {
           </Link>
           <div className="hidden xl:flex gap-4">
             
-            <Link href="/all">  {t('products')} </Link>
-          
+            <Link href="/all" className="text-xl">  {t('products')} </Link>
+
         
-            <Link href="/contact"> {t('contact')}</Link>
+            <Link href="/contact" className="text-xl"> {t('contact')}</Link>
           </div>
         
     </div>

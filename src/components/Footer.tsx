@@ -25,7 +25,7 @@ const Footer = () => {
                 height={60} 
               />
             </Link>
-            <p className="text-gray-300 text-sm text-center md:text-left max-w-xs">
+            <p className="text-gray-300 text-xl text-center md:text-left max-w-xs">
               {t('companyDescription')}
             </p>
           </div>
@@ -34,21 +34,21 @@ const Footer = () => {
 
           {/* Contact Info */}
           <div className="flex flex-col items-center md:items-start space-y-4">
-            <h3 className="text-lg font-semibold">{t('contact')}</h3>
+            <h3 className="text-xl font-semibold">{t('contact')}</h3>
             <div className="flex flex-col space-y-2 text-center md:text-left">
               <a 
                 href="mailto:hello@lama.dev" 
-                className="text-gray-300 hover:text-[#bba588] transition-colors duration-300 text-sm"
+                className="text-gray-300 hover:text-[#bba588] transition-colors duration-300 text-xl"
               >
                 hello@lama.dev
               </a>
               <a 
                 href="tel:+1234567890" 
-                className="text-gray-300 hover:text-[#bba588] transition-colors duration-300 text-sm"
+                className="text-gray-300 hover:text-[#bba588] transition-colors duration-300 text-xl"
               >
                 +1 (234) 567-890
               </a>
-              <p className="text-gray-300 text-sm">
+              <p className="text-gray-300 text-xl">
                 3252 Winding Way, CA 90210
               </p>
             </div>
@@ -56,7 +56,7 @@ const Footer = () => {
 
           {/* Social Media */}
           <div className="flex flex-col items-center md:items-start space-y-4">
-            <h3 className="text-lg font-semibold">{t('followUs')}</h3>
+            <h3 className="text-xl font-semibold">{t('followUs')}</h3>
             <div className="flex space-x-4">
               <a 
                 href="#" 

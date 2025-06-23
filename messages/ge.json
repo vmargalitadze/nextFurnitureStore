@@ -7,6 +7,43 @@
     "profile": "პროფილი"
   },
   "auth": {
+    "signIn": {
+      "title": "შესვლა",
+      "description": "შედით თქვენს ანგარიშში",
+      "email": "ელ-ფოსტა",
+      "emailPlaceholder": "შეიყვანეთ თქვენი ელ-ფოსტა",
+      "password": "პაროლი",
+      "passwordPlaceholder": "შეიყვანეთ თქვენი პაროლი",
+      "forgotPassword": "დაგავიწყდათ პაროლი?",
+      "signInButton": "შესვლა",
+      "signingIn": "იმყოფება შესვლის პროცესში...",
+      "dontHaveAccount": "არ გაქვთ ანგარიში?",
+      "signUp": "რეგისტრაცია",
+      "invalidCredentials": "არასწორი ელ-ფოსტა ან პაროლი"
+    },
+    "signUp": {
+      "title": "ანგარიშის შექმნა",
+      "description": "შეიყვანეთ თქვენი ინფორმაცია რეგისტრაციისთვის",
+      "name": "სახელი",
+      "namePlaceholder": "შეიყვანეთ თქვენი სრული სახელი",
+      "email": "ელ-ფოსტა",
+      "emailPlaceholder": "შეიყვანეთ თქვენი ელ-ფოსტა",
+      "password": "პაროლი",
+      "passwordPlaceholder": "შეიყვანეთ თქვენი პაროლი",
+      "confirmPassword": "პაროლის დადასტურება",
+      "confirmPasswordPlaceholder": "დაადასტურეთ თქვენი პაროლი",
+      "signUpButton": "რეგისტრაცია",
+      "creatingAccount": "იქმნება ანგარიში...",
+      "alreadyHaveAccount": "უკვე გაქვთ ანგარიში?",
+      "signIn": "შესვლა",
+      "checkEmail": "შეამოწმეთ თქვენი ელ-ფოსტა",
+      "checkEmailDescription": "ჩვენ გამოგიგზავნეთ დადასტურების ბმული",
+      "checkEmailInstructions": "გთხოვთ შეამოწმოთ თქვენი ელ-ფოსტა და დააჭიროთ დადასტურების ბმულს ანგარიშის დასასრულებლად.",
+      "resendVerification": "დადასტურების ელ-ფოსტის ხელახლა გაგზავნა",
+      "backToSignIn": "შესვლაზე დაბრუნება",
+      "verificationSent": "დადასტურების ელ-ფოსტა წარმატებით გაიგზავნა! გთხოვთ შეამოწმოთ თქვენი ყუთი.",
+      "verificationError": "დადასტურების ელ-ფოსტის ხელახლა გაგზავნა ვერ მოხერხდა"
+    },
     "forgotPassword": {
       "title": "პაროლის აღდგენა",
       "description": "შეიყვანეთ თქვენი ელ-ფოსტა და ჩვენ გამოგიგზავნით ბმულს პაროლის აღსადგენად.",

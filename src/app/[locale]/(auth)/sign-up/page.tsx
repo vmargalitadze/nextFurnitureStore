@@ -7,10 +7,9 @@ import {
 } from "@/components/ui/card";
 import { Metadata } from "next";
 
-
 import { auth } from "../../../../../auth";
 import { redirect } from "next/navigation";
-import SignupForm from "./signupForm";
+import SignUpClient from "./SignUpClient";
 
 export const metadata: Metadata = {
   title: "Sign Up",
@@ -29,22 +28,7 @@ const SignUpPage = async (props: {
     return redirect("/");
   }
 
-  return (
-    <div className="w-full max-w-md mx-auto">
-      <Card className="mt-[100px]">
-        <CardHeader className="space-y-4">
-      
-          <CardTitle className="text-center">Create Account</CardTitle>
-          <CardDescription className="text-center">
-            Enter your information below to sign up
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <SignupForm callbackUrl={callbackUrl} />
-        </CardContent>
-      </Card>
-    </div>
-  );
+  return <SignUpClient callbackUrl={callbackUrl} />;
 };
 
 export default SignUpPage;

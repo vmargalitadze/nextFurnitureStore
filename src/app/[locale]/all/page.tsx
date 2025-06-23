@@ -210,18 +210,10 @@ function PageContent() {
           />
           <div className="absolute inset-0 bg-black/50 z-10" />
           <div className="relative z-20 text-center w-full">
-            <h1 className="text-white text-3xl md:text-5xl font-bold leading-tight text-center mb-4">
+            <h1 className="text-white text-xl md:text-5xl font-bold leading-tight text-center mb-4">
               {t('hero.title')}
             </h1>
-            <nav className="flex items-center justify-center gap-2 text-base md:text-lg text-white/80">
-              <Link href="/" className="hover:text-white transition-colors">
-                {t('hero.breadcrumb.home')}
-              </Link>
-              <span>/</span>
-              <span className="text-primary font-medium">
-                {t('hero.breadcrumb.products')}
-              </span>
-            </nav>
+           
           </div>
         </div>
 
@@ -287,18 +279,10 @@ function PageContent() {
         />
         <div className="absolute inset-0 bg-black/50 z-10" />
         <div className="relative z-20 text-center w-full">
-          <h1 className="text-white text-3xl md:text-5xl font-bold leading-tight text-center mb-4">
+          <h1 className=" text-xl text-primary md:text-5xl font-bold leading-tight text-center mb-4">
             {t('hero.title')}
           </h1>
-          <nav className="flex items-center justify-center gap-2 text-base md:text-lg text-white/80">
-            <Link href="/" className="hover:text-white transition-colors">
-              {t('hero.breadcrumb.home')}
-            </Link>
-            <span>/</span>
-            <span className="text-primary font-medium">
-              {t('hero.breadcrumb.products')}
-            </span>
-          </nav>
+         
         </div>
       </div>
 

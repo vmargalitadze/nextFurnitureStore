@@ -131,6 +131,43 @@
   },
 
   "auth": {
+    "signIn": {
+      "title": "Sign In",
+      "description": "Sign In to your account",
+      "email": "Email",
+      "emailPlaceholder": "Enter your email address",
+      "password": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "forgotPassword": "Forgot Password?",
+      "signInButton": "Sign In",
+      "signingIn": "Signing In...",
+      "dontHaveAccount": "Don't have an account?",
+      "signUp": "Sign Up",
+      "invalidCredentials": "Invalid email or password"
+    },
+    "signUp": {
+      "title": "Create Account",
+      "description": "Enter your information below to sign up",
+      "name": "Name",
+      "namePlaceholder": "Enter your full name",
+      "email": "Email",
+      "emailPlaceholder": "Enter your email address",
+      "password": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "confirmPassword": "Confirm Password",
+      "confirmPasswordPlaceholder": "Confirm your password",
+      "signUpButton": "Sign Up",
+      "creatingAccount": "Creating Account...",
+      "alreadyHaveAccount": "Already have an account?",
+      "signIn": "Sign In",
+      "checkEmail": "Check Your Email",
+      "checkEmailDescription": "We have sent a verification link to",
+      "checkEmailInstructions": "Please check your email and click the verification link to complete your account setup.",
+      "resendVerification": "Resend Verification Email",
+      "backToSignIn": "Back to Sign In",
+      "verificationSent": "Verification email sent successfully! Please check your inbox.",
+      "verificationError": "Failed to resend verification email"
+    },
     "forgotPassword": {
       "title": "Forgot Password",
       "description": "Enter your email address and we'll send you a link to reset your password.",

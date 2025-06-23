@@ -89,10 +89,10 @@ function Categories() {
         <div className="max-w-7xl mx-auto">
           {/* Modern Section Header */}
           <div className="text-center mb-16">
-            <h2 className="text-primary font-normal text-4xl md:text-[50px] block -ml-5 -mb-3 sm:-mb-[30px] leading-normal sm:leading-normal">
+            <h2 className="text-primary font-normal text-3xl md:text-[50px] block -ml-5 -mb-3 sm:-mb-[30px] leading-normal sm:leading-normal">
               {t("title")}
             </h2>
-            <h6 className="text-base mt-10 sm:text-lg lg:text-xl text-gray-600 max-w-lg leading-relaxed mx-auto ">
+            <h6 className="text-xl mt-10 sm:text-lg  text-gray-600 max-w-lg leading-relaxed mx-auto ">
               {t("subtitle")}
             </h6>
           </div>

@@ -45,8 +45,8 @@ function ProductHelper({ items }: ProductListProps  ) {
 
               <div className="flex rounded-md flex-col items-start gap-3 md:gap-4 absolute z-20 w-11/12 bottom-3 xl:bottom-5 left-1/2 transform -translate-x-1/2 p-4 xl:p-5 bg-gray-200 bg-title  bg-opacity-[85%] group-hover:-translate-y-1/2 duration-500 group-hover:opacity-0 group-hover:invisible">
                
-                <h5 className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-lg leading-relaxed">
-                  <Link href="/product-details" className="text-base sm:text-lg lg:text-xl text-gray-600 max-w-lg leading-relaxedl" data-discover="true">
+                <h5 className="text-xl text-gray-600 max-w-lg leading-relaxed">
+                  <Link href="/product-details" className="text-xl  text-gray-600 max-w-lg leading-relaxedl" data-discover="true">
                     {getLocalizedTitle(item, 'en')}
                   </Link>
                 </h5>
@@ -56,7 +56,7 @@ function ProductHelper({ items }: ProductListProps  ) {
               
                 <Link
                   href={`/products/${item.id}`}
-                  className="icon-button relative w-9 lg:w-12 h-9 p-2 lg:h-12 bg-white bg-title bg-opacity-80 flex items-center justify-center rounded-full"
+                  className="icon-button text-xl  relative w-9 lg:w-12 h-9 p-2 lg:h-12 bg-white bg-title bg-opacity-80 flex items-center justify-center rounded-full"
                 >
                   <svg
                     stroke="currentColor"

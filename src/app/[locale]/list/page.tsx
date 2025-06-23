@@ -118,18 +118,10 @@ function PageContentWrapper() {
           <div className="absolute inset-0 bg-black/60 z-10" />
 
           <div className="relative z-20 text-center w-full">
-            <h2 className="text-white text-2xl md:text-[40px] font-normal leading-none text-center capitalize">
+            <h2 className="text-primary text-xl md:text-[40px] font-normal leading-none text-center capitalize">
               {pageTitle}
             </h2>
-            <ul className="flex items-center justify-center gap-[10px] text-base md:text-lg leading-none font-normal text-white mt-3 md:mt-4">
-              <li>
-                <Link href="/" data-discover="true">
-                  Home
-                </Link>
-              </li>
-              <li>/</li>
-              <li className="text-primary capitalize">{pageTitle}</li>
-            </ul>
+         
           </div>
         </div>
 
@@ -165,18 +157,10 @@ function PageContentWrapper() {
         <div className="absolute inset-0 bg-black/60 z-10" />
 
         <div className="relative z-20 text-center w-full">
-          <h2 className="text-white text-2xl md:text-[40px] font-normal leading-none text-center capitalize">
-            {pageTitle}
-          </h2>
-          <ul className="flex items-center justify-center gap-[10px] text-base md:text-lg leading-none font-normal text-white mt-3 md:mt-4">
-            <li>
-              <Link href="/" data-discover="true">
-                Home
-              </Link>
-            </li>
-            <li>/</li>
-            <li className="text-primary capitalize">{pageTitle}</li>
-          </ul>
+        <h2 className="text-primary text-xl md:text-[40px] font-normal leading-none text-center capitalize">
+              {pageTitle}
+            </h2>
+       
         </div>
       </div>
 
