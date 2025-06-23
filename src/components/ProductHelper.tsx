@@ -1,7 +1,12 @@
 import { Link } from "@/i18n/navigation";
 import React from "react";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, FreeMode } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/free-mode";
+import "swiper/css/autoplay";
 
 interface ProductItem {
   id: string;
@@ -12,8 +17,9 @@ interface ProductItem {
 }
 
 interface ProductListProps {
-  items: ProductItem[]; 
+  items: ProductItem[];
 }
+
 const getLocalizedTitle = (product: ProductItem, locale: string): string => {
   if (locale === 'en') {
     return product.title ?? product.titleEn;
@@ -21,71 +27,83 @@ const getLocalizedTitle = (product: ProductItem, locale: string): string => {
   return product.title ?? product.titleEn ?? '';
 };
 
-function ProductHelper({ items }: ProductListProps  ) {
-    const t = useTranslations();
-    
-    if (!items || items.length === 0) {
-      return null; 
-    }
-    return (
-   <>
-    <div className="grid grid-cols-1  sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-8">
-      {items.map((item) => (
-        <div key={item.id}>
-         <div className="relative  overflow-hidden group">
-              <Link href={`/products/${item.id}`} >
-                <Image
-                  width={150}
-                  height={100}
-                  className="w-full rounded-md transform duration-300 group-hover:scale-110"
-                  alt="product-card"
-                  src={item.image[0]}
-                />
-              </Link>
+function ProductHelper({ items }: ProductListProps) {
+  const t = useTranslations();
+  const locale = useLocale();
 
-              <div className="flex rounded-md flex-col items-start gap-3 md:gap-4 absolute z-20 w-11/12 bottom-3 xl:bottom-5 left-1/2 transform -translate-x-1/2 p-4 xl:p-5 bg-gray-200 bg-title  bg-opacity-[85%] group-hover:-translate-y-1/2 duration-500 group-hover:opacity-0 group-hover:invisible">
-               
-                <h5 className="text-xl text-gray-600 max-w-lg leading-relaxed">
-                  <Link href="/product-details" className="text-xl  text-gray-600 max-w-lg leading-relaxedl" data-discover="true">
-                    {getLocalizedTitle(item, 'en')}
+  if (!items || items.length === 0) {
+    return null;
+  }
+  return (
+    <div className="max-w-7xl mt-10 mx-auto">
+      
+      <div className="w-full relative">
+        <Swiper
+          modules={[Autoplay, FreeMode]}
+          spaceBetween={20}
+          slidesPerView={1}
+          freeMode={true}
+          autoplay={{
+            delay: 3000,
+            disableOnInteraction: false,
+          }}
+          breakpoints={{
+            640: {
+              slidesPerView: 2,
+              spaceBetween: 20,
+            },
+            768: {
+              slidesPerView: 3,
+              spaceBetween: 20,
+            },
+            1024: {
+              slidesPerView: 4,
+              spaceBetween: 20,
+            },
+            1280: {
+              slidesPerView: 5,
+              spaceBetween: 20,
+            },
+          }}
+          className="product-swiper w-full"
+        >
+          {items.map((item, index) => (
+            <SwiperSlide key={item.id}>
+              <div className="relative z-1 h-full group flex flex-col items-center justify-between py-2">
+                <div className="overflow-hidden rounded-3xl w-full">
+                  <Link href={`/products/${item.id}`}>
+                    <Image
+                      src={item.image[0]}
+                      alt={getLocalizedTitle(item, locale)}
+                      width={192}
+                      height={192}
+                      priority={index < 8}
+                      loading={index < 8 ? "eager" : "lazy"}
+                      className="w-full rounded-3xl duration-500 group-hover:-translate-y-5 object-cover"
+                      sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
+                      quality={85}
+                      placeholder="blur"
+                      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
+                    />
                   </Link>
-                </h5>
-              </div>
-
-              <div className="absolute z-10 flex gap-2 justify-center bottom-5 md:bottom-7 w-full transform translate-y-5 opacity-0 duration-500 invisible group-hover:translate-y-0 group-hover:opacity-100 group-hover:visible">
-              
-                <Link
-                  href={`/products/${item.id}`}
-                  className="icon-button text-xl  relative w-9 lg:w-12 h-9 p-2 lg:h-12 bg-white bg-title bg-opacity-80 flex items-center justify-center rounded-full"
-                >
-                  <svg
-                    stroke="currentColor"
-                    fill="none"
-                    strokeWidth="2"
-                    viewBox="0 0 24 24"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-black h-[22px] w-[20px]"
-                    height="1em"
-                    width="1em"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"></path>
-                    <circle cx="12" cy="12" r="3"></circle>
-                  </svg>
-                  <span className="tooltip">
-                    {t("helper.details")}
-                    <span className="tooltip-arrow"></span>
+                </div>
+                <div className="py-3 w-full flex flex-col items-center">
+                  <h6 className="w-[70%] max-xl:w-full text-center text-base font-semibold text-gray-800">
+                    <Link href={`/products/${item.id}`}>
+                      {getLocalizedTitle(item, locale)}
+                    </Link>
+                  </h6>
+                  <span className="mt-2 text-primary font-bold text-lg">
+                    ₾{item.price}
                   </span>
-                </Link>
+                </div>
               </div>
-            </div>
-        </div>
-      ))}
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
     </div>
-   
-   </>
-  )
+  );
 }
 
-export default ProductHelper
+export default ProductHelper;

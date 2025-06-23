@@ -140,14 +140,32 @@ export async function createProduct(data: z.infer<typeof ProductSchema>) {
       }
       
       export async function getAllProducts() {
-        const products = await prisma.product.findMany({
-          include: {
-            sizes: true
-          },
-          orderBy: { createdAt: "desc" },
-        });
-      
-        return Promise.all(products.map((product) => convertToPlainObject(product)));
+        try {
+          const products = await prisma.product.findMany({
+            include: {
+              sizes: {
+                select: {
+                  id: true,
+                  size: true,
+                  price: true
+                }
+              }
+            },
+            orderBy: { createdAt: "desc" }
+          });
+        
+          // Optimize the conversion process
+          return products.map((product) => ({
+            ...product,
+            sizes: product.sizes.map(size => ({
+              ...size,
+              price: size.price.toString()
+            }))
+          }));
+        } catch (error) {
+          console.error("Error fetching products:", error);
+          return [];
+        }
       }
       
       export async function getProductById(productId: string) {

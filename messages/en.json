@@ -278,6 +278,7 @@
     },
     "filters": {
       "title": "Filters",
+      "activeFilters": "active filters",
       "categories": {
         "title": "Categories",
         "allCategories": "All Categories"

@@ -368,3 +368,59 @@ body {
   animation: gradient-shift 3s ease infinite;
 }
 
+/* Prevent layout shift for Swiper images */
+.category-swiper .swiper-slide img,
+.product-swiper .swiper-slide img {
+  width: 100% !important;
+  height: 192px !important;
+  object-fit: cover;
+  border-radius: 24px;
+}
+
+/* Ensure Swiper container has proper dimensions */
+.category-swiper,
+.product-swiper {
+  width: 100%;
+  height: auto;
+}
+
+/* Prevent images from showing at full size during load */
+.swiper-slide img {
+  max-width: 100%;
+  height: auto;
+  transition: transform 0.5s ease;
+}
+
+/* Optimize image loading performance */
+img {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* Faster transitions for better perceived performance */
+.swiper-slide {
+  will-change: transform;
+}
+
+/* Optimize skeleton animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Preload critical images */
+@media (preload) {
+  .category-swiper img,
+  .product-swiper img {
+    preload: true;
+  }
+}
+

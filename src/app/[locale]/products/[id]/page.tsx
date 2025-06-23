@@ -4,12 +4,28 @@ import { useTranslations } from "next-intl";
 import React, { useState, useEffect } from "react";
 import ProductImage from "../ProductImage";
 import { getProductById } from "@/lib/actions/actions";
-import { Decimal } from "@prisma/client/runtime/library";
+
+// Simple Decimal-like class to avoid Prisma import issues
+class SimpleDecimal {
+  value: string;
+  
+  constructor(value: string | number) {
+    this.value = value.toString();
+  }
+  
+  toString() {
+    return this.value;
+  }
+  
+  toNumber() {
+    return parseFloat(this.value);
+  }
+}
 
 interface ProductSize {
   id: string;
   size: string;
-  price: Decimal;
+  price: SimpleDecimal;
 }
 
 interface Product {
@@ -29,7 +45,8 @@ interface Product {
   sizes?: ProductSize[];
   // Keep old fields for backward compatibility during migration
   size?: string;
-  price?: Decimal;
+  price?: SimpleDecimal;
+  sales?: number;
 }
 
 const Page = (props: { params: { id: string; locale: string } }) => {
@@ -43,10 +60,21 @@ const Page = (props: { params: { id: string; locale: string } }) => {
     const fetchProduct = async () => {
       try {
         const data = await getProductById(id);
-        setProduct(data as Product);
-        // Set the first size as default selected
-        if (data && 'sizes' in data && Array.isArray(data.sizes) && data.sizes.length > 0) {
-          setSelectedSize(data.sizes[0].id);
+        // Convert the data to match the Product interface
+        if (data) {
+          const productWithDecimalPrices = {
+            ...data,
+            sizes: data.sizes?.map(size => ({
+              ...size,
+              price: new SimpleDecimal(size.price.toString())
+            })) || undefined,
+            sales: data.sales || undefined
+          };
+          setProduct(productWithDecimalPrices as Product);
+          // Set the first size as default selected
+          if (data.sizes && Array.isArray(data.sizes) && data.sizes.length > 0) {
+            setSelectedSize(data.sizes[0].id);
+          }
         }
       } catch (error) {
         console.error("Error fetching product:", error);
@@ -173,7 +201,7 @@ const Page = (props: { params: { id: string; locale: string } }) => {
               {selectedSizeData && (
                 <div className="pb-2">
                   <div className="flex items-start gap-3">
-                    <span className="text-[18px] text-gray-600">{getTranslation('product.price', 'Price')}  {Number(selectedSizeData.price)} ₾</span>
+                    <span className="text-[18px] text-gray-600">{getTranslation('product.price', 'Price')}  {Number(selectedSizeData.price.toNumber())} ₾</span>
                 
                   
                   </div>

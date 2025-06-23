@@ -4,13 +4,33 @@ import { Link } from "@/i18n/navigation";
 import ProductHelper from "./ProductHelper";
 import { useTranslations } from "next-intl";
 import { getAllProducts } from "@/lib/actions/actions";
-import { Decimal } from "@prisma/client/runtime/library";
 import { useParams } from "next/navigation";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Autoplay, FreeMode } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+
+// Simple Decimal-like class to avoid Prisma import issues
+class SimpleDecimal {
+  value: string;
+  
+  constructor(value: string | number) {
+    this.value = value.toString();
+  }
+  
+  toString() {
+    return this.value;
+  }
+  
+  toNumber() {
+    return parseFloat(this.value);
+  }
+}
 
 interface ProductSize {
   id: string;
   size: string;
-  price: Decimal;
+  price: SimpleDecimal;
 }
 
 interface Product {
@@ -29,87 +49,114 @@ interface Product {
   qutaisi: boolean;
   sizes?: ProductSize[];
   size?: string;
-  price?: Decimal;
+  price?: SimpleDecimal;
   sales?: number;
 }
 
-function ProductList() {
+interface ProductItem {
+  id: string;
+  image: string[];
+  price: number;
+  title: string;
+  titleEn?: string;
+}
+
+interface ProductListProps {
+  selectedType: string;
+  selectedBrand: string;
+  selectedPrice: { min: number | null; max: number | null };
+}
+
+function ProductList({ selectedType, selectedBrand, selectedPrice }: ProductListProps) {
   const t = useTranslations("productList");
   const params = useParams();
   const locale = params.locale as string;
-  const [activeCategory, setActiveCategory] = useState("new-arrival");
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
 
-  // Fetch products from database
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
         const data = await getAllProducts();
-        setProducts(data as Product[]);
+        // Convert the data to match the Product interface
+        const productsWithDecimalPrices = data.map(product => ({
+          ...product,
+          sizes: product.sizes?.map(size => ({
+            ...size,
+            price: new SimpleDecimal(size.price)
+          })) || undefined,
+          sales: product.sales || undefined
+        }));
+        setProducts(productsWithDecimalPrices as Product[]);
+        // Set images as loaded immediately after data fetch
+        setImagesLoaded(true);
       } catch (error) {
         console.error("Error fetching products:", error);
+        setImagesLoaded(true); // Still set to true to show content
       } finally {
         setLoading(false);
       }
     };
-
     fetchProducts();
   }, []);
 
-  // Helper function to get product price range
   const getProductPriceRange = (product: Product) => {
     if (product.sizes && product.sizes.length > 0) {
-      const prices = product.sizes.map((s) => Number(s.price));
+      const prices = product.sizes.map((s) => s.price.toNumber());
       return {
         min: Math.min(...prices),
         max: Math.max(...prices),
       };
     }
     if (product.price) {
-      const price = Number(product.price);
+      const price = product.price.toNumber();
       return { min: price, max: price };
     }
     return { min: 0, max: 0 };
   };
 
-  // Get localized title based on locale
   const getLocalizedTitle = (product: Product): string => {
-    if (locale === 'en') {
+    if (locale === "en") {
       return product.titleEn ?? product.title;
     }
-    return product.title ?? product.titleEn ?? '';
+    return product.title ?? product.titleEn ?? "";
   };
 
-  // Filter products based on category
+  // Filter products based on sidebar filter props
   const getFilteredProducts = () => {
-    if (!products.length) return [];
-
-    switch (activeCategory) {
-      case "new-arrival":
-        // Get 4 most recent products
-        return products
-          .sort(
-            (a, b) =>
-              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-          )
-          .slice(0, 4);
-      case "sales":
-        // Get products with sales > 0, sorted by sales
-        return products
-          .filter((product) => (product.sales || 0) > 0)
-          .sort((a, b) => (b.sales || 0) - (a.sales || 0))
-          .slice(0, 4);
-      case "trending":
-        // Get popular products
-        return products.filter((product) => product.popular).slice(0, 4);
-      default:
-        return products.slice(0, 4);
-    }
+    console.log('Filtering products:', {
+      selectedType,
+      selectedBrand,
+      selectedPrice,
+      totalProducts: products.length
+    });
+    
+    return products.filter(product => {
+      const byType = !selectedType || product.category.toLowerCase() === selectedType.toLowerCase();
+      const byBrand = !selectedBrand || product.brand === selectedBrand;
+      const priceRange = getProductPriceRange(product);
+      const byMinPrice = selectedPrice.min === null || priceRange.max >= selectedPrice.min;
+      const byMaxPrice = selectedPrice.max === null || priceRange.min <= selectedPrice.max;
+      
+      console.log('Product filtering:', {
+        productId: product.id,
+        productCategory: product.category,
+        selectedType,
+        byType,
+        byBrand,
+        byMinPrice,
+        byMaxPrice
+      });
+      
+      return byType && byBrand && byMinPrice && byMaxPrice;
+    });
   };
 
-  // Transform database products to match ProductHelper interface
+  // Show up to 12 products (to fill the Swiper)
+  const filteredProducts = getFilteredProducts().slice(0, 12);
+
   const transformProducts = (products: Product[]) => {
     return products.map((product) => {
       const priceRange = getProductPriceRange(product);
@@ -123,77 +170,38 @@ function ProductList() {
     });
   };
 
-  const filteredProducts = getFilteredProducts();
   const transformedProducts = transformProducts(filteredProducts);
 
   return (
-    <section className="mt-16 bg-gradient-to-br from-gray-50 via-white to-gray-50">
-      <div className="container mx-auto px-4">
+    <section className="bg-gradient-to-br from-gray-50 via-white to-gray-50">
+      <div className=" ">
         <div className="max-w-7xl mx-auto">
-          {/* Modern Section Header */}
-          <div className="text-center mb-16">
-            <h2 className="text-primary  font-normal text-center text-3xl md:text-[50px] block -ml-5 -mb-3 sm:-mb-[30px] leading-normal sm:leading-normal">
-              {t("title")}   {t("subtitle")}
-            </h2>
-            {/* <h6 className="text-lg mt-7 text-gray-600 max-w-2xl mx-auto font-secondary">
-              {t("subtitle")}
-            </h6> */}
-          </div>
+          {/* Section Header */}
+       
 
-          {/* Category Buttons */}
-          <div className="flex flex-wrap flex-col sm:flex-row justify-center gap-4 md:gap-6 mb-16 ">
-            <button
-              onClick={() => setActiveCategory("new-arrival")}
-              className={`px-8 py-4 text-xl rounded-full font-semibold transition-all duration-300 transform hover:scale-105 ${
-                activeCategory === "new-arrival"
-                  ? "bg-gradient-to-r from-primary to-primary/80 text-white shadow-lg shadow-primary/25"
-                  : "bg-white text-gray-700 hover:bg-gray-50 shadow-md hover:shadow-lg border border-gray-200"
-              }`}
-            >
-              {t("newArrival")}
-            </button>
-            <button
-              onClick={() => setActiveCategory("sales")}
-              className={`px-8 py-4 text-xl rounded-full font-semibold transition-all duration-300 transform hover:scale-105 ${
-                activeCategory === "sales"
-                  ? "bg-gradient-to-r from-primary to-primary/80 text-white shadow-lg shadow-primary/25"
-                  : "bg-white text-gray-700 hover:bg-gray-50 shadow-md hover:shadow-lg border border-gray-200"
-              }`}
-            >
-              {t("sales")}
-            </button>
-            <button
-              onClick={() => setActiveCategory("trending")}
-              className={`px-8 py-4 text-xl rounded-full font-semibold transition-all duration-300 transform hover:scale-105 ${
-                activeCategory === "trending"
-                  ? "bg-gradient-to-r from-primary to-primary/80 text-white shadow-lg shadow-primary/25"
-                  : "bg-white text-gray-700 hover:bg-gray-50 shadow-md hover:shadow-lg border border-gray-200"
-              }`}
-            >
-              {t("trending")}
-            </button>
-          </div>
-
-          {/* Products Grid */}
-          {loading ? (
+          {/* Swiper Product Slider */}
+          {loading || !imagesLoaded ? (
+            // Skeleton Loading State
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {Array.from({ length: 4 }).map((_, index) => (
-                <div key={index} className="animate-pulse">
-                  <div className="bg-gray-200 rounded-2xl h-80 mb-4"></div>
-                  <div className="space-y-2">
-                    <div className="h-4 bg-gray-200 rounded"></div>
-                    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                    <div className="h-6 bg-gray-200 rounded w-1/2"></div>
+              {Array.from({ length: 8 }).map((_, index) => (
+                <div key={index} className="flex flex-col items-center">
+                  <div className="animate-pulse">
+                    {/* Skeleton Image */}
+                    <div className="w-full h-[192px] bg-gray-200 rounded-3xl mb-3"></div>
+                    {/* Skeleton Title */}
+                    <div className="w-[70%] h-4 bg-gray-200 rounded mb-2 mx-auto"></div>
+                    {/* Skeleton Price */}
+                    <div className="w-[40%] h-6 bg-gray-200 rounded mx-auto"></div>
                   </div>
                 </div>
               ))}
             </div>
           ) : transformedProducts.length > 0 ? (
-            <div className="mb-16 text-xl">
+            <div className="w-full mt-10 pb-4">
               <ProductHelper items={transformedProducts} />
             </div>
           ) : (
-            <div className="text-center py-12">
+            <div className="text-center py-4">
               <div className="text-gray-400 mb-4">
                 <svg
                   className="w-16 h-16 mx-auto"

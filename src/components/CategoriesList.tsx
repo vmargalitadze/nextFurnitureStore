@@ -1,4 +1,20 @@
 const CategoriesList = [
+    {
+      id: "0",
+      type: "all",
+      label: 'ყველა',
+      labelEn: 'All',
+      quantity: 0,
+      image: '/chair.jpg',
+    },
+    { 
+      id: "1", 
+      type: "bundle", 
+      label: 'კომპლექტი', 
+      labelEn: 'Bundle',  
+      quantity: 0,  
+      image: '/chair.jpg'  
+    },
     { 
       id: "2", 
       type: "pillow", 
@@ -30,7 +46,15 @@ const CategoriesList = [
       labelEn: 'Quilt',  
       quantity: 7,  
       image: '/chair.jpg'  
-    }
+    },
+    { 
+      id: "6", 
+      type: "others", 
+      label: 'სხვა', 
+      labelEn: 'Others',  
+      quantity: 7,  
+      image: '/chair.jpg'  
+    },
 ];
 
 export default CategoriesList;

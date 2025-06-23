@@ -6,12 +6,30 @@ import React, { Suspense, useState, useEffect } from "react";
 import { Link } from "@/i18n/navigation";
 import ProductHelper from "@/components/ProductHelper";
 import { getAllProducts } from "@/lib/actions/actions";
-import { Decimal } from "@prisma/client/runtime/library";
+import { useTranslations } from "next-intl";
+import Filter from "@/components/Filter";
+
+// Simple Decimal-like class to avoid Prisma import issues
+class SimpleDecimal {
+  value: string;
+  
+  constructor(value: string | number) {
+    this.value = value.toString();
+  }
+  
+  toString() {
+    return this.value;
+  }
+  
+  toNumber() {
+    return parseFloat(this.value);
+  }
+}
 
 interface ProductSize {
   id: string;
   size: string;
-  price: Decimal;
+  price: SimpleDecimal;
 }
 
 interface Product {
@@ -31,7 +49,8 @@ interface Product {
   sizes?: ProductSize[];
   // Keep old fields for backward compatibility during migration
   size?: string;
-  price?: Decimal;
+  price?: SimpleDecimal;
+  sales?: number;
 }
 
 function PageContentWrapper() {
@@ -45,7 +64,7 @@ function PageContentWrapper() {
   // Helper function to get product price range
   const getProductPriceRange = (product: Product) => {
     if (product.sizes && product.sizes.length > 0) {
-      const prices = product.sizes.map(s => Number(s.price));
+      const prices = product.sizes.map(s => s.price.toNumber());
       return {
         min: Math.min(...prices),
         max: Math.max(...prices)
@@ -53,7 +72,7 @@ function PageContentWrapper() {
     }
     // Fallback to old structure
     if (product.price) {
-      const price = Number(product.price);
+      const price = product.price.toNumber();
       return { min: price, max: price };
     }
     return { min: 0, max: 0 };
@@ -90,7 +109,16 @@ function PageContentWrapper() {
     try {
       setLoading(true);
       const data = await getAllProducts();
-      setProducts(data as Product[]);
+      // Convert the data to match the Product interface
+      const productsWithDecimalPrices = data.map(product => ({
+        ...product,
+        sizes: product.sizes?.map(size => ({
+          ...size,
+          price: new SimpleDecimal(size.price)
+        })) || undefined,
+        sales: product.sales || undefined
+      }));
+      setProducts(productsWithDecimalPrices as Product[]);
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
@@ -106,7 +134,7 @@ function PageContentWrapper() {
   if (loading) {
     return (
       <>
-        <div className="relative min-h-screen flex items-center justify-center bg-overlay p-14 sm:p-16 before:bg-title before:bg-opacity-70 overflow-hidden">
+        <div className="relative  flex items-center justify-center bg-overlay p-14 sm:p-16 before:bg-title before:bg-opacity-70 overflow-hidden">
           <Image
             src="/bed.jpg"
             alt="Background"

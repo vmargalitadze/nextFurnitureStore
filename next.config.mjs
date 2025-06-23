@@ -10,6 +10,18 @@ const nextConfig = {
       },
     ],
   },
+  webpack: (config, { isServer }) => {
+    // Handle node: protocol imports
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      "node:async_hooks": false,
+      "node:util": false,
+      "node:buffer": false,
+      "node:process": false,
+    };
+    
+    return config;
+  },
 };
 const withNextIntl = createNextIntlPlugin();
 export default withNextIntl(nextConfig);
