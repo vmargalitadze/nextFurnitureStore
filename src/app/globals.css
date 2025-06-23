@@ -424,3 +424,199 @@ img {
   }
 }
 
+/* Custom category grid styles */
+.rounded-3\.5xl {
+  border-radius: 1.75rem;
+}
+
+.rounded-ee-7xl {
+  border-top-right-radius: 3.5rem;
+}
+
+.rounded-es-7xl {
+  border-bottom-right-radius: 3.5rem;
+}
+
+.rounded-ss-7xl {
+  border-bottom-left-radius: 3.5rem;
+}
+
+.max-md\:rounded-ee-4xl {
+  border-top-right-radius: 2rem;
+}
+
+.max-md\:rounded-es-4xl {
+  border-bottom-right-radius: 2rem;
+}
+
+.max-md\:rounded-ss-4xl {
+  border-bottom-left-radius: 2rem;
+}
+
+.text-xxl {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.mb-13\.5 {
+  margin-bottom: 3.375rem;
+}
+
+/* Category Section Background */
+.bg-lightdark {
+  background-color: #f8f5f0;
+}
+
+.rounded-4xl {
+  border-radius: 2rem;
+}
+
+/* Custom padding classes */
+.3xl\:pt-25 {
+  padding-top: 6.25rem;
+}
+
+.3xl\:pb-17 {
+  padding-bottom: 4.25rem;
+}
+
+.md\:pt-17 {
+  padding-top: 4.25rem;
+}
+
+.md\:pb-10 {
+  padding-bottom: 2.5rem;
+}
+
+.sm\:pt-13\.5 {
+  padding-top: 3.375rem;
+}
+
+.sm\:pb-5 {
+  padding-bottom: 1.25rem;
+}
+
+.pt-10 {
+  padding-top: 2.5rem;
+}
+
+.pb-5 {
+  padding-bottom: 1.25rem;
+}
+
+/* Custom margin classes */
+.mx-20 {
+  margin-left: 5rem;
+  margin-right: 5rem;
+}
+
+.max-3xl\:mx-10 {
+  margin-left: 2.5rem;
+  margin-right: 2.5rem;
+}
+
+.max-lg\:mx-5 {
+  margin-left: 1.25rem;
+  margin-right: 1.25rem;
+}
+
+/* Rotating Button Styles */
+.icon-button {
+  background: white;
+  border: 2px solid #e5e7eb;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.icon-button:hover {
+  transform: translate(-50%, -7%) scale(1.05);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.word-rotate-box {
+  position: relative;
+  width: 140px;
+  height: 140px;
+}
+
+.text__char {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: 0 70px;
+  transform: translate(-50%, -50%) rotate(var(--char-rotate));
+  font-size: 12px;
+  font-weight: 600;
+  color: #000;
+}
+
+/* Rotate Animation */
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-rotate {
+  animation: rotate 20s linear infinite;
+}
+
+/* FadeInUp Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 40px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.wow.fadeInUp {
+  animation-name: fadeInUp;
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .mb-13\.5 {
+    margin-bottom: 2rem;
+  }
+  
+  .pl-10, .pr-10 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .text-xxl {
+    font-size: 0.75rem;
+    line-height: 1rem;
+  }
+  
+  .py-2.px-5 {
+    padding: 0.25rem 0.375rem;
+  }
+  
+  .bottom-7\.5 {
+    bottom: 0.5rem;
+  }
+}
+
+/* 3XL breakpoint */
+@media (min-width: 1920px) {
+  .3xl\:pt-25 {
+    padding-top: 6.25rem;
+  }
+  
+  .3xl\:pb-17 {
+    padding-bottom: 4.25rem;
+  }
+}
+

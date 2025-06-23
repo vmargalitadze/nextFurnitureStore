@@ -24,18 +24,13 @@ export default function DropdownMenuCheckboxes() {
     <div className="flex justify-center  gap-2 items-center ">
       <DropdownMenu>
       <DropdownMenuTrigger asChild>
-  <div className="flex items-center">
-    <Button
-      className="bg-gray-200 text text-gray-800 hover:bg-gray-300 px-4 py-2 h-auto w-auto rounded-md  truncate max-w-[160px]"
-      variant="ghost"
-    >
-      <span className="text-[20px]   max-w-[160px]">
-
-      {firstLetter}
-
-      </span>
-    </Button>
-  </div>
+      <div className="flex items-center">
+  <button
+    className="inline-flex items-center gap-2 h-[40px] px-4 rounded-full bg-white/70 backdrop-blur-md shadow-lg text-black font-semibold transition-all hover:bg-white truncate max-w-[160px]"
+  >
+    <span className="text-base font-medium truncate">{firstLetter}</span>
+  </button>
+</div>
 </DropdownMenuTrigger>
 
         <DropdownMenuContent

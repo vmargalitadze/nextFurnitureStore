@@ -99,91 +99,88 @@ function Categories() {
   const categoryProducts = transformCategoriesToProducts();
 
   return (
-    <section className="mt-24 bg-gradient-to-br from-gray-50 via-white to-gray-50">
-      <div className="container mx-auto px-2">
-        <div className="max-w-7xl mt-10 mx-auto">
-          {/* Swiper Category Slider */}
-          <div className="w-full mt-10 ">
-            {!imagesLoaded ? (
-              // Skeleton Loading State
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                {Array.from({ length: 5 }).map((_, index) => (
-                  <div key={index} className="flex flex-col items-center">
-                    <div className="animate-pulse">
-                      {/* Skeleton Image */}
-                      <div className="w-full h-[192px] bg-gray-200 rounded-3xl mb-3"></div>
-                      {/* Skeleton Title */}
-                      <div className="w-[70%] h-4 bg-gray-200 rounded mx-auto"></div>
-                    </div>
+    <section className="relative  mt-10 z-10 rounded-4xl bg-lightdark pt-10 pb-5 sm:pt-14 sm:pb-6 px-5 md:pt-17 md:pb-10 2xl:pt-24 2xl:pb-16 md:px-20">
+    <div className="container mx-auto">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {CategoriesList.filter(item => item.type !== "all").map((item, index) => {
+          const label = locale === "en" ? item.labelEn : item.label;
+  
+          // განსხვავებული დიზაინი ინდექსზე დაყრდნობით
+          const extraClasses = [
+            "rounded-3xl", // default
+            "rounded-ee-[3rem]",
+            "rounded-es-[3rem]",
+            "rounded-ss-[3rem]",
+            "rounded-se-[3rem]",
+            "rounded-[2rem]",
+          ];
+  
+          const borderColors = [
+            "border-gray-200",
+            "border-gray-200",
+            "border-gray-200",
+            "border-gray-200",
+            "border-gray-200",
+            "bborder-gray-200",
+          ];
+  
+          return (
+            <div
+              key={item.id}
+              className={`relative wow fadeInUp group cursor-pointer`}
+              style={{
+                animationDelay: `${0.2 + index * 0.1}s`,
+                animationName: 'fadeInUp',
+                visibility: 'visible',
+              }}
+            >
+              <Link href={`/list?cat=${item.type}`}>
+                <div className="relative z-10 transition-all duration-500 group-hover:-translate-y-4 group-hover:scale-105 group-hover:z-20">
+                  <Image
+                    src={item.image}
+                    alt={label}
+                    width={400}
+                    height={300}
+                    priority={index < 3}
+                    loading={index < 3 ? "eager" : "lazy"}
+                    className={`w-full h-[300px] max-sm:h-[150px] object-cover border-4 ${borderColors[index % borderColors.length]} ${extraClasses[index % extraClasses.length]} transition-all duration-500 group-hover:shadow-2xl`}
+                  />
+                  <div
+                    className={`absolute bottom-5 ${
+                      index % 2 === 0 ? 'left-0 max-lg:-left-3' : 'right-0 max-lg:-right-3'
+                    } bg-white border-4 border-white font-semibold text-[18px] max-lg:text-sm max-sm:text-xs py-2 px-4 rounded-xl shadow-md transition-all duration-500 group-hover:bg-primary group-hover:text-white group-hover:scale-110 group-hover:shadow-lg`}
+                  >
+                    {label}
                   </div>
-                ))}
-              </div>
-            ) : (
-              <Swiper
-                spaceBetween={15}
-                slidesPerView={1}
-                loop={true}
-                autoplay={{
-                  delay: 0,
-                  disableOnInteraction: false,
-                  pauseOnMouseEnter: false,
-                }}
-                speed={3000}
-                freeMode={true}
-                modules={[FreeMode, Autoplay]}
-                breakpoints={{
-                  640: { slidesPerView: 1 },
-                  768: { slidesPerView: 4 },
-                  1024: { slidesPerView: 5 },
-                  1280: { slidesPerView: 5 },
-                }}
-                className="category-swiper"
-              >
-                {CategoriesList.map((item, index) => (
-                  <SwiperSlide key={item.id}>
-                    <div className="relative z-1 h-full group flex flex-col items-center justify-between py-2">
-                      <div className="overflow-hidden rounded-3xl w-full">
-                        <Link
-                          href={
-                            item.type === "all"
-                              ? "/all"
-                              : `/list?cat=${item.type}`
-                          }
-                        >
-                          <Image
-                            src={item.image}
-                            alt={locale === "en" ? item.labelEn : item.label}
-                            width={192}
-                            height={192}
-                            priority={index < 5}
-                            loading={index < 5 ? "eager" : "lazy"}
-                            className="w-full rounded-3xl duration-500 group-hover:-translate-y-5 object-cover"
-                            sizes="(max-width: 640px) 50vw, (max-width: 768px) 25vw, (max-width: 1024px) 20vw, 16vw"
-                          />
-                        </Link>
-                      </div>
-                      <div className="py-3 w-full flex flex-col items-center">
-                        <h6 className="w-[70%] max-xl:w-full text-center text-base font-semibold text-gray-800">
-                          <Link
-                            href={
-                              item.type === "all"
-                                ? "/all"
-                                : `/list?cat=${item.type}`
-                            }
-                          >
-                            {locale === "en" ? item.labelEn : item.label}
-                          </Link>
-                        </h6>
-                      </div>
-                    </div>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            )}
-          </div>
-        </div>
+                </div>
+              </Link>
+            </div>
+          );
+        })}
       </div>
-    </section>
+    </div>
+  
+    {/* Rotating Button */}
+    <Link
+      href="/all"
+      className="hidden lg:inline-block absolute left-1/2 top-[-7%] transform -translate-x-1/2 -translate-y-[7%] w-[140px] h-[140px] p-2.5 rounded-full border border-white animate-rotate"
+    >
+      <div className="flex items-center justify-center w-full h-full rounded-full text-black border border-white">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-10 h-10 animate-rotate"
+          viewBox="0 0 40 40"
+          fill="none"
+        >
+          <path
+            d="M10.72 31.31L19 39.59c.26.26.62.41 1 .41s.74-.15 1-.41l8.28-8.28a1.33 1.33 0 00-1.89-1.89L21 36.84V1a1 1 0 10-2 0v35.84l-6.91-6.91a1.33 1.33 0 10-1.89 1.89z"
+            fill="currentColor"
+          />
+        </svg>
+      </div>
+    </Link>
+  </section>
+  
   );
 }
 

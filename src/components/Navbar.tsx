@@ -14,7 +14,7 @@ function Navbar() {
 
 
   return (
-    <div className='fixed top-0 left-0 w-full z-50 h-20 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 bg-white shadow-sm'>
+    <div className='fixed top-0 left-0 w-full z-50 h-20 px-4 md:px-12 bg-white shadow-sm'>
 
       <div className="h-full flex items-center justify-between md:hidden">
 
@@ -23,7 +23,7 @@ function Navbar() {
       </div>
 
 
-<div className="hidden md:flex items-center justify-between  gap-8 h-full">
+<div className="hidden md:flex items-center justify-around  gap-8 h-full">
 
     <div className="w-1/3 xl:w-1/2 flex items-center gap-12">
     <Link href="/" className="flex items-center gap-3">
@@ -32,18 +32,18 @@ function Navbar() {
           </Link>
           <div className="hidden xl:flex gap-4">
             
-            <Link href="/all" className="text-xl">  {t('products')} </Link>
+            <Link href="/all" className="text-[18px]">  {t('products')} </Link>
 
         
-            <Link href="/contact" className="text-xl"> {t('contact')}</Link>
+            <Link href="/contact" className="text-[18px]"> {t('contact')}</Link>
           </div>
         
     </div>
 
     <div className="w-2/3 flex items-center justify-between  gap-8 ">
     <SearchBar />
-     <NavIcons />
    
+     <NavIcons />
     </div>
 
 </div>

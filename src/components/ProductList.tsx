@@ -173,7 +173,7 @@ function ProductList({ selectedType, selectedBrand, selectedPrice }: ProductList
   const transformedProducts = transformProducts(filteredProducts);
 
   return (
-    <section className="bg-gradient-to-br from-gray-50 via-white to-gray-50">
+    <section className="bg-gradient-to-br px-5 md:px-20 from-gray-50 via-white to-gray-50">
       <div className=" ">
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
@@ -197,7 +197,7 @@ function ProductList({ selectedType, selectedBrand, selectedPrice }: ProductList
               ))}
             </div>
           ) : transformedProducts.length > 0 ? (
-            <div className="w-full mt-10 pb-4">
+            <div className="w-full  pt-10 pb-4">
               <ProductHelper items={transformedProducts} />
             </div>
           ) : (

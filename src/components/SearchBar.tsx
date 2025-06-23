@@ -88,6 +88,7 @@ function SearchHelper() {
             text-gray-900 placeholder-gray-500
             text-sm font-medium
             transition-all duration-200
+            placeholder:text-[16px]
           "
           placeholder={t('placeholder') || "Search products..."}
         />

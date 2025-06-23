@@ -35,14 +35,16 @@ function ProductHelper({ items }: ProductListProps) {
     return null;
   }
   return (
-    <div className="max-w-7xl mt-10 mx-auto">
-      
-      <div className="w-full relative">
+    <div className="max-w-7xl  mx-auto">
+
+      <div className="w-full  relative">
         <Swiper
           modules={[Autoplay, FreeMode]}
           spaceBetween={20}
           slidesPerView={1}
           freeMode={true}
+          
+          watchSlidesProgress={true}
           autoplay={{
             delay: 3000,
             disableOnInteraction: false,
@@ -69,33 +71,32 @@ function ProductHelper({ items }: ProductListProps) {
         >
           {items.map((item, index) => (
             <SwiperSlide key={item.id}>
-              <div className="relative z-1 h-full group flex flex-col items-center justify-between py-2">
-                <div className="overflow-hidden rounded-3xl w-full">
-                  <Link href={`/products/${item.id}`}>
-                    <Image
-                      src={item.image[0]}
-                      alt={getLocalizedTitle(item, locale)}
-                      width={192}
-                      height={192}
-                      priority={index < 8}
-                      loading={index < 8 ? "eager" : "lazy"}
-                      className="w-full rounded-3xl duration-500 group-hover:-translate-y-5 object-cover"
-                      sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
-                      quality={85}
-                      placeholder="blur"
-                      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaH9bcfaSXWGaRmknyJckliyjqTzSlT54b6bk+h0R//2Q=="
-                    />
-                  </Link>
-                </div>
-                <div className="py-3 w-full flex flex-col items-center">
-                  <h6 className="w-[70%] max-xl:w-full text-center text-base font-semibold text-gray-800">
+              <div className="relative h-[250px] wow fadeInUp z-1  group flex flex-col items-center justify-between py-2 cursor-pointer overflow-visible">
+                <div className="overflow-visible rounded-3xl w-full">
+                <div className="relative overflow-visible rounded-3xl w-full group">
+  <Link href={`/products/${item.id}`}>
+    <div className="relative z-10 transition-all duration-500 group-hover:-translate-y-4 group-hover:scale-107 group-hover:z-20">
+      <Image
+        src={item.image[0]}
+        alt={getLocalizedTitle(item, locale)}
+        width={192}
+        height={192}
+        priority={index === 0}
+        loading={index < 8 ? "eager" : "lazy"}
+        className="w-full rounded-3xl object-cover transition-all duration-500 group-hover:shadow-xl group-hover:shadow-gray-400/40"
+      />
+    </div>
+  </Link>
+</div>
+
+</div>
+                <div className="py-3 w-full flex flex-col items-center transition-all duration-500 group-hover:scale-103">
+                  <h6 className="w-[70%] max-xl:w-full text-center text-base font-semibold text-gray-800 transition-all duration-500 group-hover:text-primary">
                     <Link href={`/products/${item.id}`}>
                       {getLocalizedTitle(item, locale)}
                     </Link>
                   </h6>
-                  <span className="mt-2 text-primary font-bold text-lg">
-                    ₾{item.price}
-                  </span>
+                
                 </div>
               </div>
             </SwiperSlide>
