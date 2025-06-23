@@ -19,22 +19,25 @@ export default function DropdownMenuCheckboxes() {
       callbackUrl: window.location.origin + "/login",
     });
   };
-  const firstLetter = session?.user?.name?.charAt(0).toUpperCase() || "?";
+  const firstLetter = session?.user?.name;
   return (
     <div className="flex justify-center  gap-2 items-center ">
       <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <div className="flex items-center">
-            <Button
-              className="relative cursor-pointer w-9 lg:w-12 h-9 p-2 lg:h-12 text-center rounded-full ml-2 overflow-hidden p-0 bg-gray-200 text-gray-800 hover:bg-gray-300"
-              variant="ghost"
-            >
-              <span className="w-full h-full flex text-center items-center justify-center font-semibold text-lg">
-                {firstLetter}
-              </span>
-            </Button>
-          </div>
-        </DropdownMenuTrigger>
+      <DropdownMenuTrigger asChild>
+  <div className="flex items-center">
+    <Button
+      className="bg-gray-200 text text-gray-800 hover:bg-gray-300 px-4 py-2 h-auto w-auto rounded-md  truncate max-w-[160px]"
+      variant="ghost"
+    >
+      <span className="text-[20px]   max-w-[160px]">
+
+      {firstLetter}
+
+      </span>
+    </Button>
+  </div>
+</DropdownMenuTrigger>
+
         <DropdownMenuContent
           className="w-[200px] "
           align="center"
