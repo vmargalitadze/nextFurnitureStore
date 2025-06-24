@@ -16,7 +16,7 @@ function NavIcons() {
     <>
     
     
-    <div className="flex items-center gap-4 xl:gap-6 relative">
+    <div className="flex items-start pr-12 gap-4 xl:gap-6 relative">
       <>
       {!session && (
         <Link href="/sign-in" className="text-[18px]">

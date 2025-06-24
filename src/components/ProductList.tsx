@@ -173,8 +173,8 @@ function ProductList({ selectedType, selectedBrand, selectedPrice }: ProductList
   const transformedProducts = transformProducts(filteredProducts);
 
   return (
-    <section className="bg-gradient-to-br px-5 md:px-20 from-gray-50 via-white to-gray-50">
-      <div className=" ">
+    <section className=" px-5 md:px-20 from-gray-50 via-white to-gray-50">
+      <div className="container mx-auto ">
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
        
@@ -197,7 +197,7 @@ function ProductList({ selectedType, selectedBrand, selectedPrice }: ProductList
               ))}
             </div>
           ) : transformedProducts.length > 0 ? (
-            <div className="w-full  pt-10 pb-4">
+            <div className="w-full rounded-2xl pt-10 pb-4">
               <ProductHelper items={transformedProducts} />
             </div>
           ) : (
@@ -227,7 +227,8 @@ function ProductList({ selectedType, selectedBrand, selectedPrice }: ProductList
           {/* View All Button */}
           <div className="text-center mx-auto mt-7 md:mt-12">
             <Link
-              className="inline-block text-xl px-8 py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 bg-gradient-to-r from-primary to-primary/80 text-white shadow-lg shadow-primary/25 hover:shadow-xl"
+            
+              className="w-full bg-[#438c71] text-white py-3 px-10 rounded-xl  transition-all duration-200 font-medium border " 
               href="/all"
               data-discover="true"
             >

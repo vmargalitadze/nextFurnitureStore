@@ -38,7 +38,7 @@ function SearchHelper() {
     } else {
       replace(`${path}?${params.toString()}`);
     }
-    
+
     // Simulate search delay for better UX
     setTimeout(() => setIsSearching(false), 500);
   }, 300);
@@ -49,29 +49,25 @@ function SearchHelper() {
   };
 
   return (
-    <div className="relative w-full max-w-md">
-      <div className={`
-        relative flex items-center 
-        bg-white border-2 rounded-full 
-        transition-all duration-300 ease-in-out
-        ${isFocused 
-          ? 'border-blue-500 shadow-lg shadow-blue-500/20' 
-          : 'border-gray-200 hover:border-gray-300'
-        }
-        ${query ? 'pr-12' : 'pr-4'}
-      `}>
+    <div className="relative inline-block h-[40px] w-full max-w-xs">
+      <div
+        className={`
+        inline-flex items-center gap-2 h-[40px] w-full px-4 py-2 
+        border rounded-full bg-white/70 backdrop-blur-md border-gray-200 
+        text-black font-semibold hover:bg-white transition-all duration-300
+        ${isFocused ? "ring-1 ring-primary" : ""}
+      `}
+      >
         {/* Search Icon */}
-        <div className="flex items-center justify-center w-12 h-12 pl-4">
+        <div className="w-5 h-5 text-gray-500 flex items-center justify-center">
           {isSearching ? (
-            <Loader2 className="h-5 w-5 text-blue-500 animate-spin" />
+            <Loader2 className="h-4 w-4 animate-spin" />
           ) : (
-            <Search className={`h-5 w-5 transition-colors duration-200 ${
-              isFocused ? 'text-blue-500' : 'text-gray-400'
-            }`} />
+            <Search className="h-5 w-5" />
           )}
         </div>
 
-        {/* Input Field */}
+        {/* Input */}
         <input
           value={query}
           onChange={(e) => {
@@ -80,29 +76,20 @@ function SearchHelper() {
           }}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          name="search"
           type="text"
+          placeholder={t("placeholder") || "Search products..."}
           className="
-            flex-1 h-12 px-2 
-            bg-transparent outline-none 
-            text-gray-900 placeholder-gray-500
-            text-sm font-medium
-            transition-all duration-200
-            placeholder:text-[16px]
-          "
-          placeholder={t('placeholder') || "Search products..."}
+          flex-1 bg-transparent outline-none border-none 
+          text-sm text-black placeholder-black placeholder:text-[16px]
+          font-medium
+        "
         />
 
         {/* Clear Button */}
         {query && (
           <button
             onClick={clearSearch}
-            className="
-              absolute right-2 p-2 
-              text-gray-400 hover:text-gray-600
-              transition-colors duration-200
-              rounded-full hover:bg-gray-100
-            "
+            className="text-white hover:text-gray-600 transition-colors duration-200 rounded-full"
             aria-label="Clear search"
           >
             <X className="h-4 w-4" />
@@ -110,9 +97,9 @@ function SearchHelper() {
         )}
       </div>
 
-      {/* Search Suggestions (Optional) */}
+      {/* Suggestions Dropdown */}
       {isFocused && query && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+        <div className="absolute z-20 left-0 right-0 mt-2 w-full rounded-xl border border-gray-100 shadow-2xl bg-white/90 backdrop-blur-xl transition-all duration-200">
           <div className="p-3">
             <div className="text-sm text-gray-500 mb-2">
               Search suggestions for &ldquo;{query}&rdquo;
@@ -137,9 +124,11 @@ function SearchHelper() {
 
 export default function SearchBar() {
   return (
-    <Suspense fallback={
-      <div className="w-full max-w-md h-12 bg-gray-100 rounded-full animate-pulse" />
-    }>
+    <Suspense
+      fallback={
+        <div className="w-full max-w-md h-12 bg-gray-100 rounded-full animate-pulse" />
+      }
+    >
       <SearchHelper />
     </Suspense>
   );

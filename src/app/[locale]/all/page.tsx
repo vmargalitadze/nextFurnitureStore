@@ -219,6 +219,8 @@ function PageContent() {
     fetchProducts();
   }, []);
 
+  const categories = Array.from(new Set(products.map(p => p.category)));
+
   // Loading state
   if (loading) {
     return (
@@ -234,7 +236,7 @@ function PageContent() {
           />
           <div className="absolute inset-0 bg-black/50 z-10" />
           <div className="relative z-20 text-center w-full">
-            <h1 className="text-white text-xl md:text-5xl font-bold leading-tight text-center mb-4">
+            <h1 className="text-primary text-xl md:text-5xl font-bold leading-tight text-center mb-4">
               {t('hero.title')}
             </h1>
            
@@ -345,314 +347,32 @@ function PageContent() {
 
           {/* Mobile Filter Panel - Collapsible on small screens */}
           <div className={`lg:hidden ${filterOpen ? 'block' : 'hidden'} mb-6`}>
-            <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6">
-              <h3 className="text-2xl font-bold text-gray-900 mb-8 border-b border-gray-200 pb-4">
-                {t('filters.title')}
-              </h3>
-              
-              {/* Categories */}
-              <div className="mb-8">
-                <h4 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                  <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                  </svg>
-                  {t('filters.categories.title')}
-                </h4>
-                <div className="space-y-2">
-                  <button
-                    className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 font-medium ${
-                      selectedType === "" 
-                        ? "bg-primary text-white shadow-lg shadow-primary/25" 
-                        : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 border border-gray-200 hover:border-gray-300"
-                    }`}
-                    onClick={() => setSelectedType("")}
-                  >
-                    {t('filters.categories.allCategories')}
-                  </button>
-                  {Array.from(new Set(products.map(p => p.category))).map((type) => (
-                    <button
-                      key={type}
-                      className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 font-medium ${
-                        selectedType === type 
-                          ? "bg-primary text-white shadow-lg shadow-primary/25" 
-                          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 border border-gray-200 hover:border-gray-300"
-                      }`}
-                      onClick={() => setSelectedType(type)}
-                    >
-                      {type}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Size Filter */}
-              <div className="mb-8">
-                <h4 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                  <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-                  </svg>
-                  {t('filters.sizes.title')}
-                </h4>
-                <div className="space-y-2">
-                  <button
-                    className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 font-medium ${
-                      selectedSize === "" 
-                        ? "bg-primary text-white shadow-lg shadow-primary/25" 
-                        : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 border border-gray-200 hover:border-gray-300"
-                    }`}
-                    onClick={() => setSelectedSize("")}
-                  >
-                    {t('filters.sizes.allSizes')}
-                  </button>
-                  {getAllAvailableSizes().map((size) => (
-                    <button
-                      key={size}
-                      className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 font-medium ${
-                        selectedSize === size 
-                          ? "bg-primary text-white shadow-lg shadow-primary/25" 
-                          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 border border-gray-200 hover:border-gray-300"
-                      }`}
-                      onClick={() => setSelectedSize(size)}
-                    >
-                      {formatSizeDisplay(size)}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Price Range */}
-              <div className="mb-8">
-                <h4 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                  <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                  </svg>
-                  {t('filters.priceRange.title')}
-                </h4>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {t('filters.priceRange.minimumPrice')}
-                    </label>
-                    <input
-                      type="number"
-                      placeholder="0"
-                      value={selectedPrice.min ?? ""}
-                      onChange={(e) => setSelectedPrice({
-                        ...selectedPrice,
-                        min: e.target.value === "" ? null : Number(e.target.value)
-                      })}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {t('filters.priceRange.maximumPrice')}
-                    </label>
-                    <input
-                      type="number"
-                      placeholder="10000"
-                      value={selectedPrice.max ?? ""}
-                      onChange={(e) => setSelectedPrice({
-                        ...selectedPrice,
-                        max: e.target.value === "" ? null : Number(e.target.value)
-                      })}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Brand Filter */}
-              <div className="mb-8">
-                <h4 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                  <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                  </svg>
-                  {t('filters.brand.title')}
-                </h4>
-                <select
-                  value={selectedBrand}
-                  onChange={(e) => setSelectedBrand(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all bg-white"
-                >
-                  <option value="">
-                    {t('filters.brand.allBrands')}
-                  </option>
-                  {Array.from(new Set(products.map(p => p.brand))).map((brand) => (
-                    <option key={brand} value={brand}>{brand}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Clear Filters */}
-              <button
-                onClick={() => {
-                  setSelectedType("");
-                  setSelectedPrice({ min: null, max: null });
-                  setSelectedBrand("");
-                  setSelectedSize("");
-                }}
-                className="w-full bg-gray-100 text-gray-700 py-3 px-4 rounded-xl hover:bg-gray-200 transition-all duration-200 font-medium border border-gray-200 hover:border-gray-300"
-              >
-                {t('filters.clearFilters')}
-              </button>
-            </div>
+            <Filter
+              open={filterOpen}
+              setOpen={setFilterOpen}
+              selectedType={selectedType}
+              setSelectedType={setSelectedType}
+              selectedBrand={selectedBrand}
+              setSelectedBrand={setSelectedBrand}
+              selectedPrice={selectedPrice}
+              setSelectedPrice={setSelectedPrice}
+              categories={categories}
+            />
           </div>
 
           {/* Desktop Sidebar Filter - Only visible on large screens */}
           <div className="hidden lg:block lg:w-1/4">
-            <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 sticky top-6 max-h-[calc(100vh-3rem)] overflow-y-auto">
-              <h3 className="text-2xl font-bold text-gray-900 mb-8 border-b border-gray-200 pb-4">
-                {t('filters.title')}
-              </h3>
-              
-              {/* Categories */}
-              <div className="mb-8">
-                <h4 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                  <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                  </svg>
-                  {t('filters.categories.title')}
-                </h4>
-                <div className="space-y-2">
-                  <button
-                    className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 font-medium ${
-                      selectedType === "" 
-                        ? "bg-primary text-white shadow-lg shadow-primary/25" 
-                        : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 border border-gray-200 hover:border-gray-300"
-                    }`}
-                    onClick={() => setSelectedType("")}
-                  >
-                    {t('filters.categories.allCategories')}
-                  </button>
-                  {Array.from(new Set(products.map(p => p.category))).map((type) => (
-                    <button
-                      key={type}
-                      className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 font-medium ${
-                        selectedType === type 
-                          ? "bg-primary text-white shadow-lg shadow-primary/25" 
-                          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 border border-gray-200 hover:border-gray-300"
-                      }`}
-                      onClick={() => setSelectedType(type)}
-                    >
-                      {type}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Size Filter */}
-              <div className="mb-8">
-                <h4 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                  <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-                  </svg>
-                  {t('filters.sizes.title')}
-                </h4>
-                <div className="space-y-2">
-                  <button
-                    className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 font-medium ${
-                      selectedSize === "" 
-                        ? "bg-primary text-white shadow-lg shadow-primary/25" 
-                        : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 border border-gray-200 hover:border-gray-300"
-                    }`}
-                    onClick={() => setSelectedSize("")}
-                  >
-                    {t('filters.sizes.allSizes')}
-                  </button>
-                  {getAllAvailableSizes().map((size) => (
-                    <button
-                      key={size}
-                      className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 font-medium ${
-                        selectedSize === size 
-                          ? "bg-primary text-white shadow-lg shadow-primary/25" 
-                          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 border border-gray-200 hover:border-gray-300"
-                      }`}
-                      onClick={() => setSelectedSize(size)}
-                    >
-                      {formatSizeDisplay(size)}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Price Range */}
-              <div className="mb-8">
-                <h4 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                  <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                  </svg>
-                  {t('filters.priceRange.title')}
-                </h4>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {t('filters.priceRange.minimumPrice')}
-                    </label>
-                    <input
-                      type="number"
-                      placeholder="0"
-                      value={selectedPrice.min ?? ""}
-                      onChange={(e) => setSelectedPrice({
-                        ...selectedPrice,
-                        min: e.target.value === "" ? null : Number(e.target.value)
-                      })}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {t('filters.priceRange.maximumPrice')}
-                    </label>
-                    <input
-                      type="number"
-                      placeholder="10000"
-                      value={selectedPrice.max ?? ""}
-                      onChange={(e) => setSelectedPrice({
-                        ...selectedPrice,
-                        max: e.target.value === "" ? null : Number(e.target.value)
-                      })}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Brand Filter */}
-              <div className="mb-8">
-                <h4 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                  <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                  </svg>
-                  {t('filters.brand.title')}
-                </h4>
-                <select
-                  value={selectedBrand}
-                  onChange={(e) => setSelectedBrand(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all bg-white"
-                >
-                  <option value="">
-                    {t('filters.brand.allBrands')}
-                  </option>
-                  {Array.from(new Set(products.map(p => p.brand))).map((brand) => (
-                    <option key={brand} value={brand}>{brand}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Clear Filters */}
-              <button
-                onClick={() => {
-                  setSelectedType("");
-                  setSelectedPrice({ min: null, max: null });
-                  setSelectedBrand("");
-                  setSelectedSize("");
-                }}
-                className="w-full bg-gray-100 text-gray-700 py-3 px-4 rounded-xl hover:bg-gray-200 transition-all duration-200 font-medium border border-gray-200 hover:border-gray-300"
-              >
-                {t('filters.clearFilters')}
-              </button>
-            </div>
+            <Filter
+              open={true}
+              setOpen={() => {}}
+              selectedType={selectedType}
+              setSelectedType={setSelectedType}
+              selectedBrand={selectedBrand}
+              setSelectedBrand={setSelectedBrand}
+              selectedPrice={selectedPrice}
+              setSelectedPrice={setSelectedPrice}
+              categories={categories}
+            />
           </div>
 
           {/* Main Product Area */}

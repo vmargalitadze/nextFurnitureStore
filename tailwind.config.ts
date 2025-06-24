@@ -71,7 +71,11 @@ const config: Config = {
   				'3': 'hsl(var(--chart-3))',
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
-  			}
+  			},
+  			'brand-brown': '#3B2C3F',
+  			'brand-orange': '#C97A2B',
+  			'brand-milk': '#F6F1E7',
+  			'brand-green': '#4CA08A',
   		}
   	}
   },

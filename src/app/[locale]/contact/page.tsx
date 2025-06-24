@@ -2,6 +2,7 @@ import { Link } from "@/i18n/navigation";
 import React from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
 
 function ContactPage() {
   const t = useTranslations("contact");
@@ -20,18 +21,10 @@ function ContactPage() {
         <div className="absolute inset-0 bg-black/60 z-10" />
 
         <div className="relative z-20 text-center w-full">
-          <h2 className="text-white  text-2xl md:text-[40px] font-normal leading-none text-center">
+          <h2 className="text-primary  text-2xl md:text-[40px] font-normal leading-none text-center">
             {t('hero.title')}
           </h2>
-          <ul className="flex items-center justify-center gap-[10px] text-base md:text-lg leading-none font-normal text-white mt-3 md:mt-4">
-            <li>
-              <Link href="/" data-discover="true">
-                {t('breadcrumb.home')}
-              </Link>
-            </li>
-            <li>/</li>
-            <li className="text-primary capitalize">{t('breadcrumb.contact')}</li>
-          </ul>
+       
         </div>
       </div>
       <div className="pt-[70px] pb-[70px]">
@@ -40,21 +33,19 @@ function ContactPage() {
  
     <div className="flex justify-between gap-8 flex-wrap">
 
-      <div className="max-w-[700px] w-full block">
+      <div className="max-w-[700px] w-full  block">
         <Image
           src="/contact.jpg"
           alt="contact"
-          width={700}
-          height={500}
+          width={400}
+          height={300}
           className="w-full rounded-md h-auto"
         />
       </div>
 
 
       <div className="max-w-[725px] w-full">
-        <h3 className="leading-none font-medium mt-3 md:mt-6 text-[22px]">
-          {t('form.title')}
-        </h3>
+      
         <p className="max-w-[474px] mt-3 md:mt-4 font-medium">
           {t('form.description')}
         </p>
@@ -119,9 +110,9 @@ function ContactPage() {
 
     
         <div className="mt-5">
-          <button  className="btn-all rounded-md text-black btn-outline">
-            <span>{t('form.submit')}</span>
-          </button>
+          <Button type="submit" className="w-full text-xl rounded-md">
+            {t('form.submit')}
+          </Button>
         </div>
       </div>
     </div>

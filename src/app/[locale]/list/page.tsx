@@ -61,6 +61,12 @@ function PageContentWrapper() {
   const brand = searchParams.get("brand");
   const query = searchParams.get("query") || "";
 
+  // Filter state for Filter component
+  const [selectedType, setSelectedType] = useState(category || "");
+  const [selectedBrand, setSelectedBrand] = useState(brand || "");
+  const [selectedPrice, setSelectedPrice] = useState<{ min: number | null; max: number | null }>({ min: null, max: null });
+  const [filterOpen, setFilterOpen] = useState(false);
+
   // Helper function to get product price range
   const getProductPriceRange = (product: Product) => {
     if (product.sizes && product.sizes.length > 0) {
@@ -79,17 +85,21 @@ function PageContentWrapper() {
   };
   
   const filteredProducts = products.filter((product) => {
-    const matchesCategory = category
-      ? product.category?.toLowerCase() === category.toLowerCase()
+    const matchesCategory = selectedType
+      ? product.category?.toLowerCase() === selectedType.toLowerCase()
       : true;
-    const matchesBrand = brand
-      ? product.brand?.toLowerCase() === brand.toLowerCase()
+    const matchesBrand = selectedBrand
+      ? product.brand?.toLowerCase() === selectedBrand.toLowerCase()
       : true;
     const matchesQuery = query
       ? product.title.toLowerCase().includes(query.toLowerCase())
       : true;
     return matchesCategory && matchesBrand && matchesQuery;
   });
+
+  // For Filter component: only show categories/brands present in filteredProducts
+  const categories = Array.from(new Set(filteredProducts.map(p => p.category)));
+  const brands = Array.from(new Set(filteredProducts.map(p => p.brand)));
 
   // Transform database products to match ProductHelper interface
   const transformedProducts = filteredProducts.map(product => {
@@ -193,19 +203,44 @@ function PageContentWrapper() {
       </div>
 
       <div className="container min-h-screen mt-[50px]">
-        {transformedProducts.length > 0 ? (
-          <ProductHelper items={transformedProducts} />
-        ) : (
-          <div className="text-center py-12">
-            <div className="text-gray-400 mb-4">
-              <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
-              </svg>
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* Filter Sidebar */}
+          <div className="lg:w-1/4 w-full lg:min-h-screen lg:sticky lg:top-0 lg:left-0 lg:z-10">
+            <div className="lg:h-full lg:flex lg:flex-col">
+              <div className="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto">
+                <Filter
+                  open={filterOpen}
+                  setOpen={setFilterOpen}
+                  selectedType={selectedType}
+                  setSelectedType={setSelectedType}
+                  selectedBrand={selectedBrand}
+                  setSelectedBrand={setSelectedBrand}
+                  selectedPrice={selectedPrice}
+                  setSelectedPrice={setSelectedPrice}
+                  categories={categories}
+                  hideBrandFilter={!!brand}
+                />
+              </div>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">პროდუქტი ვერ მოიძებნა</h3>
-            <p className="text-gray-600">სცადეთ სხვა ფილტრები ან მოძებნეთ სხვა პროდუქტი</p>
           </div>
-        )}
+          {/* Products Area */}
+          <div className="lg:w-3/4 w-full">
+            {transformedProducts.length > 0 ? (
+              <ProductHelper items={transformedProducts} />
+            ) : (
+              <div className="text-center py-12">
+                <div className="text-gray-400 mb-4">
+                  <svg className="w-20 h-20 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                  </svg>
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                  No products found
+                </h3>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </>
   );

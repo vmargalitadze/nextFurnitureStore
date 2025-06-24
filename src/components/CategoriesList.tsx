@@ -1,12 +1,5 @@
 const CategoriesList = [
-    {
-      id: "0",
-      type: "all",
-      label: 'ყველა',
-      labelEn: 'All',
-      quantity: 0,
-      image: '/chair.jpg',
-    },
+
     { 
       id: "1", 
       type: "bundle", 

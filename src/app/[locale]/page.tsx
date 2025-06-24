@@ -5,7 +5,8 @@ import ProductList from "@/components/ProductList";
 import SideLogo from "@/components/SideLogo";
 import Hero from "@/components/Slider";
 import Filter from "@/components/Filter";
-import React, { useState, Suspense } from "react";
+import React, { useState, Suspense, useEffect } from "react";
+import { getAllProducts } from "@/lib/actions/actions";
 
 // Loading component for Suspense boundaries
 const LoadingSpinner = () => (
@@ -20,6 +21,15 @@ const HomePage = () => {
   const [selectedBrand, setSelectedBrand] = useState("");
   const [selectedPrice, setSelectedPrice] = useState<{ min: number | null; max: number | null }>({ min: null, max: null });
   const [filterOpen, setFilterOpen] = useState(false);
+  const [categories, setCategories] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const products = await getAllProducts();
+      setCategories(Array.from(new Set(products.map((p: any) => p.category))));
+    };
+    fetchCategories();
+  }, []);
 
   // Wrapper function to match Filter component's expected signature
   const handlePriceChange = (price: { min: number | null; max: number | null }) => {
@@ -41,6 +51,7 @@ const HomePage = () => {
               setSelectedBrand={setSelectedBrand}
               selectedPrice={selectedPrice}
               setSelectedPrice={handlePriceChange}
+              categories={categories || []}
             />
           </div>
         </div>
@@ -54,7 +65,7 @@ const HomePage = () => {
         <Suspense fallback={<LoadingSpinner />}>
           <SideLogo />
         </Suspense>
-        <div className="container mx-auto ">
+        <div className="">
           <Suspense fallback={<LoadingSpinner />}>
             <ProductList
               selectedType={selectedType}

@@ -56,6 +56,8 @@ interface FilterProps {
     setSelectedBrand: (brand: string) => void;
     selectedPrice: { min: number | null; max: number | null };
     setSelectedPrice: (price: { min: number | null; max: number | null }) => void;
+    categories: string[];
+    hideBrandFilter?: boolean;
 }
 
 const Filter = ({
@@ -65,6 +67,8 @@ const Filter = ({
     setSelectedBrand,
     selectedPrice,
     setSelectedPrice,
+    categories,
+    hideBrandFilter = false,
 }: FilterProps) => {
   const t = useTranslations('allPage');
   const locale = useLocale();
@@ -124,7 +128,15 @@ const Filter = ({
   };
 
   return (
-    <div className="bg-white  rounded-2xl shadow-xl border border-gray-100 p-6 lg:m-6">
+    <div className="
+    bg-white rounded-2xl shadow-xl border border-gray-100 p-6 lg:m-6 
+    overflow-y-scroll 
+    max-h-[85vh] 
+    scrollbar-none 
+    [&::-webkit-scrollbar]:hidden 
+    [-ms-overflow-style:'none'] 
+    [scrollbar-width:'none']
+  ">
       <h3 className="text-2xl mt-5 font-bold text-gray-900 mb-8 border-b border-gray-200 pb-4">
         {t('filters.title')}
       </h3>
@@ -132,36 +144,23 @@ const Filter = ({
       {/* Categories */}
       <div className="mb-8">
         <h4 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-          <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-          </svg>
           {t('filters.categories.title')}
         </h4>
-        <div className="space-y-2">
+        <button
+          className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 font-medium ${selectedType === "" ? "bg-[#438c71] text-white shadow-lg shadow-primary/25" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 border border-gray-200 hover:border-gray-300"}`}
+          onClick={() => handleCategoryChange("")}
+        >
+          {t('filters.categories.allCategories')}
+        </button>
+        {categories.map((type) => (
           <button
-            className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 font-medium ${
-              selectedType === "" 
-                ? "bg-primary text-white shadow-lg shadow-primary/25" 
-                : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 border border-gray-200 hover:border-gray-300"
-            }`}
-            onClick={() => handleCategoryChange("")}
+            key={type}
+            className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 font-medium ${selectedType === type ? "bg-[#438c71] text-white shadow-lg shadow-primary/25" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 border border-gray-200 hover:border-gray-300"}`}
+            onClick={() => handleCategoryChange(type)}
           >
-            {t('filters.categories.allCategories')}
+            {type}
           </button>
-          {CategoriesList.filter(item => item.type !== "all").map((item) => (
-            <button
-              key={item.id}
-              className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 font-medium ${
-                selectedType === item.type 
-                  ? "bg-primary text-white shadow-lg shadow-primary/25" 
-                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 border border-gray-200 hover:border-gray-300"
-              }`}
-              onClick={() => handleCategoryChange(item.type)}
-            >
-              {getLocalizedCategoryLabel(item.type)}
-            </button>
-          ))}
-        </div>
+        ))}
       </div>
 
       {/* Price Range */}
@@ -199,25 +198,26 @@ const Filter = ({
       </div>
 
       {/* Brand Filter */}
-      <div className="mb-8">
-        <h4 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-         
-          {t('filters.brand.title')}
-        </h4>
-        <select
-          value={selectedBrand}
-          onChange={(e) => handleBrandChange(e.target.value)}
-          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all bg-white"
-          disabled={loading}
-        >
-          <option value="">
-            {t('filters.brand.allBrands')}
-          </option>
-          {BrandFilter.map((brand) => (
-            <option key={brand} value={brand}>{brand}</option>
-          ))}
-        </select>
-      </div>
+      {!hideBrandFilter && (
+        <>
+          <h4 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+            {t('filters.brand.title')}
+          </h4>
+          <select
+            value={selectedBrand}
+            onChange={(e) => handleBrandChange(e.target.value)}
+            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all bg-white"
+            disabled={loading}
+          >
+            <option value="">
+              {t('filters.brand.allBrands')}
+            </option>
+            {BrandFilter.map((brand) => (
+              <option key={brand} value={brand}>{brand}</option>
+            ))}
+          </select>
+        </>
+      )}
 
       {/* Clear Filters */}
       <button
@@ -226,7 +226,7 @@ const Filter = ({
           setSelectedPrice({ min: null, max: null });
           setSelectedBrand("");
         }}
-        className="w-full bg-gray-100 text-gray-700 py-3 px-4 rounded-xl hover:bg-gray-200 transition-all duration-200 font-medium border border-gray-200 hover:border-gray-300"
+        className="w-full mt-9 bg-[#438c71] text-white py-3 px-4 rounded-xl  transition-all duration-200 font-medium border border-gray-200 hover:border-gray-300"
       >
         {t('filters.clearFilters')}
       </button>

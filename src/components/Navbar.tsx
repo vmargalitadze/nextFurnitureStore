@@ -14,7 +14,7 @@ function Navbar() {
 
 
   return (
-    <div className='fixed top-0 left-0 w-full z-50 h-20 px-4 md:px-12 bg-white shadow-sm'>
+    <div className='fixed top-0 left-0 w-full z-50 h-20 px-4 md:px-8 bg-[#f7bf74] text-black shadow-sm'>
 
       <div className="h-full flex items-center justify-between md:hidden">
 
@@ -40,7 +40,7 @@ function Navbar() {
         
     </div>
 
-    <div className="w-2/3 flex items-center justify-between  gap-8 ">
+    <div className="w-2/3 flex  justify-end  gap-8 ">
     <SearchBar />
    
      <NavIcons />
