@@ -89,7 +89,7 @@ export default function DropdownMenuCheckboxes() {
           <DropdownMenuItem>
             <Link
               href="/profile"
-              className="w-full text-base flex justify-start items-center gap-2"
+              className="w-full text-base font-medium flex justify-start items-center gap-2"
             >
               <FaUser /> User Profile
             </Link>
@@ -97,7 +97,7 @@ export default function DropdownMenuCheckboxes() {
           <DropdownMenuItem>
             <Link
               href="/cart"
-              className="w-full flex text-base justify-start items-center gap-2"
+              className="w-full flex text-base font-medium justify-start items-center gap-2"
             >
               <FaShoppingCart /> Cart
             </Link>

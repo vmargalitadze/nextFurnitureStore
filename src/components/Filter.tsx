@@ -129,7 +129,7 @@ const Filter = ({
 
   return (
     <div className="
-    bg-white rounded-2xl shadow-xl border border-gray-100 p-6 lg:m-6 
+    bg-white rounded-2xl  shadow-xl border border-gray-100 p-6 lg:mt-16 
     overflow-y-scroll 
     max-h-[85vh] 
     scrollbar-none 
@@ -142,12 +142,12 @@ const Filter = ({
       </h3>
       
       {/* Categories */}
-      <div className="mb-8">
-        <h4 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+      <div className="mb-8 ">
+        <h4 className="text-lg gap-x-6 font-semibold text-gray-800 mb-4 flex items-center gap-2">
           {t('filters.categories.title')}
         </h4>
         <button
-          className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 font-medium ${selectedType === "" ? "bg-[#438c71] text-white shadow-lg shadow-primary/25" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 border border-gray-200 hover:border-gray-300"}`}
+          className={`w-full mb-2 text-left px-4 py-3 rounded-xl transition-all duration-200 font-medium ${selectedType === "" ? "bg-[#438c71] text-white shadow-lg shadow-primary/25" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 border border-gray-200 hover:border-gray-300"}`}
           onClick={() => handleCategoryChange("")}
         >
           {t('filters.categories.allCategories')}
@@ -155,7 +155,7 @@ const Filter = ({
         {categories.map((type) => (
           <button
             key={type}
-            className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 font-medium ${selectedType === type ? "bg-[#438c71] text-white shadow-lg shadow-primary/25" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 border border-gray-200 hover:border-gray-300"}`}
+            className={`w-full mb-2 text-left px-4 py-3 rounded-xl transition-all duration-200 font-medium ${selectedType === type ? "bg-[#438c71] text-white shadow-lg shadow-primary/25" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900 border border-gray-200 hover:border-gray-300"}`}
             onClick={() => handleCategoryChange(type)}
           >
             {type}

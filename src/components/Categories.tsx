@@ -73,7 +73,7 @@ export default function Categories() {
 
   return (
     <div className="content-inner category-section">
-      <div className="container mx-auto">
+      <div className="">
         <div className="flex flex-wrap -mx-2">
           {filteredCategories.map((category, index) => (
             <div
@@ -94,7 +94,7 @@ export default function Categories() {
                     height={200}
                     className="w-full h-auto img object-cover"
                   />
-                  <div className="category-badge">
+                  <div className="category-badge ">
                     {getLocalizedCategoryLabel(category.type)}
                     {productCounts[category.type]
                       ? ` (${productCounts[category.type]})`

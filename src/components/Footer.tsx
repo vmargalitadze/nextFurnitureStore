@@ -10,7 +10,7 @@ const Footer = () => {
     <footer className="bg-[#41313e] text-black">
       {/* Main Footer Content */}
       <div className="container mx-auto px-4 py-12">
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-2xl mx-auto">
 
         <div className="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
           
