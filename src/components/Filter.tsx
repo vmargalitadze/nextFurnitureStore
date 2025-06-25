@@ -80,18 +80,17 @@ const Filter = ({
       try {
         const data = await getAllProducts();
         // Convert the data to match the Product interface
-        const productsWithDecimalPrices = data.map(product => ({
+        const productsWithDecimalPrices = data.map((product: any) => ({
           ...product,
-          sizes: product.sizes?.map(size => ({
+          sizes: product.sizes?.map((size: any) => ({
             ...size,
             price: new SimpleDecimal(size.price)
           })) || undefined,
           sales: product.sales || undefined
         }));
         setProducts(productsWithDecimalPrices as Product[]);
-        
         // Debug: Log unique categories
-        const uniqueCategories = Array.from(new Set(data.map(p => p.category)));
+        const uniqueCategories = Array.from(new Set(data.map((p: any) => p.category)));
         console.log('Available categories in database:', uniqueCategories);
         console.log('CategoriesList types:', CategoriesList.map(c => c.type));
         

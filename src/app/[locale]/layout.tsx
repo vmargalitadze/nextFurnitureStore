@@ -7,6 +7,7 @@ import { NextIntlClientProvider } from "next-intl";
 const inter = Josefin_Sans({ subsets: ["latin"] });
 import { SessionProvider } from "next-auth/react";
 import { auth } from "../../../auth";
+import { getMessages } from "next-intl/server";
 
 export const metadata: Metadata = {
   title: "Store Dev E-Commerce Application",
@@ -16,14 +17,23 @@ export const metadata: Metadata = {
   },
 };
 
+// Generate static params for all locales
+export function generateStaticParams() {
+  return [{ locale: 'en' }, { locale: 'ge' }];
+}
+
 export default async function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: { locale: string };
 }>) {
   const session = await auth();
+  const messages = await getMessages();
+  
   return (
-    <html lang="en">
+    <html lang={params.locale}>
       <head>
         {/* Preload critical images for better performance */}
         <link rel="preload" as="image" href="/slider/1.jpg" />
@@ -33,7 +43,7 @@ export default async function RootLayout({
         <link rel="preconnect" href="https://res.cloudinary.com" />
       </head>
       <body className={inter.className}>  
-        <NextIntlClientProvider>
+        <NextIntlClientProvider messages={messages}>
         <SessionProvider
             session={session}
             refetchInterval={0}

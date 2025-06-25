@@ -7,7 +7,7 @@ import { Link } from "@/i18n/navigation";
 import ProductHelper from "@/components/ProductHelper";
 import { getAllProducts } from "@/lib/actions/actions";
 import { useTranslations } from "next-intl";
-import Filter from "@/components/Filter";
+import FilterSidebar from "@/components/FilterSideBar";
 
 // Simple Decimal-like class to avoid Prisma import issues
 class SimpleDecimal {
@@ -53,19 +53,23 @@ interface Product {
   sales?: number;
 }
 
+interface FilterState {
+  selectedCategories: string[];
+  selectedBrands: string[];
+  priceRange: { min: number; max: number };
+}
+
 function PageContentWrapper() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const searchParams = useSearchParams();
+  const t = useTranslations("common");
+  
+  // Get URL parameters
   const category = searchParams.get("cat");
   const brand = searchParams.get("brand");
   const query = searchParams.get("query") || "";
-
-  // Filter state for Filter component
-  const [selectedType, setSelectedType] = useState(category || "");
-  const [selectedBrand, setSelectedBrand] = useState(brand || "");
-  const [selectedPrice, setSelectedPrice] = useState<{ min: number | null; max: number | null }>({ min: null, max: null });
-  const [filterOpen, setFilterOpen] = useState(false);
 
   // Helper function to get product price range
   const getProductPriceRange = (product: Product) => {
@@ -83,23 +87,33 @@ function PageContentWrapper() {
     }
     return { min: 0, max: 0 };
   };
-  
-  const filteredProducts = products.filter((product) => {
-    const matchesCategory = selectedType
-      ? product.category?.toLowerCase() === selectedType.toLowerCase()
-      : true;
-    const matchesBrand = selectedBrand
-      ? product.brand?.toLowerCase() === selectedBrand.toLowerCase()
-      : true;
-    const matchesQuery = query
-      ? product.title.toLowerCase().includes(query.toLowerCase())
-      : true;
-    return matchesCategory && matchesBrand && matchesQuery;
-  });
 
-  // For Filter component: only show categories/brands present in filteredProducts
-  const categories = Array.from(new Set(filteredProducts.map(p => p.category)));
-  const brands = Array.from(new Set(filteredProducts.map(p => p.brand)));
+  // Handle filter changes from FilterSidebar
+  const handleFilterChange = (filters: FilterState) => {
+    const filtered = products.filter((product) => {
+      // Category filter
+      const matchesCategory = filters.selectedCategories.length === 0 || 
+        filters.selectedCategories.includes(product.category);
+      
+      // Brand filter
+      const matchesBrand = filters.selectedBrands.length === 0 || 
+        filters.selectedBrands.includes(product.brand);
+      
+      // Search query filter
+      const matchesQuery = !query || 
+        product.title.toLowerCase().includes(query.toLowerCase()) ||
+        product.titleEn.toLowerCase().includes(query.toLowerCase());
+      
+      // Price range filter
+      const priceRange = getProductPriceRange(product);
+      const matchesPrice = priceRange.min >= filters.priceRange.min && 
+                          priceRange.max <= filters.priceRange.max;
+      
+      return matchesCategory && matchesBrand && matchesQuery && matchesPrice;
+    });
+    
+    setFilteredProducts(filtered);
+  };
 
   // Transform database products to match ProductHelper interface
   const transformedProducts = filteredProducts.map(product => {
@@ -113,7 +127,12 @@ function PageContentWrapper() {
   });
 
   // Determine the page title based on filter type
-  const pageTitle = category || brand || "Products";
+  const getPageTitle = () => {
+    if (query) return `Search: ${query}`;
+    if (category) return category;
+    if (brand) return brand;
+    return t("products");
+  };
 
   const fetchProducts = async () => {
     try {
@@ -140,11 +159,26 @@ function PageContentWrapper() {
     fetchProducts();
   }, []);
 
+  // Apply initial filters when products load or URL params change
+  useEffect(() => {
+    if (products.length > 0) {
+      const filtered = products.filter((product) => {
+        const matchesCategory = !category || product.category?.toLowerCase() === category.toLowerCase();
+        const matchesBrand = !brand || product.brand?.toLowerCase() === brand.toLowerCase();
+        const matchesQuery = !query || 
+          product.title.toLowerCase().includes(query.toLowerCase()) ||
+          product.titleEn.toLowerCase().includes(query.toLowerCase());
+        return matchesCategory && matchesBrand && matchesQuery;
+      });
+      setFilteredProducts(filtered);
+    }
+  }, [products, category, brand, query]);
+
   // Loading state
   if (loading) {
     return (
       <>
-        <div className="relative  flex items-center justify-center bg-overlay p-14 sm:p-16 before:bg-title before:bg-opacity-70 overflow-hidden">
+        <div className="relative flex items-center justify-center bg-overlay p-14 sm:p-16 before:bg-title before:bg-opacity-70 overflow-hidden">
           <Image
             src="/bed.jpg"
             alt="Background"
@@ -157,9 +191,8 @@ function PageContentWrapper() {
 
           <div className="relative z-20 text-center w-full">
             <h2 className="text-primary text-xl md:text-[40px] font-normal leading-none text-center capitalize">
-              {pageTitle}
+              {getPageTitle()}
             </h2>
-         
           </div>
         </div>
 
@@ -195,34 +228,24 @@ function PageContentWrapper() {
         <div className="absolute inset-0 bg-black/60 z-10" />
 
         <div className="relative z-20 text-center w-full">
-        <h2 className="text-primary text-xl md:text-[40px] font-normal leading-none text-center capitalize">
-              {pageTitle}
-            </h2>
-       
+          <h2 className="text-primary text-xl md:text-[40px] font-normal leading-none text-center capitalize">
+            {getPageTitle()}
+          </h2>
+          {filteredProducts.length > 0 && (
+            <p className="text-white mt-2 text-sm">
+              {filteredProducts.length} {filteredProducts.length === 1 ? 'product' : 'products'} found
+            </p>
+          )}
         </div>
       </div>
 
       <div className="container min-h-screen mt-[50px]">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Filter Sidebar */}
-          <div className="lg:w-1/4 w-full lg:min-h-screen lg:sticky lg:top-0 lg:left-0 lg:z-10">
-            <div className="lg:h-full lg:flex lg:flex-col">
-              <div className="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto">
-                <Filter
-                  open={filterOpen}
-                  setOpen={setFilterOpen}
-                  selectedType={selectedType}
-                  setSelectedType={setSelectedType}
-                  selectedBrand={selectedBrand}
-                  setSelectedBrand={setSelectedBrand}
-                  selectedPrice={selectedPrice}
-                  setSelectedPrice={setSelectedPrice}
-                  categories={categories}
-                  hideBrandFilter={!!brand}
-                />
-              </div>
-            </div>
+          <div className="lg:w-1/4 w-full">
+            <FilterSidebar onFilterChange={handleFilterChange} />
           </div>
+          
           {/* Products Area */}
           <div className="lg:w-3/4 w-full">
             {transformedProducts.length > 0 ? (
@@ -237,6 +260,9 @@ function PageContentWrapper() {
                 <h3 className="text-2xl font-bold text-gray-900 mb-3">
                   No products found
                 </h3>
+                <p className="text-gray-600">
+                  Try adjusting your search criteria or filters
+                </p>
               </div>
             )}
           </div>

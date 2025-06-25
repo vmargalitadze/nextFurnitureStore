@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Link } from "@/i18n/navigation";
 import ProductHelper from "./ProductHelper";
 import { useTranslations } from "next-intl";
@@ -9,6 +9,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay, FreeMode } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
+import FilterSidebar from "./FilterSideBar";
 
 // Simple Decimal-like class to avoid Prisma import issues
 class SimpleDecimal {
@@ -62,18 +63,29 @@ interface ProductItem {
 }
 
 interface ProductListProps {
-  selectedType: string;
-  selectedBrand: string;
-  selectedPrice: { min: number | null; max: number | null };
+  selectedType?: string;
+  selectedBrand?: string;
+  selectedPrice?: { min: number | null; max: number | null };
 }
 
-function ProductList({ selectedType, selectedBrand, selectedPrice }: ProductListProps) {
+function ProductList({ 
+  selectedType = "", 
+  selectedBrand = "", 
+  selectedPrice = { min: null, max: null } 
+}: ProductListProps) {
   const t = useTranslations("productList");
   const params = useParams();
   const locale = params.locale as string;
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [imagesLoaded, setImagesLoaded] = useState(false);
+  
+  // New filter state for FilterSidebar
+  const [filterState, setFilterState] = useState({
+    selectedCategories: [] as string[],
+    selectedBrands: [] as string[],
+    priceRange: { min: 0, max: 1000 }
+  });
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -81,9 +93,9 @@ function ProductList({ selectedType, selectedBrand, selectedPrice }: ProductList
         setLoading(true);
         const data = await getAllProducts();
         // Convert the data to match the Product interface
-        const productsWithDecimalPrices = data.map(product => ({
+        const productsWithDecimalPrices = data.map((product: any) => ({
           ...product,
-          sizes: product.sizes?.map(size => ({
+          sizes: product.sizes?.map((size: any) => ({
             ...size,
             price: new SimpleDecimal(size.price)
           })) || undefined,
@@ -102,7 +114,7 @@ function ProductList({ selectedType, selectedBrand, selectedPrice }: ProductList
     fetchProducts();
   }, []);
 
-  const getProductPriceRange = (product: Product) => {
+  const getProductPriceRange = useCallback((product: Product) => {
     if (product.sizes && product.sizes.length > 0) {
       const prices = product.sizes.map((s) => s.price.toNumber());
       return {
@@ -115,49 +127,72 @@ function ProductList({ selectedType, selectedBrand, selectedPrice }: ProductList
       return { min: price, max: price };
     }
     return { min: 0, max: 0 };
-  };
+  }, []);
 
-  const getLocalizedTitle = (product: Product): string => {
+  const getLocalizedTitle = useCallback((product: Product): string => {
     if (locale === "en") {
       return product.titleEn ?? product.title;
     }
     return product.title ?? product.titleEn ?? "";
-  };
+  }, [locale]);
 
-  // Filter products based on sidebar filter props
-  const getFilteredProducts = () => {
+  // Updated filter function to work with both old and new filter interfaces
+  const getFilteredProducts = useCallback(() => {
     console.log('Filtering products:', {
       selectedType,
       selectedBrand,
       selectedPrice,
+      filterState,
       totalProducts: products.length
     });
     
     return products.filter(product => {
-      const byType = !selectedType || product.category.toLowerCase() === selectedType.toLowerCase();
-      const byBrand = !selectedBrand || product.brand === selectedBrand;
+      // Legacy filter support
+      const byLegacyType = !selectedType || product.category.toLowerCase() === selectedType.toLowerCase();
+      const byLegacyBrand = !selectedBrand || product.brand === selectedBrand;
       const priceRange = getProductPriceRange(product);
-      const byMinPrice = selectedPrice.min === null || priceRange.max >= selectedPrice.min;
-      const byMaxPrice = selectedPrice.max === null || priceRange.min <= selectedPrice.max;
+      const byLegacyMinPrice = selectedPrice.min === null || priceRange.max >= selectedPrice.min;
+      const byLegacyMaxPrice = selectedPrice.max === null || priceRange.min <= selectedPrice.max;
+      
+      // New filter support
+      const byNewType = filterState.selectedCategories.length === 0 || 
+                       filterState.selectedCategories.includes(product.category);
+      const byNewBrand = filterState.selectedBrands.length === 0 || 
+                        filterState.selectedBrands.includes(product.brand);
+      const byNewMinPrice = priceRange.max >= filterState.priceRange.min;
+      const byNewMaxPrice = priceRange.min <= filterState.priceRange.max;
       
       console.log('Product filtering:', {
         productId: product.id,
         productCategory: product.category,
-        selectedType,
-        byType,
-        byBrand,
-        byMinPrice,
-        byMaxPrice
+        byLegacyType,
+        byLegacyBrand,
+        byLegacyMinPrice,
+        byLegacyMaxPrice,
+        byNewType,
+        byNewBrand,
+        byNewMinPrice,
+        byNewMaxPrice
       });
       
-      return byType && byBrand && byMinPrice && byMaxPrice;
+      return byLegacyType && byLegacyBrand && byLegacyMinPrice && byLegacyMaxPrice &&
+             byNewType && byNewBrand && byNewMinPrice && byNewMaxPrice;
     });
-  };
+  }, [products, selectedType, selectedBrand, selectedPrice, filterState, getProductPriceRange]);
 
-  // Show up to 12 products (to fill the Swiper)
-  const filteredProducts = getFilteredProducts().slice(0, 12);
+  // Handle filter changes from FilterSidebar
+  const handleFilterChange = useCallback((newFilters: any) => {
+    console.log('FilterSidebar filter change:', newFilters);
+    setFilterState(newFilters);
+  }, []);
 
-  const transformProducts = (products: Product[]) => {
+  // Memoize filtered products
+  const filteredProducts = useMemo(() => {
+    const filtered = getFilteredProducts();
+    return filtered.slice(0, 12); // Show up to 12 products
+  }, [getFilteredProducts]);
+
+  const transformProducts = useCallback((products: Product[]) => {
     return products.map((product) => {
       const priceRange = getProductPriceRange(product);
       return {
@@ -168,15 +203,20 @@ function ProductList({ selectedType, selectedBrand, selectedPrice }: ProductList
         titleEn: product.titleEn,
       };
     });
-  };
+  }, [getProductPriceRange, getLocalizedTitle]);
 
-  const transformedProducts = transformProducts(filteredProducts);
+  const transformedProducts = useMemo(() => 
+    transformProducts(filteredProducts), 
+    [transformProducts, filteredProducts]
+  );
 
   return (
     <section className=" px-5 md:px-20 from-gray-50 via-white to-gray-50">
       <div className="container mx-auto ">
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
+       
+
        
 
           {/* Swiper Product Slider */}

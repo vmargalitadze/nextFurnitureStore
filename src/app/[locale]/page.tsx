@@ -4,9 +4,9 @@ import Categories from "@/components/Categories";
 import ProductList from "@/components/ProductList";
 import SideLogo from "@/components/SideLogo";
 import Hero from "@/components/Slider";
-import Filter from "@/components/Filter";
 import React, { useState, Suspense, useEffect } from "react";
 import { getAllProducts } from "@/lib/actions/actions";
+import Slider from "@/components/Slider";
 
 // Loading component for Suspense boundaries
 const LoadingSpinner = () => (
@@ -16,11 +16,6 @@ const LoadingSpinner = () => (
 );
 
 const HomePage = () => {
-  // Filter state for Filter component
-  const [selectedType, setSelectedType] = useState("");
-  const [selectedBrand, setSelectedBrand] = useState("");
-  const [selectedPrice, setSelectedPrice] = useState<{ min: number | null; max: number | null }>({ min: null, max: null });
-  const [filterOpen, setFilterOpen] = useState(false);
   const [categories, setCategories] = useState<string[]>([]);
 
   useEffect(() => {
@@ -31,34 +26,14 @@ const HomePage = () => {
     fetchCategories();
   }, []);
 
-  // Wrapper function to match Filter component's expected signature
-  const handlePriceChange = (price: { min: number | null; max: number | null }) => {
-    setSelectedPrice(price);
-  };
-
   return (
-    <div className="flex flex-col lg:flex-row min-h-screen">
-      {/* Sticky Filter Sidebar - Full Height */}
-      <div className="lg:w-1/4 w-full lg:min-h-screen lg:sticky lg:top-0 lg:left-0 lg:z-10">
-        <div className="lg:h-full lg:flex lg:flex-col">
-          <div className="lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto">
-            <Filter
-              open={filterOpen}
-              setOpen={setFilterOpen}
-              selectedType={selectedType}
-              setSelectedType={setSelectedType}
-              selectedBrand={selectedBrand}
-              setSelectedBrand={setSelectedBrand}
-              selectedPrice={selectedPrice}
-              setSelectedPrice={handlePriceChange}
-              categories={categories || []}
-            />
-          </div>
-        </div>
+    <div className="flex flex-col min-h-screen">
+      <div className="w-full">
+        <Slider />
       </div>
 
       {/* Main Content Area */}
-      <div className="lg:w-3/4 w-full">
+      <div className="w-full">
         <Suspense fallback={<LoadingSpinner />}>
           <Categories />
         </Suspense>
@@ -67,11 +42,7 @@ const HomePage = () => {
         </Suspense>
         <div className="">
           <Suspense fallback={<LoadingSpinner />}>
-            <ProductList
-              selectedType={selectedType}
-              selectedBrand={selectedBrand}
-              selectedPrice={selectedPrice}
-            />
+            <ProductList />
           </Suspense>
         </div>
         <Suspense fallback={<LoadingSpinner />}>
