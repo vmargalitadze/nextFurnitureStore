@@ -30,7 +30,7 @@ const Hero = () => {
 
       {/* Main Container */}
       <div className="relative z-10 mt-24 mb-13 flex items-center">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto ">
           <div className="grid lg:grid-cols-2 gap-5 items-center">
             
             {/* Left Content */}

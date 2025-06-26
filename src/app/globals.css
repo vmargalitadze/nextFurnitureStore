@@ -53,6 +53,10 @@ body {
   overflow: hidden;
 }
 
+.custom-swiper-pagination .swiper-pagination-bullet-active {
+  background-color: #ce7c2a !important;
+}
+
 /* Sticky positioning for sidebar */
 .sticky {
   position: sticky;
@@ -89,8 +93,8 @@ body {
 .container {
     margin-left: auto;
     margin-right: auto;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+    /* padding-left: 1.5rem;
+    padding-right: 1.5rem; */
     width: 100%;
     max-width: 1720px; /* Adjust based on your design needs */
   }
