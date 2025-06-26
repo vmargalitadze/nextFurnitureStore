@@ -4,7 +4,10 @@
     "about": "About",
     "contact": "Contact",
     "login": "Login",
-    "profile": "Profile"
+    "profile": "Profile",
+    "signOut": "Sign Out",
+    "userProfile": " Profile",
+    "cart": "Cart"
   },
   "search": {
     "placeholder": "Search products...",
@@ -19,9 +22,14 @@
   
   "contact": {
     "title": "Contact",
+    "hero": {
+      "title": "Contact Us"
+   
+    },
     "breadcrumb": {
       "home": "Home",
-      "contact": "Contact"
+      "contact": "Contact",
+      "sendMessage": "Send us a message"
     },
     "form": {
       "title": "Contact Us",

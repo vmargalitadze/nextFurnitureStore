@@ -249,7 +249,7 @@ function PageContentWrapper() {
             {getPageTitle()}
           </h2>
           {filteredProducts.length > 0 && (
-            <p className="text-white mt-2 text-sm">
+            <p className="text-white mt-2 text-[18px]">
               {filteredProducts.length}{" "}
               {filteredProducts.length === 1 ? "product" : "products"} found
             </p>
@@ -264,7 +264,7 @@ function PageContentWrapper() {
             <div className="mb-6">
               <button
                 onClick={handleViewSidebar}
-                className="w-full px-4 py-2 text-sm font-medium text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+                className="w-full px-4 py-2 text-[18px] font-medium text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
               >
               {t('filter')}
               </button>

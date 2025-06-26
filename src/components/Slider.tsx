@@ -29,7 +29,7 @@ const Hero = () => {
       </div>
 
       {/* Main Container */}
-      <div className="relative z-10 mt-24 mb-16 flex items-center">
+      <div className="relative z-10 mt-24 mb-13 flex items-center">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-5 items-center">
             
@@ -52,7 +52,7 @@ const Hero = () => {
               </div>
 
               {/* Description */}
-              <p className="text-xl text-gray-600 max-w-lg leading-relaxed">
+              <p className="text-xl  max-w-lg leading-relaxed">
                 {t('description')}
               </p>
 
@@ -63,7 +63,7 @@ const Hero = () => {
       </div>
                 <button
                   onClick={handleViewSidebar}
-                 className="w-[50%] px-4 py-2 text-sm font-medium text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+                 className="w-[50%] px-4 py-2 text-[18px] font-medium text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
                 >
                  
                  {t('filter')}

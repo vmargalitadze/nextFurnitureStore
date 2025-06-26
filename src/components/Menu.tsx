@@ -13,6 +13,11 @@ const Menu = () => {
   const { data: session } = useSession();
   const handleClose = () => setOpen(false);
 
+  // Callback to close menu when language switcher opens
+  const handleLanguageSwitcherOpen = () => {
+    setOpen(false);
+  };
+
   return (
     <div>
       <Image
@@ -41,7 +46,7 @@ const Menu = () => {
               </Link>
             )}
             
-            <LocaleSwitcher />
+            <LocaleSwitcher onOpen={handleLanguageSwitcherOpen} />
           </div>
         </div>
       )}

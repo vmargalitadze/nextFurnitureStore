@@ -6,7 +6,23 @@ import { useTransition, useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { Globe, Check } from 'lucide-react';
 
-export default function LocaleSwitcher() {
+// Global dropdown state manager (same as in Dropdown.tsx)
+let activeDropdown: string | null = null;
+const dropdownListeners: Set<(id: string | null) => void> = new Set();
+
+const closeAllDropdowns = (exceptId?: string) => {
+  if (activeDropdown && activeDropdown !== exceptId) {
+    activeDropdown = null;
+    dropdownListeners.forEach(listener => listener(null));
+  }
+};
+
+const setActiveDropdown = (id: string | null) => {
+  activeDropdown = id;
+  dropdownListeners.forEach(listener => listener(id));
+};
+
+export default function LocaleSwitcher({ onOpen }: { onOpen?: () => void }) {
   const [, startTransition] = useTransition();
   const [open, setOpen] = useState(false);
   const router = useRouter();
@@ -14,6 +30,7 @@ export default function LocaleSwitcher() {
   const localeActive = useLocale();
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const listRef = useRef<HTMLDivElement | null>(null);
+  const dropdownId = 'locale-switcher';
 
   // Debug logging
   useEffect(() => {
@@ -23,6 +40,34 @@ export default function LocaleSwitcher() {
       router: typeof router
     });
   }, [localeActive, pathname, router]);
+
+  // Listen for other dropdowns opening
+  useEffect(() => {
+    const handleDropdownChange = (id: string | null) => {
+      if (id !== dropdownId && open) {
+        setOpen(false);
+      }
+    };
+
+    dropdownListeners.add(handleDropdownChange);
+    return () => {
+      dropdownListeners.delete(handleDropdownChange);
+    };
+  }, [open, dropdownId]);
+
+  // Listen for global close events
+  useEffect(() => {
+    const handleGlobalClose = (event: CustomEvent) => {
+      if (event.detail.exceptId !== dropdownId && open) {
+        setOpen(false);
+      }
+    };
+
+    window.addEventListener('closeAllDropdowns', handleGlobalClose as EventListener);
+    return () => {
+      window.removeEventListener('closeAllDropdowns', handleGlobalClose as EventListener);
+    };
+  }, [open, dropdownId]);
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -34,6 +79,7 @@ export default function LocaleSwitcher() {
         !(buttonRef.current as HTMLButtonElement).contains(event.target as Node)
       ) {
         setOpen(false);
+        setActiveDropdown(null);
       }
     }
     if (open) {
@@ -49,6 +95,7 @@ export default function LocaleSwitcher() {
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === 'Escape') {
         setOpen(false);
+        setActiveDropdown(null);
       }
     }
     if (open) {
@@ -60,7 +107,23 @@ export default function LocaleSwitcher() {
   }, [open]);
 
   const handleToggle = () => {
-    setOpen(!open);
+    const newOpenState = !open;
+    setOpen(newOpenState);
+    
+    if (newOpenState) {
+      // Close all other dropdowns and set this as active
+      closeAllDropdowns(dropdownId);
+      setActiveDropdown(dropdownId);
+      // Trigger global event for custom dropdowns
+      window.dispatchEvent(new CustomEvent('closeAllDropdowns', { detail: { exceptId: dropdownId } }));
+      
+      // Call the onOpen callback to close menu if provided
+      if (onOpen) {
+        onOpen();
+      }
+    } else {
+      setActiveDropdown(null);
+    }
   };
 
   const handleChange = (nextLocale: string) => {
@@ -69,6 +132,7 @@ export default function LocaleSwitcher() {
     console.log('Current search params:', window.location.search);
     console.log('Current full URL:', window.location.href);
     setOpen(false);
+    setActiveDropdown(null);
     
     startTransition(() => {
       try {

@@ -70,7 +70,7 @@ export default function Categories() {
 
   return (
     <>
-      <h1 className="text-3xl sm:text-3xl lg:text-3xl xl:text-5xl flex justify-center items-center font-light text-gray-900 leading-tight">
+      <h1 className="text-3xl  flex justify-center items-center font-light text-gray-900 leading-tight">
         {t("title")}
       </h1>
       <div className="hidden mt-10 md:block">
@@ -85,12 +85,12 @@ export default function Categories() {
                   <div className="relative group rounded-xl overflow-hidden shadow-md border-4 border-[#feeb9d] transition-all duration-300">
                     <Link href={`/list?cat=${category.type}`}>
                       {/* Image */}
-                      <div className="relative h-44 sm:h-40 w-full">
+                      <div className="relative h-64 w-full">
                         <Image
                           src={category.image}
                           alt={getLocalizedCategoryLabel(category.type)}
                           fill
-                          className="object-cover rounded-xl "
+                          className="object-cover rounded-xl"
                         />
                       </div>
 
@@ -149,27 +149,27 @@ export default function Categories() {
                 className={`w-full px-2 wow fadeInUp`}
                 data-wow-delay={`${(index + 1) * 0.1}s`}
               >
-              <div className="relative group rounded-xl overflow-hidden shadow-md border-4 border-[#feeb9d] transition-all duration-300">
-                    <Link href={`/list?cat=${category.type}`}>
-                      {/* Image */}
-                      <div className="relative h-32 sm:h-40 w-full">
+                <div className="relative group rounded-xl overflow-hidden shadow-md border-4 border-[#feeb9d] transition-all duration-300">
+                  <Link href={`/list?cat=${category.type}`}>
+                    {/* Image */}
+                    <div className="relative h-64 w-full">
                         <Image
                           src={category.image}
                           alt={getLocalizedCategoryLabel(category.type)}
                           fill
-                          className="object-cover rounded-xl "
+                          className="object-cover rounded-xl"
                         />
                       </div>
 
-                      {/* Badge */}
-                      <div className="absolute top-2 left-2 bg-white text-black text-sm font-medium px-3 py-1 rounded-full shadow">
-                        {getLocalizedCategoryLabel(category.type)}
-                        {productCounts[category.type]
-                          ? ` (${productCounts[category.type]})`
-                          : ""}
-                      </div>
-                    </Link>
-                  </div>
+                    {/* Badge */}
+                    <div className="absolute top-2 left-2 bg-white text-black text-sm font-medium px-3 py-1 rounded-full shadow">
+                      {getLocalizedCategoryLabel(category.type)}
+                      {productCounts[category.type]
+                        ? ` (${productCounts[category.type]})`
+                        : ""}
+                    </div>
+                  </Link>
+                </div>
               </div>
             </SwiperSlide>
           ))}

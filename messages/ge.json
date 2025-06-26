@@ -2,9 +2,12 @@
   "navitems": {
     "products": "პროდუქტები",
     "about": "შესახებ",
-    "contact": "კონტაქტები",
+    "contact": "კონტაქტი",
     "login": "შესვლა",
-    "profile": "პროფილი"
+    "profile": "პროფილი",
+    "signOut": "გასვლა",
+    "userProfile": " პროფილი",
+    "cart": "კალათა"
   },
   "auth": {
     "signIn": {
@@ -262,11 +265,12 @@
     "title": "კონტაქტი",
     "breadcrumb": {
       "home": "მთავარი",
-      "contact": "კონტაქტი"
+      "contact": "დაგვიკავშირდით",
+      "sendMessage": "დაგვიკავშირდით"
     },
     "hero": {
       "title": "კონტაქტი",
-      "subtitle": "დაგვიკავშირდით"
+      "subtitle": "კონტაქტი"
     },
     "form": {
       "title": "დაგვიკავშირდით",
