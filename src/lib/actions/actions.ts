@@ -181,9 +181,12 @@ export async function createProduct(data: z.infer<typeof ProductSchema>) {
 
       export async function getSimilarProducts(productId: string, category: string, limit: number = 4) {
         try {
+          // Handle category conversion like other functions
+          const normalizedCategory = category === "bundle" ? "bundle" : category.toUpperCase();
+          
           const products = await prisma.product.findMany({
             where: {
-              category: category,
+              category: normalizedCategory as any,
               id: {
                 not: productId
               }
