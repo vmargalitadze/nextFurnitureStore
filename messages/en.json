@@ -2,7 +2,7 @@
   "navitems": {
     "products": "Products",
     "about": "About",
-    "contact": "Contact",
+    "contact": "Contacts",
     "login": "Login",
     "profile": "Profile",
     "signOut": "Sign Out",
@@ -23,16 +23,16 @@
   "contact": {
     "title": "Contact",
     "hero": {
-      "title": "Contact Us"
+      "title": "Our Contacts"
    
     },
     "breadcrumb": {
       "home": "Home",
       "contact": "Contact",
-      "sendMessage": "Send us a message"
+      "sendMessage": "Send us a message "
     },
     "form": {
-      "title": "Contact Us",
+      "title": "Our Contacts",
       "description": "We are here to address your inquiries, feedback, and partnership opportunities promptly and effectively.",
       "fullName": "Full Name",
       "fullNamePlaceholder": "Enter your full name",
@@ -49,7 +49,7 @@
       },
       "message": "Your Message",
       "messagePlaceholder": "Type your message",
-      "submit": "Send Message"
+      "submit": "Send "
     },
     "info": {
       "address": "ADDRESS",
@@ -58,7 +58,10 @@
       "batumiAddress": "Batumi: A. Pushkin St. 44",
       "tbilisiAddress": "Tbilisi: T. Eristavi St. 1",
       "emailAddress": "Sleepandbedgeorgia@gmail.com",
-      "phoneNumber": "123-456-7890"
+      "phoneNumber": "123-456-7890",
+      "locations": "Locations",
+      "call": "Call",
+      "selectSubject": "Select a subject"
     }
   },
   "cart": {

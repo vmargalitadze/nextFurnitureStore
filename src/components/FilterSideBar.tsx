@@ -273,7 +273,7 @@ export default function FilterSidebar({ onFilterChange }: FilterSidebarProps) {
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyPress={handleKeyPress}
                     placeholder={labels.searchPlaceholder}
-                    className="w-full px-4 py-2 pl-10 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#ce7c2a] focus:border-[#ce7c2a]"
+                    className="w-full px-4 py-2 pl-10 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-[#ce7c2a]"
                   />
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                 </div>
@@ -291,7 +291,7 @@ export default function FilterSidebar({ onFilterChange }: FilterSidebarProps) {
                         type="checkbox"
                         checked={selectedCategories.includes(category)}
                         onChange={() => handleCategoryChange(category)}
-                        className="mr-3 rounded border-gray-300 text-[#ce7c2a] focus:ring-[#ce7c2a]"
+                        className="mr-3 rounded border-gray-300 text-[#ce7c2a] focus:border-[#ce7c2a]"
                       />
                       {getLocalizedCategoryLabel(category)}
                     </label>
@@ -312,7 +312,7 @@ export default function FilterSidebar({ onFilterChange }: FilterSidebarProps) {
                           type="checkbox"
                           checked={selectedBrands.includes(brand)}
                           onChange={() => handleBrandChange(brand)}
-                          className="mr-3 rounded border-gray-300 text-[#ce7c2a] focus:ring-[#ce7c2a]"
+                          className="mr-3 rounded border-gray-300 text-[#ce7c2a] focus:border-[#ce7c2a]"
                         />
                         {brand}
                       </label>
@@ -333,7 +333,7 @@ export default function FilterSidebar({ onFilterChange }: FilterSidebarProps) {
                     max={priceRange.max}
                     value={currentPriceRange.min}
                     onChange={e => handlePriceChange("min", parseInt(e.target.value) || 0)}
-                    className="w-1/2 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#ce7c2a]"
+                    className="w-1/2 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-[#ce7c2a]"
                     placeholder="Min"
                   />
                   <input
@@ -342,7 +342,7 @@ export default function FilterSidebar({ onFilterChange }: FilterSidebarProps) {
                     max={priceRange.max}
                     value={currentPriceRange.max}
                     onChange={e => handlePriceChange("max", parseInt(e.target.value) || 0)}
-                    className="w-1/2 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#ce7c2a]"
+                    className="w-1/2 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-[#ce7c2a]"
                     placeholder="Max"
                   />
                 </div>
@@ -355,7 +355,7 @@ export default function FilterSidebar({ onFilterChange }: FilterSidebarProps) {
               <div className="pt-4 border-t">
                 <button
                   onClick={handleSearch}
-                  className="w-full px-4 py-2 text-sm font-medium text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+                  className="w-full px-4 py-2 text-sm font-medium text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] focus:outline-none focus:border-[#438c71]/50"
                 >
                   {labels.search}
                 </button>

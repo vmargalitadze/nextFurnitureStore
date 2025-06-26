@@ -21,7 +21,7 @@ function ContactPage() {
         />
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50 z-10" />
         <div className="relative z-20 text-center w-full max-w-4xl mx-auto px-4">
-          <h1 className="text-white text-4xl md:text-5xl font-bold leading-tight mb-4">
+          <h1 className="text-primary text-xl md:text-[45px] font-normal leading-none text-center capitalize">
             {t('hero.title')}
           </h1>
          
@@ -38,7 +38,7 @@ function ContactPage() {
             {/* Contact Image */}
             <div className="order-2 lg:order-1">
               <div className="relative group">
-                <div className="absolute inset-0 bg-gradient-to-br from-orange-400/20 to-orange-600/20 rounded-2xl transform group-hover:scale-105 transition-transform duration-500"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-orange-400/20 to-orange-600/20 rounded-2xl transform "></div>
                 <Image
                   src="/contact.jpg"
                   alt="Contact Us"
@@ -66,7 +66,7 @@ function ContactPage() {
                   <form className="space-y-6">
                     <div className="grid sm:grid-cols-2 gap-6">
                       <div className="space-y-2">
-                        <label className="text-[18px] font-semibold text-gray-700 uppercase tracking-wide">
+                        <label className="text-[18px]  text-gray-700 uppercase tracking-wide">
                           {t('form.fullName')}
                         </label>
                         <input
@@ -76,7 +76,7 @@ function ContactPage() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-[18px] font-semibold text-gray-700 uppercase tracking-wide">
+                        <label className="text-[18px]  text-gray-700 uppercase tracking-wide">
                           {t('form.email')}
                         </label>
                         <input
@@ -89,7 +89,7 @@ function ContactPage() {
 
                     <div className="grid sm:grid-cols-2 gap-6">
                       <div className="space-y-2">
-                        <label className="text-[18px] font-semibold text-gray-700 uppercase tracking-wide">
+                        <label className="text-[18px]  text-gray-700 uppercase tracking-wide">
                           {t('form.phone')}
                         </label>
                         <input
@@ -99,21 +99,21 @@ function ContactPage() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-[18px] font-semibold text-gray-700 uppercase tracking-wide">
+                        <label className="text-[18px]   text-gray-700 uppercase tracking-wide">
                           {t('form.subject')}
                         </label>
-                        <select className="w-full h-12 px-4 bg-white border-2 border-gray-200 rounded-lg text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all duration-300">
-                          <option value="">Select a subject</option>
-                          <option value="payment">{t('form.subjectOptions.payment')}</option>
-                          <option value="furniture">{t('form.subjectOptions.furniture')}</option>
-                          <option value="agreement">{t('form.subjectOptions.agreement')}</option>
-                          <option value="carrying">{t('form.subjectOptions.carrying')}</option>
+                        <select className="w-full h-12 px-4 bg-white border-2 text-gray-400 border-gray-200 rounded-lg text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all duration-300">
+                          <option  className="text-gray-400" value="">{t('info.selectSubject')}</option>
+                          <option className="text-gray-400"  value="payment">{t('form.subjectOptions.payment')}</option>
+                          <option className="text-gray-400"  value="furniture">{t('form.subjectOptions.furniture')}</option>
+                          <option className="text-gray-400"  value="agreement">{t('form.subjectOptions.agreement')}</option>
+                          <option className="text-gray-400"  value="carrying">{t('form.subjectOptions.carrying')}</option>
                         </select>
                       </div>
                     </div>
 
                     <div className="space-y-2">
-                      <label className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+                      <label className="text-[18px]  text-gray-700 uppercase tracking-wide">
                         {t('form.message')}
                       </label>
                       <textarea
@@ -125,7 +125,7 @@ function ContactPage() {
 
                     <Button 
                       type="submit" 
-                      className="w-full mt-9 bg-[#438c71] text-[18px] text-white py-3 px-4 rounded-xl transition-all duration-200 font-medium border border-gray-200 hover:border-gray-300"
+                      className="w-[50%] px-4 py-2  text-[15px] md:text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
                     >
                       {t('form.submit')}
                     </Button>
@@ -150,7 +150,7 @@ function ContactPage() {
                       </svg>
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-800 mb-1">Our Locations</h3>
+                      <h3 className="font-semibold text-gray-800 mb-1">{t('info.locations')}</h3>
                       <p className="text-gray-600 text-sm">{t('info.batumiAddress')}</p>
                       <p className="text-gray-600 text-sm">{t('info.tbilisiAddress')}</p>
                     </div>
@@ -167,7 +167,7 @@ function ContactPage() {
                       </svg>
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-800 mb-1">Email Us</h3>
+                      <h3 className="font-semibold text-gray-800 mb-1">{t('info.email')}</h3>
                       <a href="mailto:info@sleepandbed.ge" className="text-orange-600 hover:text-orange-700 text-sm transition-colors">
                         {t('info.emailAddress')}
                       </a>
@@ -185,7 +185,7 @@ function ContactPage() {
                       </svg>
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-800 mb-1">Call Us</h3>
+                      <h3 className="font-semibold text-gray-800 mb-1">{t('info.call')}</h3>
                       <a href="tel:+995123456789" className="text-orange-600 hover:text-orange-700 text-sm transition-colors">
                         {t('info.phoneNumber')}
                       </a>

@@ -305,7 +305,10 @@
       "batumiAddress": "ბათუმი: ა.პუშკინის 44",
       "tbilisiAddress": "თბილისი: თ.ერისთავის 1",
       "emailAddress": "Sleepandbedgeorgia@gmail.com",
-      "phoneNumber": "123-456-7890"
+      "phoneNumber": "123-456-7890",
+      "locations": "მდებარეობები",
+      "call": "დარეკვა",
+      "selectSubject": "აირჩიეთ თემა"
     }
   },
   "cart": {

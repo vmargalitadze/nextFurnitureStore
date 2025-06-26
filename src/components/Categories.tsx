@@ -70,7 +70,7 @@ export default function Categories() {
 
   return (
     <>
-      <h1 className="text-3xl  flex justify-center items-center font-light text-gray-900 leading-tight">
+      <h1 className="text-[45px]   flex justify-center items-center font-light text-gray-900 leading-tight">
         {t("title")}
       </h1>
       <div className="hidden mt-10 md:block">
@@ -82,10 +82,10 @@ export default function Categories() {
                   key={category.id}
                   className="w-full md:w-4/12 lg:w-4/12 px-2 mb-6"
                 >
-                  <div className="relative group rounded-xl overflow-hidden shadow-md border-4 border-[#feeb9d] transition-all duration-300">
+                  <div className="relative group rounded-xl overflow-hidden  shadow-lg  hover:shadow-xl transition-all duration-300">
                     <Link href={`/list?cat=${category.type}`}>
                       {/* Image */}
-                      <div className="relative h-64 w-full">
+                      <div className="relative h-[200px] w-full">
                         <Image
                           src={category.image}
                           alt={getLocalizedCategoryLabel(category.type)}
@@ -95,7 +95,7 @@ export default function Categories() {
                       </div>
 
                       {/* Badge */}
-                      <div className="absolute top-2 left-2 bg-white text-black text-sm font-medium px-3 py-1 rounded-full shadow">
+                      <div className="absolute top-2 left-2  inline-flex items-center gap-2 h-[40px] px-4 rounded-full bg-white/70 backdrop-blur-md border border-gray-200 text-black font-semibold transition-all hover:bg-white truncate max-w-[160px]">
                         {getLocalizedCategoryLabel(category.type)}
                         {productCounts[category.type]
                           ? ` (${productCounts[category.type]})`
@@ -129,9 +129,9 @@ export default function Categories() {
               {filteredCategories.map((category, index) => (
                 <SwiperSlide key={category.id}>
                   <div className="w-full px-2">
-                    <div className="relative group rounded-xl overflow-hidden shadow-md border-4 border-[#feeb9d] transition-all duration-300">
+                    <div className="relative group rounded-xl overflow-hidden  shadow-lg  hover:shadow-xl transition-all duration-300">
                       <Link href={`/list?cat=${category.type}`}>
-                        <div className="relative h-64 w-full">
+                        <div className="relative h-[200px] w-full">
                           <Image
                             src={category.image}
                             alt={getLocalizedCategoryLabel(category.type)}
@@ -139,7 +139,7 @@ export default function Categories() {
                             className="object-cover rounded-xl"
                           />
                         </div>
-                        <div className="absolute top-2 left-2 bg-white text-black text-sm font-medium px-3 py-1 rounded-full shadow">
+                        <div className="absolute top-2 left-2  inline-flex items-center gap-2 h-[40px] px-4 rounded-full bg-white/70 backdrop-blur-md border border-gray-200 text-black font-semibold transition-all hover:bg-white truncate max-w-[160px]">
                           {getLocalizedCategoryLabel(category.type)}
                           {productCounts[category.type]
                             ? ` (${productCounts[category.type]})`

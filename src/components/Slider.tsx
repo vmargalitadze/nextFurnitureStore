@@ -29,7 +29,7 @@ const Hero = () => {
       </div>
 
       {/* Main Container */}
-      <div className="relative z-10 mt-24 mb-13 flex items-center">
+      <div className="relative z-10 mt-24 mb-[40px] flex items-center">
         <div className="container mx-auto ">
           <div className="grid lg:grid-cols-2 gap-5 items-center">
             
@@ -44,9 +44,9 @@ const Hero = () => {
               <div className="space-y-4">
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-light text-gray-900 leading-tight">
                   Elegant
-                  <span className="block font-bold bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 bg-clip-text text-transparent">
-                    Living
-                  </span>
+                  <span className="block font-bold bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 bg-clip-text text-transparent leading-tight">
+  Living
+</span>
                   Spaces
                 </h1>
               </div>
@@ -63,7 +63,7 @@ const Hero = () => {
       </div>
                 <button
                   onClick={handleViewSidebar}
-                 className="w-[50%] px-4 py-2 text-[18px] font-medium text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+                 className="w-[50%] px-4 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
                 >
                  
                  {t('filter')}

@@ -176,10 +176,10 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                       <button
                         key={size.id}
                         onClick={() => setSelectedSize(size.id)}
-                        className={`px-3  py-1 rounded-full text-[18px] font-semibold transition-all duration-300 transform hover:scale-105 ${
+                        className={`w-[50%] px-4 py-2  text-[15px] md:text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors ${
                           selectedSize === size.id
-                            ? "bg-gradient-to-r from-primary to-primary/80 text-white shadow-lg shadow-primary/25"
-                            : "bg-white text-gray-700 hover:bg-gray-50 shadow-md hover:shadow-lg border border-gray-200"
+                            ? "bg-[#438c71] text-white "
+                            : "bg-[#438c71] text-white"
                         }`}
                       >
                         {formatSizeDisplay(size.size)}
@@ -258,10 +258,10 @@ const Page = (props: { params: { id: string; locale: string } }) => {
               {/* Add to Cart Button */}
               <div className="pt-1">
                 <button 
-                  className={`px-4 py-2 rounded-full text-[18px] font-semibold transition-all duration-300 transform hover:scale-105 ${
+                  className={`w-[50%] px-4 py-2  text-[15px] md:text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors ${
                     selectedSize
-                      ? "bg-gradient-to-r from-primary to-primary/80 text-white shadow-lg shadow-primary/25 hover:shadow-xl"
-                      : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                      ? "bg-[#438c71] text-white "
+                      : "bg-[#438c71] cursor-not-allowed"
                   }`}
                   disabled={!selectedSize}
                 >

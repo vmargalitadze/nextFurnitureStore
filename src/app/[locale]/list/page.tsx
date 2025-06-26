@@ -245,7 +245,7 @@ function PageContentWrapper() {
         <div className="absolute inset-0 bg-black/60 z-10" />
 
         <div className="relative z-20 text-center w-full">
-          <h2 className="text-primary text-xl md:text-[40px] font-normal leading-none text-center capitalize">
+          <h2 className="text-primary text-xl md:text-[45px] font-normal leading-none text-center capitalize">
             {getPageTitle()}
           </h2>
           {filteredProducts.length > 0 && (
@@ -264,7 +264,7 @@ function PageContentWrapper() {
             <div className="mb-6">
               <button
                 onClick={handleViewSidebar}
-                className="w-full px-4 py-2 text-[18px] font-medium text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+                className="w-full px-4 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
               >
               {t('filter')}
               </button>

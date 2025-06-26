@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { X, Search, SlidersHorizontal } from "lucide-react";
+import { X, Search, SlidersHorizontal, Trash2 } from "lucide-react";
 import { useTranslations, useLocale } from "next-intl";
 import { getAllProducts } from "@/lib/actions/actions";
 import { useRouter } from "@/i18n/navigation";
+import { useSearchParams } from "next/navigation";
 
 interface SideBarProps {
   isOpen: boolean;
@@ -20,6 +21,7 @@ const SideBar: React.FC<SideBarProps> = ({ isOpen, toggleSidebar, onFilterChange
   const t = useTranslations("allPage.filters");
   const locale = useLocale();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
@@ -30,6 +32,11 @@ const SideBar: React.FC<SideBarProps> = ({ isOpen, toggleSidebar, onFilterChange
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState({ min: 0, max: 1000 });
   const [currentPriceRange, setCurrentPriceRange] = useState({ min: 0, max: 1000 });
+
+  // Get URL parameters
+  const urlCategory = searchParams.get("cat");
+  const urlBrand = searchParams.get("brand");
+  const urlQuery = searchParams.get("query");
 
   // Handle hydration
   useEffect(() => {
@@ -63,28 +70,58 @@ const SideBar: React.FC<SideBarProps> = ({ isOpen, toggleSidebar, onFilterChange
     };
   }, [isOpen]);
 
+  // Initialize selected categories and brands based on URL parameters
+  useEffect(() => {
+    if (urlCategory) {
+      setSelectedCategories([urlCategory]);
+    }
+    if (urlBrand) {
+      setSelectedBrands([urlBrand]);
+    }
+    if (urlQuery) {
+      setSearchQuery(urlQuery);
+    }
+  }, [urlCategory, urlBrand, urlQuery]);
+
   // Memoize categories and brands to prevent unnecessary re-renders
-  const categories = useMemo(() => 
-    Array.from(new Set(products.map(p => p.category))).filter(Boolean), 
-    [products]
-  );
+  const categories = useMemo(() => {
+    let cats = Array.from(new Set(products.map(p => p.category))).filter(Boolean);
+    
+    // If there's a URL category parameter, only show that category
+    if (urlCategory) {
+      cats = cats.filter(cat => cat.toLowerCase() === urlCategory.toLowerCase());
+    }
+    
+    console.log('Categories found:', cats, 'URL category:', urlCategory);
+    return cats;
+  }, [products, urlCategory]);
   
-  const brands = useMemo(() => 
-    Array.from(new Set(products.map(p => p.brand))).filter(Boolean), 
-    [products]
-  );
+  const brands = useMemo(() => {
+    let brs = Array.from(new Set(products.map(p => p.brand))).filter(Boolean);
+    
+    // If there's a URL brand parameter, only show that brand
+    if (urlBrand) {
+      brs = brs.filter(brand => brand.toLowerCase() === urlBrand.toLowerCase());
+    }
+    
+    console.log('Brands found:', brs, 'URL brand:', urlBrand);
+    return brs;
+  }, [products, urlBrand]);
 
   // Memoize localized category labels
   const getLocalizedCategoryLabel = useCallback((category: string) => {
+    const normalized = category.trim().toLowerCase();
+  
     const map: Record<string, { en: string; ge: string }> = {
       'bundle': { en: 'Bundle', ge: 'კომპლექტი' },
       'pillow': { en: 'Pillow', ge: 'ბალიში' },
       'mattress': { en: 'Mattress', ge: 'მატრასი' },
-      'bed': { en: 'Bed', ge: 'ლოგინი' },
+      'bed': { en: 'Bed', ge: 'საწოლი' },
       'quilt': { en: 'Quilt', ge: 'საბანი' },
       'others': { en: 'Others', ge: 'სხვა' }
     };
-    const label = map[category] || { en: category, ge: category };
+  
+    const label = map[normalized] || { en: category, ge: category };
     return locale === "en" ? label.en : label.ge;
   }, [locale]);
 
@@ -156,16 +193,21 @@ const SideBar: React.FC<SideBarProps> = ({ isOpen, toggleSidebar, onFilterChange
   };
 
   const clearFilters = () => {
-    setSelectedCategories([]);
-    setSelectedBrands([]);
+    // Only clear filters that are not from URL parameters
+    const newCategories = urlCategory ? [urlCategory] : [];
+    const newBrands = urlBrand ? [urlBrand] : [];
+    const newSearchQuery = urlQuery || "";
+    
+    setSelectedCategories(newCategories);
+    setSelectedBrands(newBrands);
     setCurrentPriceRange(priceRange);
-    setSearchQuery("");
+    setSearchQuery(newSearchQuery);
     
     // Call onFilterChange to update parent component
     if (onFilterChange && isMounted) {
       onFilterChange({ 
-        selectedCategories: [], 
-        selectedBrands: [], 
+        selectedCategories: newCategories, 
+        selectedBrands: newBrands, 
         priceRange: priceRange 
       });
     }
@@ -186,6 +228,14 @@ const SideBar: React.FC<SideBarProps> = ({ isOpen, toggleSidebar, onFilterChange
       params.set('brand', selectedBrands.join(','));
     }
     
+    // Preserve existing URL parameters if they exist
+    if (urlCategory && !selectedCategories.includes(urlCategory)) {
+      params.set('cat', urlCategory);
+    }
+    if (urlBrand && !selectedBrands.includes(urlBrand)) {
+      params.set('brand', urlBrand);
+    }
+    
     const url = `/list${params.toString() ? `?${params.toString()}` : ''}`;
     router.push(url);
     toggleSidebar();
@@ -203,29 +253,39 @@ const SideBar: React.FC<SideBarProps> = ({ isOpen, toggleSidebar, onFilterChange
     document.body.style.overflow = 'auto';
   };
 
-
-
   return (
     <>
       {/* Overlay */}
       {isOpen && (
         <div
           onClick={handleClose}
-          className="fixed inset-0 top-0 bg-black/50 z-[1]"
+          className="fixed  inset-0 top-0 bg-black/50 z-[1]"
         />
       )}
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-screen  w-60 md:w-80 bg-white shadow-lg transform transition-transform duration-300 z-30 ${
+        className={`fixed mt-14  pb-10 overflow-y-auto scrollbar-hidden top-0 left-0 h-screen w-60 md:w-80 bg-white shadow-lg transform transition-transform duration-300 z-30 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         {/* Header */}
-        <div className="flex justify-between items-center p-4 border-b mt-20">
-          <h2 className="text-lg font-semibold text-gray-800">
-            {labels.filter}
-          </h2>
+        <div className="flex  justify-between items-center p-4 border-b mt-10">
+          <div className="flex items-center gap-2">
+            <h2 className="text-lg font-semibold text-gray-800">
+              {labels.filter}
+            </h2>
+            {(selectedCategories.length > 0 || selectedBrands.length > 0 || 
+              currentPriceRange.min !== priceRange.min || currentPriceRange.max !== priceRange.max || 
+              searchQuery.trim() || urlCategory || urlBrand || urlQuery) && (
+              <span className="px-2 py-1 text-xs bg-[#438c71] text-white rounded-full">
+                {selectedCategories.length + selectedBrands.length + 
+                 (currentPriceRange.min !== priceRange.min || currentPriceRange.max !== priceRange.max ? 1 : 0) + 
+                 (searchQuery.trim() ? 1 : 0) +
+                 (urlCategory ? 1 : 0) + (urlBrand ? 1 : 0) + (urlQuery ? 1 : 0)}
+              </span>
+            )}
+          </div>
           <button
             onClick={handleClose}
             className="text-gray-500 hover:text-gray-800 transition-colors"
@@ -236,126 +296,152 @@ const SideBar: React.FC<SideBarProps> = ({ isOpen, toggleSidebar, onFilterChange
         </div>
 
         {/* Filter Content */}
-        <div className="p-4 space-y-6 overflow-y-auto h-[calc(100vh-120px)]">
-          {loading ? (
-            <div className="space-y-3 animate-pulse">
-              {[1, 2, 3].map((_, i) => (
-                <div key={i} className="h-4 bg-gray-300 rounded w-3/4"></div>
-              ))}
-            </div>
-          ) : (
-            <>
-              {/* Search Input */}
-              <div>
-                <h3 className="text-sm font-semibold text-gray-700 mb-3">
-                  {labels.search}
-                </h3>
-                <div className="relative">
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    onKeyPress={handleKeyPress}
-                    placeholder={labels.searchPlaceholder}
-                    className="w-full px-4 py-2 pl-10 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#ce7c2a] focus:border-[#ce7c2a]"
-                  />
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                </div>
+        <div className="flex flex-col h-[calc(100vh-140px)]">
+        <div className="flex-1 p-4 space-y-6 ">
+            {loading ? (
+              <div className="space-y-3 animate-pulse">
+                {[1, 2, 3].map((_, i) => (
+                  <div key={i} className="h-4 bg-gray-300 rounded w-3/4"></div>
+                ))}
               </div>
-
-              {/* Categories */}
-              <div>
-                <h3 className="text-sm font-semibold text-gray-700 mb-3">
-                  {labels.categories}
-                </h3>
-                <div className="space-y-2">
-                  {categories.map(category => (
-                    <label key={category} className="flex items-center text-sm text-gray-600 hover:text-gray-800 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={selectedCategories.includes(category)}
-                        onChange={() => handleCategoryChange(category)}
-                        className="mr-3 rounded border-gray-300 text-[#ce7c2a] focus:ring-[#ce7c2a]"
-                      />
-                      {getLocalizedCategoryLabel(category)}
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Brands */}
-              {brands.length > 0 && (
+            ) : (
+              <>
+                {/* Search Input */}
                 <div>
-                  <h3 className="text-sm font-semibold text-gray-700 mb-3">
-                    {labels.brands}
+                  <h3 className={`text-[18px] font-semibold text-gray-700 mb-3 ${
+                    searchQuery.trim() || urlQuery ? 'text-[#438c71]' : 'text-gray-700'
+                  }`}>
+                    {labels.search}
                   </h3>
-                  <div className="space-y-2">
-                    {brands.map(brand => (
-                      <label key={brand} className="flex items-center text-sm text-gray-600 hover:text-gray-800 cursor-pointer">
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      onKeyPress={handleKeyPress}
+                      placeholder={labels.searchPlaceholder}
+                      className="w-full px-4 py-2 pl-10 border-2 border-gray-200 rounded-lg text-gray-800 transition-all duration-300 placeholder-gray-400"
+                    />
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  </div>
+                </div>
+
+                {/* Categories */}
+                <div>
+                  <h3 className={`text-[18px] font-semibold text-gray-700 mb-3 ${
+                    selectedCategories.length > 0 || urlCategory ? 'text-[#438c71]' : 'text-gray-700'
+                  }`}>
+                    {labels.categories} ({categories.length})
+                  </h3>
+                  <div className="space-y-2 max-h-32 overflow-y-auto border border-gray-200 rounded-md p-2">
+                    {categories.length > 0 ? categories.map(category => (
+                      <label key={category} className={`flex items-center text-[14px] cursor-pointer transition-colors ${
+                        selectedCategories.includes(category) 
+                          ? 'text-[#438c71] font-medium' 
+                          : 'text-gray-600 hover:text-gray-800'
+                      }`}>
+                        <input
+                          type="checkbox"
+                          checked={selectedCategories.includes(category)}
+                          onChange={() => handleCategoryChange(category)}
+                          className="mr-3 rounded border-gray-300 text-[#ce7c2a] focus:border-[#ce7c2a]"
+                        />
+                        {getLocalizedCategoryLabel(category)}
+                      </label>
+                    )) : (
+                      <p className="text-[14px] text-gray-500 italic">No categories found</p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Brands */}
+                <div>
+                  <h3 className={`text-[18px] font-semibold text-gray-700 mb-3 ${
+                    selectedBrands.length > 0 || urlBrand ? 'text-[#438c71]' : 'text-gray-700'
+                  }`}>
+                    {labels.brands} ({brands.length})
+                  </h3>
+                  <div className="space-y-2 max-h-32 overflow-y-auto border border-gray-200 rounded-md p-2">
+                    {brands.length > 0 ? brands.map(brand => (
+                      <label key={brand} className={`flex items-center text-[14px] cursor-pointer transition-colors ${
+                        selectedBrands.includes(brand) 
+                          ? 'text-[#438c71] font-medium' 
+                          : 'text-gray-600 hover:text-gray-800'
+                      }`}>
                         <input
                           type="checkbox"
                           checked={selectedBrands.includes(brand)}
                           onChange={() => handleBrandChange(brand)}
-                          className="mr-3 rounded border-gray-300 text-[#ce7c2a] focus:ring-[#ce7c2a]"
+                          className="mr-3 rounded border-gray-300 text-[#ce7c2a] focus:border-[#ce7c2a]"
                         />
                         {brand}
                       </label>
-                    ))}
+                    )) : (
+                      <p className="text-[14px] text-gray-500 italic">No brands found</p>
+                    )}
                   </div>
                 </div>
-              )}
 
-              {/* Price Filter */}
-              <div>
-                <h3 className="text-sm font-semibold text-gray-700 mb-3">
-                  {labels.priceRange}
-                </h3>
-                <div className="flex gap-2 mb-2">
-                  <input
-                    type="number"
-                    min={priceRange.min}
-                    max={priceRange.max}
-                    value={currentPriceRange.min}
-                    onChange={e => handlePriceChange("min", parseInt(e.target.value) || 0)}
-                    className="w-1/2 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#ce7c2a]"
-                    placeholder="Min"
-                  />
-                  <input
-                    type="number"
-                    min={priceRange.min}
-                    max={priceRange.max}
-                    value={currentPriceRange.max}
-                    onChange={e => handlePriceChange("max", parseInt(e.target.value) || 0)}
-                    className="w-1/2 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#ce7c2a]"
-                    placeholder="Max"
-                  />
+                {/* Price Filter */}
+                <div>
+                  <h3 className={`text-[18px] font-semibold mb-3 ${
+                    currentPriceRange.min !== priceRange.min || currentPriceRange.max !== priceRange.max
+                      ? 'text-[#438c71]' 
+                      : 'text-gray-700'
+                  }`}>
+                    {labels.priceRange}
+                  </h3>
+                  <div className="flex gap-2 mb-2">
+                    <input
+                      type="number"
+                      min={priceRange.min}
+                      max={priceRange.max}
+                      value={currentPriceRange.min}
+                      onChange={e => handlePriceChange("min", parseInt(e.target.value) || 0)}
+                      className="w-1/2 px-3 py-2 border border-gray-300 rounded-md text-[14px] focus:outline-none focus:border-[#ce7c2a]"
+                      placeholder="0"
+                    />
+                    <input
+                      type="number"
+                      min={priceRange.min}
+                      max={priceRange.max}
+                      value={currentPriceRange.max}
+                      onChange={e => handlePriceChange("max", parseInt(e.target.value) || 0)}
+                      className="w-1/2 px-3 py-2 border border-gray-300 rounded-md text-[14px] focus:outline-none focus:border-[#ce7c2a]"
+                      placeholder="0"
+                    />
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    ₾{currentPriceRange.min} - ₾{currentPriceRange.max}
+                  </div>
                 </div>
-                <div className="text-xs text-gray-500">
-                  ₾{currentPriceRange.min} - ₾{currentPriceRange.max}
-                </div>
-              </div>
+              </>
+            )}
+          </div>
 
-              {/* Search Button */}
-              <div className="pt-4 border-t">
-                <button
-                  onClick={handleSearch}
-                  className="w-full px-4 py-2 text-sm font-medium text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
-                >
-                  {labels.search}
-                </button>
-              </div>
+          {/* Fixed Bottom Buttons */}
+          <div className="p-4 border-t bg-white">
+            {/* Search Button */}
+            <button
+              onClick={handleSearch}
+              className="w-full px-4  mb-20  py-2 text-[18px] font-medium text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors mb-2"
+            >
+              {labels.search}
+            </button>
 
-              {/* Clear Button */}
-              <div className="pt-2">
-                <button
-                  onClick={clearFilters}
-                  className="w-full px-4 py-2 text-sm font-medium text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
-                >
-                  {labels.clearFilters}
-                </button>
-              </div>
-            </>
-          )}
+            {/* Clear Button */}
+            {(selectedCategories.length > 0 || selectedBrands.length > 0 || 
+              currentPriceRange.min !== priceRange.min || currentPriceRange.max !== priceRange.max || 
+              searchQuery.trim() || urlCategory || urlBrand || urlQuery) && (
+              <button
+                onClick={clearFilters}
+                className="w-full mb-14 px-4 py-2 text-[18px] font-medium text-[#438c71] bg-white border-2 border-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors flex items-center justify-center gap-2"
+              >
+                <Trash2 size={16} />
+                {labels.clearFilters}
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </>

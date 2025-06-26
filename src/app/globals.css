@@ -15,6 +15,63 @@ body {
   background-color: #fcf2e8;
 }
 
+/* Georgian font support */
+.georgian-text {
+  font-family: 'Manrope', 'Noto Sans Georgian', 'DejaVu Sans', sans-serif;
+  font-weight: 600; /* Use 600 instead of bold for better Georgian support */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ensure proper font rendering for Georgian characters */
+[lang="ge"] {
+  font-family: 'Manrope', 'Noto Sans Georgian', 'DejaVu Sans', sans-serif;
+  font-weight: 600;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Override font-bold for Georgian text to use font-semibold instead */
+[lang="ge"] .font-bold {
+  font-weight: 600 !important;
+}
+
+/* Remove focus borders and outlines globally */
+*:focus {
+  outline: none !important;
+  border-color: inherit !important;
+}
+
+*:focus-visible {
+  outline: none !important;
+  border-color: inherit !important;
+}
+
+/* Remove focus styles from form elements */
+input:focus,
+textarea:focus,
+select:focus,
+button:focus {
+  outline: none !important;
+  border-color: inherit !important;
+  box-shadow: none !important;
+}
+
+/* Remove focus ring from all elements */
+.focus\:ring-0:focus,
+.focus\:ring-1:focus,
+.focus\:ring-2:focus,
+.focus\:ring-4:focus,
+.focus\:ring-8:focus,
+.focus\:ring-offset-0:focus,
+.focus\:ring-offset-1:focus,
+.focus\:ring-offset-2:focus,
+.focus\:ring-offset-4:focus,
+.focus\:ring-offset-8:focus {
+  --tw-ring-shadow: none !important;
+  box-shadow: none !important;
+}
+
 /* Container fluid utility */
 .container-fluid {
   width: 100%;
@@ -748,4 +805,13 @@ img {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hidden {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
 }

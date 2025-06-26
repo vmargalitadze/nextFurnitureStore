@@ -53,9 +53,9 @@ function SearchHelper() {
       <div
         className={`
         inline-flex items-center gap-2 h-[40px] w-full px-4 py-2 
-        border rounded-full bg-white/70 backdrop-blur-md border-gray-200 
-        text-black font-semibold hover:bg-white transition-all duration-300
-        ${isFocused ? "ring-1 ring-primary" : ""}
+        rounded-full bg-white/70 backdrop-blur-md 
+        text-black font-semibold  
+        ${isFocused ? "" : ""}
       `}
       >
         {/* Search Icon */}
@@ -99,19 +99,19 @@ function SearchHelper() {
 
       {/* Suggestions Dropdown */}
       {isFocused && query && (
-        <div className="absolute z-20 left-0 right-0 mt-2 w-full rounded-xl border border-gray-100 shadow-2xl bg-white/90 backdrop-blur-xl transition-all duration-200">
+        <div className="absolute z-20 left-0 right-0 mt-2 w-full rounded-xl  shadow-2xl bg-white/90 backdrop-blur-xl transition-all duration-200">
           <div className="p-3">
-            <div className="text-sm text-gray-500 mb-2">
+            <div className="text-[18px] text-gray-500 mb-2">
               Search suggestions for &ldquo;{query}&rdquo;
             </div>
             <div className="space-y-1">
-              <div className="px-3 py-2 hover:bg-gray-50 rounded cursor-pointer text-sm">
+              <div className="px-3 py-2  rounded cursor-pointer text-sm">
                 {query} in mattresses
               </div>
-              <div className="px-3 py-2 hover:bg-gray-50 rounded cursor-pointer text-sm">
+              <div className="px-3 py-2  rounded cursor-pointer text-sm">
                 {query} in pillows
               </div>
-              <div className="px-3 py-2 hover:bg-gray-50 rounded cursor-pointer text-sm">
+              <div className="px-3 py-2  rounded cursor-pointer text-sm">
                 {query} in quilts
               </div>
             </div>
@@ -126,7 +126,7 @@ export default function SearchBar() {
   return (
     <Suspense
       fallback={
-        <div className="w-full max-w-md h-12 bg-gray-100 rounded-full animate-pulse" />
+        <div className="w-full max-w-md h-12 bg-gray-100 rounded-full " />
       }
     >
       <SearchHelper />
