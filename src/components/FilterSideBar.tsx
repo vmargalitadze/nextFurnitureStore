@@ -37,6 +37,35 @@ export default function FilterSidebar({ onFilterChange }: FilterSidebarProps) {
     setIsMounted(true);
   }, []);
 
+  // Reset sidebar state when component mounts
+  useEffect(() => {
+    setIsOpen(false);
+    // Force cleanup
+    document.body.style.overflow = 'auto';
+  }, []);
+
+  // Additional cleanup when component unmounts
+  useEffect(() => {
+    return () => {
+      setIsOpen(false);
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
+
+  // Manage body scroll when sidebar is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+
+    // Cleanup on unmount
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isOpen]);
+
   // Memoize categories and brands to prevent unnecessary re-renders
   const categories = useMemo(() => 
     Array.from(new Set(products.map(p => p.category))).filter(Boolean), 
@@ -163,7 +192,11 @@ export default function FilterSidebar({ onFilterChange }: FilterSidebarProps) {
   };
 
   const handleToggle = () => setIsOpen(p => !p);
-  const handleClose = () => setIsOpen(false);
+  const handleClose = () => {
+    setIsOpen(false);
+    // Ensure body scroll is restored
+    document.body.style.overflow = 'auto';
+  };
 
   // Show loading skeleton until mounted
   if (!isMounted) {
@@ -194,18 +227,18 @@ export default function FilterSidebar({ onFilterChange }: FilterSidebarProps) {
       {isOpen && (
         <div
           onClick={handleClose}
-          className="fixed inset-0 bg-black/50 z-40"
+          className="fixed inset-0 top-20 bg-black/50 z-[1]"
         />
       )}
 
       {/* Sidebar Drawer */}
       <aside
-        className={`fixed overflow-y-auto no-scrollbar top-0 left-0 h-full w-3/4 sm:w-2/3 md:w-1/2 max-w-sm bg-white z-50 shadow-lg transform transition-transform duration-300 ${
+        className={`fixed overflow-y-auto no-scrollbar top-20 left-0 h-[calc(100vh-80px)] w-3/4 sm:w-2/3 md:w-1/2 max-w-sm bg-white z-[2] shadow-lg transform transition-transform duration-300 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         {/* Header */}
-        <div className="flex mt-24 md:mt-24 justify-between items-center p-4 border-b">
+        <div className="flex justify-between items-center p-4 border-b">
           <h2 className="text-lg font-semibold text-gray-800">
             {labels.filter}
           </h2>

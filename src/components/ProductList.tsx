@@ -9,7 +9,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay, FreeMode } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
-import FilterSidebar from "./FilterSideBar";
+
 
 // Simple Decimal-like class to avoid Prisma import issues
 class SimpleDecimal {
@@ -265,16 +265,7 @@ function ProductList({
           )}
 
           {/* View All Button */}
-          <div className="text-center mx-auto mt-7 md:mt-12">
-            <Link
-            
-              className="w-full bg-[#438c71] text-white py-3 px-10 rounded-xl  transition-all duration-200 font-medium border " 
-              href="/all"
-              data-discover="true"
-            >
-              <span>{t("viewAll")}</span>
-            </Link>
-          </div>
+        
         </div>
       </div>
     </section>

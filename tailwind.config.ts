@@ -10,7 +10,7 @@ const config: Config = {
   theme: {
   	extend: {
   		screens: {
-  			'3xl': '1920px',
+  			'3xl': '1920px'
   		},
   		backgroundImage: {
   			'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
@@ -76,6 +76,16 @@ const config: Config = {
   			'brand-orange': '#C97A2B',
   			'brand-milk': '#F6F1E7',
   			'brand-green': '#4CA08A',
+  			sidebar: {
+  				DEFAULT: 'hsl(var(--sidebar-background))',
+  				foreground: 'hsl(var(--sidebar-foreground))',
+  				primary: 'hsl(var(--sidebar-primary))',
+  				'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
+  				accent: 'hsl(var(--sidebar-accent))',
+  				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
+  				border: 'hsl(var(--sidebar-border))',
+  				ring: 'hsl(var(--sidebar-ring))'
+  			}
   		}
   	}
   },

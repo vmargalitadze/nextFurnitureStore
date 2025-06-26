@@ -16,15 +16,12 @@
   "helper": {
     "details": "Details"
   },
+  
   "contact": {
     "title": "Contact",
     "breadcrumb": {
       "home": "Home",
       "contact": "Contact"
-    },
-    "hero": {
-      "title": "Contact",
-      "subtitle": "Get in touch with us"
     },
     "form": {
       "title": "Contact Us",
@@ -225,7 +222,8 @@
   "hero": {
     "title": "Premium Lounge Sofa Chair",
     "description": "We offer you an extremely comfortable lounge sofa chair. Taking the time to relax at home or the office will be more appealing than ever when you choose a modern lounge sofa chair.",
-    "cta": "Let's Shop Now"
+    "cta": "Let's Shop Now",
+    "filter": "Filter"
   },
   "productList": {
     "title": "Our",
@@ -279,6 +277,8 @@
     "filters": {
       "title": "Filters",
       "activeFilters": "active filters",
+      "search": "Search",
+      "searchPlaceholder": "Search products...",
       "categories": {
         "title": "Categories",
         "allCategories": "All Categories"
@@ -302,7 +302,11 @@
       "found": "Found",
       "products": "Products",
       "noProductsFound": "No products found",
-      "tryDifferentFilters": "Try different filters or search for another product"
+      "tryDifferentFilters": "Try different filters or search for another product",
+      "productCount": "product",
+      "productsCount": "products",
+      "openSidebar": "Open SideBar",
+      "closeSidebar": "Close SideBar"
     },
     "sorting": {
       "sortBy": "Sort by:",
@@ -322,6 +326,9 @@
     "copyright": "© 2024 Furniture Store. All rights reserved.",
     "privacy": "Privacy",
     "terms": "Terms"
+  },
+  "common": {
+    "filter": "Filter"
   },
   "profile": {
     "title": "Profile Dashboard",

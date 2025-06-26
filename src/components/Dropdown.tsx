@@ -69,7 +69,7 @@ export default function DropdownMenuCheckboxes() {
   const firstLetter = session?.user?.name;
   
   return (
-    <div className="flex justify-center gap-2 items-center">
+    <div className="flex  justify-center gap-2 items-center">
       <DropdownMenu open={open} onOpenChange={handleOpenChange}>
         <DropdownMenuTrigger asChild>
           <div className="flex items-center">
@@ -80,7 +80,7 @@ export default function DropdownMenuCheckboxes() {
         </DropdownMenuTrigger>
 
         <DropdownMenuContent
-          className="w-[200px]"
+          className="w-[200px] z-[900]"
           align="center"
           side="bottom"
           sideOffset={8}

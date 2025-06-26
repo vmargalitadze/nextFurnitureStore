@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
@@ -7,20 +7,20 @@ import { Link } from "@/i18n/navigation";
 import ProductHelper from "@/components/ProductHelper";
 import { getAllProducts } from "@/lib/actions/actions";
 import { useTranslations } from "next-intl";
-import FilterSidebar from "@/components/FilterSideBar";
+import SideBar from "@/components/Sidebar";
 
 // Simple Decimal-like class to avoid Prisma import issues
 class SimpleDecimal {
   value: string;
-  
+
   constructor(value: string | number) {
     this.value = value.toString();
   }
-  
+
   toString() {
     return this.value;
   }
-  
+
   toNumber() {
     return parseFloat(this.value);
   }
@@ -63,21 +63,29 @@ function PageContentWrapper() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const searchParams = useSearchParams();
   const t = useTranslations("common");
-  
+
   // Get URL parameters
   const category = searchParams.get("cat");
   const brand = searchParams.get("brand");
   const query = searchParams.get("query") || "";
 
+  // Check if sidebar should be shown (only when category or brand parameters exist)
+  const shouldShowSidebar = Boolean(category || brand);
+
+  const handleViewSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
   // Helper function to get product price range
   const getProductPriceRange = (product: Product) => {
     if (product.sizes && product.sizes.length > 0) {
-      const prices = product.sizes.map(s => s.price.toNumber());
+      const prices = product.sizes.map((s) => s.price.toNumber());
       return {
         min: Math.min(...prices),
-        max: Math.max(...prices)
+        max: Math.max(...prices),
       };
     }
     // Fallback to old structure
@@ -92,37 +100,41 @@ function PageContentWrapper() {
   const handleFilterChange = (filters: FilterState) => {
     const filtered = products.filter((product) => {
       // Category filter
-      const matchesCategory = filters.selectedCategories.length === 0 || 
+      const matchesCategory =
+        filters.selectedCategories.length === 0 ||
         filters.selectedCategories.includes(product.category);
-      
+
       // Brand filter
-      const matchesBrand = filters.selectedBrands.length === 0 || 
+      const matchesBrand =
+        filters.selectedBrands.length === 0 ||
         filters.selectedBrands.includes(product.brand);
-      
+
       // Search query filter
-      const matchesQuery = !query || 
+      const matchesQuery =
+        !query ||
         product.title.toLowerCase().includes(query.toLowerCase()) ||
         product.titleEn.toLowerCase().includes(query.toLowerCase());
-      
+
       // Price range filter
       const priceRange = getProductPriceRange(product);
-      const matchesPrice = priceRange.min >= filters.priceRange.min && 
-                          priceRange.max <= filters.priceRange.max;
-      
+      const matchesPrice =
+        priceRange.min >= filters.priceRange.min &&
+        priceRange.max <= filters.priceRange.max;
+
       return matchesCategory && matchesBrand && matchesQuery && matchesPrice;
     });
-    
+
     setFilteredProducts(filtered);
   };
 
   // Transform database products to match ProductHelper interface
-  const transformedProducts = filteredProducts.map(product => {
+  const transformedProducts = filteredProducts.map((product) => {
     const priceRange = getProductPriceRange(product);
     return {
       id: product.id,
       image: product.images,
       price: priceRange.min, // Show minimum price for display
-      title: product.title
+      title: product.title,
     };
   });
 
@@ -139,13 +151,14 @@ function PageContentWrapper() {
       setLoading(true);
       const data = await getAllProducts();
       // Convert the data to match the Product interface
-      const productsWithDecimalPrices = data.map(product => ({
+      const productsWithDecimalPrices = data.map((product) => ({
         ...product,
-        sizes: product.sizes?.map(size => ({
-          ...size,
-          price: new SimpleDecimal(size.price)
-        })) || undefined,
-        sales: product.sales || undefined
+        sizes:
+          product.sizes?.map((size) => ({
+            ...size,
+            price: new SimpleDecimal(size.price),
+          })) || undefined,
+        sales: product.sales || undefined,
       }));
       setProducts(productsWithDecimalPrices as Product[]);
     } catch (error) {
@@ -163,9 +176,13 @@ function PageContentWrapper() {
   useEffect(() => {
     if (products.length > 0) {
       const filtered = products.filter((product) => {
-        const matchesCategory = !category || product.category?.toLowerCase() === category.toLowerCase();
-        const matchesBrand = !brand || product.brand?.toLowerCase() === brand.toLowerCase();
-        const matchesQuery = !query || 
+        const matchesCategory =
+          !category ||
+          product.category?.toLowerCase() === category.toLowerCase();
+        const matchesBrand =
+          !brand || product.brand?.toLowerCase() === brand.toLowerCase();
+        const matchesQuery =
+          !query ||
           product.title.toLowerCase().includes(query.toLowerCase()) ||
           product.titleEn.toLowerCase().includes(query.toLowerCase());
         return matchesCategory && matchesBrand && matchesQuery;
@@ -213,7 +230,7 @@ function PageContentWrapper() {
       </>
     );
   }
-    
+
   return (
     <>
       <div className="relative min-h-[50vh] flex items-center justify-center bg-overlay p-14 sm:p-16 before:bg-title before:bg-opacity-70 overflow-hidden">
@@ -233,7 +250,8 @@ function PageContentWrapper() {
           </h2>
           {filteredProducts.length > 0 && (
             <p className="text-white mt-2 text-sm">
-              {filteredProducts.length} {filteredProducts.length === 1 ? 'product' : 'products'} found
+              {filteredProducts.length}{" "}
+              {filteredProducts.length === 1 ? "product" : "products"} found
             </p>
           )}
         </div>
@@ -241,20 +259,43 @@ function PageContentWrapper() {
 
       <div className="container min-h-screen mt-[50px]">
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Filter Sidebar */}
-          <div className="lg:w-1/4 w-full">
-            <FilterSidebar onFilterChange={handleFilterChange} />
-          </div>
-          
+          {/* SideBar Toggle Button - Only show when category or brand parameters exist */}
+          {shouldShowSidebar && (
+            <div className="mb-6">
+              <button
+                onClick={handleViewSidebar}
+                className="w-full px-4 py-2 text-sm font-medium text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+              >
+              {t('filter')}
+              </button>
+            </div>
+          )}
+
+          <SideBar
+            isOpen={sidebarOpen}
+            toggleSidebar={handleViewSidebar}
+            onFilterChange={() => {}}
+          />
+
           {/* Products Area */}
-          <div className="lg:w-3/4 w-full">
+          <div className={`${shouldShowSidebar ? "lg:w-3/4" : "w-full"}`}>
             {transformedProducts.length > 0 ? (
               <ProductHelper items={transformedProducts} />
             ) : (
               <div className="text-center py-12">
                 <div className="text-gray-400 mb-4">
-                  <svg className="w-20 h-20 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                  <svg
+                    className="w-20 h-20 mx-auto"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
+                    />
                   </svg>
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-3">
@@ -274,7 +315,13 @@ function PageContentWrapper() {
 
 export default function Page() {
   return (
-    <Suspense fallback={<div className="flex justify-center items-center h-screen">Loading...</div>}>
+    <Suspense
+      fallback={
+        <div className="flex justify-center items-center h-screen">
+          Loading...
+        </div>
+      }
+    >
       <PageContentWrapper />
     </Suspense>
   );

@@ -5,32 +5,17 @@ import { Link } from "@/i18n/navigation";
 import { useTranslations } from 'next-intl';
 import FilterSidebar from "./FilterSideBar";
 import { useState, useEffect } from "react";
+import SideBar from "./Sidebar";
 
-// Client-side only wrapper to prevent hydration issues
-const ClientOnlyFilterSidebar = () => {
-  const [isMounted, setIsMounted] = useState(false);
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  if (!isMounted) {
-    return (
-      <div className="mb-4 flex justify-start">
-        <div className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-[#438c71] rounded-lg shadow-md">
-          <div className="w-4 h-4 bg-white/20 rounded animate-pulse"></div>
-          <div className="w-16 h-4 bg-white/20 rounded animate-pulse"></div>
-        </div>
-      </div>
-    );
-  }
-
-  return <FilterSidebar />;
-};
 
 const Hero = () => {
   const t = useTranslations('hero');
-
+  const [sidebarOpen, setSideBarOpen] = useState(false);
+  
+  const handleViewSidebar = () => {
+    setSideBarOpen(!sidebarOpen);
+  };
   return (
     <section className="relative overflow-hidden">
       {/* Background Pattern */}
@@ -73,11 +58,25 @@ const Hero = () => {
 
               {/* CTA Section - Filter moved outside motion div */}
               <div className="flex flex-col sm:flex-row gap-4">
+              <div className="mb-4 flex justify-start">
+       
+      </div>
+                <button
+                  onClick={handleViewSidebar}
+                 className="w-[50%] px-4 py-2 text-sm font-medium text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+                >
+                 
+                 {t('filter')}
+                </button>
+                
                 {/* Filter Sidebar - Rendered outside motion context */}
-                <div className="w-full sm:w-auto">
+                {/* <div className="w-full sm:w-auto">
                   <ClientOnlyFilterSidebar />
-                </div>
+                </div> */}
               </div>
+
+              {/* SideBar Component */}
+              <SideBar isOpen={sidebarOpen} toggleSidebar={handleViewSidebar} onFilterChange={() => {}} />
 
            
             </div>

@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import { Link } from '@/i18n/navigation';
-import { Button } from '@/components/ui/button';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ShoppingCart, ArrowLeft } from 'lucide-react';
 
@@ -25,12 +24,7 @@ function Cartpage() {
             <p className="text-gray-600 mb-6">
               {t('emptyDescription')}
             </p>
-            <Button asChild>
-              <Link href="/all">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                {t('continueShopping')}
-              </Link>
-            </Button>
+          
           </CardContent>
         </Card>
 

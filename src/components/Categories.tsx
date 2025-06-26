@@ -14,7 +14,9 @@ import "swiper/css/navigation";
 export default function Categories() {
   const t = useTranslations("categories");
   const locale = useLocale();
-  const [productCounts, setProductCounts] = useState<Record<string, number>>({});
+  const [productCounts, setProductCounts] = useState<Record<string, number>>(
+    {}
+  );
   const [isLoading, setIsLoading] = useState(true);
 
   const prevRef = useRef(null);
@@ -50,7 +52,9 @@ export default function Categories() {
     return productCounts[categoryType] || 0;
   };
 
-  const filteredCategories = CategoriesList.filter((item) => item.type !== "all");
+  const filteredCategories = CategoriesList.filter(
+    (item) => item.type !== "all"
+  );
 
   if (isLoading) {
     return (
@@ -67,35 +71,31 @@ export default function Categories() {
   return (
     <>
       <h1 className="text-3xl sm:text-3xl lg:text-3xl xl:text-5xl flex justify-center items-center font-light text-gray-900 leading-tight">
-        {t('title')}
+        {t("title")}
       </h1>
-      <div className="hidden md:block">
-        <div className="content-inner category-section">
-          <div className="">
-            
+      <div className="hidden mt-10 md:block">
+        <div className="container mx-auto">
+          <div className="max-w-7xl mx-auto">
             <div className="flex flex-wrap -mx-2">
               {filteredCategories.map((category, index) => (
                 <div
                   key={category.id}
-                  className={`w-full md:w-4/12 lg:w-4/12 px-2 wow fadeInUp`}
-                  data-wow-delay={`${(index + 1) * 0.1}s`}
+                  className="w-full md:w-4/12 lg:w-4/12 px-2 mb-6"
                 >
-                  <div
-                    className={`category-product ${
-                      index < 3 ? "left" : "right"
-                    } product-${index + 1}`}
-                  >
+                  <div className="relative group rounded-xl overflow-hidden shadow-md border-4 border-[#feeb9d] transition-all duration-300">
                     <Link href={`/list?cat=${category.type}`}>
-                    <div className="relative h-32 sm:h-40 rounded-lg sm:rounded-xl overflow-hidden shadow-lg">
-                      <Image
-                         src={category.image}
-                        alt="Modern chair"
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                   
-                      <div className="category-badge ">
+                      {/* Image */}
+                      <div className="relative h-44 sm:h-40 w-full">
+                        <Image
+                          src={category.image}
+                          alt={getLocalizedCategoryLabel(category.type)}
+                          fill
+                          className="object-cover rounded-xl "
+                        />
+                      </div>
+
+                      {/* Badge */}
+                      <div className="absolute top-2 left-2 bg-white text-black text-sm font-medium px-3 py-1 rounded-full shadow">
                         {getLocalizedCategoryLabel(category.type)}
                         {productCounts[category.type]
                           ? ` (${productCounts[category.type]})`
@@ -109,61 +109,60 @@ export default function Categories() {
           </div>
         </div>
       </div>
-     {/* Mobile View – Swiper */}
-     <div className="lg:hidden">
-          <div className="flex justify-center mb-4 gap-4">
-            <button
-              ref={prevRef}
-              className="text-[#ce7c2a] text-xl font-bold hover:scale-110 transition"
-            >
-              ←
-            </button>
-            <button
-              ref={nextRef}
-              className="text-[#ce7c2a] text-xl font-bold hover:scale-110 transition"
-            >
-              →
-            </button>
-          </div>
 
-          <Swiper
-            modules={[Navigation]}
-            slidesPerView={1}
-            spaceBetween={16}
-            onInit={(swiper) => {
-              if (
-                typeof swiper.params.navigation !== "boolean" &&
-                swiper.params.navigation
-              ) {
-                swiper.params.navigation.prevEl = prevRef.current!;
-                swiper.params.navigation.nextEl = nextRef.current!;
-                swiper.navigation.init();
-                swiper.navigation.update();
-              }
-            }}
+      {/* Mobile View – Swiper */}
+      <div className="lg:hidden">
+        <div className="flex justify-around mb-4 gap-4">
+          <button
+            ref={prevRef}
+            className="text-[#ce7c2a] text-xl font-bold hover:scale-110 transition"
           >
-            {filteredCategories.map((category, index) => (
-              <SwiperSlide key={category.id}>
-                <div
-                  className={`w-full px-2 wow fadeInUp`}
-                  data-wow-delay={`${(index + 1) * 0.1}s`}
-                >
-                  <div
-                    className={`category-product ${
-                      index < 3 ? "left" : "right"
-                    } product-${index + 1}`}
-                  >
+            ←
+          </button>
+          <button
+            ref={nextRef}
+            className="text-[#ce7c2a] text-xl font-bold hover:scale-110 transition"
+          >
+            →
+          </button>
+        </div>
+
+        <Swiper
+          modules={[Navigation]}
+          slidesPerView={1}
+          spaceBetween={16}
+          onInit={(swiper) => {
+            if (
+              typeof swiper.params.navigation !== "boolean" &&
+              swiper.params.navigation
+            ) {
+              swiper.params.navigation.prevEl = prevRef.current!;
+              swiper.params.navigation.nextEl = nextRef.current!;
+              swiper.navigation.init();
+              swiper.navigation.update();
+            }
+          }}
+        >
+          {filteredCategories.map((category, index) => (
+            <SwiperSlide key={category.id}>
+              <div
+                className={`w-full px-2 wow fadeInUp`}
+                data-wow-delay={`${(index + 1) * 0.1}s`}
+              >
+              <div className="relative group rounded-xl overflow-hidden shadow-md border-4 border-[#feeb9d] transition-all duration-300">
                     <Link href={`/list?cat=${category.type}`}>
-                      <div className="relative h-32 sm:h-40 rounded-lg sm:rounded-xl overflow-hidden shadow-lg">
+                      {/* Image */}
+                      <div className="relative h-32 sm:h-40 w-full">
                         <Image
                           src={category.image}
-                          alt="Modern chair"
+                          alt={getLocalizedCategoryLabel(category.type)}
                           fill
-                          className="object-cover"
+                          className="object-cover rounded-xl "
                         />
                       </div>
 
-                      <div className="category-badge">
+                      {/* Badge */}
+                      <div className="absolute top-2 left-2 bg-white text-black text-sm font-medium px-3 py-1 rounded-full shadow">
                         {getLocalizedCategoryLabel(category.type)}
                         {productCounts[category.type]
                           ? ` (${productCounts[category.type]})`
@@ -171,13 +170,11 @@ export default function Categories() {
                       </div>
                     </Link>
                   </div>
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
-      </>
-    );
-  }
-
-
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
+    </>
+  );
+}

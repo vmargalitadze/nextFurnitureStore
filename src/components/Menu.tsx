@@ -24,9 +24,9 @@ const Menu = () => {
         onClick={() => setOpen((prev) => !prev)}
       />
       {open && (
-        <div className="absolute bg-white text-black left-0 w-full h-screen flex flex-col items-center justify-start gap-8 text-xl z-10">
-          <div className="mt-[100px] flex flex-col items-center gap-8">
-            <Link href="/all" onClick={handleClose}>{t('products')} </Link>
+        <div className="absolute bg-white text-black left-0 w-full h-[calc(100vh-80px)] flex flex-col items-center justify-start gap-8 text-xl z-[50] top-20">
+          <div className="mt-[20px] flex flex-col items-center gap-8">
+        
       
             <Link href="/contact" onClick={handleClose}> {t('contact')} </Link>
             

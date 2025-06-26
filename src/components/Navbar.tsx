@@ -1,4 +1,3 @@
-
 import { Link } from "@/i18n/navigation";
 import React from 'react'
 import Menu from './Menu'
@@ -14,7 +13,7 @@ function Navbar() {
 
 
   return (
-    <div className='fixed top-0 left-0 w-full z-50 h-20 px-4 md:px-8 bg-[#ce7c2a] text-black shadow-sm'>
+    <div className='fixed top-0 left-0 w-full z-[800] h-20 px-4 md:px-8 bg-[#ce7c2a] text-black shadow-sm pointer-events-auto isolate'>
 
       <div className="h-full flex items-center justify-between md:hidden">
 
@@ -32,7 +31,7 @@ function Navbar() {
           </Link>
           <div className="hidden xl:flex gap-4">
             
-            <Link href="/all" className="text-[18px]">  {t('products')} </Link>
+       
 
         
             <Link href="/contact" className="text-[18px]"> {t('contact')}</Link>

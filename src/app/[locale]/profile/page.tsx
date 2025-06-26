@@ -274,12 +274,7 @@ export default async function ProfilePage() {
                       {t('quickActions.viewCart')}
                     </Button>
                   </Link>
-                  <Link href="/all">
-                    <Button className="w-full" variant="outline">
-                      <FaList className="mr-2" />
-                      {t('quickActions.browseProducts')}
-                    </Button>
-                  </Link>
+              
                 </div>
               </CardContent>
             </Card>

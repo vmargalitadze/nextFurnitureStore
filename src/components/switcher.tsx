@@ -65,19 +65,27 @@ export default function LocaleSwitcher() {
 
   const handleChange = (nextLocale: string) => {
     console.log('Switching to locale:', nextLocale);
+    console.log('Current pathname:', pathname);
+    console.log('Current search params:', window.location.search);
+    console.log('Current full URL:', window.location.href);
     setOpen(false);
     
     startTransition(() => {
       try {
-        // Try next-intl router first
-        router.replace(pathname, { locale: nextLocale });
-        console.log('Used next-intl router');
+        // Get current search parameters
+        const searchParams = window.location.search;
+        const fullPath = pathname + searchParams;
+        
+        // Try next-intl router first with full path including search params
+        router.replace(fullPath, { locale: nextLocale });
+        console.log('Used next-intl router with search params:', fullPath);
       } catch (error) {
         console.error('next-intl router failed:', error);
-        // Fallback to manual navigation
+        // Fallback to manual navigation with search params
         const currentPath = pathname.replace(/^\/[a-zA-Z]+/, '');
-        const newPath = `/${nextLocale}${currentPath}`;
-        console.log('Falling back to manual navigation:', newPath);
+        const searchParams = window.location.search;
+        const newPath = `/${nextLocale}${currentPath}${searchParams}`;
+        console.log('Falling back to manual navigation with search params:', newPath);
         window.location.href = newPath;
       }
     });
