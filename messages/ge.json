@@ -152,6 +152,12 @@
       "tbilisiAddress": "თბილისი, თ. ერისთავი 1",
       "batumiAddress": "ბათუმი, ა. პუშკინი 117",
       "qutaisiAddress": "ქუთაისი, ზ. ფურცელაძე 15"
+    },
+    "similarProducts": {
+      "title": "მსგავსი პროდუქტები",
+      "viewDetails": "დეტალების ნახვა",
+      "noProducts": "მსგავსი პროდუქტები ვერ მოიძებნა",
+      "noProductsDescription": "ამ კატეგორიაში სხვა პროდუქტები ვერ მოიძებნა ამ მომენტში."
     }
   },
   "allPage": {

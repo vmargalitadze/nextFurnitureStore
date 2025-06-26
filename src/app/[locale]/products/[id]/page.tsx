@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import React, { useState, useEffect } from "react";
 import ProductImage from "../ProductImage";
 import { getProductById } from "@/lib/actions/actions";
+import SimilarProducts from "@/components/SimilarProducts";
 
 // Simple Decimal-like class to avoid Prisma import issues
 class SimpleDecimal {
@@ -137,19 +138,10 @@ const Page = (props: { params: { id: string; locale: string } }) => {
   
   return (
     <>
-      {/* Breadcrumb */}
-      <div className="bg-[#F8F5F0] mt-[80px] py-2 md:py-3">
-        <div className="container mx-auto">
-          <ul className="flex justify-center items-center gap-2 text-[18px] font-normal text-black flex-wrap text-center">
-          
-         
-            <li className="text-primary text-[18px]">{localizedTitle}</li>
-          </ul>
-        </div>
-      </div>
 
-      {/* Main Product Section */}
-      <div className="py-2 min-h-screen mx-auto md:py-4 bg-white">
+
+     
+      <div className="py-2 mt-[120px] min-h-screen mx-auto md:py-4 ">
         <div className="container mx-auto">
           <div className="grid max-w-7xl mx-auto grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 items-start">
             
@@ -279,6 +271,8 @@ const Page = (props: { params: { id: string; locale: string } }) => {
             </div>
           </div>
         </div>
+        
+      <SimilarProducts currentProductId={id} category={product.category} />
       </div>
     </>
   );

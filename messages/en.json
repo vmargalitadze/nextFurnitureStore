@@ -272,6 +272,12 @@
       "tbilisiAddress": "Tbilisi, T. Eristavi 1",
       "batumiAddress": "Batumi, A. Pushkin 117",
       "qutaisiAddress": "Kutaisi, Z. Purtzeladze 15"
+    },
+    "similarProducts": {
+      "title": "Similar Products",
+      "viewDetails": "View Details",
+      "noProducts": "No similar products found",
+      "noProductsDescription": "We couldn't find any other products in this category at the moment."
     }
   },
   "allPage": {

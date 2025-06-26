@@ -178,3 +178,38 @@ export async function createProduct(data: z.infer<typeof ProductSchema>) {
       
         return convertToPlainObject(data);
       }
+
+      export async function getSimilarProducts(productId: string, category: string, limit: number = 4) {
+        try {
+          const products = await prisma.product.findMany({
+            where: {
+              category: category,
+              id: {
+                not: productId
+              }
+            },
+            include: {
+              sizes: {
+                select: {
+                  id: true,
+                  size: true,
+                  price: true
+                }
+              }
+            },
+            take: limit,
+            orderBy: { createdAt: "desc" }
+          });
+
+          return products.map((product) => ({
+            ...product,
+            sizes: product.sizes.map(size => ({
+              ...size,
+              price: size.price.toString()
+            }))
+          }));
+        } catch (error) {
+          console.error("Error fetching similar products:", error);
+          return [];
+        }
+      }
