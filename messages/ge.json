@@ -127,7 +127,17 @@
     "kitchen": "სამზარეულო"
   },
   "common": {
-    "filter": "ფილტრი"
+    "filter": "ფილტრი",
+    "clearAllFilters": "ყველა ფილტრის გასუფთავება",
+    "clearFilters": "ფილტრების გასუფთავება",
+    "found": "ნაპოვნია",
+    "products": "პროდუქტი",
+    "activeFilters": "აქტიური ფილტრები",
+    "sortBy": "დალაგება",
+    "newest": "ახალი",
+    "priceLowToHigh": "ფასი: დაბალიადან მაღლად",
+    "priceHighToLow": "ფასი: მაღლადან დაბალად",
+    "nameAZ": "სახელი: A-Z"
   },
   "productDetail": {
     "breadcrumb": {
@@ -199,7 +209,7 @@
       "tryDifferentFilters": "სცადეთ სხვა ფილტრები ან მოძებნეთ სხვა პროდუქტი",
       "productCount": "პროდუქტი",
       "productsCount": "პროდუქტი",
-      "openSidebar": "ფილტრის გახსნა",
+      "openSidebar": "ფილტრი",
       "closeSidebar": "ფილტრის დახურვა"
     },
     "sorting": {

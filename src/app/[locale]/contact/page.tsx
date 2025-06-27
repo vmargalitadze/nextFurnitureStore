@@ -66,7 +66,7 @@ function ContactPage() {
                   <form className="space-y-6">
                     <div className="grid sm:grid-cols-2 gap-6">
                       <div className="space-y-2">
-                        <label className="text-[18px]  text-gray-700 uppercase tracking-wide">
+                        <label className="text-[18px] font-bold text-gray-700  tracking-wide">
                           {t('form.fullName')}
                         </label>
                         <input
@@ -76,7 +76,7 @@ function ContactPage() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-[18px]  text-gray-700 uppercase tracking-wide">
+                        <label className="text-[18px] font-bold  text-gray-700  tracking-wide">
                           {t('form.email')}
                         </label>
                         <input
@@ -89,7 +89,7 @@ function ContactPage() {
 
                     <div className="grid sm:grid-cols-2 gap-6">
                       <div className="space-y-2">
-                        <label className="text-[18px]  text-gray-700 uppercase tracking-wide">
+                        <label className="text-[18px] font-bold text-gray-700  tracking-wide">
                           {t('form.phone')}
                         </label>
                         <input
@@ -99,10 +99,10 @@ function ContactPage() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-[18px]   text-gray-700 uppercase tracking-wide">
+                        <label className="text-[18px] font-bold  text-gray-700  tracking-wide">
                           {t('form.subject')}
                         </label>
-                        <select className="w-full h-12 px-4 bg-white border-2 text-gray-400 border-gray-200 rounded-lg text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all duration-300">
+                        <select className="w-full h-12 px-4 bg-white border-2 text-gray-400 border-gray-200 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all duration-300">
                           <option  className="text-gray-400" value="">{t('info.selectSubject')}</option>
                           <option className="text-gray-400"  value="payment">{t('form.subjectOptions.payment')}</option>
                           <option className="text-gray-400"  value="furniture">{t('form.subjectOptions.furniture')}</option>
@@ -113,7 +113,7 @@ function ContactPage() {
                     </div>
 
                     <div className="space-y-2">
-                      <label className="text-[18px]  text-gray-700 uppercase tracking-wide">
+                      <label className="text-[18px] font-bold  text-gray-700  tracking-wide">
                         {t('form.message')}
                       </label>
                       <textarea

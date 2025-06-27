@@ -1,14 +1,20 @@
 "use client";
 
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
-import React, { Suspense, useState, useEffect } from "react";
-import { Link } from "@/i18n/navigation";
+import {
+  useParams,
+  useRouter,
+  useSearchParams,
+  usePathname,
+} from "next/navigation";
+import React, { Suspense, useState, useEffect, useRef } from "react";
+
 import ProductHelper from "@/components/ProductHelper";
 import { getAllProducts } from "@/lib/actions/actions";
 import { useTranslations } from "next-intl";
 import SideBar from "@/components/Sidebar";
-
+import ListSideBar from "@/components/ListSidebar";
+import { Trash2 } from "lucide-react";
 // Simple Decimal-like class to avoid Prisma import issues
 class SimpleDecimal {
   value: string;
@@ -53,10 +59,13 @@ interface Product {
   sales?: number;
 }
 
+
+
 interface FilterState {
   selectedCategories: string[];
   selectedBrands: string[];
   priceRange: { min: number; max: number };
+  searchQuery?: string;
 }
 
 function PageContentWrapper() {
@@ -64,22 +73,56 @@ function PageContentWrapper() {
   const [loading, setLoading] = useState(true);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [listSidebarOpen, setListSidebarOpen] = useState(false);
   const searchParams = useSearchParams();
   const t = useTranslations("common");
+  
+  const [selectedType, setSelectedType] = useState<string>("");
 
-  // Get URL parameters
-  const category = searchParams.get("cat");
-  const brand = searchParams.get("brand");
-  const query = searchParams.get("query") || "";
+  // Handle filter changes from ListSidebar
+  const handleListFilterChange = (filters: FilterState) => {
+    const filtered = products.filter((product) => {
+      // Category filter
+      const matchesCategory =
+        filters.selectedCategories.length === 0 ||
+        filters.selectedCategories.includes(product.category);
 
-  // Check if sidebar should be shown (only when category or brand parameters exist)
-  const shouldShowSidebar = Boolean(category || brand);
+      // Brand filter
+      const matchesBrand =
+        filters.selectedBrands.length === 0 ||
+        filters.selectedBrands.includes(product.brand);
 
-  const handleViewSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
+      // Search query filter
+      const matchesQuery =
+        !filters.searchQuery ||
+        product.title.toLowerCase().includes(filters.searchQuery.toLowerCase()) ||
+        product.titleEn.toLowerCase().includes(filters.searchQuery.toLowerCase());
+
+      // Price range filter
+      const priceRange = getProductPriceRange(product);
+      const matchesPrice =
+        priceRange.min >= filters.priceRange.min &&
+        priceRange.max <= filters.priceRange.max;
+
+      return matchesCategory && matchesBrand && matchesQuery && matchesPrice;
+    });
+
+    setFilteredProducts(filtered);
   };
 
-  // Helper function to get product price range
+  const handleViewListSidebar = () => {
+    setListSidebarOpen(!listSidebarOpen);
+  };
+
+  const [selectedPrice, setSelectedPrice] = useState<{
+    min: number | null;
+    max: number | null;
+  }>({ min: null, max: null });
+  const [selectedBrand, setSelectedBrand] = useState<string>("");
+  const [selectedSize, setSelectedSize] = useState<string>("");
+  const [sortBy, setSortBy] = useState<string>("newest");
+  const params = useParams();
+  const router = useRouter();
   const getProductPriceRange = (product: Product) => {
     if (product.sizes && product.sizes.length > 0) {
       const prices = product.sizes.map((s) => s.price.toNumber());
@@ -95,40 +138,84 @@ function PageContentWrapper() {
     }
     return { min: 0, max: 0 };
   };
+  const sidebarRef = useRef<{ clearFilters: () => void } | null>(null);
+  const handleClearFilters = () => {
+    // Reset local filter states
+    setSelectedType("");
+    setSelectedPrice({ min: null, max: null });
+    setSelectedBrand("");
+    setSelectedSize("");
+    setSortBy("newest");
 
-  // Handle filter changes from FilterSidebar
-  const handleFilterChange = (filters: FilterState) => {
-    const filtered = products.filter((product) => {
-      // Category filter
-      const matchesCategory =
-        filters.selectedCategories.length === 0 ||
-        filters.selectedCategories.includes(product.category);
+    // Show all products
+    setFilteredProducts(products);
 
-      // Brand filter
-      const matchesBrand =
-        filters.selectedBrands.length === 0 ||
-        filters.selectedBrands.includes(product.brand);
+    // Clear query parameters from URL
+    router.push(`/${locale}/list`);
 
-      // Search query filter
-      const matchesQuery =
-        !query ||
-        product.title.toLowerCase().includes(query.toLowerCase()) ||
-        product.titleEn.toLowerCase().includes(query.toLowerCase());
-
-      // Price range filter
-      const priceRange = getProductPriceRange(product);
-      const matchesPrice =
-        priceRange.min >= filters.priceRange.min &&
-        priceRange.max <= filters.priceRange.max;
-
-      return matchesCategory && matchesBrand && matchesQuery && matchesPrice;
-    });
-
-    setFilteredProducts(filtered);
+    // Call sidebar clearFilters method (removes filters visually/sidebar state)
+    sidebarRef.current?.clearFilters();
+  };
+  const locale = params.locale as string;
+  const getActiveFiltersCount = () => {
+    let count = 0;
+    if (selectedType) count++;
+    if (selectedSize) count++;
+    if (selectedBrand) count++;
+    if (selectedPrice.min !== null) count++;
+    if (selectedPrice.max !== null) count++;
+    return count;
   };
 
+  const activeFiltersCount = getActiveFiltersCount();
+  const getLocalizedTitle = (product: Product): string => {
+    if (locale === "en") {
+      return product.titleEn ?? product.title;
+    }
+    return product.title ?? product.titleEn ?? "";
+  };
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    const aPriceRange = getProductPriceRange(a);
+    const bPriceRange = getProductPriceRange(b);
+
+    console.log('Sorting by:', sortBy); // Debug log
+
+    switch (sortBy) {
+      case "price-low":
+        return aPriceRange.min - bPriceRange.min;
+      case "price-high":
+        return bPriceRange.max - aPriceRange.max;
+      case "name":
+        // Use localized titles for sorting
+        const aTitle = getLocalizedTitle(a);
+        const bTitle = getLocalizedTitle(b);
+        return aTitle.localeCompare(bTitle);
+      default:
+        return 0;
+    }
+  });
+
+  // Get URL parameters
+  const category = searchParams.get("cat");
+  const brand = searchParams.get("brand");
+  const query = searchParams.get("query") || "";
+
+  // Check if sidebar should be shown (only when category or brand parameters exist)
+  const shouldShowSidebar = Boolean(category || brand);
+
+  const handleViewSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
+  const pathname = usePathname();
+
+  const isListPage = pathname?.includes("/list");
+
+  const hasQueryParams = Array.from(searchParams.keys()).length > 0;
+
+  const isListPage1 = pathname.endsWith("/list") && !hasQueryParams;
   // Transform database products to match ProductHelper interface
-  const transformedProducts = filteredProducts.map((product) => {
+  const transformedProducts = sortedProducts.map((product) => {
     const priceRange = getProductPriceRange(product);
     return {
       id: product.id,
@@ -258,24 +345,111 @@ function PageContentWrapper() {
       </div>
 
       <div className="container min-h-screen mt-[50px]">
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 mb-8">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-2 h-8 bg-primary rounded-full"></div>
+              <div>
+                <p className="text-gray-600 text-sm">
+                  {t("found")}{" "}
+                  <span className="font-bold text-gray-900 text-lg">
+                    {sortedProducts.length}
+                  </span>{" "}
+                  {t("products")}
+                </p>
+
+                {activeFiltersCount > 0 && (
+                  <p className="text-primary text-sm font-medium">
+                    {activeFiltersCount} {t("activeFilters")}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center gap-4">
+              <div className="flex items-center gap-2">
+                <svg
+                  className="w-5 h-5 text-gray-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M3 4h18M3 8h18M3 12h18M3 16h18"
+                  />
+                </svg>
+                <label className="text-sm font-medium text-gray-700">
+                  {t("sortBy")}
+                </label>
+              </div>
+              <select
+                value={sortBy}
+                onChange={(e) => {
+                  console.log('Sort changed to:', e.target.value); // Debug log
+                  setSortBy(e.target.value);
+                }}
+                className="px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all bg-white font-medium"
+              >
+                <option value="newest">{t("newest")}</option>
+                <option value="price-low">{t("priceLowToHigh")}</option>
+                <option value="price-high">{t("priceHighToLow")}</option>
+                <option value="name">{t("nameAZ")}</option>
+              </select>
+
+              { shouldShowSidebar && (
+              <button
+                onClick={handleClearFilters}
+                className="w-full px-4 py-2 text-sm font-medium border border-[#438c71] text-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors flex items-center justify-center gap-2"
+              >
+              <Trash2 size={16} />   {t("clearFilters")}
+              </button>
+
+              )}
+
+            </div>
+          </div>
+        </div>
+
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* SideBar Toggle Button - Only show when category or brand parameters exist */}
-          {shouldShowSidebar && (
+          {isListPage && isListPage1 && (
             <div className="mb-6">
               <button
-                onClick={handleViewSidebar}
+                onClick={handleViewListSidebar}
                 className="w-full px-4 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
               >
-              {t('filter')}
+                {t("filter")}
               </button>
             </div>
           )}
-
-          <SideBar
-            isOpen={sidebarOpen}
-            toggleSidebar={handleViewSidebar}
-            onFilterChange={() => {}}
+          <ListSideBar 
+            isOpen={listSidebarOpen} 
+            toggleSidebar={handleViewListSidebar}
+            onFilterChange={handleListFilterChange}
           />
+          {/* SideBar Toggle Button - Only show when category or brand parameters exist */}
+          {shouldShowSidebar && (
+            <>
+              <div className="mb-6">
+                <button
+                  onClick={handleViewSidebar}
+                  className="w-full px-4 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+                >
+                  {t("filter")}
+                </button>
+              </div>
+
+              <SideBar
+                isOpen={sidebarOpen}
+                toggleSidebar={handleViewSidebar}
+                onFilterChange={() => {}}
+                ref={sidebarRef}
+              />
+            </>
+          )}
+
 
           {/* Products Area */}
           <div className={`${shouldShowSidebar ? "lg:w-3/4" : "w-full"}`}>
@@ -326,4 +500,3 @@ export default function Page() {
     </Suspense>
   );
 }
-

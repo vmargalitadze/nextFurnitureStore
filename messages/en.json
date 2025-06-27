@@ -29,7 +29,7 @@
     "breadcrumb": {
       "home": "Home",
       "contact": "Contact",
-      "sendMessage": "Send us a message "
+      "sendMessage": " Your Message"
     },
     "form": {
       "title": "Our Contacts",
@@ -38,7 +38,7 @@
       "fullNamePlaceholder": "Enter your full name",
       "email": "Email",
       "emailPlaceholder": "Enter your email address",
-      "phone": "Phone No.",
+      "phone": "Phone No",
       "phonePlaceholder": "Type your phone number",
       "subject": "Subject",
       "subjectOptions": {
@@ -53,14 +53,14 @@
     },
     "info": {
       "address": "ADDRESS",
-      "email": "EMAIL",
+      "email": "Email",
       "phone": "PHONE",
       "batumiAddress": "Batumi: A. Pushkin St. 44",
       "tbilisiAddress": "Tbilisi: T. Eristavi St. 1",
       "emailAddress": "Sleepandbedgeorgia@gmail.com",
       "phoneNumber": "123-456-7890",
       "locations": "Locations",
-      "call": "Call",
+      "call": "Phone No",
       "selectSubject": "Select a subject"
     }
   },
@@ -322,7 +322,7 @@
       "tryDifferentFilters": "Try different filters or search for another product",
       "productCount": "product",
       "productsCount": "products",
-      "openSidebar": "Open SideBar",
+      "openSidebar": "filter",
       "closeSidebar": "Close SideBar"
     },
     "sorting": {
@@ -345,7 +345,17 @@
     "terms": "Terms"
   },
   "common": {
-    "filter": "Filter"
+    "filter": "Filter",
+    "clearAllFilters": "Clear All Filters",
+    "clearFilters": "Clear Filters",
+    "found": "Found",
+    "products": "Products",
+    "activeFilters": "Active Filters",
+    "sortBy": "Sort By",
+    "newest": "Newest",
+    "priceLowToHigh": "Price: Low to High",
+    "priceHighToLow": "Price: High to Low",
+    "nameAZ": "Name: A-Z"
   },
   "profile": {
     "title": "Profile Dashboard",

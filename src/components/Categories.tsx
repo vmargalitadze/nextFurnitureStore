@@ -70,7 +70,7 @@ export default function Categories() {
 
   return (
     <>
-      <h1 className="text-[45px]   flex justify-center items-center font-light text-gray-900 leading-tight">
+      <h1 className=" text-3xl md:text-[45px]   flex justify-center items-center font-light text-gray-900 leading-tight">
         {t("title")}
       </h1>
       <div className="hidden mt-10 md:block">

@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { Link } from "@/i18n/navigation";
+
 import { useTranslations } from 'next-intl';
-import FilterSidebar from "./FilterSideBar";
+
 import { useState, useEffect } from "react";
 import SideBar from "./Sidebar";
 

@@ -120,7 +120,7 @@ const SimilarProducts: React.FC<SimilarProductsProps> = ({ currentProductId, cat
     return (
       <div className="py-8">
         <div className="container mx-auto">
-          <h2 className="text-[45px] font-bold text-gray-900 mb-6">
+          <h2 className="text-3xl md:text-[45px] font-bold text-gray-900 mb-6">
             {getTranslation('similarProducts.title', 'Similar Products')}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

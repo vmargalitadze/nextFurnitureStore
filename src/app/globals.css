@@ -111,8 +111,10 @@ button:focus {
 }
 
 .custom-swiper-pagination .swiper-pagination-bullet-active {
-  background-color: #ce7c2a !important;
+  background-color: #3a7a5f !important;
 }
+
+
 
 /* Sticky positioning for sidebar */
 .sticky {
