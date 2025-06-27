@@ -117,7 +117,8 @@
     "sales": "ფასდაკლება",
     "trending": "ტრენდული",
     "viewAll": "ყველა პროდუქტის ნახვა",
-    "newProducts": "ახალი პროდუქტები"
+    "newProducts": "ახალი პროდუქტები",
+    "popularProducts": "პოპულარული პროდუქტები"
   },
   "categorySlider": {
     "bedroom": "საძინებელი",

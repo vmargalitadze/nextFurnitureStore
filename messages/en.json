@@ -243,7 +243,8 @@
     "sales": "Sales",
     "trending": "Trending",
     "viewAll": "View All Products",
-    "newProducts": "New Products"
+    "newProducts": "New Products",
+    "popularProducts": "Popular Products"
   },
   "categorySlider": {
     "bedroom": "Bedroom",

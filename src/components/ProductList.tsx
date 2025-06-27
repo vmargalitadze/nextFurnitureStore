@@ -151,7 +151,7 @@ function ProductList({
     });
 
     return products.filter((product) => {
-      // Legacy filter support
+    
       const byLegacyType =
         !selectedType ||
         product.category.toLowerCase() === selectedType.toLowerCase();
@@ -205,7 +205,6 @@ function ProductList({
     getProductPriceRange,
   ]);
 
-  // Memoize filtered products
   const filteredProducts = useMemo(() => {
     const filtered = getFilteredProducts();
 
@@ -215,6 +214,22 @@ function ProductList({
 
     return matress.slice(0, 5);
   }, [getFilteredProducts, products]);
+
+ 
+  const getPopularProducts = useCallback(() => {
+    console.log("Getting popular products from all products:", products.length);
+    console.log("All products popular status:", products.map(p => ({ id: p.id, popular: p.popular, title: p.title })));
+    
+    const popular = products.filter((p) => p.popular === true);
+    console.log("Popular products found:", popular.length);
+    console.log("Popular products:", popular.map(p => ({ id: p.id, title: p.title })));
+    
+    return popular.slice(0, 5);
+  }, [products]);
+
+  const filteredProducts2 = useMemo(() => {
+    return getPopularProducts();
+  }, [getPopularProducts]);
 
   const transformProducts = useCallback(
     (products: Product[]) => {
@@ -235,6 +250,11 @@ function ProductList({
   const transformedProducts = useMemo(
     () => transformProducts(filteredProducts),
     [filteredProducts, transformProducts]
+  );
+
+  const transformedProducts2 = useMemo(
+    () => transformProducts(filteredProducts2),
+    [filteredProducts2, transformProducts]
   );
 
   return (
@@ -261,12 +281,29 @@ function ProductList({
               ))}
             </div>
           ) : transformedProducts.length > 0 ? (
+            <>
             <div className="w-full rounded-2xl pt-10 pb-4">
               <h1 className=" text-3xl md:text-[45px] mb-10  flex justify-center items-center font-light text-gray-900 leading-tight">
                 {t("newProducts")}
               </h1>
               <ProductHelper items={transformedProducts} />
             </div>
+            <div className="w-full rounded-2xl pt-10 pb-4">
+              <h1 className=" text-3xl md:text-[45px] mb-10  flex justify-center items-center font-light text-gray-900 leading-tight">
+                {t("popularProducts")}
+              </h1>
+              {transformedProducts2.length > 0 ? (
+                <ProductHelper items={transformedProducts2} />
+              ) : (
+                <div className="text-center py-8">
+                  <p className="text-gray-500 text-lg">
+                    {locale === "en" ? "No popular products available at the moment." : "ამ მომენტში პოპულარული პროდუქტები არ არის."}
+                  </p>
+                </div>
+              )}
+            </div>
+            
+            </>
           ) : (
             <div className="text-center py-4">
               <div className="text-gray-400 mb-4">

@@ -95,10 +95,15 @@ export default function EditProductForm({ productId }: EditProductFormProps) {
   const onSubmit = async (data: EditProductFormValues) => {
     try {
       setError(null);
+      console.log("Form data being submitted:", data);
+      console.log("Popular field value:", data.popular);
+      
       const res = await updateProduct({
         ...data,
         images: data.images.filter((url): url is string => typeof url === "string"),
       });
+
+      console.log("Update response:", res);
 
       if (res.success) {
         router.push("/adminall");
@@ -445,16 +450,22 @@ export default function EditProductForm({ productId }: EditProductFormProps) {
               name="popular"
               render={({ field }) => (
                 <FormItem>
+                  <FormLabel className="text-base font-medium">Popular Product</FormLabel>
                   <FormControl>
-                    <label className="flex items-center gap-2">
+                    <div className="flex items-center space-x-2">
                       <input 
                         type="checkbox" 
+                        id="popular"
                         checked={field.value} 
-                        onChange={e => field.onChange(e.target.checked)} 
+                        onChange={e => field.onChange(e.target.checked)}
+                        className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
                       />
-                      Popular
-                    </label>
+                      <label htmlFor="popular" className="text-sm font-medium text-gray-700">
+                        Mark as popular product
+                      </label>
+                    </div>
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />

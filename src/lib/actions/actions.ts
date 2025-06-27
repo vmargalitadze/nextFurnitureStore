@@ -102,7 +102,11 @@ export async function createProduct(data: z.infer<typeof ProductSchema>) {
     
     export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
         try {
+       
+          
           const product = updateProductSchema.parse(data);
+        
+          
           const productExists = await prisma.product.findFirst({
             where: { id: product.id },
           });
@@ -121,9 +125,16 @@ export async function createProduct(data: z.infer<typeof ProductSchema>) {
               images: product.images,
               category: normalizedCategory,
               sales: product.sales,
+              popular: product.popular,
+              tbilisi: product.tbilisi,
+              batumi: product.batumi,
+              qutaisi: product.qutaisi,
               sizes: {
                 deleteMany: {},
-                create: product.sizes
+                create: product.sizes.map(sizeData => ({
+                  size: sizeData.size,
+                  price: new Prisma.Decimal(sizeData.price)
+                }))
               }
             },
           });
@@ -135,6 +146,7 @@ export async function createProduct(data: z.infer<typeof ProductSchema>) {
             message: 'Product updated successfully',
           };
         } catch (error) {
+          console.error("Error in updateProduct:", error);
           return { success: false, message: formatError(error) };
         }
       }
