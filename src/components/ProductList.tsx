@@ -215,7 +215,7 @@ function ProductList({
     return matress.slice(0, 5);
   }, [getFilteredProducts, products]);
 
- 
+  // Separate function to get popular products without filtering restrictions
   const getPopularProducts = useCallback(() => {
     console.log("Getting popular products from all products:", products.length);
     console.log("All products popular status:", products.map(p => ({ id: p.id, popular: p.popular, title: p.title })));
@@ -227,9 +227,25 @@ function ProductList({
     return popular.slice(0, 5);
   }, [products]);
 
+  // Separate function to get products with sales/discounts
+  const getSalesProducts = useCallback(() => {
+    console.log("Getting sales products from all products:", products.length);
+    console.log("All products sales status:", products.map(p => ({ id: p.id, sales: p.sales, title: p.title })));
+    
+    const salesProducts = products.filter((p) => p.sales && p.sales > 0);
+    console.log("Sales products found:", salesProducts.length);
+    console.log("Sales products:", salesProducts.map(p => ({ id: p.id, title: p.title, sales: p.sales })));
+    
+    return salesProducts.slice(0, 5);
+  }, [products]);
+
   const filteredProducts2 = useMemo(() => {
     return getPopularProducts();
   }, [getPopularProducts]);
+
+  const filteredProducts3 = useMemo(() => {
+    return getSalesProducts();
+  }, [getSalesProducts]);
 
   const transformProducts = useCallback(
     (products: Product[]) => {
@@ -255,6 +271,11 @@ function ProductList({
   const transformedProducts2 = useMemo(
     () => transformProducts(filteredProducts2),
     [filteredProducts2, transformProducts]
+  );
+
+  const transformedProducts3 = useMemo(
+    () => transformProducts(filteredProducts3),
+    [filteredProducts3, transformProducts]
   );
 
   return (
@@ -298,6 +319,21 @@ function ProductList({
                 <div className="text-center py-8">
                   <p className="text-gray-500 text-lg">
                     {locale === "en" ? "No popular products available at the moment." : "ამ მომენტში პოპულარული პროდუქტები არ არის."}
+                  </p>
+                </div>
+              )}
+            </div>
+            
+            <div className="w-full rounded-2xl pt-10 pb-4">
+              <h1 className=" text-3xl md:text-[45px] mb-10  flex justify-center items-center font-light text-gray-900 leading-tight">
+                {t("salesProducts")}
+              </h1>
+              {transformedProducts3.length > 0 ? (
+                <ProductHelper items={transformedProducts3} />
+              ) : (
+                <div className="text-center py-8">
+                  <p className="text-gray-500 text-lg">
+                    {locale === "en" ? "No products on sale at the moment." : "ამ მომენტში ფასდაკლებული პროდუქტები არ არის."}
                   </p>
                 </div>
               )}
