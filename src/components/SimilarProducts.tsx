@@ -4,7 +4,10 @@ import { Link } from "@/i18n/navigation";
 import { useTranslations, useLocale } from "next-intl";
 import Image from "next/image";
 import { getSimilarProducts } from "@/lib/actions/actions";
-
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination"
 // Simple Decimal-like class to avoid Prisma import issues
 class SimpleDecimal {
   value: string;
@@ -156,54 +159,113 @@ const SimilarProducts: React.FC<SimilarProductsProps> = ({ currentProductId, cat
   }
 
   return (
-    <div className="py-8 bg-gray-50">
-      <div className="container mx-auto px-4">
+    <div className="py-8 ">
+      <div className="">
         <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
           {getTranslation('similarProducts.title', 'Similar Products')}
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {similarProducts.map((product) => {
-            const priceRange = getProductPriceRange(product);
-            const localizedTitle = getLocalizedTitle(product);
-            
-            return (
-              <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+        <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    {similarProducts.map((product) => {
+      const priceRange = getProductPriceRange(product);
+      const localizedTitle = getLocalizedTitle(product);
+      return (
+        <div
+          key={product.id}
+          className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300"
+        >
+          <Link href={`/products/${product.id}`}>
+            <div className="relative h-48 overflow-hidden">
+              <Image
+                src={product.images[0]}
+                alt={localizedTitle}
+                fill
+                className="object-cover"
+              />
+            </div>
+          </Link>
+          <div className="p-4">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+              <Link
+                href={`/products/${product.id}`}
+                className="hover:text-primary transition-colors"
+              >
+                {localizedTitle}
+              </Link>
+            </h3>
+            <p className="text-[16px] text-gray-600 mb-2">{product.brand}</p>
+            <div className="flex justify-between items-center">
+              <span className="text-[16px] font-bold text-primary">
+                {priceRange.min} ₾
+              </span>
+              <Link
+                href={`/products/${product.id}`}
+                className="text-[16px] text-primary hover:text-primary/80 font-medium transition-colors"
+              >
+                {getTranslation("similarProducts.viewDetails", "View Details")} →
+              </Link>
+            </div>
+          </div>
+        </div>
+      );
+    })}
+  </div>
+
+  {/* ✅ Mobile View: Swiper */}
+  <div className="md:hidden mt-6">
+    <Swiper
+      modules={[Pagination]}
+      slidesPerView={1}
+      spaceBetween={16}
+      pagination={{
+        clickable: true,
+        el: ".custom-swiper-pagination",
+        renderBullet: (index, className) =>
+          `<span class="${className} w-3 h-3 rounded-full bg-gray-300 transition-all duration-300 hover:bg-gray-400"></span>`,
+      }}
+      className="pb-12"
+    >
+      {similarProducts.map((product) => {
+        const priceRange = getProductPriceRange(product);
+        const localizedTitle = getLocalizedTitle(product);
+        return (
+          <SwiperSlide key={product.id}>
+            <div className="w-full">
+              <div className="relative group rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
                 <Link href={`/products/${product.id}`}>
-                  <div className="relative h-48 overflow-hidden">
+                  <div className="relative h-[200px] w-full">
                     <Image
                       src={product.images[0]}
                       alt={localizedTitle}
                       fill
-                      className="object-cover hover:scale-105 transition-transform duration-300"
+                      className="object-cover rounded-xl"
                     />
                   </div>
-                </Link>
-                <div className="p-4">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
-                    <Link href={`/products/${product.id}`} className="hover:text-primary transition-colors">
-                      {localizedTitle}
-                    </Link>
-                  </h3>
-                  <p className="text-sm text-gray-600 mb-2">{product.brand}</p>
-                  <div className="flex justify-between items-center">
-                    <span className="text-lg font-bold text-primary">
-                      {priceRange.min} ₾
-                    </span>
-                    <Link 
-                      href={`/products/${product.id}`}
-                      className="text-sm text-primary hover:text-primary/80 font-medium transition-colors"
-                    >
-                      {getTranslation('similarProducts.viewDetails', 'View Details')} →
-                    </Link>
+                  <div className="absolute bottom-2 left-2 bg-white backdrop-blur-md px-3 py-1 rounded-full text-black font-medium text-[18px] max-w-[90%] truncate">
+                    {localizedTitle}
                   </div>
+                </Link>
+              </div>
+              <div className="mt-2 px-2">
+                <p className="text-[16px] text-gray-600">{product.brand}</p>
+                <div className="flex justify-between items-center">
+                  <span className="text-[16px] font-bold text-primary">{priceRange.min} ₾</span>
+                  <Link
+                    href={`/products/${product.id}`}
+                    className="text-[16px] text-primary hover:text-primary/80 font-medium transition-colors"
+                  >
+                    {getTranslation("similarProducts.viewDetails", "View Details")} →
+                  </Link>
                 </div>
               </div>
-            );
-          })}
-        </div>
-      </div>
+            </div>
+          </SwiperSlide>
+        );
+      })}
+    </Swiper>
+    <div className="custom-swiper-pagination flex justify-center gap-2 mt-4" />
+  </div>
     </div>
-  );
-};
-
-export default SimilarProducts; 
+  </div>
+);
+}
+export default SimilarProducts;

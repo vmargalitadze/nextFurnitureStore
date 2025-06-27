@@ -436,7 +436,7 @@ const SideBar: React.FC<SideBarProps> = ({
                   >
                     {labels.brands} ({brands.length})
                   </h3>
-                  <div className="space-y-2 max-h-32 overflow-y-auto border border-gray-200 rounded-md p-2">
+                  <div className="space-y-2 max-h-48 overflow-y-auto border border-gray-200 rounded-md p-2">
                     {brands.length > 0 ? (
                       brands.map((brand) => (
                         <label

@@ -113,19 +113,15 @@ export default function DropdownMenuCheckboxes() {
               <FaShoppingCart /> {t("cart")}
             </Link>
           </DropdownMenuItem>
-
-          <DropdownMenuItem>
-            <div className="flex items-start justify-start">
-
-            <Button
-              className="cursor-pointer  justify-start mx-auto px-3 py-1.5 text-sm gap-2"
+          <div className="w-full">
+            <button
               onClick={handleSignOut}
+              className="flex items-center w-full justify-center gap-2 px-4 py-2 mt-3 text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors shadow-md"
             >
-              <FaSignOutAlt className="w-7 h-7" />
-              <span className="text-sm">{t("signOut")}</span>
-            </Button>
-            </div>
-          </DropdownMenuItem>
+              <FaSignOutAlt className="w-5 h-5" />
+              <span className="text-[16px] font-medium">{t("signOut")}</span>
+            </button>
+          </div>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

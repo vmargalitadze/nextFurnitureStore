@@ -174,7 +174,7 @@ const ListSideBar: React.FC<FilterProps> = ({ isOpen, toggleSidebar, onFilterCha
           {/* Brands */}
           <div>
             <h3 className="text-sm font-semibold text-gray-700 mb-3">{t("brand.title")} ({brands.length})</h3>
-            <div className="space-y-2">
+            <div className="space-y-2 max-h-48 overflow-y-auto border border-gray-200 rounded-md p-2">
               {brands.map((brand) => (
                 <label key={brand} className="flex items-center text-sm text-gray-600 hover:text-gray-800 cursor-pointer">
                   <input

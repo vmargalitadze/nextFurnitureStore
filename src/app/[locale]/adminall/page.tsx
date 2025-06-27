@@ -18,6 +18,7 @@ import { Link } from "@/i18n/navigation";
 import { prisma } from "@/lib/prisma";
 import { format } from "date-fns";
 import Image from "next/image";
+import DeleteProductButton from "@/components/DeleteProductButton";
 
 async function getAllProducts() {
   const products = await prisma.product.findMany({
@@ -225,9 +226,8 @@ export default async function AdminAllPage() {
                                 <FaEdit className="w-3 h-3" />
                               </Button>
                             </Link>
-                            <Button size="sm" variant="outline" className="text-red-600 hover:text-red-700">
-                              <FaTrash className="w-3 h-3" />
-                            </Button>
+                            
+                            <DeleteProductButton productId={product.id} />
                           </div>
                         </td>
                       </tr>
@@ -256,3 +256,6 @@ export default async function AdminAllPage() {
     </div>
   );
 }
+
+
+
