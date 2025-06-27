@@ -12,6 +12,8 @@ interface ProductItem {
   id: string;
   image: string[];
   price: number;
+  originalPrice?: number;
+  sales?: number;
   title: string;
   titleEn?: string;
 }
@@ -96,7 +98,29 @@ function ProductHelper({ items }: ProductListProps) {
                       {getLocalizedTitle(item, locale)}
                     </Link>
                   </h6>
-                
+                  
+                  {/* Price Display */}
+                  <div className="mt-2 text-center">
+                    {item.sales && item.originalPrice ? (
+                      <div className="flex flex-col items-center gap-1">
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg font-bold text-green-600">
+                            ₾{item.price.toFixed(2)}
+                          </span>
+                          <span className="text-sm text-gray-500 line-through">
+                            ₾{item.originalPrice.toFixed(2)}
+                          </span>
+                        </div>
+                        <span className="text-xs text-red-600 font-medium">
+                          -{item.sales}% OFF
+                        </span>
+                      </div>
+                    ) : (
+                      <span className="text-lg font-bold text-gray-900">
+                        ₾{item.price.toFixed(2)}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
             </SwiperSlide>

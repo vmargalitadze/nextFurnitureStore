@@ -58,6 +58,8 @@ interface ProductItem {
   id: string;
   image: string[];
   price: number;
+  originalPrice?: number;
+  sales?: number;
   title: string;
   titleEn?: string;
 }
@@ -251,10 +253,18 @@ function ProductList({
     (products: Product[]) => {
       return products.map((product) => {
         const priceRange = getProductPriceRange(product);
+        const originalPrice = priceRange.min;
+        const salesPercentage = product.sales || 0;
+        const discountedPrice = salesPercentage > 0 
+          ? originalPrice * (1 - salesPercentage / 100) 
+          : originalPrice;
+        
         return {
           id: product.id,
           image: product.images,
-          price: priceRange.min,
+          price: discountedPrice,
+          originalPrice: salesPercentage > 0 ? originalPrice : undefined,
+          sales: salesPercentage > 0 ? salesPercentage : undefined,
           title: getLocalizedTitle(product),
           titleEn: product.titleEn,
         };

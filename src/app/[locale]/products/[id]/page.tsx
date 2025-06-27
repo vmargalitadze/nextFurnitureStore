@@ -162,9 +162,16 @@ const Page = (props: { params: { id: string; locale: string } }) => {
             <div className="space-y-3 lg:max-w-md">
               {/* Product Title */}
               <div className="pb-2">
-                <h1 className="text-[18px]  font-semibold text-gray-900 mb-2 leading-tight">
-                  {localizedTitle}
-                </h1>
+                <div className="flex items-center gap-3 mb-2">
+                  <h1 className="text-[18px] font-semibold text-gray-900 leading-tight">
+                    {localizedTitle}
+                  </h1>
+                  {product.sales && product.sales > 0 && (
+                    <span className="text-xs text-white font-bold bg-red-500 px-2 py-1 rounded-full">
+                      -{product.sales}% SALE
+                    </span>
+                  )}
+                </div>
 
                 <p className="text-[18px] text-gray-600 mb-1">
                   {getTranslation("product.brand", "Brand")}:{" "}
@@ -209,10 +216,35 @@ const Page = (props: { params: { id: string; locale: string } }) => {
               {selectedSizeData && (
                 <div className="pb-2">
                   <div className="flex items-start gap-3">
-                    <span className="text-[18px] text-gray-600">
-                      {getTranslation("product.price", "Price")}{" "}
-                      {Number(selectedSizeData.price.toNumber())} ₾
-                    </span>
+                    {product.sales && product.sales > 0 ? (
+                      <div className="flex flex-col gap-1">
+                        <div className="flex items-center gap-3">
+                          <span className="text-[18px] text-gray-600">
+                            {getTranslation("product.price", "Price")}:
+                          </span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-[20px] font-bold text-green-600">
+                              ₾{(selectedSizeData.price.toNumber() * (1 - product.sales / 100)).toFixed(2)}
+                            </span>
+                            <span className="text-[16px] text-gray-500 line-through">
+                              ₾{selectedSizeData.price.toNumber().toFixed(2)}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm text-red-600 font-medium bg-red-50 px-2 py-1 rounded">
+                            -{product.sales}% OFF
+                          </span>
+                        </div>
+                      </div>
+                    ) : (
+                      <span className="text-[18px] text-gray-600">
+                        {getTranslation("product.price", "Price")}:{" "}
+                        <span className="text-[20px] font-bold text-gray-900">
+                          ₾{selectedSizeData.price.toNumber().toFixed(2)}
+                        </span>
+                      </span>
+                    )}
                   </div>
                 </div>
               )}
