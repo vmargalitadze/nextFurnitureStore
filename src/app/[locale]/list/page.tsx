@@ -82,7 +82,24 @@ function PageContentWrapper() {
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10); // Show 12 products per page
+  const [itemsPerPage] = useState(10); // Show 10 products per page
+  const [isLargeScreen, setIsLargeScreen] = useState(false);
+
+  // Responsive screen detection
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsLargeScreen(window.innerWidth >= 1024);
+    };
+
+    // Check on mount
+    checkScreenSize();
+
+    // Add event listener for resize
+    window.addEventListener('resize', checkScreenSize);
+
+    // Cleanup
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
 
   // Handle filter changes from ListSidebar
   const handleListFilterChange = (filters: FilterState) => {
@@ -201,14 +218,16 @@ function PageContentWrapper() {
     }
   });
 
-  // Pagination logic
-  const totalPages = Math.ceil(sortedProducts.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
+  // Pagination logic - only on large screens
+  const effectiveItemsPerPage = isLargeScreen ? itemsPerPage : sortedProducts.length;
+  const totalPages = Math.ceil(sortedProducts.length / effectiveItemsPerPage);
+  const startIndex = isLargeScreen ? (currentPage - 1) * effectiveItemsPerPage : 0;
+  const endIndex = isLargeScreen ? startIndex + effectiveItemsPerPage : sortedProducts.length;
   const currentProducts = sortedProducts.slice(startIndex, endIndex);
 
   // Handle page change
   const handlePageChange = (page: number) => {
+    if (!isLargeScreen) return; // Only allow page changes on large screens
     setCurrentPage(page);
     // Update URL with page parameter
     const params = new URLSearchParams(searchParams.toString());
@@ -223,10 +242,10 @@ function PageContentWrapper() {
     setCurrentPage(page);
   }, [searchParams]);
 
-  // Reset to first page when filters change
+  // Reset to first page when filters change or screen size changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [filteredProducts]);
+  }, [filteredProducts, isLargeScreen]);
 
   // Get URL parameters
   const category = searchParams.get("cat");
@@ -372,7 +391,7 @@ function PageContentWrapper() {
             <p className="text-white mt-2 text-[18px]">
               {filteredProducts.length}{" "}
               {filteredProducts.length === 1 ? "product" : "products"} found
-              {totalPages > 1 && (
+              {isLargeScreen && totalPages > 1 && (
                 <span className="block text-sm opacity-90">
                   Showing {startIndex + 1}-{Math.min(endIndex, filteredProducts.length)} of {filteredProducts.length}
                 </span>
@@ -394,7 +413,7 @@ function PageContentWrapper() {
                     {sortedProducts.length}
                   </span>{" "}
                   {t("products")}
-                  {totalPages > 1 && (
+                  {isLargeScreen && totalPages > 1 && (
                     <span className="text-gray-500 ml-2">
                       (Page {currentPage} of {totalPages})
                     </span>
@@ -494,13 +513,13 @@ function PageContentWrapper() {
           )}
 
 
-          {/* Products Area */}
+      
           <div className={`${shouldShowSidebar ? "lg:w-3/4" : "w-full"}`}>
             {transformedProducts.length > 0 ? (
               <>
                 <ProductHelper items={transformedProducts} />
-                {/* Pagination */}
-                {totalPages > 1 && (
+              
+                {isLargeScreen && totalPages > 1 && (
                   <div className="mt-8 flex justify-center">
                     <Pagination pageCount={totalPages} />
                   </div>
