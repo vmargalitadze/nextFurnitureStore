@@ -14,6 +14,7 @@ import { getAllProducts } from "@/lib/actions/actions";
 import { useTranslations } from "next-intl";
 import SideBar from "@/components/Sidebar";
 import ListSideBar from "@/components/ListSidebar";
+import Pagination from "@/components/Pagination";
 import { Trash2 } from "lucide-react";
 // Simple Decimal-like class to avoid Prisma import issues
 class SimpleDecimal {
@@ -79,6 +80,10 @@ function PageContentWrapper() {
   
   const [selectedType, setSelectedType] = useState<string>("");
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10); // Show 12 products per page
+
   // Handle filter changes from ListSidebar
   const handleListFilterChange = (filters: FilterState) => {
     const filtered = products.filter((product) => {
@@ -108,6 +113,7 @@ function PageContentWrapper() {
     });
 
     setFilteredProducts(filtered);
+    setCurrentPage(1); // Reset to first page when filters change
   };
 
   const handleViewListSidebar = () => {
@@ -195,6 +201,33 @@ function PageContentWrapper() {
     }
   });
 
+  // Pagination logic
+  const totalPages = Math.ceil(sortedProducts.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentProducts = sortedProducts.slice(startIndex, endIndex);
+
+  // Handle page change
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    // Update URL with page parameter
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", page.toString());
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+  // Update current page when URL changes
+  useEffect(() => {
+    const pageParam = searchParams.get("page");
+    const page = pageParam ? parseInt(pageParam) : 1;
+    setCurrentPage(page);
+  }, [searchParams]);
+
+  // Reset to first page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filteredProducts]);
+
   // Get URL parameters
   const category = searchParams.get("cat");
   const brand = searchParams.get("brand");
@@ -215,7 +248,7 @@ function PageContentWrapper() {
 
   const isListPage1 = pathname.endsWith("/list") && !hasQueryParams;
   // Transform database products to match ProductHelper interface
-  const transformedProducts = sortedProducts.map((product) => {
+  const transformedProducts = currentProducts.map((product) => {
     const priceRange = getProductPriceRange(product);
     return {
       id: product.id,
@@ -339,6 +372,11 @@ function PageContentWrapper() {
             <p className="text-white mt-2 text-[18px]">
               {filteredProducts.length}{" "}
               {filteredProducts.length === 1 ? "product" : "products"} found
+              {totalPages > 1 && (
+                <span className="block text-sm opacity-90">
+                  Showing {startIndex + 1}-{Math.min(endIndex, filteredProducts.length)} of {filteredProducts.length}
+                </span>
+              )}
             </p>
           )}
         </div>
@@ -356,6 +394,11 @@ function PageContentWrapper() {
                     {sortedProducts.length}
                   </span>{" "}
                   {t("products")}
+                  {totalPages > 1 && (
+                    <span className="text-gray-500 ml-2">
+                      (Page {currentPage} of {totalPages})
+                    </span>
+                  )}
                 </p>
 
                 {activeFiltersCount > 0 && (
@@ -454,7 +497,15 @@ function PageContentWrapper() {
           {/* Products Area */}
           <div className={`${shouldShowSidebar ? "lg:w-3/4" : "w-full"}`}>
             {transformedProducts.length > 0 ? (
-              <ProductHelper items={transformedProducts} />
+              <>
+                <ProductHelper items={transformedProducts} />
+                {/* Pagination */}
+                {totalPages > 1 && (
+                  <div className="mt-8 flex justify-center">
+                    <Pagination pageCount={totalPages} />
+                  </div>
+                )}
+              </>
             ) : (
               <div className="text-center py-12">
                 <div className="text-gray-400 mb-4">

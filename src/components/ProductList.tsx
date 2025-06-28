@@ -313,14 +313,14 @@ function ProductList({
             </div>
           ) : transformedProducts.length > 0 ? (
             <>
-            <div className="w-full rounded-2xl pt-10 pb-4">
-              <h1 className=" text-3xl md:text-[45px] mb-10  flex justify-center items-center font-light text-gray-900 leading-tight">
+            <div className="w-full rounded-2xl pt-10 ">
+              <h1 className=" text-3xl md:text-[45px] mb-3  flex justify-center items-center font-light text-gray-900 leading-tight">
                 {t("newProducts")}
               </h1>
               <ProductHelper items={transformedProducts} />
             </div>
-            <div className="w-full rounded-2xl pt-10 pb-4">
-              <h1 className=" text-3xl md:text-[45px] mb-10  flex justify-center items-center font-light text-gray-900 leading-tight">
+            <div className="w-full rounded-2xl pt-10 ">
+              <h1 className=" text-3xl md:text-[45px] mb-3  flex justify-center items-center font-light text-gray-900 leading-tight">
                 {t("popularProducts")}
               </h1>
               {transformedProducts2.length > 0 ? (
@@ -334,8 +334,8 @@ function ProductList({
               )}
             </div>
             
-            <div className="w-full rounded-2xl pt-10 pb-4">
-              <h1 className=" text-3xl md:text-[45px] mb-10  flex justify-center items-center font-light text-gray-900 leading-tight">
+            <div className="w-full rounded-2xl pt-10 ">
+              <h1 className=" text-3xl md:text-[45px] mb-3  flex justify-center items-center font-light text-gray-900 leading-tight">
                 {t("salesProducts")}
               </h1>
               {transformedProducts3.length > 0 ? (
