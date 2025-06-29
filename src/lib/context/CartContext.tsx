@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { CartItem } from '@/lib/types';
+import { useSession } from 'next-auth/react';
 
 interface Cart {
   id: string;
@@ -20,6 +21,7 @@ interface CartContextType {
   refreshCart: () => Promise<void>;
   addToCartOptimistic: (item: CartItem) => void;
   removeFromCartOptimistic: (productId: string, size: string) => void;
+  clearCart: () => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -39,6 +41,7 @@ interface CartProviderProps {
 export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const [cart, setCart] = useState<Cart | null>(null);
   const [loading, setLoading] = useState(true);
+  const { data: session, status } = useSession();
 
   const loadCart = async () => {
     try {
@@ -149,11 +152,22 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     });
   };
 
+  const clearCart = () => {
+    setCart(null);
+  };
+
   const cartItemCount = cart?.items?.reduce((total, item) => total + item.qty, 0) || 0;
 
   useEffect(() => {
     loadCart();
   }, []);
+
+  // Clear cart when session changes to unauthenticated
+  useEffect(() => {
+    if (status === 'unauthenticated' && cart) {
+      setCart(null);
+    }
+  }, [status, cart]);
 
   const value: CartContextType = {
     cart,
@@ -163,6 +177,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     refreshCart,
     addToCartOptimistic,
     removeFromCartOptimistic,
+    clearCart,
   };
 
   return (

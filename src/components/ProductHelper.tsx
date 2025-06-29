@@ -70,7 +70,7 @@ function ProductHelper({ items }: ProductListProps) {
         
             {/* Price & View Details */}
             <div className="flex justify-between items-center">
-              <span className="text-[16px] font-bold text-primary">
+              <span className="text-[16px] font-bold text-[#438c71]">
                 ₾{item.price.toFixed(2)}
               </span>
             
@@ -107,24 +107,42 @@ function ProductHelper({ items }: ProductListProps) {
           {items.map((item) => (
             <SwiperSlide key={item.id}>
               <div className=" py-3">
-                <div className="relative group rounded-xl overflow-hidden  shadow-lg  hover:shadow-xl transition-all duration-300">
-                  <Link href={`/products/${item.id}`}>
-                    <div className="relative h-[200px] w-full">
-                      <Image
-                        src={item.image[0]}
-                        alt={getLocalizedTitle(item, locale)}
-                        fill
-                        className="object-cover rounded-xl"
-                      />
-                    </div>
-                    <div className="py-3 text-center font-semibold">
-                      {getLocalizedTitle(item, locale)}
-                    </div>
-                    <div className="text-center font-bold text-gray-900">
-                      ₾{item.price.toFixed(2)}
-                    </div>
-                  </Link>
-                </div>
+              <div
+  key={item.id}
+  className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300"
+>
+  <Link href={`/products/${item.id}`}>
+    <div className="relative h-48 overflow-hidden">
+      <Image
+        src={item.image[0]}
+        alt={getLocalizedTitle(item, locale)}
+        fill
+        className="object-cover"
+      />
+    </div>
+  </Link>
+
+  <div className="p-4">
+    {/* Title */}
+    <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+      <Link
+        href={`/products/${item.id}`}
+        className="hover:text-[#438c71] transition-colors"
+      >
+        {getLocalizedTitle(item, locale)}
+      </Link>
+    </h3>
+
+    {/* Price */}
+    <div className="flex justify-between items-center">
+      <span className="text-[16px] font-bold text-[#438c71]">
+        ₾{item.price.toFixed(2)}
+      </span>
+      {/* Optional View Details link can be added here */}
+    </div>
+  </div>
+</div>
+
               </div>
             </SwiperSlide>
           ))}

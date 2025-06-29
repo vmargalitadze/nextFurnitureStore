@@ -14,6 +14,7 @@ import { useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
 import Image from "next/image";
+import { useCart } from "@/lib/context/CartContext";
 
 
 // Global dropdown state manager (same as in switcher.tsx)
@@ -38,6 +39,7 @@ export default function DropdownMenuCheckboxes() {
   const dropdownId = "user-dropdown";
   const t = useTranslations("navitems");
   const locale = useLocale();
+  const { clearCart } = useCart();
 
   // Listen for other dropdowns opening
   useEffect(() => {
@@ -70,7 +72,23 @@ export default function DropdownMenuCheckboxes() {
     }
   };
 
-  const handleSignOut = () => {
+  const handleSignOut = async () => {
+    try {
+      // Clear cart on server side
+      await fetch('/api/cart/clear', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    } catch (error) {
+      console.error('Error clearing cart:', error);
+    }
+    
+    // Clear cart on client side
+    clearCart();
+    
+    // Sign out
     signOut({
       callbackUrl: window.location.origin + "/login",
     });
