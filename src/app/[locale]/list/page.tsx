@@ -407,9 +407,9 @@ function PageContentWrapper() {
             <div className="flex items-center gap-3">
               <div className="w-2 h-8 bg-primary rounded-full"></div>
               <div>
-                <p className="text-gray-600 text-sm">
+                <p className="text-gray-600 text-[18px]">
                   {t("found")}{" "}
-                  <span className="font-bold text-gray-900 text-lg">
+                  <span className="font-bold text-gray-900 text-[18px]">
                     {sortedProducts.length}
                   </span>{" "}
                   {t("products")}
@@ -443,7 +443,7 @@ function PageContentWrapper() {
                     d="M3 4h18M3 8h18M3 12h18M3 16h18"
                   />
                 </svg>
-                <label className="text-sm font-medium text-gray-700">
+                <label className="text-[18px] font-medium text-gray-700">
                   {t("sortBy")}
                 </label>
               </div>

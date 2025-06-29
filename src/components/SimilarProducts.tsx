@@ -193,17 +193,7 @@ const SimilarProducts: React.FC<SimilarProductsProps> = ({ currentProductId, cat
               </Link>
             </h3>
             <p className="text-[16px] text-gray-600 mb-2">{product.brand}</p>
-            <div className="flex justify-between items-center">
-              <span className="text-[16px] font-bold text-primary">
-                {priceRange.min} ₾
-              </span>
-              <Link
-                href={`/products/${product.id}`}
-                className="text-[16px] text-primary hover:text-primary/80 font-medium transition-colors"
-              >
-                {getTranslation("similarProducts.viewDetails", "View Details")} →
-              </Link>
-            </div>
+         
           </div>
         </div>
       );

@@ -8,6 +8,7 @@ import SimilarProducts from "@/components/SimilarProducts";
 import { toast } from 'sonner';
 import { useCart } from "@/lib/context/CartContext";
 import { CartItem } from "@/lib/types";
+import { useSession } from "next-auth/react";
 
 // Simple Decimal-like class to avoid Prisma import issues
 class SimpleDecimal {
@@ -61,7 +62,7 @@ const Page = (props: { params: { id: string; locale: string } }) => {
   const [loading, setLoading] = useState(true);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [addingToCart, setAddingToCart] = useState(false);
-
+  const { data: session } = useSession();
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -238,14 +239,14 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                   )}
                 </div>
 
-                <p className="text-[18px] text-gray-600 mb-1">
+                <p className="text-[18px] font-bold text-gray-600 mb-1">
                   {getTranslation("product.brand", "Brand")}:{" "}
                   <span className="font-medium text-gray-900">
                     {product.brand}
                   </span>
                 </p>
 
-                <p className="text-[18px] text-gray-600">
+                <p className="text-[18px] font-bold text-gray-600">
                   {getTranslation("product.category", "Category")}:{" "}
                   <span className="font-medium text-gray-900">
                     {product.category}
@@ -256,30 +257,51 @@ const Page = (props: { params: { id: string; locale: string } }) => {
               {/* Size Selection */}
               {hasNewStructure && (
                 <div className="pb-2">
-                  <div className="flex items-center gap-3">
-                    <h3 className="text-[18px] font-semibold gap-4 text-gray-900 ">
-                      {getTranslation("product.size", "Size")}:{" "}
+                  <div className="flex flex-col gap-3">
+                    <h3 className="text-[18px] font-semibold text-gray-900">
+                      {getTranslation("product.size", "Size")}:
                     </h3>
-                    {product.sizes?.map((size) => (
-                      <button
-                        key={size.id}
-                        onClick={() => setSelectedSize(size.id)}
-                        className={`w-[50%] px-4 py-2  text-[15px] md:text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors ${
-                          selectedSize === size.id
-                            ? "bg-[#438c71] text-white "
-                            : "bg-[#438c71] text-white"
-                        }`}
-                      >
-                        {formatSizeDisplay(size.size)}
-                      </button>
-                    ))}
+                    <div className="grid grid-cols-2 gap-2">
+                      {product.sizes?.map((size) => {
+                        const sizePrice = size.price.toNumber();
+                        const discountedPrice = product.sales && product.sales > 0 
+                          ? sizePrice * (1 - product.sales / 100)
+                          : sizePrice;
+                        
+                        return (
+                          <button
+                            key={size.id}
+                            onClick={() => setSelectedSize(size.id)}
+                            className={`p-3 text-left rounded-lg transition-all duration-200 border-2 ${
+                              selectedSize === size.id
+                                ? "border-[#438c71] bg-[#438c71] text-white shadow-lg scale-105"
+                                : "border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:bg-gray-50"
+                            }`}
+                          >
+                            <div className="font-bold text-[16px]">
+                              {formatSizeDisplay(size.size)}
+                            </div>
+                            <div className={`text-sm ${selectedSize === size.id ? 'text-white' : 'text-gray-600'}`}>
+                              {product.sales && product.sales > 0 ? (
+                                <div>
+                                  <span className="line-through">₾{sizePrice.toFixed(2)}</span>
+                                  <span className="ml-2 font-bold">₾{discountedPrice.toFixed(2)}</span>
+                                </div>
+                              ) : (
+                                <span className="font-bold">₾{sizePrice.toFixed(2)}</span>
+                              )}
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
                 </div>
               )}
 
               {/* Price Display */}
               {selectedSizeData && (
-                <div className="pb-2">
+                <div key={selectedSize} className="pb-2">
                   <div className="flex items-start gap-3">
                     {product.sales && product.sales > 0 ? (
                       <div className="flex flex-col gap-1">
@@ -288,10 +310,10 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                             {getTranslation("product.price", "Price")}:
                           </span>
                           <div className="flex items-center gap-2">
-                            <span className="text-[20px] font-bold text-green-600">
+                            <span className="text-[24px] font-bold text-green-600 transition-all duration-200 animate-pulse">
                               ₾{(selectedSizeData.price.toNumber() * (1 - product.sales / 100)).toFixed(2)}
                             </span>
-                            <span className="text-[16px] text-gray-500 line-through">
+                            <span className="text-[18px] text-gray-500 line-through">
                               ₾{selectedSizeData.price.toNumber().toFixed(2)}
                             </span>
                           </div>
@@ -300,15 +322,27 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                           <span className="text-sm text-red-600 font-medium bg-red-50 px-2 py-1 rounded">
                             -{product.sales}% OFF
                           </span>
+                          <span className="text-sm text-gray-600 bg-gray-100 px-2 py-1 rounded">
+                            Size: {formatSizeDisplay(selectedSizeData.size)}
+                          </span>
                         </div>
                       </div>
                     ) : (
-                      <span className="text-[18px] text-gray-600">
-                        {getTranslation("product.price", "Price")}:{" "}
-                        <span className="text-[20px] font-bold text-gray-900">
-                          ₾{selectedSizeData.price.toNumber().toFixed(2)}
-                        </span>
-                      </span>
+                      <div className="flex flex-col gap-1">
+                        <div className="flex items-center gap-3">
+                          <span className="text-[18px] text-gray-600">
+                            {getTranslation("product.price", "Price")}:
+                          </span>
+                          <span className="text-[24px] font-bold text-gray-900 transition-all duration-200 animate-pulse">
+                            ₾{selectedSizeData.price.toNumber().toFixed(2)}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm text-gray-600 bg-gray-100 px-2 py-1 rounded">
+                            Size: {formatSizeDisplay(selectedSizeData.size)}
+                          </span>
+                        </div>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -404,6 +438,7 @@ const Page = (props: { params: { id: string; locale: string } }) => {
               </div>
 
               {/* Add to Cart Button */}
+              {session && (
               <div className="pt-1">
                 <button
                   onClick={handleAddToCart}
@@ -422,6 +457,14 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                   </span>
                 </button>
               </div>
+              )} 
+              {!session && (
+                <div className="pt-1">
+                  <button className="w-[50%] px-4 py-2 text-[15px] md:text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors">
+                    <Link href="/sign-in">Login to add to cart</Link>
+                  </button>
+                </div>
+              )}
             </div>
           </div>
           <div className="container mx-auto mt-10">

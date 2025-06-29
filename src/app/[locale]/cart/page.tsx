@@ -144,10 +144,10 @@ const CartPage = () => {
             <p className="text-gray-600 mb-8">
               {t('cart.emptyDescription')}
             </p>
-            <Link href="/products">
-              <Button className="bg-[#438c71] hover:bg-[#3a7a5f]">
+            <Link href="/list">
+              <button    className="w-full px-4  mb-10  py-2 text-[18px] font-medium text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors ">
                 {t('cart.continueShopping')}
-              </Button>
+              </button>
             </Link>
           </div>
         </div>
@@ -158,18 +158,11 @@ const CartPage = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-6xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center mt-[100px] justify-between mb-8">
           <h1 className="text-3xl font-bold text-gray-900">
             {t('cart.title')}
           </h1>
-          <Button
-            variant="outline"
-            onClick={handleClearCart}
-            className="text-red-600 hover:text-red-700"
-          >
-            <Trash2 className="h-4 w-4 mr-2" />
-            Clear Cart
-          </Button>
+        
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -331,18 +324,21 @@ const CartPage = () => {
                   </div>
                 </div>
 
-                <Button
+                <button
                   onClick={handleCheckout}
-                  className="w-full bg-[#438c71] hover:bg-[#3a7a5f] text-white font-semibold py-3"
-                  size="lg"
+                 className="w-full px-4  mb-10  py-2 text-[18px] font-medium text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors "
+                
                 >
                   {t('cart.checkout')}
-                </Button>
+                </button>
 
-                <Link href="/products">
-                  <Button variant="outline" className="w-full">
+                <Link href="/list">
+                  <button  
+                 className="w-full mt-4 px-4  mb-10  py-2 text-[18px] font-medium text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors "
+                  
+                  >
                     {t('cart.continueShopping')}
-                  </Button>
+                  </button>
                 </Link>
               </CardContent>
             </Card>

@@ -237,16 +237,15 @@ const SideBar: React.FC<SideBarProps> = ({
   };
 
   const clearFilters = () => {
-    // Clear all filters including URL parameters
     setSelectedCategories([]);
     setSelectedBrands([]);
     setCurrentPriceRange(priceRange);
     setSearchQuery("");
-
-    // Navigate to base list page without URL parameters to show all categories and brands
-    router.push(`/${locale}/list`);
-
-    // Call onFilterChange to update parent component with cleared filters
+  
+    // უბრალოდ ამოიღე router.replace(url)
+    // ან თუ გინდა URL-საც გაასუფთავებ, მაგრამ გვერდის რეფრეშის გარეშე — გამოიყენე pushState ან router.replace მხოლოდ query update-ით.
+  
+    // Notify parent about cleared filters
     if (onFilterChange && isMounted) {
       onFilterChange({
         selectedCategories: [],
@@ -255,7 +254,8 @@ const SideBar: React.FC<SideBarProps> = ({
       });
     }
   };
-
+  
+  
   const handleSearch = () => {
     const params = new URLSearchParams();
 
@@ -513,12 +513,12 @@ const SideBar: React.FC<SideBarProps> = ({
             {/* Search Button */}
             <button
               onClick={handleSearch}
-              className="w-full px-4  mb-20  py-2 text-[18px] font-medium text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors "
+              className="w-full px-4  mb-10  py-2 text-[18px] font-medium text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors "
             >
               {labels.search}
             </button>
 
-            {/* Clear Button */}
+       
             {(selectedCategories.length > 0 ||
               selectedBrands.length > 0 ||
               currentPriceRange.min !== priceRange.min ||

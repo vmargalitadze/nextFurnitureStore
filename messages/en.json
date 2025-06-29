@@ -400,7 +400,7 @@
       "closeSidebar": "Close SideBar"
     },
     "sorting": {
-      "sortBy": "Sort by:",
+      "sortBy": "Sort:",
       "newest": "Newest",
       "priceLowToHigh": "Price: Low to High",
       "priceHighToLow": "Price: High to Low",
@@ -425,7 +425,7 @@
     "found": "Found",
     "products": "Products",
     "activeFilters": "Active Filters",
-    "sortBy": "Sort By",
+    "sortBy": "Sort:",
     "newest": "Newest",
     "priceLowToHigh": "Price: Low to High",
     "priceHighToLow": "Price: High to Low",

@@ -160,7 +160,7 @@ const OrderConfirmationPage = () => {
             Order Confirmed!
           </h1>
           <p className="text-gray-600">
-            Thank you for your purchase. We hve received your order and will begin processing it right away.
+            Thank you for your purchase. We have received your order and will begin processing it right away.
           </p>
         </div>
 
@@ -315,16 +315,16 @@ const OrderConfirmationPage = () => {
 
         <div className="flex flex-col sm:flex-row gap-4">
           <Link href="/" className="flex-1">
-            <Button className="w-full bg-[#438c71] hover:bg-[#3a7a5f]">
+            <button   className="w-full px-4  mb-10  py-2 text-[18px] font-medium text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors ">
               <Home className="h-4 w-4 mr-2" />
               Continue Shopping
-            </Button>
+            </button>
           </Link>
           <Link href="/profile" className="flex-1">
-            <Button variant="outline" className="w-full">
+            <button   className="w-full px-4  mb-10  py-2 text-[18px] font-medium text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors ">
               <ShoppingBag className="h-4 w-4 mr-2" />
               View Orders
-            </Button>
+            </button>
           </Link>
         </div>
 
