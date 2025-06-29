@@ -15,6 +15,7 @@ import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
 import Image from "next/image";
 
+
 // Global dropdown state manager (same as in switcher.tsx)
 let activeDropdown: string | null = null;
 const dropdownListeners: Set<(id: string | null) => void> = new Set();
@@ -105,14 +106,7 @@ export default function DropdownMenuCheckboxes() {
               <FaUser /> {t("userProfile")}
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Link
-              href="/cart"
-              className="w-full flex text-base font-medium justify-start items-center gap-2"
-            >
-              <FaShoppingCart /> {t("cart")}
-            </Link>
-          </DropdownMenuItem>
+      
           <div className="w-full">
             <button
               onClick={handleSignOut}

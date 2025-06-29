@@ -5,6 +5,9 @@ import React, { useState, useEffect } from "react";
 import ProductImage from "../ProductImage";
 import { getProductById } from "@/lib/actions/actions";
 import SimilarProducts from "@/components/SimilarProducts";
+import { toast } from 'sonner';
+import { useCart } from "@/lib/context/CartContext";
+import { CartItem } from "@/lib/types";
 
 // Simple Decimal-like class to avoid Prisma import issues
 class SimpleDecimal {
@@ -53,9 +56,11 @@ interface Product {
 const Page = (props: { params: { id: string; locale: string } }) => {
   const { id, locale } = props.params;
   const t = useTranslations("productDetail");
+  const { addToCartOptimistic, refreshCart } = useCart();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const [addingToCart, setAddingToCart] = useState(false);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -123,6 +128,66 @@ const Page = (props: { params: { id: string; locale: string } }) => {
     } catch (error) {
       console.error(`Translation error for key ${key}:`, error);
       return fallback;
+    }
+  };
+
+  const handleAddToCart = async () => {
+    if (!selectedSize || !product) return;
+
+    const selectedSizeData = getSelectedSizeData();
+    if (!selectedSizeData) {
+      toast.error('Please select a size');
+      return;
+    }
+
+    // Calculate the price (discounted if there's a sale)
+    const basePrice = selectedSizeData.price.toNumber();
+    const finalPrice = product.sales && product.sales > 0 
+      ? basePrice * (1 - product.sales / 100)
+      : basePrice;
+
+    // Show toast immediately for better UX
+    toast.success('Added to cart successfully!');
+
+    // Optimistically update the cart UI
+    const newItem: CartItem = {
+      productId: product.id,
+      name: getLocalizedTitle() || product.title || 'Product',
+      size: selectedSizeData.size,
+      qty: 1,
+      image: product.images[0],
+      price: finalPrice.toFixed(2),
+    };
+    
+    addToCartOptimistic(newItem);
+
+    setAddingToCart(true);
+    try {
+      const response = await fetch('/api/cart/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          productId: product.id,
+          size: selectedSizeData.size,
+          quantity: 1,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to add to cart');
+      }
+
+      // Refresh cart to get the actual server state
+      await refreshCart();
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      toast.error('Failed to add to cart');
+      // Refresh cart to revert optimistic update on error
+      await refreshCart();
+    } finally {
+      setAddingToCart(false);
     }
   };
 
@@ -341,15 +406,19 @@ const Page = (props: { params: { id: string; locale: string } }) => {
               {/* Add to Cart Button */}
               <div className="pt-1">
                 <button
-                  className={`w-[50%] px-4 py-2  text-[15px] md:text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors ${
-                    selectedSize
-                      ? "bg-[#438c71] text-white "
-                      : "bg-[#438c71] cursor-not-allowed"
+                  onClick={handleAddToCart}
+                  disabled={!selectedSize || addingToCart}
+                  className={`w-[50%] px-4 py-2 text-[15px] md:text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors ${
+                    selectedSize && !addingToCart
+                      ? "bg-[#438c71] text-white"
+                      : "bg-gray-400 cursor-not-allowed"
                   }`}
-                  disabled={!selectedSize}
                 >
                   <span>
-                    {getTranslation("product.addToCart", "Add to Cart")}
+                    {addingToCart 
+                      ? "Adding..." 
+                      : getTranslation("product.addToCart", "Add to Cart")
+                    }
                   </span>
                 </button>
               </div>

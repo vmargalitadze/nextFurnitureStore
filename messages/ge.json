@@ -395,5 +395,183 @@
   "dropdown": {
     "selectSize": "აირჩიეთ ზომა",
     "selectBrand": "აირჩიეთ ბრენდი"
+  },
+  "checkout": {
+    "title": "გადახდა",
+    "breadcrumb": {
+      "home": "მთავარი",
+      "cart": "კალათა",
+      "checkout": "გადახდა"
+    },
+    "personalInformation": {
+      "title": "პირადი ინფორმაცია",
+      "firstName": "სახელი",
+      "firstNamePlaceholder": "შეიყვანეთ თქვენი სახელი",
+      "lastName": "გვარი",
+      "lastNamePlaceholder": "შეიყვანეთ თქვენი გვარი",
+      "phone": "ტელეფონის ნომერი",
+      "phonePlaceholder": "შეიყვანეთ თქვენი ტელეფონის ნომერი",
+      "email": "ელ-ფოსტა",
+      "emailPlaceholder": "შეიყვანეთ თქვენი ელ-ფოსტა",
+      "idNumber": "პირადობის ნომერი",
+      "idNumberPlaceholder": "შეიყვანეთ თქვენი 11-ციფრიანი პირადობის ნომერი"
+    },
+    "deliveryAddress": {
+      "title": "მიწოდების მისამართი",
+      "streetAddress": "ქუჩის მისამართი",
+      "streetAddressPlaceholder": "შეიყვანეთ ქუჩის მისამართი",
+      "city": "ქალაქი",
+      "cityPlaceholder": "შეიყვანეთ ქალაქი",
+      "postalCode": "საფოსტო კოდი",
+      "postalCodePlaceholder": "შეიყვანეთ საფოსტო კოდი",
+      "country": "ქვეყანა",
+      "additionalInfo": "დამატებითი ინფორმაცია",
+      "additionalInfoPlaceholder": "შენიშვნები, ბინის ნომერი, ა.შ."
+    },
+    "deliveryOptions": {
+      "title": "მიწოდების ვარიანტები",
+      "standard": "სტანდარტული მიწოდება",
+      "standardDesc": "3-5 სამუშაო დღე",
+      "standardPrice": "უფასო",
+      "express": "სწრაფი მიწოდება",
+      "expressDesc": "1-2 სამუშაო დღე",
+      "expressPrice": "+₾15",
+      "sameDay": "იმავე დღის მიწოდება",
+      "sameDayDesc": "არჩეულ რაიონებში ხელმისაწვდომი",
+      "sameDayPrice": "+₾25"
+    },
+    "paymentOptions": {
+      "title": "გადახდის ვარიანტები",
+      "card": {
+        "title": "საკრედიტო/დებეტური ბარათი",
+        "description": "Visa, Mastercard, American Express"
+      },
+      "cash": {
+        "title": "ნაღდი ფული მიწოდებისას",
+        "description": "გადაიხადეთ მიწოდებისას"
+      },
+      "bankTransfer": {
+        "title": "საბანკო გადარიცხვა",
+        "description": "გადარიცხვა ბანკის ანგარიშზე"
+      }
+    },
+    "orderSummary": {
+      "title": "შეკვეთის შემაჯამებელი",
+      "items": "ნაწარმი",
+      "subtotal": "ქვეჯამი",
+      "shipping": "ტრანსპორტირება",
+      "tax": "დღგ (18%)",
+      "total": "სულ",
+      "placeOrder": "შეკვეთის გაფორმება",
+      "processingOrder": "შეკვეთა მუშავდება..."
+    },
+    "validation": {
+      "firstNameRequired": "სახელი სავალდებულოა",
+      "lastNameRequired": "გვარი სავალდებულოა",
+      "phoneRequired": "ტელეფონის ნომერი სავალდებულოა",
+      "phoneInvalid": "შეიყვანეთ სწორი ტელეფონის ნომერი",
+      "emailRequired": "ელ-ფოსტა სავალდებულოა",
+      "emailInvalid": "შეიყვანეთ სწორი ელ-ფოსტა",
+      "idNumberRequired": "პირადობის ნომერი სავალდებულოა",
+      "idNumberInvalid": "შეიყვანეთ სწორი 11-ციფრიანი პირადობის ნომერი",
+      "streetAddressRequired": "ქუჩის მისამართი სავალდებულოა",
+      "cityRequired": "ქალაქი სავალდებულოა",
+      "postalCodeRequired": "საფოსტო კოდი სავალდებულოა",
+      "deliveryOptionRequired": "აირჩიეთ მიწოდების ვარიანტი",
+      "paymentMethodRequired": "აირჩიეთ გადახდის მეთოდი"
+    },
+    "errors": {
+      "cartEmpty": "კალათა ცარიელია",
+      "orderFailed": "შეკვეთის გაფორმება ვერ მოხერხდა",
+      "tryAgain": "სცადეთ თავიდან"
+    },
+    "success": "შეკვეთა წარმატებით გაფორმდა!"
+  },
+  "orderConfirmation": {
+    "title": "შეკვეთა დადასტურებულია",
+    "thankYou": "მადლობა თქვენი შეკვეთისთვის!",
+    "orderNumber": "შეკვეთის ნომერი",
+    "orderDate": "შეკვეთის თარიღი",
+    "estimatedDelivery": "სავარაუდო მიწოდების თარიღი",
+    "deliveryAddress": "მიწოდების მისამართი",
+    "paymentMethod": "გადახდის მეთოდი",
+    "orderSummary": "შეკვეთის შემაჯამებელი",
+    "items": "ნაწარმი",
+    "subtotal": "ქვეჯამი",
+    "shipping": "ტრანსპორტირება",
+    "tax": "დღგ",
+    "total": "სულ",
+    "nextSteps": {
+      "title": "შემდეგი ნაბიჯები",
+      "emailConfirmation": "ჩვენ გამოგიგზავნით დადასტურების ელ-ფოსტას",
+      "trackingInfo": "მიწოდების ინფორმაცია გამოგიგზავნება ელ-ფოსტით",
+      "contactSupport": "კითხვების შემთხვევაში დაგვიკავშირდით"
+    },
+    "actions": {
+      "continueShopping": "გააგრძელეთ შოპინგი",
+      "viewOrders": "შეკვეთების ნახვა",
+      "contactSupport": "მხარდაჭერის დაკავშირება"
+    }
+  },
+  "admin": {
+    "dashboard": {
+      "title": "ადმინისტრატორის დეშბორდი",
+      "description": "მართეთ თქვენი მაღაზია, პროდუქტები და შეკვეთები",
+      "totalProducts": "სულ პროდუქტი",
+      "totalOrders": "სულ შეკვეთა",
+      "totalRevenue": "სულ შემოსავალი",
+      "pendingOrders": "მიმდინარე შეკვეთები",
+      "avgOrderValue": "საშუალო შეკვეთის ღირებულება",
+      "backToDashboard": "დეშბორდზე დაბრუნება"
+    },
+    "orders": {
+      "title": "შეკვეთების მართვა",
+      "description": "ნახეთ და მართეთ ყველა მომხმარებლის შეკვეთა",
+      "allOrders": "ყველა შეკვეთა",
+      "orderDetails": "შეკვეთის დეტალები",
+      "orderId": "შეკვეთის ID",
+      "customer": "მომხმარებელი",
+      "items": "ნაწარმი",
+      "total": "სულ",
+      "payment": "გადახდა",
+      "delivery": "მიწოდება",
+      "date": "თარიღი",
+      "actions": "ქმედებები",
+      "status": {
+        "paid": "გადახდილი",
+        "pending": "მიმდინარე",
+        "delivered": "მიწოდებული",
+        "inTransit": "ტრანზიტში"
+      },
+      "noOrders": "შეკვეთები არ არის",
+      "noOrdersDescription": "შეკვეთები გამოჩნდება აქ, როცა მომხმარებლები შეიძენენ"
+    },
+    "orderDetail": {
+      "title": "შეკვეთა #{id}",
+      "placedOn": "გაფორმებულია {date}",
+      "backToOrders": "შეკვეთებზე დაბრუნება",
+      "editOrder": "შეკვეთის რედაქტირება",
+      "updateStatus": "სტატუსის განახლება",
+      "orderStatus": "შეკვეთის სტატუსი",
+      "paymentStatus": "გადახდის სტატუსი",
+      "deliveryStatus": "მიწოდების სტატუსი",
+      "shipping": "ტრანსპორტირება",
+      "orderItems": "შეკვეთის ნაწარმი",
+      "customerInformation": "მომხმარებლის ინფორმაცია",
+      "contactDetails": "საკონტაქტო დეტალები",
+      "shippingAddress": "მიწოდების მისამართი",
+      "orderSummary": "შეკვეთის შემაჯამებელი",
+      "itemsTotal": "ნაწარმის სულ",
+      "shipping": "ტრანსპორტირება",
+      "tax": "დღგ (18%)",
+      "total": "სულ",
+      "paymentInformation": "გადახდის ინფორმაცია",
+      "orderTimeline": "შეკვეთის ქრონოლოგია",
+      "orderPlaced": "შეკვეთა გაფორმებულია",
+      "paymentReceived": "გადახდა მიღებულია",
+      "delivered": "მიწოდებულია",
+      "paidOn": "გადახდილია {date}",
+      "deliveredOn": "მიწოდებულია {date}"
+    }
   }
 }

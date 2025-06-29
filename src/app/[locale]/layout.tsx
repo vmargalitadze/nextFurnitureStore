@@ -8,6 +8,8 @@ const inter = Josefin_Sans({ subsets: ["latin"] });
 import { SessionProvider } from "next-auth/react";
 import { auth } from "../../../auth";
 import { getMessages } from "next-intl/server";
+import { Toaster } from 'sonner';
+import { CartProvider } from "@/lib/context/CartContext";
 
 export const metadata: Metadata = {
   title: "Store Dev E-Commerce Application",
@@ -43,20 +45,22 @@ export default async function RootLayout({
         <link rel="preconnect" href="https://res.cloudinary.com" />
       </head>
       <body className={inter.className}>  
-        <NextIntlClientProvider messages={messages}>
-        <SessionProvider
-            session={session}
-            refetchInterval={0}
-            refetchOnWindowFocus={false}
-          >
-            
-        <Navbar />
-        {children}
-        <Footer />
-            
-            </SessionProvider>
-        </NextIntlClientProvider>
-        </body>
+        <SessionProvider session={session}>
+          <NextIntlClientProvider messages={messages}>
+            <CartProvider>
+              <Navbar />
+              {children}
+              <Footer />
+              <Toaster 
+                position="top-right"
+                duration={3000}
+                closeButton={true}
+                richColors={true}
+              />
+            </CartProvider>
+          </NextIntlClientProvider>
+        </SessionProvider>
+      </body>
     </html>
   );
 }

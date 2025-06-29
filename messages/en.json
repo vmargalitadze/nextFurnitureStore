@@ -77,7 +77,78 @@
     "checkout": "Proceed to Checkout",
     "remove": "Remove",
     "quantity": "Quantity",
-    "price": "Price"
+    "price": "Price",
+    "clearCart": "Clear Cart",
+    "orderSummary": "Order Summary",
+    "deliveryOptions": "Delivery Options",
+    "standardDelivery": "Standard Delivery",
+    "expressDelivery": "Express Delivery",
+    "sameDayDelivery": "Same Day Delivery",
+    "standardDeliveryDesc": "3-5 business days",
+    "expressDeliveryDesc": "1-2 business days",
+    "sameDayDeliveryDesc": "Available in select areas",
+    "free": "Free",
+    "paymentMethod": "Payment Method",
+    "creditCard": "Credit/Debit Card",
+    "cashOnDelivery": "Cash on Delivery",
+    "placeOrder": "Place Order",
+    "processingOrder": "Processing Order..."
+  },
+  "checkout": {
+    "title": "Checkout",
+    "backToCart": "Back to Cart",
+    "personalInformation": {
+      "title": "Personal Information",
+      "firstName": "First Name",
+      "firstNamePlaceholder": "Enter your first name",
+      "lastName": "Last Name",
+      "lastNamePlaceholder": "Enter your last name",
+      "phone": "Phone Number",
+      "phonePlaceholder": "Enter your phone number",
+      "email": "Email",
+      "emailPlaceholder": "Enter your email address",
+      "idNumber": "Georgian ID Number",
+      "idNumberPlaceholder": "Enter your 11-digit Georgian ID number"
+    },
+    "deliveryAddress": "Delivery Address",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "phone": "Phone Number",
+    "email": "Email Address",
+    "streetAddress": "Street Address",
+    "city": "City",
+    "postalCode": "Postal Code",
+    "country": "Country",
+    "additionalInfo": "Additional Information",
+    "phonePlaceholder": "+995 5XX XXX XXX",
+    "firstNamePlaceholder": "Enter your first name",
+    "lastNamePlaceholder": "Enter your last name",
+    "emailPlaceholder": "Enter your email address",
+    "streetPlaceholder": "Enter your street address",
+    "cityPlaceholder": "Enter your city",
+    "postalPlaceholder": "Enter postal code",
+    "additionalPlaceholder": "Apartment, suite, etc. (optional)",
+    "validation": {
+      "firstNameRequired": "First name is required",
+      "lastNameRequired": "Last name is required",
+      "phoneRequired": "Phone number is required",
+      "phoneInvalid": "Please enter a valid phone number",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email address",
+      "idNumberRequired": "Georgian ID number is required",
+      "idNumberInvalid": "Please enter a valid 11-digit Georgian ID number",
+      "streetAddressRequired": "Street address is required",
+      "cityRequired": "City is required",
+      "postalCodeRequired": "Postal code is required",
+      "deliveryOptionRequired": "Please select a delivery option",
+      "paymentMethodRequired": "Please select a payment method"
+    },
+    "errors": {
+      "cartEmpty": "Your cart is empty",
+      "orderFailed": "Failed to place order",
+      "tryAgain": "Please try again"
+    },
+    "success": "Order placed successfully!"
   },
   "productForm": {
     "title": "Add Product",
@@ -397,6 +468,184 @@
       "description": "Common tasks and navigation",
       "viewCart": "View Cart",
       "browseProducts": "Browse Products"
+    }
+  },
+  "checkout": {
+    "title": "Checkout",
+    "breadcrumb": {
+      "home": "Home",
+      "cart": "Cart",
+      "checkout": "Checkout"
+    },
+    "personalInformation": {
+      "title": "Personal Information",
+      "firstName": "First Name",
+      "firstNamePlaceholder": "Enter your first name",
+      "lastName": "Last Name",
+      "lastNamePlaceholder": "Enter your last name",
+      "phone": "Phone Number",
+      "phonePlaceholder": "Enter your phone number",
+      "email": "Email",
+      "emailPlaceholder": "Enter your email address",
+      "idNumber": "Georgian ID Number",
+      "idNumberPlaceholder": "Enter your 11-digit Georgian ID number"
+    },
+    "deliveryAddress": {
+      "title": "Delivery Address",
+      "streetAddress": "Street Address",
+      "streetAddressPlaceholder": "Enter street address",
+      "city": "City",
+      "cityPlaceholder": "Enter city",
+      "postalCode": "Postal Code",
+      "postalCodePlaceholder": "Enter postal code",
+      "country": "Country",
+      "additionalInfo": "Additional Information",
+      "additionalInfoPlaceholder": "Notes, apartment number, etc."
+    },
+    "deliveryOptions": {
+      "title": "Delivery Options",
+      "standard": "Standard Delivery",
+      "standardDesc": "3-5 business days",
+      "standardPrice": "Free",
+      "express": "Express Delivery",
+      "expressDesc": "1-2 business days",
+      "expressPrice": "+₾15",
+      "sameDay": "Same Day Delivery",
+      "sameDayDesc": "Available in select areas",
+      "sameDayPrice": "+₾25"
+    },
+    "paymentOptions": {
+      "title": "Payment Options",
+      "card": {
+        "title": "Credit/Debit Card",
+        "description": "Visa, Mastercard, American Express"
+      },
+      "cash": {
+        "title": "Cash on Delivery",
+        "description": "Pay when you receive your order"
+      },
+      "bankTransfer": {
+        "title": "Bank Transfer",
+        "description": "Transfer to bank account"
+      }
+    },
+    "orderSummary": {
+      "title": "Order Summary",
+      "items": "Items",
+      "subtotal": "Subtotal",
+      "shipping": "Shipping",
+      "tax": "VAT (18%)",
+      "total": "Total",
+      "placeOrder": "Place Order",
+      "processingOrder": "Processing Order..."
+    },
+    "validation": {
+      "firstNameRequired": "First name is required",
+      "lastNameRequired": "Last name is required",
+      "phoneRequired": "Phone number is required",
+      "phoneInvalid": "Please enter a valid phone number",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Please enter a valid email address",
+      "idNumberRequired": "Georgian ID number is required",
+      "idNumberInvalid": "Please enter a valid 11-digit Georgian ID number",
+      "streetAddressRequired": "Street address is required",
+      "cityRequired": "City is required",
+      "postalCodeRequired": "Postal code is required",
+      "deliveryOptionRequired": "Please select a delivery option",
+      "paymentMethodRequired": "Please select a payment method"
+    },
+    "errors": {
+      "cartEmpty": "Your cart is empty",
+      "orderFailed": "Failed to place order",
+      "tryAgain": "Please try again"
+    },
+    "success": "Order placed successfully!"
+  },
+  "orderConfirmation": {
+    "title": "Order Confirmed",
+    "thankYou": "Thank you for your order!",
+    "orderNumber": "Order Number",
+    "orderDate": "Order Date",
+    "estimatedDelivery": "Estimated Delivery Date",
+    "deliveryAddress": "Delivery Address",
+    "paymentMethod": "Payment Method",
+    "orderSummary": "Order Summary",
+    "items": "Items",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "tax": "VAT",
+    "total": "Total",
+    "nextSteps": {
+      "title": "Next Steps",
+      "emailConfirmation": "We'll send you a confirmation email",
+      "trackingInfo": "Delivery tracking information will be sent via email",
+      "contactSupport": "Contact us if you have any questions"
+    },
+    "actions": {
+      "continueShopping": "Continue Shopping",
+      "viewOrders": "View Orders",
+      "contactSupport": "Contact Support"
+    }
+  },
+  "admin": {
+    "dashboard": {
+      "title": "Admin Dashboard",
+      "description": "Manage your store, products, and orders",
+      "totalProducts": "Total Products",
+      "totalOrders": "Total Orders",
+      "totalRevenue": "Total Revenue",
+      "pendingOrders": "Pending Orders",
+      "avgOrderValue": "Avg Order Value",
+      "backToDashboard": "Back to Dashboard"
+    },
+    "orders": {
+      "title": "Order Management",
+      "description": "View and manage all customer orders",
+      "allOrders": "All Orders",
+      "orderDetails": "Order Details",
+      "orderId": "Order ID",
+      "customer": "Customer",
+      "items": "Items",
+      "total": "Total",
+      "payment": "Payment",
+      "delivery": "Delivery",
+      "date": "Date",
+      "actions": "Actions",
+      "status": {
+        "paid": "Paid",
+        "pending": "Pending",
+        "delivered": "Delivered",
+        "inTransit": "In Transit"
+      },
+      "noOrders": "No orders yet",
+      "noOrdersDescription": "Orders will appear here when customers make purchases"
+    },
+    "orderDetail": {
+      "title": "Order #{id}",
+      "placedOn": "Placed on {date}",
+      "backToOrders": "Back to Orders",
+      "editOrder": "Edit Order",
+      "updateStatus": "Update Status",
+      "orderStatus": "Order Status",
+      "paymentStatus": "Payment Status",
+      "deliveryStatus": "Delivery Status",
+      "shipping": "Shipping",
+      "orderItems": "Order Items",
+      "customerInformation": "Customer Information",
+      "contactDetails": "Contact Details",
+      "shippingAddress": "Shipping Address",
+      "orderSummary": "Order Summary",
+      "itemsTotal": "Items Total",
+      "shipping": "Shipping",
+      "tax": "Tax (18%)",
+      "total": "Total",
+      "paymentInformation": "Payment Information",
+      "orderTimeline": "Order Timeline",
+      "orderPlaced": "Order Placed",
+      "paymentReceived": "Payment Received",
+      "delivered": "Delivered",
+      "paidOn": "Paid on {date}",
+      "deliveredOn": "Delivered on {date}"
     }
   }
 }

@@ -1,38 +1,356 @@
-import React from 'react';
+'use client';
+
+import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
-
+import { CartItem } from '@/lib/types';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ShoppingCart, ArrowLeft } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { Trash2, Plus, Minus, ShoppingBag, Truck, CreditCard } from 'lucide-react';
+import { Link } from '@/i18n/navigation'; 
+import { useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
+import { toast } from 'sonner';
+import { useCart } from '@/lib/context/CartContext';
+import Image from 'next/image';
 
-function Cartpage() {
-  const t = useTranslations('cart');
+const CartPage = () => {
+  const t = useTranslations();
+  const router = useRouter();
+  const params = useParams();
+  const { cart, loading, refreshCart, removeFromCartOptimistic } = useCart();
+  const [updating, setUpdating] = useState<string | null>(null);
+
+  const handleQuantityChange = async (productId: string, size: string, newQuantity: number) => {
+    if (newQuantity < 1) return;
+    
+    setUpdating(`${productId}-${size}`);
+    try {
+      const response = await fetch('/api/cart/update-quantity', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ productId, size, quantity: newQuantity }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update quantity');
+      }
+
+      await refreshCart();
+      toast.success('Cart updated');
+    } catch (error) {
+      console.error('Error updating quantity:', error);
+      toast.error('Failed to update quantity');
+    } finally {
+      setUpdating(null);
+    }
+  };
+
+  const handleRemoveItem = async (productId: string, size: string) => {
+    setUpdating(`${productId}-${size}`);
+    
+    // Optimistically remove from UI
+    removeFromCartOptimistic(productId, size);
+    
+    try {
+      const response = await fetch('/api/cart/remove', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ productId, size }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to remove item');
+      }
+
+      await refreshCart();
+      toast.success('Item removed from cart');
+    } catch (error) {
+      console.error('Error removing item:', error);
+      toast.error('Failed to remove item');
+      // Refresh cart to revert optimistic update on error
+      await refreshCart();
+    } finally {
+      setUpdating(null);
+    }
+  };
+
+  const handleClearCart = async () => {
+    try {
+      const response = await fetch('/api/cart/clear', {
+        method: 'POST',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to clear cart');
+      }
+
+      await refreshCart();
+      toast.success('Cart cleared');
+    } catch (error) {
+      console.error('Error clearing cart:', error);
+      toast.error('Failed to clear cart');
+    }
+  };
+
+  const handleCheckout = () => {
+    if (!cart || cart.items.length === 0) {
+      toast.error('Cart is empty');
+      return;
+    }
+    router.push(`/${params.locale}/checkout`);
+  };
+
+  const formatPrice = (price: string) => {
+    return `₾${parseFloat(price).toFixed(2)}`;
+  };
+
+  const formatSize = (size: string) => {
+    return size.replace('SIZE_', '').replace('_', 'x');
+  };
+
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="animate-pulse">
+            <div className="h-8 bg-gray-200 rounded w-1/4 mb-8"></div>
+            <div className="space-y-4">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="h-32 bg-gray-200 rounded"></div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!cart || cart.items.length === 0) {
+    return (
+      <div className="container mt-[120px] min-h-screen mx-auto px-4 py-8">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="mb-8">
+            <ShoppingBag className="mx-auto h-16 w-16 text-gray-400 mb-4" />
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">
+              {t('cart.empty')}
+            </h1>
+            <p className="text-gray-600 mb-8">
+              {t('cart.emptyDescription')}
+            </p>
+            <Link href="/products">
+              <Button className="bg-[#438c71] hover:bg-[#3a7a5f]">
+                {t('cart.continueShopping')}
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">{t('title')}</h1>
+    <div className="container mx-auto px-4 py-8">
+      <div className="max-w-6xl mx-auto">
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">
+            {t('cart.title')}
+          </h1>
+          <Button
+            variant="outline"
+            onClick={handleClearCart}
+            className="text-red-600 hover:text-red-700"
+          >
+            <Trash2 className="h-4 w-4 mr-2" />
+            Clear Cart
+          </Button>
         </div>
 
-        {/* Empty Cart State */}
-        <Card className="text-center py-12">
-          <CardContent>
-            <ShoppingCart className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">
-              {t('empty')}
-            </h2>
-            <p className="text-gray-600 mb-6">
-              {t('emptyDescription')}
-            </p>
-          
-          </CardContent>
-        </Card>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Cart Items */}
+          <div className="lg:col-span-2">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <ShoppingBag className="h-5 w-5 mr-2" />
+                  {t('cart.items')} ({cart.items.length})
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {cart.items.map((item) => (
+                  <div key={`${item.productId}-${item.size}`} className="flex items-center space-x-4 p-4 border rounded-lg">
+                    <div className="flex-shrink-0">
+                      <Image
+                        src={item.image}
+                        alt={item.name}
+                        className="w-20 h-20 object-cover rounded-md"
+                        width={80}
+                        height={80}
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-lg font-semibold text-gray-900 truncate">
+                        {item.name}
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        Size: {formatSize(item.size)}
+                      </p>
+                      <p className="text-lg font-bold text-[#438c71]">
+                        {formatPrice(item.price)}
+                      </p>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleQuantityChange(item.productId, item.size, item.qty - 1)}
+                        disabled={updating === `${item.productId}-${item.size}`}
+                      >
+                        <Minus className="h-4 w-4" />
+                      </Button>
+                      <span className="w-12 text-center font-semibold">
+                        {updating === `${item.productId}-${item.size}` ? '...' : item.qty}
+                      </span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleQuantityChange(item.productId, item.size, item.qty + 1)}
+                        disabled={updating === `${item.productId}-${item.size}`}
+                      >
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-lg font-bold text-gray-900">
+                        {formatPrice((parseFloat(item.price) * item.qty).toString())}
+                      </p>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleRemoveItem(item.productId, item.size)}
+                        disabled={updating === `${item.productId}-${item.size}`}
+                        className="text-red-600 hover:text-red-700 mt-2"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          </div>
 
-        {/* Cart Items would go here */}
-        {/* This is a placeholder - you would implement the actual cart functionality */}
+          {/* Order Summary */}
+          <div className="lg:col-span-1">
+            <Card className="sticky top-8">
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <CreditCard className="h-5 w-5 mr-2" />
+                  Order Summary
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">{t('cart.subtotal')}</span>
+                    <span className="font-semibold">{formatPrice(cart.itemsPrice)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600 flex items-center">
+                      <Truck className="h-4 w-4 mr-1" />
+                      {t('cart.shipping')}
+                    </span>
+                    <span className="font-semibold">
+                      {parseFloat(cart.shippingPrice) === 0 ? 'Free' : formatPrice(cart.shippingPrice)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">{t('cart.tax')}</span>
+                    <span className="font-semibold">{formatPrice(cart.taxPrice)}</span>
+                  </div>
+                  <Separator />
+                  <div className="flex justify-between text-lg font-bold">
+                    <span>{t('cart.total')}</span>
+                    <span className="text-[#438c71]">{formatPrice(cart.totalPrice)}</span>
+                  </div>
+                </div>
+
+                {/* Delivery Options */}
+                <div className="space-y-3">
+                  <h4 className="font-semibold text-gray-900">Delivery Options</h4>
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="radio"
+                        id="standard"
+                        name="delivery"
+                        value="standard"
+                        defaultChecked
+                        className="text-[#438c71]"
+                      />
+                      <label htmlFor="standard" className="text-sm flex-1">
+                        <div className="font-medium">Standard Delivery</div>
+                        <div className="text-gray-600">3-5 business days</div>
+                      </label>
+                      <span className="font-semibold">Free</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="radio"
+                        id="express"
+                        name="delivery"
+                        value="express"
+                        className="text-[#438c71]"
+                      />
+                      <label htmlFor="express" className="text-sm flex-1">
+                        <div className="font-medium">Express Delivery</div>
+                        <div className="text-gray-600">1-2 business days</div>
+                      </label>
+                      <span className="font-semibold">+₾15</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="radio"
+                        id="same-day"
+                        name="delivery"
+                        value="same-day"
+                        className="text-[#438c71]"
+                      />
+                      <label htmlFor="same-day" className="text-sm flex-1">
+                        <div className="font-medium">Same Day Delivery</div>
+                        <div className="text-gray-600">Available in select areas</div>
+                      </label>
+                      <span className="font-semibold">+₾25</span>
+                    </div>
+                  </div>
+                </div>
+
+                <Button
+                  onClick={handleCheckout}
+                  className="w-full bg-[#438c71] hover:bg-[#3a7a5f] text-white font-semibold py-3"
+                  size="lg"
+                >
+                  {t('cart.checkout')}
+                </Button>
+
+                <Link href="/products">
+                  <Button variant="outline" className="w-full">
+                    {t('cart.continueShopping')}
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </div>
     </div>
   );
-}
+};
 
-export default Cartpage;
+export default CartPage;

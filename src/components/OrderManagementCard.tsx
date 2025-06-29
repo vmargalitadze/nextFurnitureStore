@@ -1,0 +1,461 @@
+'use client';
+
+import React, { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { 
+  FaShoppingCart,
+  FaDollarSign,
+  FaTruck,
+  FaCheckCircle,
+  FaClock,
+  FaUser,
+  FaMapMarkerAlt,
+  FaCreditCard,
+  FaCalendar,
+  FaPhone,
+  FaEnvelope,
+  FaBox,
+  FaEdit,
+  FaEye,
+  FaPrint,
+  FaDownload,
+  FaWhatsapp,
+  FaTelegram
+} from "react-icons/fa";
+import { format } from "date-fns";
+import Image from "next/image";
+import { toast } from "sonner";
+
+interface OrderItem {
+  productId: string;
+  qty: number;
+  price: number;
+  title: string;
+  image: string;
+}
+
+interface ShippingAddress {
+  firstName: string;
+  lastName: string;
+  phone: string;
+  email: string;
+  streetAddress: string;
+  city: string;
+  postalCode: string;
+  country: string;
+  additionalInfo?: string;
+}
+
+interface Order {
+  id: string;
+  userId: string;
+  shippingAddress: any; // Changed to any to handle JSON from database
+  paymentMethod: string;
+  itemsPrice: number | string;
+  shippingPrice: number | string;
+  taxPrice: number | string;
+  totalPrice: number | string;
+  isPaid: boolean;
+  paidAt?: string | Date | null;
+  isDelivered: boolean;
+  deliveredAt?: string | Date | null;
+  createdAt: string | Date;
+  orderitems: OrderItem[];
+  user: {
+    id: string;
+    name: string;
+    email: string;
+  };
+}
+
+interface OrderManagementCardProps {
+  order: Order;
+  onStatusUpdate?: (orderId: string, updates: { isPaid?: boolean; isDelivered?: boolean }) => void;
+}
+
+const OrderManagementCard: React.FC<OrderManagementCardProps> = ({ order, onStatusUpdate }) => {
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
+
+  // Safely extract shipping address from JSON
+  const shippingAddress: ShippingAddress = order.shippingAddress as ShippingAddress;
+
+  const handleStatusUpdate = async (field: 'isPaid' | 'isDelivered', value: boolean) => {
+    setIsUpdating(true);
+    try {
+      const response = await fetch(`/api/orders/${order.id}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ [field]: value }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update order status');
+      }
+
+      toast.success(`Order ${field === 'isPaid' ? 'payment' : 'delivery'} status updated successfully`);
+      
+      if (onStatusUpdate) {
+        onStatusUpdate(order.id, { [field]: value });
+      }
+    } catch (error) {
+      console.error('Error updating order status:', error);
+      toast.error('Failed to update order status');
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const handleContactCustomer = (method: 'phone' | 'email' | 'whatsapp' | 'telegram') => {
+    const phone = shippingAddress.phone;
+    const email = shippingAddress.email;
+    
+    switch (method) {
+      case 'phone':
+        window.open(`tel:${phone}`, '_blank');
+        break;
+      case 'email':
+        window.open(`mailto:${email}`, '_blank');
+        break;
+      case 'whatsapp':
+        window.open(`https://wa.me/${phone.replace(/\D/g, '')}`, '_blank');
+        break;
+      case 'telegram':
+        window.open(`https://t.me/${phone.replace(/\D/g, '')}`, '_blank');
+        break;
+    }
+  };
+
+  const getEstimatedDelivery = () => {
+    const orderDate = new Date(order.createdAt);
+    const deliveryDate = new Date(orderDate);
+    deliveryDate.setDate(orderDate.getDate() + 5);
+    return format(deliveryDate, 'MMM dd, yyyy');
+  };
+
+  // Helper function to safely convert price values
+  const getPriceValue = (price: number | string): number => {
+    if (typeof price === 'string') {
+      return parseFloat(price) || 0;
+    }
+    return price || 0;
+  };
+
+  // Helper function to safely format dates
+  const formatDate = (date: string | Date | null | undefined): string => {
+    if (!date) return '';
+    return format(new Date(date), 'MMM dd, yyyy HH:mm');
+  };
+
+  return (
+    <Card className="w-full">
+      <CardHeader>
+        <div className="flex justify-between items-start">
+          <div>
+            <CardTitle className="flex items-center text-lg">
+              <FaShoppingCart className="w-5 h-5 mr-2 text-[#438c71]" />
+              Order #{order.id.slice(-8).toUpperCase()}
+            </CardTitle>
+            <CardDescription>
+              Placed on {formatDate(order.createdAt)}
+            </CardDescription>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowDetails(!showDetails)}
+            >
+              <FaEye className="w-4 h-4 mr-1" />
+              {showDetails ? 'Hide' : 'Details'}
+            </Button>
+            <Button variant="outline" size="sm">
+              <FaPrint className="w-4 h-4" />
+            </Button>
+          </div>
+        </div>
+      </CardHeader>
+
+      <CardContent className="space-y-6">
+        {/* Order Status Overview */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="flex items-center justify-between p-4 border rounded-lg bg-gray-50">
+            <div className="flex items-center">
+              <FaCreditCard className="w-5 h-5 mr-3 text-blue-500" />
+              <div>
+                <p className="font-medium text-sm">Payment</p>
+                <p className="text-xs text-gray-500">{order.paymentMethod}</p>
+              </div>
+            </div>
+            <Badge 
+              variant={order.isPaid ? "default" : "secondary"}
+              className="text-xs"
+            >
+              {order.isPaid ? 'Paid' : 'Pending'}
+            </Badge>
+          </div>
+
+          <div className="flex items-center justify-between p-4 border rounded-lg bg-gray-50">
+            <div className="flex items-center">
+              <FaTruck className="w-5 h-5 mr-3 text-green-500" />
+              <div>
+                <p className="font-medium text-sm">Delivery</p>
+                <p className="text-xs text-gray-500">
+                  {order.isDelivered ? 'Delivered' : 'In Transit'}
+                </p>
+              </div>
+            </div>
+            <Badge 
+              variant={order.isDelivered ? "default" : "outline"}
+              className="text-xs"
+            >
+              {order.isDelivered ? 'Delivered' : 'In Transit'}
+            </Badge>
+          </div>
+
+          <div className="flex items-center justify-between p-4 border rounded-lg bg-gray-50">
+            <div className="flex items-center">
+              <FaDollarSign className="w-5 h-5 mr-3 text-purple-500" />
+              <div>
+                <p className="font-medium text-sm">Total</p>
+                <p className="text-xs text-gray-500">{order.orderitems.length} items</p>
+              </div>
+            </div>
+            <span className="font-bold text-[#438c71]">₾{getPriceValue(order.totalPrice).toFixed(2)}</span>
+          </div>
+        </div>
+
+        {/* Customer Information */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <h4 className="font-medium mb-3 flex items-center">
+              <FaUser className="w-4 h-4 mr-2 text-[#438c71]" />
+              Customer Details
+            </h4>
+            <div className="space-y-2 text-sm">
+              <div className="flex items-center">
+                <FaUser className="w-3 h-3 mr-2 text-gray-400" />
+                <span className="font-medium">
+                  {shippingAddress.firstName} {shippingAddress.lastName}
+                </span>
+              </div>
+              <div className="flex items-center">
+                <FaEnvelope className="w-3 h-3 mr-2 text-gray-400" />
+                <span>{shippingAddress.email}</span>
+              </div>
+              <div className="flex items-center">
+                <FaPhone className="w-3 h-3 mr-2 text-gray-400" />
+                <span>{shippingAddress.phone}</span>
+              </div>
+            </div>
+            
+            {/* Contact Actions */}
+            <div className="flex items-center space-x-2 mt-3">
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => handleContactCustomer('phone')}
+                className="text-xs"
+              >
+                <FaPhone className="w-3 h-3 mr-1" />
+                Call
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => handleContactCustomer('whatsapp')}
+                className="text-xs bg-green-50 text-green-700 border-green-200 hover:bg-green-100"
+              >
+                <FaWhatsapp className="w-3 h-3 mr-1" />
+                WhatsApp
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => handleContactCustomer('telegram')}
+                className="text-xs bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100"
+              >
+                <FaTelegram className="w-3 h-3 mr-1" />
+                Telegram
+              </Button>
+            </div>
+          </div>
+
+          <div>
+            <h4 className="font-medium mb-3 flex items-center">
+              <FaMapMarkerAlt className="w-4 h-4 mr-2 text-[#438c71]" />
+              Delivery Address
+            </h4>
+            <div className="space-y-1 text-sm">
+              <p className="font-medium">
+                {shippingAddress.firstName} {shippingAddress.lastName}
+              </p>
+              <p>{shippingAddress.streetAddress}</p>
+              <p>{shippingAddress.city}, {shippingAddress.postalCode}</p>
+              <p>{shippingAddress.country}</p>
+              {shippingAddress.additionalInfo && (
+                <p className="text-gray-500 text-xs">
+                  Additional Info: {shippingAddress.additionalInfo}
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Expandable Details */}
+        {showDetails && (
+          <>
+            <Separator />
+            
+            {/* Order Items */}
+            <div>
+              <h4 className="font-medium mb-3 flex items-center">
+                <FaBox className="w-4 h-4 mr-2 text-[#438c71]" />
+                Order Items ({order.orderitems.length})
+              </h4>
+              <div className="space-y-3">
+                {order.orderitems.map((item, index) => (
+                  <div key={index} className="flex items-center space-x-3 p-3 border rounded-lg">
+                    <Image
+                      src={item.image}
+                      alt={item.title}
+                      width={48}
+                      height={48}
+                      className="w-12 h-12 object-cover rounded-lg"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <h5 className="font-medium text-sm truncate">{item.title}</h5>
+                      <p className="text-xs text-gray-500">Qty: {item.qty} × ₾{getPriceValue(item.price).toFixed(2)}</p>
+                    </div>
+                    <span className="font-medium text-sm">
+                      ₾{(getPriceValue(item.price) * item.qty).toFixed(2)}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Price Breakdown */}
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h4 className="font-medium mb-3">Price Breakdown</h4>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span>Items Total</span>
+                  <span>₾{getPriceValue(order.itemsPrice).toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Shipping</span>
+                  <span>₾{getPriceValue(order.shippingPrice).toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Tax (18%)</span>
+                  <span>₾{getPriceValue(order.taxPrice).toFixed(2)}</span>
+                </div>
+                <Separator />
+                <div className="flex justify-between font-bold">
+                  <span>Total</span>
+                  <span className="text-[#438c71]">₾{getPriceValue(order.totalPrice).toFixed(2)}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Status Management */}
+            <div className="bg-blue-50 p-4 rounded-lg">
+              <h4 className="font-medium mb-3">Status Management</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm font-medium mb-2">Payment Status</p>
+                  <div className="flex items-center space-x-2">
+                    <Button
+                      size="sm"
+                      variant={order.isPaid ? "default" : "outline"}
+                      onClick={() => handleStatusUpdate('isPaid', !order.isPaid)}
+                      disabled={isUpdating}
+                    >
+                      {order.isPaid ? 'Mark as Pending' : 'Mark as Paid'}
+                    </Button>
+                    {order.isPaid && order.paidAt && (
+                      <span className="text-xs text-gray-500">
+                        Paid: {formatDate(order.paidAt)}
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm font-medium mb-2">Delivery Status</p>
+                  <div className="flex items-center space-x-2">
+                    <Button
+                      size="sm"
+                      variant={order.isDelivered ? "default" : "outline"}
+                      onClick={() => handleStatusUpdate('isDelivered', !order.isDelivered)}
+                      disabled={isUpdating}
+                    >
+                      {order.isDelivered ? 'Mark as In Transit' : 'Mark as Delivered'}
+                    </Button>
+                    {order.isDelivered && order.deliveredAt && (
+                      <span className="text-xs text-gray-500">
+                        Delivered: {formatDate(order.deliveredAt)}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Order Timeline */}
+            <div>
+              <h4 className="font-medium mb-3">Order Timeline</h4>
+              <div className="space-y-3">
+                <div className="flex items-center">
+                  <div className="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium">Order Placed</p>
+                    <p className="text-xs text-gray-500">
+                      {formatDate(order.createdAt)}
+                    </p>
+                  </div>
+                </div>
+                {order.isPaid && order.paidAt && (
+                  <div className="flex items-center">
+                    <div className="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium">Payment Received</p>
+                      <p className="text-xs text-gray-500">
+                        {formatDate(order.paidAt)}
+                      </p>
+                    </div>
+                  </div>
+                )}
+                {order.isDelivered && order.deliveredAt && (
+                  <div className="flex items-center">
+                    <div className="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium">Delivered</p>
+                      <p className="text-xs text-gray-500">
+                        {formatDate(order.deliveredAt)}
+                      </p>
+                    </div>
+                  </div>
+                )}
+                {!order.isDelivered && (
+                  <div className="flex items-center">
+                    <div className="w-3 h-3 bg-gray-300 rounded-full mr-3"></div>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium">Estimated Delivery</p>
+                      <p className="text-xs text-gray-500">{getEstimatedDelivery()}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </>
+        )}
+      </CardContent>
+    </Card>
+  );
+};
+
+export default OrderManagementCard; 
