@@ -75,7 +75,7 @@ export default function CredentialsForm({ callbackUrl }: { callbackUrl: string }
           </div>
         </div>
         <div>
-          <Button disabled={loading} className="w-full" variant="default">
+          <Button disabled={loading} className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="default">
             {loading ? t("signingIn") : t("signInButton")}
           </Button>
         </div>

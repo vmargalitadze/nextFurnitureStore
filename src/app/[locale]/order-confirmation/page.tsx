@@ -315,16 +315,16 @@ const OrderConfirmationPage = () => {
 
         <div className="flex flex-col sm:flex-row gap-4">
           <Link href="/" className="flex-1">
-            <button   className="w-full px-4  mb-10  py-2 text-[18px] font-medium text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors ">
+            <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors">
               <Home className="h-4 w-4 mr-2" />
               Continue Shopping
-            </button>
+            </Button>
           </Link>
           <Link href="/profile" className="flex-1">
-            <button   className="w-full px-4  mb-10  py-2 text-[18px] font-medium text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors ">
+            <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors">
               <ShoppingBag className="h-4 w-4 mr-2" />
               View Orders
-            </button>
+            </Button>
           </Link>
         </div>
 

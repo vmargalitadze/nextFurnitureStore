@@ -505,13 +505,14 @@ export default function EditProductForm({ productId }: EditProductFormProps) {
             />
 
             <div className="flex gap-4">
-              <Button type="submit" disabled={form.formState.isSubmitting}>
+              <Button type="submit" disabled={form.formState.isSubmitting} className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors">
                 {form.formState.isSubmitting ? "Updating..." : "Update"}
               </Button>
               <Button 
                 type="button" 
                 variant="outline" 
                 onClick={() => router.push("/adminall")}
+                className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
               >
                 Cancel
               </Button>

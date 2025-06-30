@@ -144,7 +144,7 @@ export default async function OrdersPage() {
             <p className="text-gray-600">Comprehensive view of all customer orders across the website</p>
           </div>
           <Link href="/adminall">
-            <Button className="mt-4 sm:mt-0" variant="outline">
+            <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="outline">
               Back to Dashboard
             </Button>
           </Link>
@@ -268,7 +268,7 @@ export default async function OrdersPage() {
                     className="pl-10 w-64"
                   />
                 </div>
-                <Button variant="outline" size="sm">
+                <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="outline" size="sm">
                   <FaFilter className="mr-2" />
                   Filter
                 </Button>
@@ -433,11 +433,11 @@ export default async function OrdersPage() {
                         <td className="p-4">
                           <div className="flex items-center gap-2">
                             <Link href={`/adminall/orders/${order.id}`}>
-                              <Button size="sm" variant="outline" title="View Details">
+                              <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors" size="sm" variant="outline" title="View Details">
                                 <FaEye className="w-3 h-3" />
                               </Button>
                             </Link>
-                            <Button size="sm" variant="outline" title="Edit Order">
+                            <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors" size="sm" variant="outline" title="Edit Order">
                               <FaEdit className="w-3 h-3" />
                             </Button>
                           </div>

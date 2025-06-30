@@ -259,7 +259,7 @@ const CheckoutPage = () => {
               {t('cart.emptyDescription')}
             </p>
             <Link href="/list">
-              <Button   className="w-full px-4  mb-10  py-2 text-[18px] font-medium text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors ">
+              <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors">
                 {t('cart.continueShopping')}
               </Button>
             </Link>

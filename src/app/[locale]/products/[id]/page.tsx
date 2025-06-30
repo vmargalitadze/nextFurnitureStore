@@ -474,7 +474,7 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                 <button
                   onClick={handleAddToCart}
                   disabled={(!isOthersProduct() && !selectedSize) || addingToCart}
-                  className={`w-[50%] px-4 py-2 text-[15px] md:text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors ${
+                  className={`w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors ${
                     (isOthersProduct() || selectedSize) && !addingToCart
                       ? "bg-[#438c71] text-white"
                       : "bg-gray-400 cursor-not-allowed"
@@ -491,9 +491,11 @@ const Page = (props: { params: { id: string; locale: string } }) => {
               )}
               {!session && (
                 <div className="pt-1">
-                  <button className="w-[50%] px-4 py-2 text-[15px] md:text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors">
-                    <Link href="/sign-in">Login to add to cart</Link>
-                  </button>
+                  <Link href="/sign-in">
+                    <button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors">
+                      Login to add to cart
+                    </button>
+                  </Link>
                 </div>
               )}
             </div>

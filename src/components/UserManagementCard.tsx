@@ -146,6 +146,7 @@ const UserManagementCard: React.FC<UserManagementCardProps> = ({ user }) => {
           </div>
           <div className="flex items-center space-x-2">
             <Button
+              className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
               variant="outline"
               size="sm"
               onClick={() => setShowDetails(!showDetails)}
@@ -153,7 +154,7 @@ const UserManagementCard: React.FC<UserManagementCardProps> = ({ user }) => {
               <FaEye className="w-4 h-4 mr-1" />
               {showDetails ? 'Hide' : 'Details'}
             </Button>
-            <Button variant="outline" size="sm">
+            <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="outline" size="sm">
               <FaPrint className="w-4 h-4" />
             </Button>
           </div>

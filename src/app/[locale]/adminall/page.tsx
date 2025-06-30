@@ -126,7 +126,7 @@ export default async function AdminAllPage() {
             <p className="text-gray-600">Manage your store, products, orders, and users</p>
           </div>
           <Link href="/new">
-            <Button className="mt-4 sm:mt-0" variant="default">
+            <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="default">
               <FaPlus className="mr-2" />
               Add New Product
             </Button>
@@ -303,12 +303,12 @@ export default async function AdminAllPage() {
                             <td className="p-4">
                               <div className="flex items-center space-x-2">
                                 <Link href={`/products/${product.id}`}>
-                                  <Button size="sm" variant="outline">
+                                  <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors" size="sm" variant="outline">
                                     <FaEye className="w-3 h-3" />
                                   </Button>
                                 </Link>
                                 <Link href={`/edit?id=${product.id}`}>
-                                  <Button size="sm" variant="outline">
+                                  <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors" size="sm" variant="outline">
                                     <FaEdit className="w-3 h-3" />
                                   </Button>
                                 </Link>
@@ -329,7 +329,7 @@ export default async function AdminAllPage() {
                     <h3 className="text-lg font-medium text-gray-900 mb-2">No products yet</h3>
                     <p className="text-gray-500 mb-6">Get started by adding your first product</p>
                     <Link href="/new">
-                      <Button variant="default">
+                      <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="default">
                         <FaPlus className="mr-2" />
                         Add First Product
                       </Button>

@@ -299,8 +299,10 @@ function PageContentWrapper() {
         sizes:
           product.sizes?.map((size) => ({
             ...size,
-            price: new SimpleDecimal(size.price),
+            price: new SimpleDecimal(size.price?.toString() || '0'),
           })) || undefined,
+        // Handle the legacy price field if it exists
+        price: product.price ? new SimpleDecimal(product.price.toString()) : undefined,
         sales: product.sales || undefined,
       }));
       setProducts(productsWithDecimalPrices as Product[]);
@@ -485,7 +487,7 @@ function PageContentWrapper() {
               { shouldShowSidebar && (
               <button
                 onClick={handleClearFilters}
-                className="w-full px-4 py-2 text-sm font-medium border border-[#438c71] text-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors flex items-center justify-center gap-2"
+                className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
               >
               <Trash2 size={16} />   {t("clearFilters")}
               </button>

@@ -127,7 +127,7 @@ export default async function ProfilePage() {
               href="/forgot-password" 
               className="inline-block px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 text-gray-700   "
             >
-            <Button className="w-full h-16 text-lg" variant="default">
+            <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="default">
                       
                       {t('recoverPassword')}
                       </Button>
@@ -197,13 +197,13 @@ export default async function ProfilePage() {
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <Link href="/new">
-                      <Button className="w-full h-16 text-lg" variant="default">
+                      <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="default">
                         <FaPlus className="mr-2" />
                         {t('adminActions.addNewProduct')}
                       </Button>
                     </Link>
                     <Link href="/adminall">
-                      <Button className="w-full h-16 text-lg" variant="outline">
+                      <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="outline">
                         <FaList className="mr-2" />
                         {t('adminActions.manageAllProducts')}
                       </Button>
@@ -269,7 +269,7 @@ export default async function ProfilePage() {
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <Link href="/cart">
-                    <Button className="w-full" variant="outline">
+                    <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="outline">
                       <FaShoppingCart className="mr-2" />
                       {t('quickActions.viewCart')}
                     </Button>

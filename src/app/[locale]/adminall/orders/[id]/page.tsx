@@ -70,7 +70,7 @@ export default async function OrderDetailPage({ params }: { params: { id: string
           <div>
             <div className="flex items-center mb-2">
               <Link href="/adminall/orders">
-                <Button variant="ghost" size="sm" className="mr-4">
+                <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] mr-4 transition-colors" variant="ghost" size="sm" >
                   <FaArrowLeft className="w-4 h-4 mr-2" />
                   Back to Orders
                 </Button>
@@ -84,11 +84,11 @@ export default async function OrderDetailPage({ params }: { params: { id: string
             </p>
           </div>
           <div className="flex items-center space-x-2 mt-4 sm:mt-0">
-            <Button variant="outline">
+            <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="outline">
               <FaEdit className="w-4 h-4 mr-2" />
               Edit Order
             </Button>
-            <Button>
+            <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors">
               <FaTruck className="w-4 h-4 mr-2" />
               Update Status
             </Button>
