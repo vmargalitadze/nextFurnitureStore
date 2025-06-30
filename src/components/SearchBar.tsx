@@ -31,7 +31,7 @@ function SearchHelper() {
       params.delete("query");
     }
 
-    const path = pathname.includes("/all") ? pathname : "/all";
+    const path = pathname.includes("/list") ? pathname : "/list";
 
     if (pathname !== path) {
       push(`${path}?${params.toString()}`);
@@ -105,15 +105,39 @@ function SearchHelper() {
               Search suggestions for &ldquo;{query}&rdquo;
             </div>
             <div className="space-y-1">
-              <div className="px-3 py-2  rounded cursor-pointer text-sm">
+              <button 
+                onClick={() => {
+                  const params = new URLSearchParams();
+                  params.set("query", query);
+                  params.set("cat", "MATTRESS");
+                  push(`/list?${params.toString()}`);
+                }}
+                className="w-full text-left px-3 py-2 rounded cursor-pointer text-sm hover:bg-gray-100"
+              >
                 {query} in mattresses
-              </div>
-              <div className="px-3 py-2  rounded cursor-pointer text-sm">
+              </button>
+              <button 
+                onClick={() => {
+                  const params = new URLSearchParams();
+                  params.set("query", query);
+                  params.set("cat", "PILLOW");
+                  push(`/list?${params.toString()}`);
+                }}
+                className="w-full text-left px-3 py-2 rounded cursor-pointer text-sm hover:bg-gray-100"
+              >
                 {query} in pillows
-              </div>
-              <div className="px-3 py-2  rounded cursor-pointer text-sm">
+              </button>
+              <button 
+                onClick={() => {
+                  const params = new URLSearchParams();
+                  params.set("query", query);
+                  params.set("cat", "QUILT");
+                  push(`/list?${params.toString()}`);
+                }}
+                className="w-full text-left px-3 py-2 rounded cursor-pointer text-sm hover:bg-gray-100"
+              >
                 {query} in quilts
-              </div>
+              </button>
             </div>
           </div>
         </div>

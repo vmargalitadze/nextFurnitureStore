@@ -118,7 +118,11 @@ function PageContentWrapper() {
       const matchesQuery =
         !filters.searchQuery ||
         product.title.toLowerCase().includes(filters.searchQuery.toLowerCase()) ||
-        product.titleEn.toLowerCase().includes(filters.searchQuery.toLowerCase());
+        product.titleEn.toLowerCase().includes(filters.searchQuery.toLowerCase()) ||
+        product.description.toLowerCase().includes(filters.searchQuery.toLowerCase()) ||
+        product.descriptionEn.toLowerCase().includes(filters.searchQuery.toLowerCase()) ||
+        product.brand.toLowerCase().includes(filters.searchQuery.toLowerCase()) ||
+        product.category.toLowerCase().includes(filters.searchQuery.toLowerCase());
 
       // Price range filter
       const priceRange = getProductPriceRange(product);
@@ -314,18 +318,35 @@ function PageContentWrapper() {
   // Apply initial filters when products load or URL params change
   useEffect(() => {
     if (products.length > 0) {
+      console.log('Applying filters:', { category, brand, query, productsCount: products.length });
+      
+      // Parse multiple categories and brands from comma-separated values
+      const selectedCategories = category ? category.split(',').map(c => c.trim()) : [];
+      const selectedBrands = brand ? brand.split(',').map(b => b.trim()) : [];
+      
       const filtered = products.filter((product) => {
         const matchesCategory =
-          !category ||
-          product.category?.toLowerCase() === category.toLowerCase();
+          selectedCategories.length === 0 ||
+          selectedCategories.some(cat => product.category?.toLowerCase() === cat.toLowerCase());
         const matchesBrand =
-          !brand || product.brand?.toLowerCase() === brand.toLowerCase();
+          selectedBrands.length === 0 ||
+          selectedBrands.some(brandName => product.brand?.toLowerCase() === brandName.toLowerCase());
         const matchesQuery =
           !query ||
           product.title.toLowerCase().includes(query.toLowerCase()) ||
-          product.titleEn.toLowerCase().includes(query.toLowerCase());
+          product.titleEn.toLowerCase().includes(query.toLowerCase()) ||
+          product.description.toLowerCase().includes(query.toLowerCase()) ||
+          product.descriptionEn.toLowerCase().includes(query.toLowerCase()) ||
+          product.brand.toLowerCase().includes(query.toLowerCase()) ||
+          product.category.toLowerCase().includes(query.toLowerCase());
+        
+        if (query && !matchesQuery) {
+          console.log('Product filtered out by query:', product.title, 'Query:', query);
+        }
+        
         return matchesCategory && matchesBrand && matchesQuery;
       });
+      console.log('Filtered products count:', filtered.length);
       setFilteredProducts(filtered);
     }
   }, [products, category, brand, query]);

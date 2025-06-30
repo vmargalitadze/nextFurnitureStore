@@ -48,17 +48,25 @@ export async function createProduct(data: z.infer<typeof ProductSchema>) {
       const normalizedCategory = product.category === "bundle" ? "bundle" : product.category;
       const { sizes, ...productData } = product;
       
+      const createData: any = {
+        ...productData,
+        category: normalizedCategory as any,
+      };
+
+      // Handle price for OTHERS category or sizes for other categories
+      if (product.category === "OTHERS") {
+        createData.price = new Prisma.Decimal(product.price!);
+      } else {
+        createData.sizes = {
+          create: sizes!.map(sizeData => ({
+            size: sizeData.size,
+            price: new Prisma.Decimal(sizeData.price)
+          }))
+        };
+      }
+      
       const createdProduct = await prisma.product.create({ 
-        data: { 
-          ...productData, 
-          category: normalizedCategory as any,
-          sizes: {
-            create: sizes.map(sizeData => ({
-              size: sizeData.size,
-              price: new Prisma.Decimal(sizeData.price)
-            }))
-          }
-        },
+        data: createData,
         include: {
           sizes: true
         }
@@ -102,11 +110,9 @@ export async function createProduct(data: z.infer<typeof ProductSchema>) {
     
     export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
         try {
-       
           
           const product = updateProductSchema.parse(data);
         
-          
           const productExists = await prisma.product.findFirst({
             where: { id: product.id },
           });
@@ -114,29 +120,42 @@ export async function createProduct(data: z.infer<typeof ProductSchema>) {
           if (!productExists) throw new Error('Product not found');
       
           const normalizedCategory = product.category === "bundle" ? "bundle" : product.category;
+          
+          const updateData: any = {
+            title: product.title,
+            titleEn: product.titleEn,
+            description: product.description, 
+            descriptionEn: product.descriptionEn,
+            brand: product.brand,
+            images: product.images,
+            category: normalizedCategory,
+            sales: product.sales,
+            popular: product.popular,
+            tbilisi: product.tbilisi,
+            batumi: product.batumi,
+            qutaisi: product.qutaisi,
+          };
+
+          // Handle price for OTHERS category or sizes for other categories
+          if (product.category === "OTHERS") {
+            updateData.price = new Prisma.Decimal(product.price!);
+            // Remove all sizes for OTHERS category
+            updateData.sizes = {
+              deleteMany: {}
+            };
+          } else {
+            updateData.sizes = {
+              deleteMany: {},
+              create: product.sizes!.map(sizeData => ({
+                size: sizeData.size,
+                price: new Prisma.Decimal(sizeData.price)
+              }))
+            };
+          }
+
           await prisma.product.update({
             where: { id: product.id },
-            data: {
-              title: product.title,
-              titleEn: product.titleEn,
-              description: product.description, 
-              descriptionEn: product.descriptionEn,
-              brand: product.brand,
-              images: product.images,
-              category: normalizedCategory,
-              sales: product.sales,
-              popular: product.popular,
-              tbilisi: product.tbilisi,
-              batumi: product.batumi,
-              qutaisi: product.qutaisi,
-              sizes: {
-                deleteMany: {},
-                create: product.sizes.map(sizeData => ({
-                  size: sizeData.size,
-                  price: new Prisma.Decimal(sizeData.price)
-                }))
-              }
-            },
+            data: updateData,
           });
       
           revalidatePath('/admin/products');

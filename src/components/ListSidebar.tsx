@@ -73,7 +73,7 @@ const ListSideBar: React.FC<FilterProps> = ({ isOpen, toggleSidebar, onFilterCha
       mattress: { en: "Mattress", ge: "მატრასი" },
       bed: { en: "Bed", ge: "საწოლი" },
       quilt: { en: "Quilt", ge: "საბანი" },
-      others: { en: "Others", ge: "სხვა" }
+      OTHERS: { en: "Others", ge: "სხვა" }
     };
     const label = map[category.toLowerCase()] || { en: category, ge: category };
     return locale === "en" ? label.en : label.ge;
@@ -95,6 +95,12 @@ const ListSideBar: React.FC<FilterProps> = ({ isOpen, toggleSidebar, onFilterCha
     setCurrentPriceRange(priceRange);
     setSearchQuery("");
     onFilterChange({ selectedCategories: [], selectedBrands: [], priceRange, searchQuery: "" });
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      applyFilters();
+    }
   };
 
   const handleClose = () => {
@@ -148,6 +154,7 @@ const ListSideBar: React.FC<FilterProps> = ({ isOpen, toggleSidebar, onFilterCha
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={t("searchPlaceholder")}
                    className="w-full px-4 py-2 pl-17 md:pl-10 border-2 border-gray-200 rounded-lg text-gray-800 transition-all duration-300 placeholder-gray-400"
+                onKeyDown={handleKeyPress}
               />
                <Search className="absolute  md:left-3  top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             </div>

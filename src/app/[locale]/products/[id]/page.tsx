@@ -48,9 +48,7 @@ interface Product {
   batumi: boolean;
   qutaisi: boolean;
   sizes?: ProductSize[];
-  // Keep old fields for backward compatibility during migration
-  size?: string;
-  price?: SimpleDecimal;
+  price?: SimpleDecimal; // For OTHERS category products
   sales?: number;
 }
 
@@ -76,10 +74,11 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                 ...size,
                 price: new SimpleDecimal(size.price.toString()),
               })) || undefined,
+            price: data.price ? new SimpleDecimal(data.price.toString()) : undefined,
             sales: data.sales || undefined,
           };
           setProduct(productWithDecimalPrices as Product);
-          // Set the first size as default selected
+          // Set the first size as default selected for products with sizes
           if (
             data.sizes &&
             Array.isArray(data.sizes) &&
@@ -101,6 +100,28 @@ const Page = (props: { params: { id: string; locale: string } }) => {
   const getSelectedSizeData = () => {
     if (!product || !selectedSize || !product.sizes) return null;
     return product.sizes.find((size) => size.id === selectedSize);
+  };
+
+  const isOthersProduct = () => {
+    return product?.category === "OTHERS";
+  };
+
+  const getProductPrice = () => {
+    if (isOthersProduct() && product?.price) {
+      return product.price.toNumber();
+    }
+    if (selectedSizeData) {
+      return selectedSizeData.price.toNumber();
+    }
+    return 0;
+  };
+
+  const getDiscountedPrice = () => {
+    const basePrice = getProductPrice();
+    if (product?.sales && product.sales > 0) {
+      return basePrice * (1 - product.sales / 100);
+    }
+    return basePrice;
   };
 
   const formatSizeDisplay = (sizeEnum: string) => {
@@ -133,19 +154,25 @@ const Page = (props: { params: { id: string; locale: string } }) => {
   };
 
   const handleAddToCart = async () => {
-    if (!selectedSize || !product) return;
+    if (!product) return;
 
-    const selectedSizeData = getSelectedSizeData();
-    if (!selectedSizeData) {
-      toast.error('Please select a size');
-      return;
+    // For OTHERS products, no size selection needed
+    if (isOthersProduct()) {
+      if (!product.price) {
+        toast.error('Product price not available');
+        return;
+      }
+    } else {
+      // For sized products, size selection is required
+      if (!selectedSize) {
+        toast.error('Please select a size');
+        return;
+      }
     }
 
-    // Calculate the price (discounted if there's a sale)
-    const basePrice = selectedSizeData.price.toNumber();
-    const finalPrice = product.sales && product.sales > 0 
-      ? basePrice * (1 - product.sales / 100)
-      : basePrice;
+    const selectedSizeData = getSelectedSizeData();
+    const basePrice = getProductPrice();
+    const finalPrice = getDiscountedPrice();
 
     // Show toast immediately for better UX
     toast.success('Added to cart successfully!');
@@ -154,7 +181,7 @@ const Page = (props: { params: { id: string; locale: string } }) => {
     const newItem: CartItem = {
       productId: product.id,
       name: getLocalizedTitle() || product.title || 'Product',
-      size: selectedSizeData.size,
+      size: isOthersProduct() ? 'N/A' : (selectedSizeData?.size || ''),
       qty: 1,
       image: product.images[0],
       price: finalPrice.toFixed(2),
@@ -171,7 +198,7 @@ const Page = (props: { params: { id: string; locale: string } }) => {
         },
         body: JSON.stringify({
           productId: product.id,
-          size: selectedSizeData.size,
+          size: isOthersProduct() ? 'N/A' : (selectedSizeData?.size || ''),
           quantity: 1,
         }),
       });
@@ -254,8 +281,8 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                 </p>
               </div>
 
-              {/* Size Selection */}
-              {hasNewStructure && (
+              {/* Size Selection - Only for non-OTHERS products */}
+              {!isOthersProduct() && hasNewStructure && (
                 <div className="pb-2">
                   <div className="flex flex-col gap-3">
                     <h3 className="text-[18px] font-semibold text-gray-900">
@@ -300,7 +327,7 @@ const Page = (props: { params: { id: string; locale: string } }) => {
               )}
 
               {/* Price Display */}
-              {selectedSizeData && (
+              {(isOthersProduct() || selectedSizeData) && (
                 <div key={selectedSize} className="pb-2">
                   <div className="flex items-start gap-3">
                     {product.sales && product.sales > 0 ? (
@@ -311,10 +338,10 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                           </span>
                           <div className="flex items-center gap-2">
                             <span className="text-[24px] font-bold text-green-600 transition-all duration-200 animate-pulse">
-                              ₾{(selectedSizeData.price.toNumber() * (1 - product.sales / 100)).toFixed(2)}
+                              ₾{getDiscountedPrice().toFixed(2)}
                             </span>
                             <span className="text-[18px] text-gray-500 line-through">
-                              ₾{selectedSizeData.price.toNumber().toFixed(2)}
+                              ₾{getProductPrice().toFixed(2)}
                             </span>
                           </div>
                         </div>
@@ -322,9 +349,11 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                           <span className="text-sm text-red-600 font-medium bg-red-50 px-2 py-1 rounded">
                             -{product.sales}% OFF
                           </span>
-                          <span className="text-sm text-gray-600 bg-gray-100 px-2 py-1 rounded">
-                            Size: {formatSizeDisplay(selectedSizeData.size)}
-                          </span>
+                          {!isOthersProduct() && selectedSizeData && (
+                            <span className="text-sm text-gray-600 bg-gray-100 px-2 py-1 rounded">
+                              Size: {formatSizeDisplay(selectedSizeData.size)}
+                            </span>
+                          )}
                         </div>
                       </div>
                     ) : (
@@ -334,14 +363,16 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                             {getTranslation("product.price", "Price")}:
                           </span>
                           <span className="text-[24px] font-bold text-gray-900 transition-all duration-200 animate-pulse">
-                            ₾{selectedSizeData.price.toNumber().toFixed(2)}
+                            ₾{getProductPrice().toFixed(2)}
                           </span>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm text-gray-600 bg-gray-100 px-2 py-1 rounded">
-                            Size: {formatSizeDisplay(selectedSizeData.size)}
-                          </span>
-                        </div>
+                        {!isOthersProduct() && selectedSizeData && (
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm text-gray-600 bg-gray-100 px-2 py-1 rounded">
+                              Size: {formatSizeDisplay(selectedSizeData.size)}
+                            </span>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
@@ -442,9 +473,9 @@ const Page = (props: { params: { id: string; locale: string } }) => {
               <div className="pt-1">
                 <button
                   onClick={handleAddToCart}
-                  disabled={!selectedSize || addingToCart}
+                  disabled={(!isOthersProduct() && !selectedSize) || addingToCart}
                   className={`w-[50%] px-4 py-2 text-[15px] md:text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors ${
-                    selectedSize && !addingToCart
+                    (isOthersProduct() || selectedSize) && !addingToCart
                       ? "bg-[#438c71] text-white"
                       : "bg-gray-400 cursor-not-allowed"
                   }`}
@@ -457,7 +488,7 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                   </span>
                 </button>
               </div>
-              )} 
+              )}
               {!session && (
                 <div className="pt-1">
                   <button className="w-[50%] px-4 py-2 text-[15px] md:text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors">

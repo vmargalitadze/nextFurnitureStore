@@ -85,7 +85,7 @@ export default function FilterSidebar({ onFilterChange }: FilterSidebarProps) {
       'mattress': { en: 'Mattress', ge: 'მატრასი' },
       'bed': { en: 'Bed', ge: 'ლოგინი' },
       'quilt': { en: 'Quilt', ge: 'საბანი' },
-      'others': { en: 'Others', ge: 'სხვა' }
+      'OTHERS': { en: 'Others', ge: 'სხვა' }
     };
     const label = map[category] || { en: category, ge: category };
     return locale === "en" ? label.en : label.ge;
@@ -173,11 +173,13 @@ export default function FilterSidebar({ onFilterChange }: FilterSidebarProps) {
     }
     
     if (selectedCategories.length > 0) {
-      params.set('cat', selectedCategories[0]); // Take first category for URL
+      // For multiple categories, join them with comma
+      params.set('cat', selectedCategories.join(','));
     }
     
     if (selectedBrands.length > 0) {
-      params.set('brand', selectedBrands[0]); // Take first brand for URL
+      // For multiple brands, join them with comma
+      params.set('brand', selectedBrands.join(','));
     }
     
     const url = `/list${params.toString() ? `?${params.toString()}` : ''}`;

@@ -42,7 +42,7 @@ const CategoriesList = [
   },
   { 
     id: "6", 
-    type: "others", 
+    type: "OTHERS", 
     label: 'სხვა', 
     labelEn: 'Others',  
     quantity: 7,  

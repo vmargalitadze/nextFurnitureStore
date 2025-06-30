@@ -14,25 +14,28 @@ const currency = z
     "Price must have exactly two decimal places"
   );
 
-export const ProductSchema = z.object({
+// Base product schema without refinement
+const BaseProductSchema = z.object({
   title: z.string().min(1),
   titleEn: z.string().min(1),
-  category: z.enum(["MATTRESS", "PILLOW", "bundle", "QUILT", "PAD", "BED"]),
+  category: z.enum(["MATTRESS", "PILLOW", "bundle", "QUILT", "PAD", "BED", "OTHERS"]),
   images: z.array(z.string()).min(1),
 
   brand: z.string().min(1),
   description: z.string().min(1),
   descriptionEn: z.string().min(1),
+  price: z.number().positive().optional(), // For products without sizes (like OTHERS)
   sizes: z.array(z.object({
     size: z.enum([
       "SIZE_80_190", "SIZE_80_200", "SIZE_90_190", "SIZE_90_200", "SIZE_100_190", 
       "SIZE_100_200", "SIZE_110_190", "SIZE_110_200", "SIZE_120_190", "SIZE_120_200", 
       "SIZE_130_190", "SIZE_130_200", "SIZE_140_190", "SIZE_140_200", "SIZE_150_190", 
       "SIZE_150_200", "SIZE_160_190", "SIZE_160_200", "SIZE_170_190", "SIZE_170_200", 
-      "SIZE_180_190", "SIZE_180_200", "SIZE_190_190", "SIZE_190_200", "SIZE_200_200"
+      "SIZE_180_190", "SIZE_180_200", "SIZE_190_190", "SIZE_190_200", "SIZE_200_200",
+      "SIZE_200_220", "SIZE_220_220"
     ]),
     price: z.number().positive()
-  })).min(1, "At least one size with price is required"),
+  })).optional(), // Make sizes optional
 
   tbilisi: z.boolean().optional(),
   batumi: z.boolean().optional(),
@@ -42,8 +45,31 @@ export const ProductSchema = z.object({
   sales: z.number().int().nonnegative().optional(),
 });
 
-export const updateProductSchema = ProductSchema.extend({
+// Product schema with refinement
+export const ProductSchema = BaseProductSchema.refine((data) => {
+  // Either price (for OTHERS) or sizes (for other categories) must be provided
+  if (data.category === "OTHERS") {
+    return data.price !== undefined && (!data.sizes || data.sizes.length === 0);
+  } else {
+    return data.sizes !== undefined && data.sizes.length > 0;
+  }
+}, {
+  message: "OTHERS category must have a price, other categories must have sizes",
+  path: ["category"]
+});
+
+export const updateProductSchema = BaseProductSchema.extend({
   id: z.string().min(1, "Id is required"),
+}).refine((data) => {
+  // Either price (for OTHERS) or sizes (for other categories) must be provided
+  if (data.category === "OTHERS") {
+    return data.price !== undefined && (!data.sizes || data.sizes.length === 0);
+  } else {
+    return data.sizes !== undefined && data.sizes.length > 0;
+  }
+}, {
+  message: "OTHERS category must have a price, other categories must have sizes",
+  path: ["category"]
 });
 
 // Schema for signing users in

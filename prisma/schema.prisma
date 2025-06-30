@@ -52,6 +52,7 @@ enum ProductType {
   PAD
   bundle
   BED
+  OTHERS
 }
 
 enum Size {
@@ -80,6 +81,8 @@ enum Size {
   SIZE_190_190
   SIZE_190_200
   SIZE_200_200
+  SIZE_200_220
+  SIZE_220_220
 }
 
 model Product {
@@ -92,6 +95,7 @@ model Product {
   brand         String
   description   String
   descriptionEn String
+  price         Decimal? @db.Decimal(12, 2)
   tbilisi       Boolean @default(false)
   batumi        Boolean @default(false)
   qutaisi       Boolean @default(false)

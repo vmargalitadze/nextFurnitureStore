@@ -140,7 +140,7 @@ const SideBar: React.FC<SideBarProps> = ({
         mattress: { en: "Mattress", ge: "მატრასი" },
         bed: { en: "Bed", ge: "საწოლი" },
         quilt: { en: "Quilt", ge: "საბანი" },
-        others: { en: "Others", ge: "სხვა" },
+        OTHERS: { en: "Others", ge: "სხვა" },
       };
 
       const label = map[normalized] || { en: category, ge: category };

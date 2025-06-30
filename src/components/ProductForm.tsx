@@ -39,6 +39,7 @@ export default function ProductForm() {
       brand: "",
       description: "",
       descriptionEn: "",
+      price: undefined,
       sizes: [{ size: "SIZE_80_190", price: 0 }],
       tbilisi: false,
       batumi: false,
@@ -52,6 +53,9 @@ export default function ProductForm() {
     control: form.control,
     name: "sizes",
   });
+
+  const selectedCategory = form.watch("category");
+  const isOthersCategory = selectedCategory === "OTHERS";
 
   const onSubmit = async (data: ProductFormValues) => {
     try {
@@ -148,6 +152,7 @@ export default function ProductForm() {
                     <option value="QUILT">QUILT</option>
                     <option value="PAD">PAD</option>
                     <option value="BED">BED</option>
+                    <option value="OTHERS">OTHERS</option>
                   </select>
                 </FormControl>
                 <FormMessage />
@@ -222,97 +227,124 @@ export default function ProductForm() {
             )}
           />
 
-          {/* Sizes and Prices */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <FormLabel className="text-base font-medium">ზომები და ფასები</FormLabel>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={addSize}
-                className="text-sm"
-              >
-                + ზომის დამატება
-              </Button>
-            </div>
-            
-            {fields.map((field, index) => (
-              <div key={field.id} className="flex gap-4 items-end p-4 border rounded-lg">
-                <FormField
-                  control={form.control}
-                  name={`sizes.${index}.size`}
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel className="text-sm">ზომა</FormLabel>
-                      <FormControl>
-                        <select {...field} className="w-full border rounded px-3 py-2">
-                          <option value="SIZE_80_190">80-190</option>
-                          <option value="SIZE_80_200">80-200</option>
-                          <option value="SIZE_90_190">90-190</option>
-                          <option value="SIZE_90_200">90-200</option>
-                          <option value="SIZE_100_190">100-190</option>
-                          <option value="SIZE_100_200">100-200</option>
-                          <option value="SIZE_110_190">110-190</option>
-                          <option value="SIZE_110_200">110-200</option>
-                          <option value="SIZE_120_190">120-190</option>
-                          <option value="SIZE_120_200">120-200</option>
-                          <option value="SIZE_130_190">130-190</option>
-                          <option value="SIZE_130_200">130-200</option>
-                          <option value="SIZE_140_190">140-190</option>
-                          <option value="SIZE_140_200">140-200</option>
-                          <option value="SIZE_150_190">150-190</option>
-                          <option value="SIZE_150_200">150-200</option>
-                          <option value="SIZE_160_190">160-190</option>
-                          <option value="SIZE_160_200">160-200</option>
-                          <option value="SIZE_170_190">170-190</option>
-                          <option value="SIZE_170_200">170-200</option>
-                          <option value="SIZE_180_190">180-190</option>
-                          <option value="SIZE_180_200">180-200</option>
-                          <option value="SIZE_190_190">190-190</option>
-                          <option value="SIZE_190_200">190-200</option>
-                          <option value="SIZE_200_200">200-200</option>
-                        </select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name={`sizes.${index}.price`}
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel className="text-sm">ფასი</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          step="0.01"
-                          placeholder="ფასი"
-                          {...field}
-                          onChange={(e) => field.onChange(Number(e.target.value))}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                {fields.length > 1 && (
-                  <Button
-                    type="button"
-                    variant="destructive"
-                    size="sm"
-                    onClick={() => removeSize(index)}
-                    className="text-sm"
-                  >
-                    წაშლა
-                  </Button>
-                )}
+          {/* Price field for OTHERS category */}
+          {isOthersCategory && (
+            <FormField
+              control={form.control}
+              name="price"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>ფასი</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      step="0.01"
+                      placeholder="ფასი"
+                      {...field}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+
+          {/* Sizes and Prices - only show for non-OTHERS categories */}
+          {!isOthersCategory && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <FormLabel className="text-base font-medium">ზომები და ფასები</FormLabel>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={addSize}
+                  className="text-sm"
+                >
+                  + ზომის დამატება
+                </Button>
               </div>
-            ))}
-          </div>
+              
+              {fields.map((field, index) => (
+                <div key={field.id} className="flex gap-4 items-end p-4 border rounded-lg">
+                  <FormField
+                    control={form.control}
+                    name={`sizes.${index}.size`}
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        <FormLabel className="text-sm">ზომა</FormLabel>
+                        <FormControl>
+                          <select {...field} className="w-full border rounded px-3 py-2">
+                            <option value="SIZE_80_190">80-190</option>
+                            <option value="SIZE_80_200">80-200</option>
+                            <option value="SIZE_90_190">90-190</option>
+                            <option value="SIZE_90_200">90-200</option>
+                            <option value="SIZE_100_190">100-190</option>
+                            <option value="SIZE_100_200">100-200</option>
+                            <option value="SIZE_110_190">110-190</option>
+                            <option value="SIZE_110_200">110-200</option>
+                            <option value="SIZE_120_190">120-190</option>
+                            <option value="SIZE_120_200">120-200</option>
+                            <option value="SIZE_130_190">130-190</option>
+                            <option value="SIZE_130_200">130-200</option>
+                            <option value="SIZE_140_190">140-190</option>
+                            <option value="SIZE_140_200">140-200</option>
+                            <option value="SIZE_150_190">150-190</option>
+                            <option value="SIZE_150_200">150-200</option>
+                            <option value="SIZE_160_190">160-190</option>
+                            <option value="SIZE_160_200">160-200</option>
+                            <option value="SIZE_170_190">170-190</option>
+                            <option value="SIZE_170_200">170-200</option>
+                            <option value="SIZE_180_190">180-190</option>
+                            <option value="SIZE_180_200">180-200</option>
+                            <option value="SIZE_190_190">190-190</option>
+                            <option value="SIZE_190_200">190-200</option>
+                            <option value="SIZE_200_200">200-200</option>
+                            <option value="SIZE_200_220">200-220</option>
+                            <option value="SIZE_220_220">220-220</option>
+                          </select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name={`sizes.${index}.price`}
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        <FormLabel className="text-sm">ფასი</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            step="0.01"
+                            placeholder="ფასი"
+                            {...field}
+                            onChange={(e) => field.onChange(Number(e.target.value))}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  {fields.length > 1 && (
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => removeSize(index)}
+                      className="text-sm"
+                    >
+                      წაშლა
+                    </Button>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
 
           {/* tbilisi */}
           <FormField
