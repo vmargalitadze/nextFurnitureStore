@@ -10,28 +10,12 @@ function calculateCartTotals(items: CartItem[]) {
     return total + (parseFloat(item.price) * item.qty);
   }, 0);
 
-  // Shipping calculation based on total items and price (in Lari)
-  let shippingPrice = 0;
-  if (itemsPrice > 0) {
-    if (itemsPrice >= 1500) {
-      shippingPrice = 0; // Free shipping for orders over ₾1500
-    } else if (itemsPrice >= 600) {
-      shippingPrice = 25; // ₾25 shipping for orders ₾600-₾1499
-    } else {
-      shippingPrice = 40; // ₾40 shipping for orders under ₾600
-    }
-  }
-
-  // Tax calculation (assuming 18% VAT rate for Georgia)
-  const taxPrice = itemsPrice * 0.18;
-
-  const totalPrice = itemsPrice + shippingPrice + taxPrice;
-
+  // No shipping or tax calculation - just return the items price
   return {
     itemsPrice: parseFloat(itemsPrice.toFixed(2)),
-    totalPrice: parseFloat(totalPrice.toFixed(2)),
-    shippingPrice: parseFloat(shippingPrice.toFixed(2)),
-    taxPrice: parseFloat(taxPrice.toFixed(2)),
+    totalPrice: parseFloat(itemsPrice.toFixed(2)),
+    shippingPrice: 0,
+    taxPrice: 0,
   };
 }
 

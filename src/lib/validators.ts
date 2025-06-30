@@ -21,7 +21,7 @@ const BaseProductSchema = z.object({
   category: z.enum(["MATTRESS", "PILLOW", "bundle", "QUILT", "PAD", "BED", "OTHERS"]),
   images: z.array(z.string()).min(1),
 
-  brand: z.string().min(1),
+  brand: z.string().optional(), // Make brand optional for OTHERS category
   description: z.string().min(1),
   descriptionEn: z.string().min(1),
   price: z.number().positive().optional(), // For products without sizes (like OTHERS)
@@ -47,28 +47,30 @@ const BaseProductSchema = z.object({
 
 // Product schema with refinement
 export const ProductSchema = BaseProductSchema.refine((data) => {
-  // Either price (for OTHERS) or sizes (for other categories) must be provided
+  // OTHERS category: must have price, no sizes, no brand required
   if (data.category === "OTHERS") {
     return data.price !== undefined && (!data.sizes || data.sizes.length === 0);
   } else {
-    return data.sizes !== undefined && data.sizes.length > 0;
+    // Other categories: must have sizes and brand
+    return data.sizes !== undefined && data.sizes.length > 0 && data.brand && data.brand.length > 0;
   }
 }, {
-  message: "OTHERS category must have a price, other categories must have sizes",
+  message: "OTHERS category must have a price (no sizes/brands), other categories must have sizes and brand",
   path: ["category"]
 });
 
 export const updateProductSchema = BaseProductSchema.extend({
   id: z.string().min(1, "Id is required"),
 }).refine((data) => {
-  // Either price (for OTHERS) or sizes (for other categories) must be provided
+  // OTHERS category: must have price, no sizes, no brand required
   if (data.category === "OTHERS") {
     return data.price !== undefined && (!data.sizes || data.sizes.length === 0);
   } else {
-    return data.sizes !== undefined && data.sizes.length > 0;
+    // Other categories: must have sizes and brand
+    return data.sizes !== undefined && data.sizes.length > 0 && data.brand && data.brand.length > 0;
   }
 }, {
-  message: "OTHERS category must have a price, other categories must have sizes",
+  message: "OTHERS category must have a price (no sizes/brands), other categories must have sizes and brand",
   path: ["category"]
 });
 

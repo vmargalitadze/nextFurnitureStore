@@ -102,6 +102,7 @@ function ProductList({
               ...size,
               price: new SimpleDecimal(size.price),
             })) || undefined,
+          price: product.price ? new SimpleDecimal(product.price) : undefined,
           sales: product.sales || undefined,
         }));
         setProducts(productsWithDecimalPrices as Product[]);
@@ -126,7 +127,15 @@ function ProductList({
       };
     }
     if (product.price) {
-      const price = product.price.toNumber();
+      // Handle different price types safely
+      let price: number;
+      if (typeof product.price === 'object' && 'toNumber' in product.price) {
+        price = product.price.toNumber();
+      } else if (typeof product.price === 'string' || typeof product.price === 'number') {
+        price = new SimpleDecimal(product.price).toNumber();
+      } else {
+        price = 0;
+      }
       return { min: price, max: price };
     }
     return { min: 0, max: 0 };
@@ -157,7 +166,11 @@ function ProductList({
       const byLegacyType =
         !selectedType ||
         product.category.toLowerCase() === selectedType.toLowerCase();
-      const byLegacyBrand = !selectedBrand || product.brand === selectedBrand;
+      
+      // Handle brand filtering for OTHERS products (they don't have brands)
+      const byLegacyBrand = !selectedBrand || 
+        (product.category === "OTHERS" ? true : product.brand === selectedBrand);
+      
       const priceRange = getProductPriceRange(product);
       const byLegacyMinPrice =
         selectedPrice.min === null || priceRange.max >= selectedPrice.min;
@@ -168,9 +181,12 @@ function ProductList({
       const byNewType =
         filterState.selectedCategories.length === 0 ||
         filterState.selectedCategories.includes(product.category);
+      
+      // Handle brand filtering for OTHERS products in new filter system
       const byNewBrand =
         filterState.selectedBrands.length === 0 ||
-        filterState.selectedBrands.includes(product.brand);
+        (product.category === "OTHERS" ? true : filterState.selectedBrands.includes(product.brand));
+      
       const byNewMinPrice = priceRange.max >= filterState.priceRange.min;
       const byNewMaxPrice = priceRange.min <= filterState.priceRange.max;
 
@@ -217,37 +233,15 @@ function ProductList({
     return matress.slice(0, 5);
   }, [getFilteredProducts, products]);
 
-  // Separate function to get popular products without filtering restrictions
-  const getPopularProducts = useCallback(() => {
-    console.log("Getting popular products from all products:", products.length);
-    console.log("All products popular status:", products.map(p => ({ id: p.id, popular: p.popular, title: p.title })));
-    
+  const filteredProducts2 = useMemo(() => {
     const popular = products.filter((p) => p.popular === true);
-    console.log("Popular products found:", popular.length);
-    console.log("Popular products:", popular.map(p => ({ id: p.id, title: p.title })));
-    
     return popular.slice(0, 5);
   }, [products]);
-
-  // Separate function to get products with sales/discounts
-  const getSalesProducts = useCallback(() => {
-    console.log("Getting sales products from all products:", products.length);
-    console.log("All products sales status:", products.map(p => ({ id: p.id, sales: p.sales, title: p.title })));
-    
+  
+  const filteredProducts3 = useMemo(() => {
     const salesProducts = products.filter((p) => p.sales && p.sales > 0);
-    console.log("Sales products found:", salesProducts.length);
-    console.log("Sales products:", salesProducts.map(p => ({ id: p.id, title: p.title, sales: p.sales })));
-    
     return salesProducts.slice(0, 5);
   }, [products]);
-
-  const filteredProducts2 = useMemo(() => {
-    return getPopularProducts();
-  }, [getPopularProducts]);
-
-  const filteredProducts3 = useMemo(() => {
-    return getSalesProducts();
-  }, [getSalesProducts]);
 
   const transformProducts = useCallback(
     (products: Product[]) => {
@@ -282,7 +276,7 @@ function ProductList({
     () => transformProducts(filteredProducts2),
     [filteredProducts2, transformProducts]
   );
-
+  
   const transformedProducts3 = useMemo(
     () => transformProducts(filteredProducts3),
     [filteredProducts3, transformProducts]
@@ -311,14 +305,17 @@ function ProductList({
                 </div>
               ))}
             </div>
-          ) : transformedProducts.length > 0 ? (
+          ) : (
             <>
-            <div className="w-full rounded-2xl pt-10 ">
-              <h1 className=" text-3xl md:text-[45px] mb-3  flex justify-center items-center font-light text-gray-900 leading-tight">
-                {t("newProducts")}
-              </h1>
-              <ProductHelper items={transformedProducts} />
-            </div>
+            {transformedProducts.length > 0 && (
+              <div className="w-full rounded-2xl pt-10 ">
+                <h1 className=" text-3xl md:text-[45px] mb-3  flex justify-center items-center font-light text-gray-900 leading-tight">
+                  {t("newProducts")}
+                </h1>
+                <ProductHelper items={transformedProducts} />
+              </div>
+            )}
+            
             <div className="w-full rounded-2xl pt-10 ">
               <h1 className=" text-3xl md:text-[45px] mb-3  flex justify-center items-center font-light text-gray-900 leading-tight">
                 {t("popularProducts")}
@@ -349,29 +346,30 @@ function ProductList({
               )}
             </div>
             
-            </>
-          ) : (
-            <div className="text-center py-4">
-              <div className="text-gray-400 mb-4">
-                <svg
-                  className="w-16 h-16 mx-auto"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
-                  />
-                </svg>
+            {transformedProducts.length === 0 && transformedProducts2.length === 0 && transformedProducts3.length === 0 && (
+              <div className="text-center py-4">
+                <div className="text-gray-400 mb-4">
+                  <svg
+                    className="w-16 h-16 mx-auto"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
+                    />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  პროდუქტი ვერ მოიძებნა
+                </h3>
+                <p className="text-gray-600">ამ კატეგორიაში პროდუქტები არ არის</p>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                პროდუქტი ვერ მოიძებნა
-              </h3>
-              <p className="text-gray-600">ამ კატეგორიაში პროდუქტები არ არის</p>
-            </div>
+            )}
+            </>
           )}
 
           {/* View All Button */}

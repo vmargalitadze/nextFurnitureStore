@@ -59,6 +59,22 @@ export default function EditProductForm({ productId }: EditProductFormProps) {
   const selectedCategory = form.watch("category");
   const isOthersCategory = selectedCategory === "OTHERS";
 
+  // Reset form fields when category changes
+  useEffect(() => {
+    if (isOthersCategory) {
+      // Clear sizes and brand for OTHERS category
+      form.setValue("sizes", []);
+      form.setValue("brand", "");
+    } else {
+      // Reset to default sizes for other categories if no sizes exist
+      const currentSizes = form.getValues("sizes");
+      if (!currentSizes || currentSizes.length === 0) {
+        form.setValue("sizes", [{ size: "SIZE_80_190", price: 0 }]);
+      }
+      form.setValue("price", undefined);
+    }
+  }, [selectedCategory, form]);
+
   // Load product data
   useEffect(() => {
     const loadProduct = async () => {
@@ -224,27 +240,29 @@ export default function EditProductForm({ productId }: EditProductFormProps) {
               )}
             />
 
-            {/* brand */}
-            <FormField
-              control={form.control}
-              name="brand"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Brand</FormLabel>
-                  <FormControl>
-                    <select {...field} className="w-full border rounded px-3 py-2">
-                      <option value="">Select Brand</option>
-                      <option value="Sevyat">Sevyat</option>
-                      <option value="IDAŞ">IDAŞ</option>
-                      <option value="İsbiryatak">İsbiryatak</option>
-                      <option value="Sleepnice">Sleepnice</option>
-                      <option value="Sleepandbed">Sleepandbed</option>
-                    </select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {/* brand - only show for non-OTHERS categories */}
+            {!isOthersCategory && (
+              <FormField
+                control={form.control}
+                name="brand"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Brand</FormLabel>
+                    <FormControl>
+                      <select {...field} className="w-full border rounded px-3 py-2">
+                        <option value="">Select Brand</option>
+                        <option value="Sevyat">Sevyat</option>
+                        <option value="IDAŞ">IDAŞ</option>
+                        <option value="İsbiryatak">İsbiryatak</option>
+                        <option value="Sleepnice">Sleepnice</option>
+                        <option value="Sleepandbed">Sleepandbed</option>
+                      </select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
 
             {/* description */}
             <FormField

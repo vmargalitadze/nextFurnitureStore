@@ -266,12 +266,15 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                   )}
                 </div>
 
-                <p className="text-[18px] font-bold text-gray-600 mb-1">
-                  {getTranslation("product.brand", "Brand")}:{" "}
-                  <span className="font-medium text-gray-900">
-                    {product.brand}
-                  </span>
-                </p>
+                {/* Brand - only show for non-OTHERS products */}
+                {!isOthersProduct() && product.brand && (
+                  <p className="text-[18px] font-bold text-gray-600 mb-1">
+                    {getTranslation("product.brand", "Brand")}:{" "}
+                    <span className="font-medium text-gray-900">
+                      {product.brand}
+                    </span>
+                  </p>
+                )}
 
                 <p className="text-[18px] font-bold text-gray-600">
                   {getTranslation("product.category", "Category")}:{" "}
@@ -326,55 +329,34 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                 </div>
               )}
 
-              {/* Price Display */}
-              {(isOthersProduct() || selectedSizeData) && (
-                <div key={selectedSize} className="pb-2">
-                  <div className="flex items-start gap-3">
-                    {product.sales && product.sales > 0 ? (
-                      <div className="flex flex-col gap-1">
-                        <div className="flex items-center gap-3">
-                          <span className="text-[18px] text-gray-600">
-                            {getTranslation("product.price", "Price")}:
-                          </span>
-                          <div className="flex items-center gap-2">
-                            <span className="text-[24px] font-bold text-green-600 transition-all duration-200 animate-pulse">
+              {/* Price Display - Only for OTHERS products */}
+              {isOthersProduct() && product.price && (
+                <div className="pb-2">
+                  <div className="flex flex-col gap-3">
+                    <h3 className="text-[18px] font-semibold text-gray-900">
+                      {getTranslation("product.price", "Price")}:
+                    </h3>
+                    <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                      <div className="text-center">
+                        {product.sales && product.sales > 0 ? (
+                          <div>
+                            <div className="text-sm text-gray-500 line-through">
+                              ₾{product.price.toNumber().toFixed(2)}
+                            </div>
+                            <div className="text-2xl font-bold text-[#438c71]">
                               ₾{getDiscountedPrice().toFixed(2)}
-                            </span>
-                            <span className="text-[18px] text-gray-500 line-through">
-                              ₾{getProductPrice().toFixed(2)}
-                            </span>
+                            </div>
+                            <div className="text-sm text-red-600 font-semibold">
+                              -{product.sales}% OFF
+                            </div>
                           </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm text-red-600 font-medium bg-red-50 px-2 py-1 rounded">
-                            -{product.sales}% OFF
-                          </span>
-                          {!isOthersProduct() && selectedSizeData && (
-                            <span className="text-sm text-gray-600 bg-gray-100 px-2 py-1 rounded">
-                              Size: {formatSizeDisplay(selectedSizeData.size)}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="flex flex-col gap-1">
-                        <div className="flex items-center gap-3">
-                          <span className="text-[18px] text-gray-600">
-                            {getTranslation("product.price", "Price")}:
-                          </span>
-                          <span className="text-[24px] font-bold text-gray-900 transition-all duration-200 animate-pulse">
-                            ₾{getProductPrice().toFixed(2)}
-                          </span>
-                        </div>
-                        {!isOthersProduct() && selectedSizeData && (
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm text-gray-600 bg-gray-100 px-2 py-1 rounded">
-                              Size: {formatSizeDisplay(selectedSizeData.size)}
-                            </span>
+                        ) : (
+                          <div className="text-2xl font-bold text-[#438c71]">
+                            ₾{product.price.toNumber().toFixed(2)}
                           </div>
                         )}
                       </div>
-                    )}
+                    </div>
                   </div>
                 </div>
               )}
@@ -474,7 +456,7 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                 <button
                   onClick={handleAddToCart}
                   disabled={(!isOthersProduct() && !selectedSize) || addingToCart}
-                  className={`w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors ${
+                  className={`w-[50%] px-4 py-2 text-[15px] md:text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors ${
                     (isOthersProduct() || selectedSize) && !addingToCart
                       ? "bg-[#438c71] text-white"
                       : "bg-gray-400 cursor-not-allowed"
@@ -491,11 +473,9 @@ const Page = (props: { params: { id: string; locale: string } }) => {
               )}
               {!session && (
                 <div className="pt-1">
-                  <Link href="/sign-in">
-                    <button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors">
-                      Login to add to cart
-                    </button>
-                  </Link>
+                  <button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors">
+                    <Link href="/sign-in">Login to add to cart</Link>
+                  </button>
                 </div>
               )}
             </div>

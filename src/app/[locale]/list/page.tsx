@@ -410,17 +410,7 @@ function PageContentWrapper() {
           <h2 className="text-primary text-xl md:text-[45px] font-normal leading-none text-center capitalize">
             {getPageTitle()}
           </h2>
-          {filteredProducts.length > 0 && (
-            <p className="text-white mt-2 text-[18px]">
-              {filteredProducts.length}{" "}
-              {filteredProducts.length === 1 ? "product" : "products"} found
-              {isLargeScreen && totalPages > 1 && (
-                <span className="block text-sm opacity-90">
-                  Showing {startIndex + 1}-{Math.min(endIndex, filteredProducts.length)} of {filteredProducts.length}
-                </span>
-              )}
-            </p>
-          )}
+         
         </div>
       </div>
 
@@ -451,7 +441,7 @@ function PageContentWrapper() {
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center gap-4">
+            <div className="flex justify-center  flex-col sm:flex-row items-center gap-4">
               <div className="flex items-center gap-2">
                 <svg
                   className="w-5 h-5 text-gray-600"
@@ -487,7 +477,7 @@ function PageContentWrapper() {
               { shouldShowSidebar && (
               <button
                 onClick={handleClearFilters}
-                className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+                className="w-full flex mx-auto items-center justify-center gap-3 px-4  py-1 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
               >
               <Trash2 size={16} />   {t("clearFilters")}
               </button>

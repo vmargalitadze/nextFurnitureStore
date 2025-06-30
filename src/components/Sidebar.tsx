@@ -451,7 +451,7 @@ const SideBar: React.FC<SideBarProps> = ({
                             type="checkbox"
                             checked={selectedBrands.includes(brand)}
                             onChange={() => handleBrandChange(brand)}
-                            className="mr-3 rounded border-gray-300 text-[#ce7c2a] focus:border-[#ce7c2a]"
+                            className="mr-3 rounded uppercase border-gray-300 text-[#ce7c2a] focus:border-[#ce7c2a]"
                           />
                           {brand}
                         </label>

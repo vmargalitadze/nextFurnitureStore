@@ -60,6 +60,7 @@ const CheckoutPage = () => {
   const [paymentMethod, setPaymentMethod] = useState('card');
   const [processing, setProcessing] = useState(false);
   const [errors, setErrors] = useState<Partial<DeliveryAddress>>({});
+  const [orderPlaced, setOrderPlaced] = useState(false);
 
   const loadCart = useCallback(async () => {
     try {
@@ -142,27 +143,14 @@ const CheckoutPage = () => {
   const calculateDeliveryPrice = () => {
     if (!cart) return 0;
     
-    // Calculate shipping based on delivery option and cart total
-    const itemsPrice = parseFloat(cart.itemsPrice);
-    let shippingPrice = 0;
-    
-    // Base shipping calculation
-    if (itemsPrice >= 500) {
-      shippingPrice = 0; // Free shipping for orders over ₾500
-    } else if (itemsPrice >= 200) {
-      shippingPrice = 15; // ₾15 shipping for orders ₾200-₾499
-    } else {
-      shippingPrice = 25; // ₾25 shipping for orders under ₾200
-    }
-    
-    // Add delivery option surcharge
+    // Only calculate delivery option surcharge, not base shipping
     switch (deliveryOption) {
       case 'express':
-        return shippingPrice + 15;
+        return 15; // ₾15 for express
       case 'same-day':
-        return shippingPrice + 25;
+        return 25; // ₾25 for same day
       default:
-        return shippingPrice;
+        return 0; // Free for standard
     }
   };
 
@@ -196,6 +184,9 @@ const CheckoutPage = () => {
       if (!response.ok) {
         throw new Error(data.error || 'Order failed');
       }
+      
+      // Set order placed flag to prevent empty cart message
+      setOrderPlaced(true);
       toast.success(t('checkout.success'));
       
       // Clear the cart context to update the cart icon
@@ -204,11 +195,9 @@ const CheckoutPage = () => {
       // Refresh cart context to ensure it's synchronized with server
       await refreshCart();
       
-      // Small delay to ensure cart context is updated before redirect
-      await new Promise(resolve => setTimeout(resolve, 100));
-      
       // Redirect to order confirmation with the order ID
       router.push(`/${params.locale}/order-confirmation?orderId=${data.order.id}`);
+      
     } catch (error) {
       console.error('Error placing order:', error);
       toast.error(t('checkout.errors.orderFailed'));
@@ -248,6 +237,24 @@ const CheckoutPage = () => {
   }
 
   if (!cart || cart.items.length === 0) {
+    // Don't show empty cart message if order was just placed
+    if (orderPlaced) {
+      return (
+        <div className="container min-h-screen mx-auto px-4 py-8">
+          <div className="max-w-4xl mt-[120px] mx-auto text-center">
+            <div className="mb-8">
+              <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                {t('checkout.processing')}
+              </h1>
+              <p className="text-gray-600 mb-8">
+                {t('checkout.redirecting')}
+              </p>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    
     return (
       <div className="container min-h-screen mx-auto px-4 py-8">
         <div className="max-w-4xl mt-[120px] mx-auto text-center">
@@ -259,7 +266,7 @@ const CheckoutPage = () => {
               {t('cart.emptyDescription')}
             </p>
             <Link href="/list">
-              <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors">
+              <Button className="w-[50%] px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors">
                 {t('cart.continueShopping')}
               </Button>
             </Link>
@@ -271,7 +278,7 @@ const CheckoutPage = () => {
 
   return (
     <div className="container min-h-screen mx-auto px-4 py-8">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-6xl text-[16px] mx-auto">
         <div className="flex items-center mb-8">
           <Link href="/cart">
             <Button variant="ghost" className="mr-4">
@@ -290,13 +297,16 @@ const CheckoutPage = () => {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <User className="h-5 w-5 mr-2" />
-                  {t('checkout.personalInformation.title')}
+                  <div className=" text-[20px]">
+                    {t('checkout.personalInformation.title')}
+                  </div>
+                  
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="firstName">{t('checkout.personalInformation.firstName')} *</Label>
+                    <Label className='text-[16px]'htmlFor="firstName">{t('checkout.personalInformation.firstName')} *</Label>
                     <Input
                       id="firstName"
                       value={address.firstName}
@@ -305,11 +315,11 @@ const CheckoutPage = () => {
                       className={errors.firstName ? 'border-red-500' : ''}
                     />
                     {errors.firstName && (
-                      <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>
+                      <p className="text-red-500 text-[16px] mt-1">{errors.firstName}</p>
                     )}
                   </div>
                   <div>
-                    <Label htmlFor="lastName">{t('checkout.personalInformation.lastName')} *</Label>
+                    <Label className='text-[16px]' htmlFor="lastName">{t('checkout.personalInformation.lastName')} *</Label>
                     <Input
                       id="lastName"
                       value={address.lastName}
@@ -318,13 +328,13 @@ const CheckoutPage = () => {
                       className={errors.lastName ? 'border-red-500' : ''}
                     />
                     {errors.lastName && (
-                      <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>
+                      <p className="text-red-500 text-[16px] mt-1">{errors.lastName}</p>
                     )}
                   </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="phone">{t('checkout.personalInformation.phone')} *</Label>
+                    <Label className='text-[16px]' htmlFor="phone">{t('checkout.personalInformation.phone')} *</Label>
                     <Input
                       id="phone"
                       value={address.phone}
@@ -333,11 +343,11 @@ const CheckoutPage = () => {
                       className={errors.phone ? 'border-red-500' : ''}
                     />
                     {errors.phone && (
-                      <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
+                      <p className="text-red-500 text-[16px] mt-1">{errors.phone}</p>
                     )}
                   </div>
                   <div>
-                    <Label htmlFor="email">{t('checkout.personalInformation.email')} *</Label>
+                    <Label className='text-[16px]' htmlFor="email">{t('checkout.personalInformation.email')} *</Label>
                     <Input
                       id="email"
                       type="email"
@@ -347,12 +357,12 @@ const CheckoutPage = () => {
                       className={errors.email ? 'border-red-500' : ''}
                     />
                     {errors.email && (
-                      <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                      <p className="text-red-500 text-[16px] mt-1">{errors.email}</p>
                     )}
                   </div>
                 </div>
                 <div>
-                  <Label htmlFor="idNumber">{t('checkout.personalInformation.idNumber')} *</Label>
+                  <Label className='text-[16px]' htmlFor="idNumber">{t('checkout.personalInformation.idNumber')} *</Label>
                   <Input
                     id="idNumber"
                     value={address.idNumber}
@@ -361,7 +371,7 @@ const CheckoutPage = () => {
                     className={errors.idNumber ? 'border-red-500' : ''}
                   />
                   {errors.idNumber && (
-                    <p className="text-red-500 text-sm mt-1">{errors.idNumber}</p>
+                    <p className="text-red-500 text-[16px] mt-1">{errors.idNumber}</p>
                   )}
                 </div>
               </CardContent>
@@ -372,12 +382,15 @@ const CheckoutPage = () => {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <MapPin className="h-5 w-5 mr-2" />
-                  {t('checkout.deliveryAddress.title')}
+                  <div className=" text-[20px]">
+                    {t('checkout.deliveryAddress.title')}
+                  </div>
+                  
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <Label htmlFor="streetAddress">{t('checkout.deliveryAddress.streetAddress')} *</Label>
+                  <Label className='text-[16px]' htmlFor="streetAddress">{t('checkout.deliveryAddress.streetAddress')} *</Label>
                   <Input
                     id="streetAddress"
                     value={address.streetAddress}
@@ -386,12 +399,12 @@ const CheckoutPage = () => {
                     className={errors.streetAddress ? 'border-red-500' : ''}
                   />
                   {errors.streetAddress && (
-                    <p className="text-red-500 text-sm mt-1">{errors.streetAddress}</p>
+                    <p className="text-red-500 text-[16px] mt-1">{errors.streetAddress}</p>
                   )}
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
-                    <Label htmlFor="city">{t('checkout.deliveryAddress.city')} *</Label>
+                    <Label className='text-[16px]' htmlFor="city">{t('checkout.deliveryAddress.city')} *</Label>
                     <Input
                       id="city"
                       value={address.city}
@@ -400,11 +413,11 @@ const CheckoutPage = () => {
                       className={errors.city ? 'border-red-500' : ''}
                     />
                     {errors.city && (
-                      <p className="text-red-500 text-sm mt-1">{errors.city}</p>
+                      <p className="text-red-500 text-[16px] mt-1">{errors.city}</p>
                     )}
                   </div>
                   <div>
-                    <Label htmlFor="postalCode">{t('checkout.deliveryAddress.postalCode')} *</Label>
+                    <Label className='text-[16px]' htmlFor="postalCode">{t('checkout.deliveryAddress.postalCode')} *</Label>
                     <Input
                       id="postalCode"
                       value={address.postalCode}
@@ -413,11 +426,11 @@ const CheckoutPage = () => {
                       className={errors.postalCode ? 'border-red-500' : ''}
                     />
                     {errors.postalCode && (
-                      <p className="text-red-500 text-sm mt-1">{errors.postalCode}</p>
+                      <p className="text-red-500 text-[16px] mt-1">{errors.postalCode}</p>
                     )}
                   </div>
                   <div>
-                    <Label htmlFor="country">{t('checkout.deliveryAddress.country')}</Label>
+                    <Label className='text-[16px]' htmlFor="country">{t('checkout.deliveryAddress.country')}</Label>
                     <Input
                       id="country"
                       value={address.country}
@@ -428,7 +441,7 @@ const CheckoutPage = () => {
                   </div>
                 </div>
                 <div>
-                  <Label htmlFor="additionalInfo">{t('checkout.deliveryAddress.additionalInfo')}</Label>
+                  <Label className='text-[16px]' htmlFor="additionalInfo">{t('checkout.deliveryAddress.additionalInfo')}</Label>
                   <Input
                     id="additionalInfo"
                     value={address.additionalInfo}
@@ -444,7 +457,10 @@ const CheckoutPage = () => {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <Truck className="h-5 w-5 mr-2" />
-                  {t('checkout.deliveryOptions.title')}
+                  <div className=" text-[20px]">
+                    {t('checkout.deliveryOptions.title')}
+                  </div>
+                  
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -461,7 +477,7 @@ const CheckoutPage = () => {
                         onChange={() => setDeliveryOption('standard')}
                         className="text-[#438c71]"
                       />
-                      <label htmlFor="standard" className="text-sm flex-1">
+                      <label htmlFor="standard" className="text-[16px] flex-1">
                         <div className="font-medium">{t('checkout.deliveryOptions.standard')}</div>
                         <div className="text-gray-600">{t('checkout.deliveryOptions.standardDesc')}</div>
                       </label>
@@ -477,7 +493,7 @@ const CheckoutPage = () => {
                         onChange={() => setDeliveryOption('express')}
                         className="text-[#438c71]"
                       />
-                      <label htmlFor="express" className="text-sm flex-1">
+                      <label  htmlFor="express" className="text-[16px] flex-1">
                         <div className="font-medium">{t('checkout.deliveryOptions.express')}</div>
                         <div className="text-gray-600">{t('checkout.deliveryOptions.expressDesc')}</div>
                       </label>
@@ -493,7 +509,7 @@ const CheckoutPage = () => {
                         onChange={() => setDeliveryOption('same-day')}
                         className="text-[#438c71]"
                       />
-                      <label htmlFor="same-day" className="text-sm flex-1">
+                      <label htmlFor="same-day" className="text-[16px] flex-1">
                         <div className="font-medium">{t('checkout.deliveryOptions.sameDay')}</div>
                         <div className="text-gray-600">{t('checkout.deliveryOptions.sameDayDesc')}</div>
                       </label>
@@ -509,7 +525,10 @@ const CheckoutPage = () => {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <CreditCard className="h-5 w-5 mr-2" />
-                  {t('checkout.paymentOptions.title')}
+                  <div className=" text-[20px]">
+                    {t('checkout.paymentOptions.title')}
+                  </div>
+                  
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -524,7 +543,7 @@ const CheckoutPage = () => {
                       onChange={(e) => setPaymentMethod(e.target.value)}
                       className="text-[#438c71]"
                     />
-                    <label htmlFor="card" className="text-sm">
+                    <label  htmlFor="card" className="text-[16px]">
                       {t('checkout.paymentOptions.card.title')}
                     </label>
                   </div>
@@ -538,7 +557,7 @@ const CheckoutPage = () => {
                       onChange={(e) => setPaymentMethod(e.target.value)}
                       className="text-[#438c71]"
                     />
-                    <label htmlFor="cash" className="text-sm">
+                    <label htmlFor="cash" className="text-[16px]">
                       {t('checkout.paymentOptions.cash.title')}
                     </label>
                   </div>
@@ -566,14 +585,14 @@ const CheckoutPage = () => {
                         height={48}
                       />
                       <div className="flex-1 min-w-0">
-                        <h4 className="text-sm font-medium text-gray-900 truncate">
+                        <h4 className="text-[16px] font-medium text-gray-900 truncate">
                           {item.name}
                         </h4>
                         <p className="text-xs text-gray-600">
                           {t('productDetail.product.size')}: {formatSize(item.size)} | {t('cart.quantity')}: {item.qty}
                         </p>
                       </div>
-                      <span className="text-sm font-semibold">
+                      <span className="text-[16px] font-semibold">
                         {formatPrice((parseFloat(item.price) * item.qty).toString())}
                       </span>
                     </div>
@@ -595,7 +614,7 @@ const CheckoutPage = () => {
                   <div className="flex justify-between">
                     <span className="text-gray-600">{t('checkout.orderSummary.shipping')}</span>
                     <span className="font-semibold">
-                      {calculateDeliveryPrice() === 0 ? t('checkout.deliveryOptions.standard.price') : formatPrice(calculateDeliveryPrice().toString())}
+                      {calculateDeliveryPrice() === 0 ? 'Free' : `+₾${calculateDeliveryPrice()}`}
                     </span>
                   </div>
                   <Separator />

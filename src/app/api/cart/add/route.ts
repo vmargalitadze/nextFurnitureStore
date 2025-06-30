@@ -10,28 +10,12 @@ function calculateCartTotals(items: CartItem[]) {
     return total + (parseFloat(item.price) * item.qty);
   }, 0);
 
-  // Shipping calculation based on total items and price (in Lari)
-  let shippingPrice = 0;
-  if (itemsPrice > 0) {
-    if (itemsPrice >= 1500) {
-      shippingPrice = 0; // Free shipping for orders over ₾1500
-    } else if (itemsPrice >= 600) {
-      shippingPrice = 25; // ₾25 shipping for orders ₾600-₾1499
-    } else {
-      shippingPrice = 40; // ₾40 shipping for orders under ₾600
-    }
-  }
-
-  // Tax calculation (assuming 18% VAT rate for Georgia)
-  const taxPrice = itemsPrice * 0.18;
-
-  const totalPrice = itemsPrice + shippingPrice + taxPrice;
-
+  // No shipping or tax calculation - just return the items price
   return {
     itemsPrice: parseFloat(itemsPrice.toFixed(2)),
-    totalPrice: parseFloat(totalPrice.toFixed(2)),
-    shippingPrice: parseFloat(shippingPrice.toFixed(2)),
-    taxPrice: parseFloat(taxPrice.toFixed(2)),
+    totalPrice: parseFloat(itemsPrice.toFixed(2)),
+    shippingPrice: 0,
+    taxPrice: 0,
   };
 }
 
@@ -71,19 +55,33 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const productSize = product.sizes.find(s => s.size === size);
-    if (!productSize) {
-      return NextResponse.json(
-        { error: 'Product size not found' },
-        { status: 404 }
-      );
+    // Handle OTHERS products (they don't have sizes, only a single price)
+    let finalPrice: number;
+    if (product.category === "OTHERS") {
+      if (!product.price) {
+        return NextResponse.json(
+          { error: 'Product price not available' },
+          { status: 400 }
+        );
+      }
+      const basePrice = parseFloat(product.price.toString());
+      finalPrice = product.sales && product.sales > 0 
+        ? basePrice * (1 - product.sales / 100)
+        : basePrice;
+    } else {
+      // Handle regular products with sizes
+      const productSize = product.sizes.find(s => s.size === size);
+      if (!productSize) {
+        return NextResponse.json(
+          { error: 'Product size not found' },
+          { status: 404 }
+        );
+      }
+      const basePrice = parseFloat(productSize.price.toString());
+      finalPrice = product.sales && product.sales > 0 
+        ? basePrice * (1 - product.sales / 100)
+        : basePrice;
     }
-
-    // Calculate the price (discounted if there's a sale)
-    const basePrice = parseFloat(productSize.price.toString());
-    const finalPrice = product.sales && product.sales > 0 
-      ? basePrice * (1 - product.sales / 100)
-      : basePrice;
 
     // Get or create cart
     let cart = await prisma.cart.findFirst({
@@ -120,7 +118,7 @@ export async function POST(request: NextRequest) {
       const newItem: CartItem = {
         productId,
         name: product.title,
-        size,
+        size: product.category === "OTHERS" ? "N/A" : size, // Use "N/A" for OTHERS products
         qty: quantity || 1,
         image: product.images[0],
         price: finalPrice.toFixed(2),

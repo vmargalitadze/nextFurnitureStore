@@ -220,9 +220,10 @@ const CartPage = () => {
                       </Button>
                     </div>
                     <div className="text-right">
-                      <p className="text-lg font-bold text-gray-900">
+                      <p className="text-lg font-bold text-[#438c71]">
                         {formatPrice((parseFloat(item.price) * item.qty).toString())}
                       </p>
+                    </div>
                       <Button
                         variant="ghost"
                         size="sm"
@@ -232,7 +233,6 @@ const CartPage = () => {
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
-                    </div>
                   </div>
                 ))}
               </CardContent>
@@ -254,73 +254,11 @@ const CartPage = () => {
                     <span className="text-gray-600">{t('cart.subtotal')}</span>
                     <span className="font-semibold">{formatPrice(cart.itemsPrice)}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600 flex items-center">
-                      <Truck className="h-4 w-4 mr-1" />
-                      {t('cart.shipping')}
-                    </span>
-                    <span className="font-semibold">
-                      {parseFloat(cart.shippingPrice) === 0 ? 'Free' : formatPrice(cart.shippingPrice)}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">{t('cart.tax')}</span>
-                    <span className="font-semibold">{formatPrice(cart.taxPrice)}</span>
-                  </div>
+                 
                   <Separator />
                   <div className="flex justify-between text-lg font-bold">
                     <span>{t('cart.total')}</span>
                     <span className="text-[#438c71]">{formatPrice(cart.totalPrice)}</span>
-                  </div>
-                </div>
-
-                {/* Delivery Options */}
-                <div className="space-y-3">
-                  <h4 className="font-semibold text-gray-900">Delivery Options</h4>
-                  <div className="space-y-2">
-                    <div className="flex items-center space-x-2">
-                      <input
-                        type="radio"
-                        id="standard"
-                        name="delivery"
-                        value="standard"
-                        defaultChecked
-                        className="text-[#438c71]"
-                      />
-                      <label htmlFor="standard" className="text-sm flex-1">
-                        <div className="font-medium">Standard Delivery</div>
-                        <div className="text-gray-600">3-5 business days</div>
-                      </label>
-                      <span className="font-semibold">Free</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <input
-                        type="radio"
-                        id="express"
-                        name="delivery"
-                        value="express"
-                        className="text-[#438c71]"
-                      />
-                      <label htmlFor="express" className="text-sm flex-1">
-                        <div className="font-medium">Express Delivery</div>
-                        <div className="text-gray-600">1-2 business days</div>
-                      </label>
-                      <span className="font-semibold">+₾15</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <input
-                        type="radio"
-                        id="same-day"
-                        name="delivery"
-                        value="same-day"
-                        className="text-[#438c71]"
-                      />
-                      <label htmlFor="same-day" className="text-sm flex-1">
-                        <div className="font-medium">Same Day Delivery</div>
-                        <div className="text-gray-600">Available in select areas</div>
-                      </label>
-                      <span className="font-semibold">+₾25</span>
-                    </div>
                   </div>
                 </div>
 
@@ -333,7 +271,7 @@ const CartPage = () => {
 
                 <Link href="/list">
                   <button  
-                 className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+                 className="w-full  mt-4 px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
                   
                   >
                     {t('cart.continueShopping')}

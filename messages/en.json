@@ -148,7 +148,9 @@
       "orderFailed": "Failed to place order",
       "tryAgain": "Please try again"
     },
-    "success": "Order placed successfully!"
+    "success": "Order placed successfully!",
+    "processing": "Processing your order...",
+    "redirecting": "Redirecting to order confirmation..."
   },
   "productForm": {
     "title": "Add Product",
@@ -559,7 +561,9 @@
       "orderFailed": "Failed to place order",
       "tryAgain": "Please try again"
     },
-    "success": "Order placed successfully!"
+    "success": "Order placed successfully!",
+    "processing": "Processing your order...",
+    "redirecting": "Redirecting to order confirmation..."
   },
   "orderConfirmation": {
     "title": "Order Confirmed",

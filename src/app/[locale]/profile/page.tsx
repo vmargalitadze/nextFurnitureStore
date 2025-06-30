@@ -77,10 +77,15 @@ export default async function ProfilePage() {
                     {isAdmin ? (
                       <>
                         <FaCrown className="mr-1" />
+                        <div className="text-2xl font-bold">
                         {t("admin")}
+                        </div>
+                        
                       </>
                     ) : (
-                      t("user")
+                      <div className="text-2xl font-bold">
+                        {t("user")}
+                        </div>
                     )}
                   </Badge>
                 </div>
@@ -202,7 +207,10 @@ export default async function ProfilePage() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <FaCrown className="text-yellow-500" />
+                    <div className="text-2xl font-bold">
+                      
                     {t("adminActions.title")}
+                    </div>
                   </CardTitle>
                   <CardDescription>
                     {t("adminActions.description")}
@@ -236,7 +244,10 @@ export default async function ProfilePage() {
             {/* Recent Orders */}
             <Card>
               <CardHeader>
-                <CardTitle>{t("recentOrders.title")}</CardTitle>
+                <div className="text-2xl font-bold">
+                {t("recentOrders.title")}
+                </div>
+               
                 <CardDescription>
                   {t("recentOrders.description")}
                 </CardDescription>
