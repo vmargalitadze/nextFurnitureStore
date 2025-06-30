@@ -17,7 +17,7 @@ const currency = z
 export const ProductSchema = z.object({
   title: z.string().min(1),
   titleEn: z.string().min(1),
-  category: z.enum(["MATTRESS", "PILLOW", "bundle", "QUILT", "PAD"]),
+  category: z.enum(["MATTRESS", "PILLOW", "bundle", "QUILT", "PAD", "BED"]),
   images: z.array(z.string()).min(1),
 
   brand: z.string().min(1),

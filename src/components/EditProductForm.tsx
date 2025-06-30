@@ -195,6 +195,7 @@ export default function EditProductForm({ productId }: EditProductFormProps) {
                       <option value="QUILT">Quilt</option>
                       <option value="PAD">Pad</option>
                       <option value="bundle">Bundle</option>
+                      <option value="BED">Bed</option>
                     </select>
                   </FormControl>
                   <FormMessage />

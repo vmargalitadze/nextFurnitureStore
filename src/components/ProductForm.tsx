@@ -147,6 +147,7 @@ export default function ProductForm() {
                     <option value="bundle">BUNDLE</option>
                     <option value="QUILT">QUILT</option>
                     <option value="PAD">PAD</option>
+                    <option value="BED">BED</option>
                   </select>
                 </FormControl>
                 <FormMessage />
