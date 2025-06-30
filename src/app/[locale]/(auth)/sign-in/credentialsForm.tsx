@@ -46,7 +46,7 @@ export default function CredentialsForm({ callbackUrl }: { callbackUrl: string }
       <input type="hidden" name="callbackUrl" value={callbackUrl} />
       <div className="space-y-6">
         <div>
-          <Label className="text-xl" htmlFor="email">{t("email")}</Label>
+          <Label className="text-xl font-bold" htmlFor="email">{t("email")}</Label>
           <Input 
             id="email" 
             name="email" 
@@ -57,7 +57,7 @@ export default function CredentialsForm({ callbackUrl }: { callbackUrl: string }
           />
         </div>
         <div>
-          <Label className="text-xl" htmlFor="password">{t("password")}</Label>
+          <Label className="text-xl font-bold" htmlFor="password">{t("password")}</Label>
           <PasswordInput 
             id="password" 
             name="password" 
@@ -68,7 +68,7 @@ export default function CredentialsForm({ callbackUrl }: { callbackUrl: string }
           <div className="text-right mt-2">
             <Link 
               href="/forgot-password" 
-              className="text-xl text-gray-600 hover:text-gray-900"
+              className="text-xl font-bold "
             >
               {t("forgotPassword")}
             </Link>
@@ -80,9 +80,9 @@ export default function CredentialsForm({ callbackUrl }: { callbackUrl: string }
           </Button>
         </div>
         {error && <div className="text-center text-destructive">{error}</div>}
-        <div className="text-xl text-center text-muted-foreground">
+        <div className="text-xl font-bold text-center ">
           {t("dontHaveAccount")}{" "}
-          <Link href="/sign-up" target="_self" className="link">
+          <Link href="/sign-up" target="_self" className="link font-bold">
             {t("signUp")}
           </Link>
         </div>

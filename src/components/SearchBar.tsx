@@ -89,7 +89,7 @@ function SearchHelper() {
         {query && (
           <button
             onClick={clearSearch}
-            className="text-white hover:text-gray-600 transition-colors duration-200 rounded-full"
+            className="text-white hover:text-[#438c71] transition-colors duration-200 rounded-full"
             aria-label="Clear search"
           >
             <X className="h-4 w-4" />

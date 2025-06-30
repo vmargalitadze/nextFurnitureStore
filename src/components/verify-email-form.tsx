@@ -118,9 +118,9 @@ export default function VerifyEmailForm() {
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
             {status === 'success' ? (
-              <CheckCircle className="h-12 w-12 text-green-500" />
+              <CheckCircle className="h-12 w-12 text-[#438c71]" />
             ) : (
-              <XCircle className="h-12 w-12 text-red-500" />
+              <XCircle className="h-12 w-12 text-[#438c71]" />
             )}
           </div>
           <CardTitle>

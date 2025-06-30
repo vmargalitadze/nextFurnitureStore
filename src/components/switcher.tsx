@@ -187,7 +187,7 @@ export default function LocaleSwitcher({ onOpen }: { onOpen?: () => void }) {
       {/* Dropdown */}
       <div
         ref={listRef}
-        className={`absolute z-20 right-0 mt-2 w-[180px] rounded-xl border border-gray-100 shadow-2xl bg-white/90 backdrop-blur-xl transition-all duration-200 ${open ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-95 pointer-events-none'}`}
+        className={`absolute z-20 -right-3 mt-2 w-[180px] rounded-xl border border-gray-100 shadow-2xl bg-white/90 backdrop-blur-xl transition-all duration-200 ${open ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-95 pointer-events-none'}`}
         style={{ minWidth: 160 }}
         tabIndex={-1}
         role="listbox"

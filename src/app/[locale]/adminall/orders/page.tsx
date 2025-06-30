@@ -309,7 +309,7 @@ export default async function OrdersPage() {
                               )}
                             </div>
                             <div className="flex items-center gap-2">
-                              <FaEnvelope className="w-3 h-3 text-gray-500" />
+                              <FaEnvelope className="w-3 h-3 text-[#438c71]" />
                               <p className="text-sm text-gray-600">{order.user.email}</p>
                             </div>
                             <p className="text-xs text-gray-500">
@@ -320,12 +320,12 @@ export default async function OrdersPage() {
                         <td className="p-4">
                           <div className="space-y-1">
                             <div className="flex items-center gap-2">
-                              <FaCreditCard className="w-3 h-3 text-gray-500" />
+                              <FaCreditCard className="w-3 h-3 text-[#438c71]" />
                               <span className="text-sm font-medium">{order.paymentMethod}</span>
                             </div>
                             {order.shippingAddress && (
                               <div className="flex items-center gap-2">
-                                <FaMapMarkerAlt className="w-3 h-3 text-gray-500" />
+                                <FaMapMarkerAlt className="w-3 h-3 text-[#438c71]" />
                                 <p className="text-xs text-gray-600">
                                   {typeof order.shippingAddress === 'object' && order.shippingAddress !== null
                                     ? `${(order.shippingAddress as any).city || 'N/A'}`
@@ -420,7 +420,7 @@ export default async function OrdersPage() {
                         <td className="p-4">
                           <div className="space-y-1">
                             <div className="flex items-center gap-2">
-                              <FaCalendar className="w-3 h-3 text-gray-500" />
+                              <FaCalendar className="w-3 h-3 text-[#438c71]" />
                               <p className="text-sm font-medium">
                                 {format(new Date(order.createdAt), 'MMM dd, yyyy')}
                               </p>

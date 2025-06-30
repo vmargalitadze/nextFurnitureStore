@@ -29,13 +29,45 @@ const initialState = {
 function SignupForm({ callbackUrl }: { callbackUrl: string }) {
   const [data, action] = useFormState(signUpUser, initialState);
   const [showVerificationMessage, setShowVerificationMessage] = useState(false);
+  const [verificationData, setVerificationData] = useState<any>(null);
   const { pending } = useFormStatus();
   const router = useRouter();
   const t = useTranslations("auth.signUp");
 
+  // Load verification state from localStorage on component mount
+  useEffect(() => {
+    const savedVerificationState = localStorage.getItem('signupVerificationState');
+    if (savedVerificationState) {
+      const parsedState = JSON.parse(savedVerificationState);
+      setShowVerificationMessage(parsedState.showVerificationMessage);
+      setVerificationData(parsedState.verificationData);
+    }
+  }, []);
+
+  // Save verification state to localStorage whenever it changes
+  useEffect(() => {
+    if (showVerificationMessage && verificationData) {
+      localStorage.setItem('signupVerificationState', JSON.stringify({
+        showVerificationMessage,
+        verificationData
+      }));
+    } else if (!showVerificationMessage) {
+      localStorage.removeItem('signupVerificationState');
+    }
+  }, [showVerificationMessage, verificationData]);
+
+  // Cleanup localStorage when component unmounts
+  useEffect(() => {
+    return () => {
+      // Only clear if user navigates away without completing verification
+      // Keep it if they're just changing language
+    };
+  }, []);
+
   useEffect(() => {
     if (data.success && data.email) {
       setShowVerificationMessage(true);
+      setVerificationData(data);
     }
   }, [data.success, data.email]);
 
@@ -52,7 +84,7 @@ function SignupForm({ callbackUrl }: { callbackUrl: string }) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email: data.email }),
+        body: JSON.stringify({ email: verificationData.email }),
       });
       
       const result = await response.json();
@@ -68,21 +100,27 @@ function SignupForm({ callbackUrl }: { callbackUrl: string }) {
     }
   };
 
+  const clearVerificationState = () => {
+    setShowVerificationMessage(false);
+    setVerificationData(null);
+    localStorage.removeItem('signupVerificationState');
+  };
+
   if (showVerificationMessage) {
     return (
       <Card className="w-full">
-        <CardHeader className="space-y-4 text-center">
+        <CardHeader className="space-y-4 font-bold text-center">
           <div className="flex justify-center">
-            <Mail className="h-12 w-12 text-primary" />
+            <Mail className="h-12 w-12 text-[#438c71]" />
           </div>
-          <CardTitle className="text-xl font-bold">{t("checkEmail")}</CardTitle>
-          <CardDescription className='text-xl'>
-            {t("checkEmailDescription")} <strong>{data.email}</strong>
+          <CardTitle className="text-[18px]  font-bold">{t("checkEmail")}</CardTitle>
+          <CardDescription className='text-[18px] text-black font-bold'>
+            {t("checkEmailDescription")} <strong>{verificationData?.email}</strong>
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="text-center space-y-4">
-            <p className="text-sm text-muted-foreground">
+          <div className="text-center font-bold space-y-4">
+            <p className="text-sm  font-bold">
               {t("checkEmailInstructions")}
             </p>
             <div className="space-y-2">
@@ -94,7 +132,7 @@ function SignupForm({ callbackUrl }: { callbackUrl: string }) {
                 {t("resendVerification")}
               </Button>
               <Button asChild variant="outline" className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors">
-                <Link href="/sign-in">
+                <Link href="/sign-in" onClick={clearVerificationState}>
                   {t("backToSignIn")}
                 </Link>
               </Button>
@@ -110,7 +148,7 @@ function SignupForm({ callbackUrl }: { callbackUrl: string }) {
       <input type="hidden" name="callbackUrl" value={callbackUrl} />
       <div className="space-y-6">
         <div>
-          <Label className='text-xl' htmlFor="name">{t("name")}</Label>
+          <Label className='text-xl font-bold' htmlFor="name">{t("name")}</Label>
           <Input 
             id="name" 
             name="name" 
@@ -121,7 +159,7 @@ function SignupForm({ callbackUrl }: { callbackUrl: string }) {
           />
         </div>
         <div>
-          <Label className='text-xl' htmlFor="email">{t("email")}</Label>
+          <Label className='text-xl font-bold' htmlFor="email">{t("email")}</Label>
           <Input 
             id="email" 
             name="email" 
@@ -132,7 +170,7 @@ function SignupForm({ callbackUrl }: { callbackUrl: string }) {
           />
         </div>
         <div>
-          <Label className='text-xl' htmlFor="password">{t("password")}</Label>
+          <Label className='text-xl font-bold' htmlFor="password">{t("password")}</Label>
           <PasswordInput 
             id="password" 
             name="password" 
@@ -142,7 +180,7 @@ function SignupForm({ callbackUrl }: { callbackUrl: string }) {
           />
         </div>
         <div>
-          <Label className='text-xl' htmlFor="confirmPassword">{t("confirmPassword")}</Label>
+          <Label className='text-xl font-bold' htmlFor="confirmPassword">{t("confirmPassword")}</Label>
           <PasswordInput 
             id="confirmPassword" 
             name="confirmPassword" 
@@ -159,7 +197,7 @@ function SignupForm({ callbackUrl }: { callbackUrl: string }) {
           <div className="text-center text-destructive">{data.message}</div>
         )}
 
-        <div className="text-xl text-center text-muted-foreground">
+        <div className="text-xl text-center font-bold">
           {t("alreadyHaveAccount")}{' '}
           <Link href="/sign-in" className="link">
             {t("signIn")}

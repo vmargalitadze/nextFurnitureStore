@@ -211,16 +211,16 @@ export default async function OrderDetailPage({ params }: { params: { id: string
                     <h4 className="font-medium mb-3">Contact Details</h4>
                     <div className="space-y-2">
                       <div className="flex items-center">
-                        <FaUser className="w-4 h-4 mr-2 text-gray-400" />
+                        <FaUser className="w-4 h-4 mr-2 text-[#438c71]" />
                         <span>{order.user.name}</span>
                       </div>
                       <div className="flex items-center">
-                        <FaEnvelope className="w-4 h-4 mr-2 text-gray-400" />
+                        <FaEnvelope className="w-4 h-4 mr-2 text-[#438c71]" />
                         <span>{order.user.email}</span>
                       </div>
                       {shippingAddress.phone && (
                         <div className="flex items-center">
-                          <FaPhone className="w-4 h-4 mr-2 text-gray-400" />
+                          <FaPhone className="w-4 h-4 mr-2 text-[#438c71]" />
                           <span>{shippingAddress.phone}</span>
                         </div>
                       )}
@@ -230,7 +230,7 @@ export default async function OrderDetailPage({ params }: { params: { id: string
                     <h4 className="font-medium mb-3">Shipping Address</h4>
                     <div className="space-y-2">
                       <div className="flex items-start">
-                        <FaMapMarkerAlt className="w-4 h-4 mr-2 text-gray-400 mt-0.5" />
+                        <FaMapMarkerAlt className="w-4 h-4 mr-2 text-[#438c71] mt-0.5" />
                         <div>
                           <p>{shippingAddress.streetAddress}</p>
                           <p>{shippingAddress.city}, {shippingAddress.postalCode}</p>
@@ -281,7 +281,7 @@ export default async function OrderDetailPage({ params }: { params: { id: string
                     <h4 className="font-medium">Payment Information</h4>
                     <div className="space-y-2">
                       <div className="flex items-center">
-                        <FaCreditCard className="w-4 h-4 mr-2 text-gray-400" />
+                        <FaCreditCard className="w-4 h-4 mr-2 text-[#438c71]" />
                         <span className="text-sm">{order.paymentMethod}</span>
                       </div>
                       {order.paymentResult && (
