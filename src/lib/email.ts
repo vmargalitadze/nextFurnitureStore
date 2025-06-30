@@ -119,4 +119,125 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
     console.error('Error sending email:', error);
     return { success: false, error: 'Failed to send password reset email' };
   }
+};
+
+export const sendOrderReceipt = async (email: string, order: any, customerName: string) => {
+  const formatPrice = (price: number) => `₾${price.toFixed(2)}`;
+  
+  const orderItemsHtml = order.orderitems.map((item: any) => `
+    <tr>
+      <td style="padding: 12px; border-bottom: 1px solid #eee;">
+        <div style="display: flex; align-items: center;">
+          <img src="${item.image}" alt="${item.title}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px; margin-right: 12px;">
+          <div>
+            <div style="font-weight: 600; color: #333;">${item.title}</div>
+            <div style="font-size: 14px; color: #666;">Qty: ${item.qty}</div>
+          </div>
+        </div>
+      </td>
+      <td style="padding: 12px; border-bottom: 1px solid #eee; text-align: right; font-weight: 600;">
+        ${formatPrice(item.price * item.qty)}
+      </td>
+    </tr>
+  `).join('');
+
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: `Order Confirmation #${order.id}`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9f9f9; padding: 20px;">
+        <div style="background-color: white; border-radius: 8px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+          <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="color: #438c71; margin: 0; font-size: 28px;">Furniture Store</h1>
+            <p style="color: #666; margin: 10px 0 0 0;">Order Confirmation</p>
+          </div>
+          
+          <div style="margin-bottom: 30px;">
+            <h2 style="color: #333; margin: 0 0 10px 0;">Thank you for your order!</h2>
+            <p style="color: #666; margin: 0;">Dear ${customerName},</p>
+            <p style="color: #666; margin: 10px 0 0 0;">We've received your order and it's being processed. Here are your order details:</p>
+          </div>
+          
+          <div style="background-color: #f8f9fa; border-radius: 6px; padding: 20px; margin-bottom: 30px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+              <span style="font-weight: 600; color: #333;">Order Number:</span>
+              <span style="color: #666;">#${order.id}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+              <span style="font-weight: 600; color: #333;">Order Date:</span>
+              <span style="color: #666;">${new Date(order.createdAt).toLocaleDateString()}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+              <span style="font-weight: 600; color: #333;">Payment Method:</span>
+              <span style="color: #666;">${order.paymentMethod}</span>
+            </div>
+          </div>
+          
+          <div style="margin-bottom: 30px;">
+            <h3 style="color: #333; margin: 0 0 15px 0;">Order Items</h3>
+            <table style="width: 100%; border-collapse: collapse;">
+              <thead>
+                <tr style="border-bottom: 2px solid #438c71;">
+                  <th style="padding: 12px; text-align: left; color: #333;">Item</th>
+                  <th style="padding: 12px; text-align: right; color: #333;">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${orderItemsHtml}
+              </tbody>
+            </table>
+          </div>
+          
+          <div style="background-color: #f8f9fa; border-radius: 6px; padding: 20px; margin-bottom: 30px;">
+            <h3 style="color: #333; margin: 0 0 15px 0;">Order Summary</h3>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+              <span style="color: #666;">Subtotal:</span>
+              <span style="font-weight: 600;">${formatPrice(parseFloat(order.itemsPrice.toString()))}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+              <span style="color: #666;">Tax (18%):</span>
+              <span style="font-weight: 600;">${formatPrice(parseFloat(order.taxPrice.toString()))}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+              <span style="color: #666;">Shipping:</span>
+              <span style="font-weight: 600;">${order.shippingPrice === 0 ? 'Free' : formatPrice(order.shippingPrice)}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; border-top: 2px solid #438c71; padding-top: 8px; margin-top: 8px;">
+              <span style="font-weight: 700; color: #333; font-size: 18px;">Total:</span>
+              <span style="font-weight: 700; color: #438c71; font-size: 18px;">${formatPrice(parseFloat(order.totalPrice.toString()))}</span>
+            </div>
+          </div>
+          
+          <div style="background-color: #f8f9fa; border-radius: 6px; padding: 20px; margin-bottom: 30px;">
+            <h3 style="color: #333; margin: 0 0 15px 0;">Shipping Address</h3>
+            <p style="color: #666; margin: 0; line-height: 1.6;">
+              ${order.shippingAddress.firstName} ${order.shippingAddress.lastName}<br>
+              ${order.shippingAddress.streetAddress}<br>
+              ${order.shippingAddress.city}, ${order.shippingAddress.postalCode}<br>
+              ${order.shippingAddress.country}
+            </p>
+          </div>
+          
+          <div style="text-align: center; margin-top: 30px;">
+            <p style="color: #666; margin: 0;">If you have any questions about your order, please contact us.</p>
+            <p style="color: #666; margin: 10px 0 0 0;">Thank you for choosing Furniture Store!</p>
+          </div>
+          
+          <hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;">
+          <p style="color: #666; font-size: 12px; text-align: center; margin: 0;">
+            This is an automated email from Furniture Store. Please do not reply to this email.
+          </p>
+        </div>
+      </div>
+    `,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    return { success: true };
+  } catch (error) {
+    console.error('Error sending order receipt:', error);
+    return { success: false, error: 'Failed to send order receipt' };
+  }
 }; 

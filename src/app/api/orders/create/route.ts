@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '../../../../../auth';
 import { prisma } from '@/lib/prisma';
+import { sendOrderReceipt } from '@/lib/email';
 
 export async function POST(request: NextRequest) {
   try {
@@ -86,6 +87,15 @@ export async function POST(request: NextRequest) {
         user: true
       }
     });
+
+    // Send order receipt email
+    try {
+      const customerName = `${shippingAddress.firstName} ${shippingAddress.lastName}`;
+      await sendOrderReceipt(shippingAddress.email, order, customerName);
+    } catch (emailError) {
+      console.error('Error sending order receipt email:', emailError);
+      // Don't fail the order if email fails
+    }
 
     // Clear the cart after successful order creation
     await prisma.cart.update({
