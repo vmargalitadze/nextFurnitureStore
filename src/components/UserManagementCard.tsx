@@ -21,7 +21,8 @@ import {
   FaBox,
   FaCheckCircle,
   FaClock,
-  FaTruck
+  FaTruck,
+  FaTrash
 } from "react-icons/fa";
 import { format } from "date-fns";
 import Image from "next/image";
@@ -76,11 +77,14 @@ interface User {
 
 interface UserManagementCardProps {
   user: User;
+  currentUserId?: string;
+  currentUserRole?: string;
 }
 
-const UserManagementCard: React.FC<UserManagementCardProps> = ({ user }) => {
+const UserManagementCard: React.FC<UserManagementCardProps> = ({ user, currentUserId, currentUserRole }) => {
   const [showDetails, setShowDetails] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const totalOrders = user.orders.length;
   const totalSpent = user.orders.reduce((sum, order) => {
@@ -90,27 +94,38 @@ const UserManagementCard: React.FC<UserManagementCardProps> = ({ user }) => {
   const paidOrders = user.orders.filter(order => order.isPaid).length;
   const deliveredOrders = user.orders.filter(order => order.isDelivered).length;
 
-  const handleContactUser = (method: 'email' | 'whatsapp' | 'telegram') => {
-    switch (method) {
-      case 'email':
-        window.open(`mailto:${user.email}`, '_blank');
-        break;
-      case 'whatsapp':
-        const latestOrder = user.orders[0];
-        if (latestOrder?.shippingAddress?.phone) {
-          window.open(`https://wa.me/${latestOrder.shippingAddress.phone.replace(/\D/g, '')}`, '_blank');
-        } else {
-          toast.error('No phone number available');
-        }
-        break;
-      case 'telegram':
-        const order = user.orders[0];
-        if (order?.shippingAddress?.phone) {
-          window.open(`https://t.me/${order.shippingAddress.phone.replace(/\D/g, '')}`, '_blank');
-        } else {
-          toast.error('No phone number available');
-        }
-        break;
+  // Check if current user can delete this user
+  const canDelete = currentUserRole === 'admin' && currentUserId !== user.id;
+
+  const handleDeleteUser = async () => {
+    if (!canDelete) {
+      toast.error('You cannot delete this user');
+      return;
+    }
+
+    if (!confirm(`Are you sure you want to delete user "${user.name}"? This action cannot be undone.`)) {
+      return;
+    }
+
+    setIsDeleting(true);
+    try {
+      const response = await fetch(`/api/users/${user.id}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        toast.success('User deleted successfully');
+        // Refresh the page to update the user list
+        window.location.reload();
+      } else {
+        const error = await response.json();
+        toast.error(error.error || 'Failed to delete user');
+      }
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      toast.error('Failed to delete user');
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -154,9 +169,19 @@ const UserManagementCard: React.FC<UserManagementCardProps> = ({ user }) => {
               <FaEye className="w-4 h-4 mr-1" />
               {showDetails ? 'Hide' : 'Details'}
             </Button>
-            <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="outline" size="sm">
-              <FaPrint className="w-4 h-4" />
-            </Button>
+            
+            {canDelete && (
+              <Button
+                className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors"
+                variant="outline"
+                size="sm"
+                onClick={handleDeleteUser}
+                disabled={isDeleting}
+              >
+                <FaTrash className="w-4 h-4 mr-1" />
+                {isDeleting ? 'Deleting...' : 'Delete'}
+              </Button>
+            )}
           </div>
         </div>
       </CardHeader>
@@ -239,36 +264,7 @@ const UserManagementCard: React.FC<UserManagementCardProps> = ({ user }) => {
               )}
             </div>
             
-            {/* Contact Actions */}
-            <div className="flex items-center space-x-2 mt-3">
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => handleContactUser('email')}
-                className="text-xs"
-              >
-                <FaEnvelope className="w-3 h-3 mr-1" />
-                Email
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => handleContactUser('whatsapp')}
-                className="text-xs bg-green-50 text-green-700 border-green-200 hover:bg-green-100"
-              >
-                <FaWhatsapp className="w-3 h-3 mr-1" />
-                WhatsApp
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => handleContactUser('telegram')}
-                className="text-xs bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100"
-              >
-                <FaTelegram className="w-3 h-3 mr-1" />
-                Telegram
-              </Button>
-            </div>
+        
           </div>
 
           <div>

@@ -1,11 +1,17 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import React, { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { 
+import {
   FaShoppingCart,
   FaDollarSign,
   FaTruck,
@@ -23,7 +29,7 @@ import {
   FaPrint,
   FaDownload,
   FaWhatsapp,
-  FaTelegram
+  FaTelegram,
 } from "react-icons/fa";
 import { format } from "date-fns";
 import Image from "next/image";
@@ -73,59 +79,51 @@ interface Order {
 
 interface OrderManagementCardProps {
   order: Order;
-  onStatusUpdate?: (orderId: string, updates: { isPaid?: boolean; isDelivered?: boolean }) => void;
+  onStatusUpdate?: (
+    orderId: string,
+    updates: { isPaid?: boolean; isDelivered?: boolean }
+  ) => void;
 }
 
-const OrderManagementCard: React.FC<OrderManagementCardProps> = ({ order, onStatusUpdate }) => {
+const OrderManagementCard: React.FC<OrderManagementCardProps> = ({
+  order,
+  onStatusUpdate,
+}) => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
 
   // Safely extract shipping address from JSON
-  const shippingAddress: ShippingAddress = order.shippingAddress as ShippingAddress;
+  const shippingAddress: ShippingAddress =
+    order.shippingAddress as ShippingAddress;
 
-  const handleStatusUpdate = async (field: 'isPaid' | 'isDelivered', value: boolean) => {
+  const handleStatusUpdate = async (
+    field: "isPaid" | "isDelivered",
+    value: boolean
+  ) => {
     setIsUpdating(true);
     try {
       const response = await fetch(`/api/orders/${order.id}/status`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ [field]: value }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to update order status');
+        throw new Error("Failed to update order status");
       }
 
-      toast.success(`Order ${field === 'isPaid' ? 'payment' : 'delivery'} status updated successfully`);
-      
+      toast.success(
+        `Order ${field === "isPaid" ? "payment" : "delivery"} status updated successfully`
+      );
+
       if (onStatusUpdate) {
         onStatusUpdate(order.id, { [field]: value });
       }
     } catch (error) {
-      console.error('Error updating order status:', error);
-      toast.error('Failed to update order status');
+      console.error("Error updating order status:", error);
+      toast.error("Failed to update order status");
     } finally {
       setIsUpdating(false);
-    }
-  };
-
-  const handleContactCustomer = (method: 'phone' | 'email' | 'whatsapp' | 'telegram') => {
-    const phone = shippingAddress.phone;
-    const email = shippingAddress.email;
-    
-    switch (method) {
-      case 'phone':
-        window.open(`tel:${phone}`, '_blank');
-        break;
-      case 'email':
-        window.open(`mailto:${email}`, '_blank');
-        break;
-      case 'whatsapp':
-        window.open(`https://wa.me/${phone.replace(/\D/g, '')}`, '_blank');
-        break;
-      case 'telegram':
-        window.open(`https://t.me/${phone.replace(/\D/g, '')}`, '_blank');
-        break;
     }
   };
 
@@ -133,12 +131,12 @@ const OrderManagementCard: React.FC<OrderManagementCardProps> = ({ order, onStat
     const orderDate = new Date(order.createdAt);
     const deliveryDate = new Date(orderDate);
     deliveryDate.setDate(orderDate.getDate() + 5);
-    return format(deliveryDate, 'MMM dd, yyyy');
+    return format(deliveryDate, "MMM dd, yyyy");
   };
 
   // Helper function to safely convert price values
   const getPriceValue = (price: number | string): number => {
-    if (typeof price === 'string') {
+    if (typeof price === "string") {
       return parseFloat(price) || 0;
     }
     return price || 0;
@@ -146,8 +144,8 @@ const OrderManagementCard: React.FC<OrderManagementCardProps> = ({ order, onStat
 
   // Helper function to safely format dates
   const formatDate = (date: string | Date | null | undefined): string => {
-    if (!date) return '';
-    return format(new Date(date), 'MMM dd, yyyy HH:mm');
+    if (!date) return "";
+    return format(new Date(date), "MMM dd, yyyy HH:mm");
   };
 
   return (
@@ -171,10 +169,7 @@ const OrderManagementCard: React.FC<OrderManagementCardProps> = ({ order, onStat
               onClick={() => setShowDetails(!showDetails)}
             >
               <FaEye className="w-4 h-4 mr-1" />
-              {showDetails ? 'Hide' : 'Details'}
-            </Button>
-            <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="outline" size="sm">
-              <FaPrint className="w-4 h-4" />
+              {showDetails ? "Hide" : "Details"}
             </Button>
           </div>
         </div>
@@ -191,11 +186,11 @@ const OrderManagementCard: React.FC<OrderManagementCardProps> = ({ order, onStat
                 <p className="text-xs text-gray-500">{order.paymentMethod}</p>
               </div>
             </div>
-            <Badge 
+            <Badge
               variant={order.isPaid ? "default" : "secondary"}
               className="text-xs"
             >
-              {order.isPaid ? 'Paid' : 'Pending'}
+              {order.isPaid ? "Paid" : "Pending"}
             </Badge>
           </div>
 
@@ -205,15 +200,15 @@ const OrderManagementCard: React.FC<OrderManagementCardProps> = ({ order, onStat
               <div>
                 <p className="font-medium text-sm">Delivery</p>
                 <p className="text-xs text-gray-500">
-                  {order.isDelivered ? 'Delivered' : 'In Transit'}
+                  {order.isDelivered ? "Delivered" : "In Transit"}
                 </p>
               </div>
             </div>
-            <Badge 
+            <Badge
               variant={order.isDelivered ? "default" : "outline"}
               className="text-xs"
             >
-              {order.isDelivered ? 'Delivered' : 'In Transit'}
+              {order.isDelivered ? "Delivered" : "In Transit"}
             </Badge>
           </div>
 
@@ -222,10 +217,14 @@ const OrderManagementCard: React.FC<OrderManagementCardProps> = ({ order, onStat
               <FaDollarSign className="w-5 h-5 mr-3 text-purple-500" />
               <div>
                 <p className="font-medium text-sm">Total</p>
-                <p className="text-xs text-gray-500">{order.orderitems.length} items</p>
+                <p className="text-xs text-gray-500">
+                  {order.orderitems.length} items
+                </p>
               </div>
             </div>
-            <span className="font-bold text-[#438c71]">₾{getPriceValue(order.totalPrice).toFixed(2)}</span>
+            <span className="font-bold text-[#438c71]">
+              ₾{getPriceValue(order.totalPrice).toFixed(2)}
+            </span>
           </div>
         </div>
 
@@ -252,37 +251,6 @@ const OrderManagementCard: React.FC<OrderManagementCardProps> = ({ order, onStat
                 <span>{shippingAddress.phone}</span>
               </div>
             </div>
-            
-            {/* Contact Actions */}
-            <div className="flex items-center space-x-2 mt-3">
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => handleContactCustomer('phone')}
-                className="text-xs"
-              >
-                <FaPhone className="w-3 h-3 mr-1" />
-                Call
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => handleContactCustomer('whatsapp')}
-                className="text-xs bg-green-50 text-green-700 border-green-200 hover:bg-green-100"
-              >
-                <FaWhatsapp className="w-3 h-3 mr-1" />
-                WhatsApp
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => handleContactCustomer('telegram')}
-                className="text-xs bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100"
-              >
-                <FaTelegram className="w-3 h-3 mr-1" />
-                Telegram
-              </Button>
-            </div>
           </div>
 
           <div>
@@ -295,7 +263,9 @@ const OrderManagementCard: React.FC<OrderManagementCardProps> = ({ order, onStat
                 {shippingAddress.firstName} {shippingAddress.lastName}
               </p>
               <p>{shippingAddress.streetAddress}</p>
-              <p>{shippingAddress.city}, {shippingAddress.postalCode}</p>
+              <p>
+                {shippingAddress.city}, {shippingAddress.postalCode}
+              </p>
               <p>{shippingAddress.country}</p>
               {shippingAddress.additionalInfo && (
                 <p className="text-gray-500 text-xs">
@@ -310,7 +280,7 @@ const OrderManagementCard: React.FC<OrderManagementCardProps> = ({ order, onStat
         {showDetails && (
           <>
             <Separator />
-            
+
             {/* Order Items */}
             <div>
               <h4 className="font-medium mb-3 flex items-center">
@@ -319,7 +289,10 @@ const OrderManagementCard: React.FC<OrderManagementCardProps> = ({ order, onStat
               </h4>
               <div className="space-y-3">
                 {order.orderitems.map((item, index) => (
-                  <div key={index} className="flex items-center space-x-3 p-3 border rounded-lg">
+                  <div
+                    key={index}
+                    className="flex items-center space-x-3 p-3 border rounded-lg"
+                  >
                     <Image
                       src={item.image}
                       alt={item.title}
@@ -328,8 +301,13 @@ const OrderManagementCard: React.FC<OrderManagementCardProps> = ({ order, onStat
                       className="w-12 h-12 object-cover rounded-lg"
                     />
                     <div className="flex-1 min-w-0">
-                      <h5 className="font-medium text-sm truncate">{item.title}</h5>
-                      <p className="text-xs text-gray-500">Qty: {item.qty} × ₾{getPriceValue(item.price).toFixed(2)}</p>
+                      <h5 className="font-medium text-sm truncate">
+                        {item.title}
+                      </h5>
+                      <p className="text-xs text-gray-500">
+                        Qty: {item.qty} × ₾
+                        {getPriceValue(item.price).toFixed(2)}
+                      </p>
                     </div>
                     <span className="font-medium text-sm">
                       ₾{(getPriceValue(item.price) * item.qty).toFixed(2)}
@@ -358,7 +336,9 @@ const OrderManagementCard: React.FC<OrderManagementCardProps> = ({ order, onStat
                 <Separator />
                 <div className="flex justify-between font-bold">
                   <span>Total</span>
-                  <span className="text-[#438c71]">₾{getPriceValue(order.totalPrice).toFixed(2)}</span>
+                  <span className="text-[#438c71]">
+                    ₾{getPriceValue(order.totalPrice).toFixed(2)}
+                  </span>
                 </div>
               </div>
             </div>
@@ -373,10 +353,12 @@ const OrderManagementCard: React.FC<OrderManagementCardProps> = ({ order, onStat
                     <Button
                       size="sm"
                       variant={order.isPaid ? "default" : "outline"}
-                      onClick={() => handleStatusUpdate('isPaid', !order.isPaid)}
+                      onClick={() =>
+                        handleStatusUpdate("isPaid", !order.isPaid)
+                      }
                       disabled={isUpdating}
                     >
-                      {order.isPaid ? 'Mark as Pending' : 'Mark as Paid'}
+                      {order.isPaid ? "Mark as Pending" : "Mark as Paid"}
                     </Button>
                     {order.isPaid && order.paidAt && (
                       <span className="text-xs text-gray-500">
@@ -391,10 +373,14 @@ const OrderManagementCard: React.FC<OrderManagementCardProps> = ({ order, onStat
                     <Button
                       size="sm"
                       variant={order.isDelivered ? "default" : "outline"}
-                      onClick={() => handleStatusUpdate('isDelivered', !order.isDelivered)}
+                      onClick={() =>
+                        handleStatusUpdate("isDelivered", !order.isDelivered)
+                      }
                       disabled={isUpdating}
                     >
-                      {order.isDelivered ? 'Mark as In Transit' : 'Mark as Delivered'}
+                      {order.isDelivered
+                        ? "Mark as In Transit"
+                        : "Mark as Delivered"}
                     </Button>
                     {order.isDelivered && order.deliveredAt && (
                       <span className="text-xs text-gray-500">
@@ -446,7 +432,9 @@ const OrderManagementCard: React.FC<OrderManagementCardProps> = ({ order, onStat
                     <div className="w-3 h-3 bg-gray-300 rounded-full mr-3"></div>
                     <div className="flex-1">
                       <p className="text-sm font-medium">Estimated Delivery</p>
-                      <p className="text-xs text-gray-500">{getEstimatedDelivery()}</p>
+                      <p className="text-xs text-gray-500">
+                        {getEstimatedDelivery()}
+                      </p>
                     </div>
                   </div>
                 )}
@@ -459,4 +447,4 @@ const OrderManagementCard: React.FC<OrderManagementCardProps> = ({ order, onStat
   );
 };
 
-export default OrderManagementCard; 
+export default OrderManagementCard;

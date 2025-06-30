@@ -233,7 +233,7 @@ export default async function ProfilePage() {
                         variant="outline"
                       >
                         <List className="mr-2" />
-                        {t("adminActions.manageAllProducts")}
+                      მოქმედებები
                       </Button>
                     </Link>
                   </div>

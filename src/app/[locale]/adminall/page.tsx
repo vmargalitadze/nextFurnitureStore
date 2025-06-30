@@ -411,6 +411,8 @@ export default async function AdminAllPage() {
                             }))
                           }))
                         }}
+                        currentUserId={session.user.id}
+                        currentUserRole={session.user.role}
                       />
                     ))}
                   </div>
