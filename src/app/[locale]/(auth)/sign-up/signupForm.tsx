@@ -72,7 +72,7 @@ function SignupForm({ callbackUrl }: { callbackUrl: string }) {
   }, [data.success, data.email]);
 
   const SignUpButton = () => (
-    <Button disabled={pending} className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="default">
+    <Button disabled={pending} className="w-[50%] items-center flex justify-center mx-auto px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="default">
       {pending ? t("creatingAccount") : t("signUpButton")}
     </Button>
   );
@@ -127,11 +127,12 @@ function SignupForm({ callbackUrl }: { callbackUrl: string }) {
               <Button 
                 onClick={handleResendVerification}
                 variant="outline"
-                className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+                className="w-full px-4 mb-5 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
               >
                 {t("resendVerification")}
               </Button>
-              <Button asChild variant="outline" className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors">
+              <Button  variant="outline"
+                 className="w-full mb-5 px-4 py-2 text-[20px] font-bold text-[#438c71] bg-white border-2 border-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors flex items-center justify-center ">
                 <Link href="/sign-in" onClick={clearVerificationState}>
                   {t("backToSignIn")}
                 </Link>
@@ -148,7 +149,7 @@ function SignupForm({ callbackUrl }: { callbackUrl: string }) {
       <input type="hidden" name="callbackUrl" value={callbackUrl} />
       <div className="space-y-6">
         <div>
-          <Label className='text-xl font-bold' htmlFor="name">{t("name")}</Label>
+          <Label className='text-[18px] font-bold' htmlFor="name">{t("name")}</Label>
           <Input 
             id="name" 
             name="name" 
@@ -159,7 +160,7 @@ function SignupForm({ callbackUrl }: { callbackUrl: string }) {
           />
         </div>
         <div>
-          <Label className='text-xl font-bold' htmlFor="email">{t("email")}</Label>
+          <Label className='text-[18px] font-bold' htmlFor="email">{t("email")}</Label>
           <Input 
             id="email" 
             name="email" 
@@ -170,7 +171,7 @@ function SignupForm({ callbackUrl }: { callbackUrl: string }) {
           />
         </div>
         <div>
-          <Label className='text-xl font-bold' htmlFor="password">{t("password")}</Label>
+          <Label className='text-[18px] font-bold' htmlFor="password">{t("password")}</Label>
           <PasswordInput 
             id="password" 
             name="password" 
@@ -180,7 +181,7 @@ function SignupForm({ callbackUrl }: { callbackUrl: string }) {
           />
         </div>
         <div>
-          <Label className='text-xl font-bold' htmlFor="confirmPassword">{t("confirmPassword")}</Label>
+          <Label className='text-[18px] font-bold' htmlFor="confirmPassword">{t("confirmPassword")}</Label>
           <PasswordInput 
             id="confirmPassword" 
             name="confirmPassword" 
@@ -197,7 +198,7 @@ function SignupForm({ callbackUrl }: { callbackUrl: string }) {
           <div className="text-center text-destructive">{data.message}</div>
         )}
 
-        <div className="text-xl text-center font-bold">
+        <div className="text-[18px] text-center font-bold">
           {t("alreadyHaveAccount")}{' '}
           <Link href="/sign-in" className="link">
             {t("signIn")}

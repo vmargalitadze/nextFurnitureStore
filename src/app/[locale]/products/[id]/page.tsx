@@ -9,6 +9,7 @@ import { toast } from 'sonner';
 import { useCart } from "@/lib/context/CartContext";
 import { CartItem } from "@/lib/types";
 import { useSession } from "next-auth/react";
+import { Button } from "@/components/ui/button";
 
 // Simple Decimal-like class to avoid Prisma import issues
 class SimpleDecimal {
@@ -256,7 +257,7 @@ const Page = (props: { params: { id: string; locale: string } }) => {
               {/* Product Title */}
               <div className="pb-2">
                 <div className="flex items-center gap-3 mb-2">
-                  <h1 className="text-[18px] font-semibold text-gray-900 leading-tight">
+                  <h1 className="text-[20px] font-semibold text-gray-900 leading-tight">
                     {localizedTitle}
                   </h1>
                   {product.sales && product.sales > 0 && (
@@ -268,98 +269,56 @@ const Page = (props: { params: { id: string; locale: string } }) => {
 
                 {/* Brand - only show for non-OTHERS products */}
                 {!isOthersProduct() && product.brand && (
-                  <p className="text-[18px] font-bold text-gray-600 mb-1">
+                  <p className="text-[18px] uppercase font-bold  mb-1">
                     {getTranslation("product.brand", "Brand")}:{" "}
-                    <span className="font-medium text-gray-900">
+                    <span className="font-medium uppercase text-gray-900">
                       {product.brand}
                     </span>
                   </p>
                 )}
 
-                <p className="text-[18px] font-bold text-gray-600">
+                <p className="text-[18px] uppercase font-bold ">
                   {getTranslation("product.category", "Category")}:{" "}
-                  <span className="font-medium text-gray-900">
+                  <span className="font-medium uppercase text-gray-900">
                     {product.category}
                   </span>
                 </p>
               </div>
 
-              {/* Size Selection - Only for non-OTHERS products */}
-              {!isOthersProduct() && hasNewStructure && (
-                <div className="pb-2">
-                  <div className="flex flex-col gap-3">
-                    <h3 className="text-[18px] font-semibold text-gray-900">
-                      {getTranslation("product.size", "Size")}:
-                    </h3>
-                    <div className="grid grid-cols-2 gap-2">
-                      {product.sizes?.map((size) => {
-                        const sizePrice = size.price.toNumber();
-                        const discountedPrice = product.sales && product.sales > 0 
-                          ? sizePrice * (1 - product.sales / 100)
-                          : sizePrice;
-                        
-                        return (
-                          <button
-                            key={size.id}
-                            onClick={() => setSelectedSize(size.id)}
-                            className={`p-3 text-left rounded-lg transition-all duration-200 border-2 ${
-                              selectedSize === size.id
-                                ? "border-[#438c71] bg-[#438c71] text-white shadow-lg scale-105"
-                                : "border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:bg-gray-50"
-                            }`}
-                          >
-                            <div className="font-bold text-[16px]">
-                              {formatSizeDisplay(size.size)}
-                            </div>
-                            <div className={`text-sm ${selectedSize === size.id ? 'text-white' : 'text-gray-600'}`}>
-                              {product.sales && product.sales > 0 ? (
-                                <div>
-                                  <span className="line-through">₾{sizePrice.toFixed(2)}</span>
-                                  <span className="ml-2 font-bold">₾{discountedPrice.toFixed(2)}</span>
-                                </div>
-                              ) : (
-                                <span className="font-bold">₾{sizePrice.toFixed(2)}</span>
-                              )}
-                            </div>
-                          </button>
-                        );
-                      })}
+              {/* Size and Price Section */}
+              <div className="flex flex-col gap-2 mb-4">
+                {!isOthersProduct() && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-[18px] font-semibold">{getTranslation("product.size", "Size")}:</span>
+                    <div className="flex gap-2">
+                      {product.sizes?.map((size) => (
+                        <button
+                          key={size.id}
+                          onClick={() => setSelectedSize(size.id)}
+                          className={`px-4 py-1 rounded-lg font-bold text-[18px] ${
+                            selectedSize === size.id
+                              ? "bg-[#438c71] text-white"
+                              : "bg-white text-[#438c71]"
+                          }`}
+                        >
+                          {formatSizeDisplay(size.size)}
+                        </button>
+                      ))}
                     </div>
                   </div>
+                )}
+                <div className="flex items-center gap-2">
+                  <span className="text-[18px] font-semibold">{getTranslation("product.price", "Price")}:</span>
+                  <span className="text-[20px] font-bold text-[#438c71]">
+                    ₾{getDiscountedPrice().toFixed(2)}
+                  </span>
+                  {product.sales && product.sales > 0 && (
+                    <span className="text-sm line-through text-gray-500 ml-2">
+                      ₾{getProductPrice().toFixed(2)}
+                    </span>
+                  )}
                 </div>
-              )}
-
-              {/* Price Display - Only for OTHERS products */}
-              {isOthersProduct() && product.price && (
-                <div className="pb-2">
-                  <div className="flex flex-col gap-3">
-                    <h3 className="text-[18px] font-semibold text-gray-900">
-                      {getTranslation("product.price", "Price")}:
-                    </h3>
-                    <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-                      <div className="text-center">
-                        {product.sales && product.sales > 0 ? (
-                          <div>
-                            <div className="text-sm text-gray-500 line-through">
-                              ₾{product.price.toNumber().toFixed(2)}
-                            </div>
-                            <div className="text-2xl font-bold text-[#438c71]">
-                              ₾{getDiscountedPrice().toFixed(2)}
-                            </div>
-                            <div className="text-sm text-red-600 font-semibold">
-                              -{product.sales}% OFF
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="text-2xl font-bold text-[#438c71]">
-                            ₾{product.price.toNumber().toFixed(2)}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
+              </div>
 
               {/* Product Description */}
 
@@ -453,7 +412,7 @@ const Page = (props: { params: { id: string; locale: string } }) => {
               {/* Add to Cart Button */}
               {session && (
               <div className="pt-1">
-                <button
+                <Button  
                   onClick={handleAddToCart}
                   disabled={(!isOthersProduct() && !selectedSize) || addingToCart}
                   className={`w-[50%] px-4 py-2 text-[15px] md:text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors ${
@@ -468,14 +427,14 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                       : getTranslation("product.addToCart", "Add to Cart")
                     }
                   </span>
-                </button>
+                </Button>
               </div>
               )}
               {!session && (
                 <div className="pt-1">
-                  <button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors">
+                  <Button  variant="outline" className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors">
                     <Link href="/sign-in">Login to add to cart</Link>
-                  </button>
+                  </Button>
                 </div>
               )}
             </div>

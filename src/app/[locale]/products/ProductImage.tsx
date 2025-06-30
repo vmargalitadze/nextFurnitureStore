@@ -9,6 +9,7 @@ import {
   FaExpand,
   FaCompress,
 } from "react-icons/fa";
+import { Button } from "@/components/ui/button";
 
 const imageVariants = {
   exit: {
@@ -85,7 +86,7 @@ function ProductImage({ image }: { image: string[] }) {
               <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300 rounded-2xl" />
 
               {/* Zoom Button */}
-              <button
+              <Button  variant="outline"
                 onClick={() => setIsZoomed(!isZoomed)}
                 className="absolute top-4 right-4 p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white hover:scale-110"
               >
@@ -94,25 +95,25 @@ function ProductImage({ image }: { image: string[] }) {
                 ) : (
                   <FaExpand className="w-4 h-4 text-gray-700" />
                 )}
-              </button>
+              </Button>
             </motion.div>
           </AnimatePresence>
 
           {/* Navigation Arrows */}
           {image.length > 1 && (
             <>
-              <button
+              <Button  variant="outline"
                 onClick={prevImage}
                 className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-white/80 backdrop-blur-sm rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white hover:scale-110 z-10"
               >
                 <FaChevronLeft className="w-4 h-4 text-gray-700" />
-              </button>
-              <button
+              </Button>
+              <Button  variant="outline"
                 onClick={nextImage}
                 className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-white/80 backdrop-blur-sm rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white hover:scale-110 z-10"
               >
                 <FaChevronRight className="w-4 h-4 text-gray-700" />
-              </button>
+              </Button>
             </>
           )}
 
@@ -179,12 +180,12 @@ function ProductImage({ image }: { image: string[] }) {
               height={800}
               className="w-full h-[700px] object-contain rounded-lg"
             />
-            <button
+            <Button  variant="outline"
               onClick={() => setIsZoomed(false)}
               className="absolute top-4 right-4 p-3 bg-white/20 backdrop-blur-sm rounded-full text-white hover:bg-white/30 transition-all duration-300"
             >
               <FaCompress className="w-5 h-5" />
-            </button>
+            </Button>
           </div>
         </div>
       )}

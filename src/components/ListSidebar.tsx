@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Search, Trash2, X } from "lucide-react";
 import { useTranslations, useLocale } from "next-intl";
 import { getAllProducts } from "@/lib/actions/actions";
+import { Button } from "./ui/button";
 
 interface FilterState {
   selectedCategories: string[];
@@ -133,13 +134,13 @@ const ListSideBar: React.FC<FilterProps> = ({ isOpen, toggleSidebar, onFilterCha
           <h2 className="text-lg font-semibold text-gray-800">
             {t("title")}
           </h2>
-          <button
+          <Button  variant="outline"
             onClick={handleClose}
             className="text-gray-500 hover:text-gray-800 transition-colors"
             aria-label="Close"
           >
             <X size={24} />
-          </button>
+          </Button>
         </div>
 
         {/* Filter Content */}
@@ -226,18 +227,18 @@ const ListSideBar: React.FC<FilterProps> = ({ isOpen, toggleSidebar, onFilterCha
 
           {/* Buttons */}
           <div className="pt-4 border-t space-y-2">
-            <button 
+            <Button  variant="outline"
               onClick={applyFilters} 
               className="w-full px-4 py-2 text-sm font-medium text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
             >
               {t("search")}
-            </button>
-            <button 
+            </Button>
+            <Button  variant="outline"
               onClick={clearFilters} 
               className="w-full px-4 py-2 text-sm font-medium border border-[#438c71] text-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors flex items-center justify-center gap-2"
             >
               <Trash2 size={16} /> {t("clearFilters")}
-            </button>
+            </Button>
           </div>
         </div>
       </div>

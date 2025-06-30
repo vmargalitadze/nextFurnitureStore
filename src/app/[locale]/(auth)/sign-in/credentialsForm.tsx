@@ -46,7 +46,7 @@ export default function CredentialsForm({ callbackUrl }: { callbackUrl: string }
       <input type="hidden" name="callbackUrl" value={callbackUrl} />
       <div className="space-y-6">
         <div>
-          <Label className="text-xl font-bold" htmlFor="email">{t("email")}</Label>
+          <Label className="text-[18px] font-bold" htmlFor="email">{t("email")}</Label>
           <Input 
             id="email" 
             name="email" 
@@ -57,7 +57,7 @@ export default function CredentialsForm({ callbackUrl }: { callbackUrl: string }
           />
         </div>
         <div>
-          <Label className="text-xl font-bold" htmlFor="password">{t("password")}</Label>
+          <Label className="text-[18px] font-bold" htmlFor="password">{t("password")}</Label>
           <PasswordInput 
             id="password" 
             name="password" 
@@ -68,19 +68,19 @@ export default function CredentialsForm({ callbackUrl }: { callbackUrl: string }
           <div className="text-right mt-2">
             <Link 
               href="/forgot-password" 
-              className="text-xl font-bold "
+              className="text-[18px] font-bold "
             >
               {t("forgotPassword")}
             </Link>
           </div>
         </div>
         <div>
-          <Button disabled={loading} className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="default">
+          <Button disabled={loading} className="w-[50%] items-center flex justify-center mx-auto px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="default">
             {loading ? t("signingIn") : t("signInButton")}
           </Button>
         </div>
         {error && <div className="text-center text-destructive">{error}</div>}
-        <div className="text-xl font-bold text-center ">
+        <div className="text-[18px] font-bold text-center ">
           {t("dontHaveAccount")}{" "}
           <Link href="/sign-up" target="_self" className="link font-bold">
             {t("signUp")}

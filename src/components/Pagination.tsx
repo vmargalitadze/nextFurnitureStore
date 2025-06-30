@@ -3,6 +3,7 @@
 import React, { FC, useCallback, Suspense } from "react";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { Button } from "./ui/button";
 
 interface PaginationProps {
   pageCount: number;
@@ -19,14 +20,14 @@ const PaginationArrow: FC<PaginationArrowProps> = React.memo(
     const isLeft = direction === "left";
 
     return (
-      <button
+      <Button  variant="outline"
         onClick={onClick}
         className="flex items-center justify-center w-10 h-10 bg-white text-gray-700 hover:bg-gray-50 shadow-md hover:shadow-lg border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed rounded-full transition-all duration-300 transform hover:scale-105"
         aria-label={isLeft ? "Previous page" : "Next page"}
         disabled={isDisabled}
       >
         {isLeft ? <FaArrowLeft className="w-4 h-4" /> : <FaArrowRight className="w-4 h-4" />}
-      </button>
+      </Button>
     );
   }
 );
@@ -109,7 +110,7 @@ const PaginationContent: FC<PaginationProps> = ({ pageCount }) => {
           {page === '...' ? (
             <span className="px-3 py-2 text-gray-500">...</span>
           ) : (
-            <button
+            <Button  variant="outline"
               onClick={() => goToPage(page as number)}
               className={`flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 transform hover:scale-105 ${
                 currentPage === page
@@ -118,7 +119,7 @@ const PaginationContent: FC<PaginationProps> = ({ pageCount }) => {
               }`}
             >
               {page}
-            </button>
+            </Button>
           )}
         </React.Fragment>
       ))}

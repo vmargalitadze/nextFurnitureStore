@@ -17,7 +17,7 @@ function NavIcons() {
 
   return (
     <>
-    <div className="flex items-start pr-12 gap-8 xl:gap-8 relative">
+    <div className="flex items-center pr-12 gap-8 xl:gap-8 relative">
       <>
        
         {!session && (

@@ -14,7 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import {
   FaEnvelope,
   FaCalendarAlt,
-  FaCrown,
+ 
   FaPlus,
   FaMapMarkerAlt,
   FaCreditCard,
@@ -65,7 +65,7 @@ export default async function ProfilePage() {
           <div className="lg:col-span-1">
             <Card className="h-fit">
               <CardHeader className="text-center pb-4">
-                <div className="mx-auto w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mb-4">
+                <div className="mx-auto w-24 h-24  bg-orange-400 rounded-full flex items-center justify-center mb-4">
                   <User className="text-white text-3xl" />
                 </div>
                 <CardTitle className="text-2xl">{user.name}</CardTitle>
@@ -76,23 +76,25 @@ export default async function ProfilePage() {
                   >
                     {isAdmin ? (
                       <>
-                        <FaCrown className="mr-1" />
+                      
                         <div className="text-2xl font-bold">
-                        {t("admin")}
+                          {t("admin")}
                         </div>
-                        
+
                       </>
                     ) : (
                       <div className="text-2xl font-bold">
                         {t("user")}
-                        </div>
+                      </div>
                     )}
                   </Badge>
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                  <FaEnvelope className="text-gray-500" />
+                  <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
+                      <FaEnvelope className="w-6 h-6 text-orange-600" />
+                    </div>
                   <div>
                     <p className="text-sm text-gray-500">{t("email")}</p>
                     <p className="font-medium">{user.email}</p>
@@ -100,7 +102,9 @@ export default async function ProfilePage() {
                 </div>
 
                 <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                  <FaCalendarAlt className="text-gray-500" />
+                  <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
+                      <FaCalendarAlt className="w-6 h-6 text-orange-600" />
+                    </div>
                   <div>
                     <p className="text-sm text-gray-500">{t("memberSince")}</p>
                     <p className="font-medium">
@@ -111,12 +115,15 @@ export default async function ProfilePage() {
 
                 {user.address && (
                   <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                    <FaMapMarkerAlt className="text-gray-500" />
+                    <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
+                      <FaMapMarkerAlt className="w-6 h-6 text-orange-600" />
+                    </div>
+                    
                     <div>
                       <p className="text-sm text-gray-500">{t("address")}</p>
                       <p className="font-medium text-sm">
                         {typeof user.address === "object" &&
-                        user.address !== null
+                          user.address !== null
                           ? `${(user.address as any).street || ""} ${(user.address as any).city || ""}`
                           : t("addressSaved")}
                       </p>
@@ -126,7 +133,9 @@ export default async function ProfilePage() {
 
                 {user.paymentMethod && (
                   <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                    <FaCreditCard className="text-gray-500" />
+                    <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
+                      <FaCreditCard className="w-6 h-6 text-orange-600" />
+                    </div>
                     <div>
                       <p className="text-sm text-gray-500">
                         {t("paymentMethod")}
@@ -138,12 +147,10 @@ export default async function ProfilePage() {
                   </div>
                 )}
                 <div className="flex justify-center">
-                  <Link
-                    href="/forgot-password"
-                    className="w-[70%]  text-center mx-auto  mb-5 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
-                  >
-                    {t("recoverPassword")}
-                  </Link>
+                    <Link className="inline-flex items-center font-medium text-blue-600 dark:text-blue-500 hover:underline" href="/forgot-password">
+                      {t("recoverPassword")}
+                    </Link>
+              
                 </div>
 
                 {/* Sign Out Button */}
@@ -158,7 +165,7 @@ export default async function ProfilePage() {
           <div className="lg:col-span-2 space-y-6">
             {/* Quick Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+              <Card className="bg-orange-400 text-white">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
@@ -172,7 +179,7 @@ export default async function ProfilePage() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-gradient-to-r from-green-500 to-green-600 text-white">
+              <Card className="bg-orange-400 text-white">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
@@ -184,21 +191,7 @@ export default async function ProfilePage() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-gradient-to-r from-purple-500 to-purple-600 text-white">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-purple-100 text-sm">
-                        {t("accountType")}
-                      </p>
-                      <p className="text-2xl font-bold">
-                        {isAdmin ? t("admin") : t("user")}
-                      </p>
-                    </div>
-                    <User className="text-2xl text-purple-200" />
-                  </div>
-                </CardContent>
-              </Card>
+         
             </div>
 
             {/* Admin Actions */}
@@ -206,10 +199,10 @@ export default async function ProfilePage() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <FaCrown className="text-yellow-500" />
+               
                     <div className="text-2xl font-bold">
-                      
-                    {t("adminActions.title")}
+
+                      {t("adminActions.title")}
                     </div>
                   </CardTitle>
                   <CardDescription>
@@ -233,7 +226,7 @@ export default async function ProfilePage() {
                         variant="outline"
                       >
                         <List className="mr-2" />
-                      მოქმედებები
+                        მოქმედებები
                       </Button>
                     </Link>
                   </div>
@@ -245,9 +238,9 @@ export default async function ProfilePage() {
             <Card>
               <CardHeader>
                 <div className="text-2xl font-bold">
-                {t("recentOrders.title")}
+                  {t("recentOrders.title")}
                 </div>
-               
+
                 <CardDescription>
                   {t("recentOrders.description")}
                 </CardDescription>
@@ -315,13 +308,13 @@ export default async function ProfilePage() {
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <Link href="/cart">
-                    <button
-                   className="w-full mb-14 px-4 py-2 text-[18px] font-medium text-[#438c71] bg-white border-2 border-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors flex items-center justify-center gap-2"
-                  
+                    <Button
+                      className="w-full  flex justify-center mx-auto items-center mb-14 px-4 py-2 text-[20px] font-bold text-[#438c71] bg-white border-2 border-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors flex items-center justify-center gap-2"
+
                     >
                       <ShoppingCart className="mr-2" />
                       {t("quickActions.viewCart")}
-                    </button>
+                    </Button>
                   </Link>
                 </div>
               </CardContent>

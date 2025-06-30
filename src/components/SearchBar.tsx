@@ -5,6 +5,7 @@ import { useDebouncedCallback } from "use-debounce";
 import { Suspense, useEffect, useState } from "react";
 import { Search, X, Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { Button } from "./ui/button";
 
 function SearchHelper() {
   const searchParams = useSearchParams();
@@ -87,13 +88,13 @@ function SearchHelper() {
 
         {/* Clear Button */}
         {query && (
-          <button
+          <Button  variant="outline"
             onClick={clearSearch}
             className="text-white hover:text-[#438c71] transition-colors duration-200 rounded-full"
             aria-label="Clear search"
           >
             <X className="h-4 w-4" />
-          </button>
+          </Button>
         )}
       </div>
 
@@ -105,7 +106,7 @@ function SearchHelper() {
               Search suggestions for &ldquo;{query}&rdquo;
             </div>
             <div className="space-y-1">
-              <button 
+              <Button  variant="outline"
                 onClick={() => {
                   const params = new URLSearchParams();
                   params.set("query", query);
@@ -115,8 +116,8 @@ function SearchHelper() {
                 className="w-full text-left px-3 py-2 rounded cursor-pointer text-sm hover:bg-gray-100"
               >
                 {query} in mattresses
-              </button>
-              <button 
+              </Button>
+              <Button  variant="outline"
                 onClick={() => {
                   const params = new URLSearchParams();
                   params.set("query", query);
@@ -126,8 +127,8 @@ function SearchHelper() {
                 className="w-full text-left px-3 py-2 rounded cursor-pointer text-sm hover:bg-gray-100"
               >
                 {query} in pillows
-              </button>
-              <button 
+              </Button>
+              <Button  variant="outline"
                 onClick={() => {
                   const params = new URLSearchParams();
                   params.set("query", query);
@@ -137,7 +138,7 @@ function SearchHelper() {
                 className="w-full text-left px-3 py-2 rounded cursor-pointer text-sm hover:bg-gray-100"
               >
                 {query} in quilts
-              </button>
+              </Button>
             </div>
           </div>
         </div>

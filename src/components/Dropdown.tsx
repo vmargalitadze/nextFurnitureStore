@@ -101,11 +101,11 @@ export default function DropdownMenuCheckboxes() {
       <DropdownMenu open={open} onOpenChange={handleOpenChange}>
         <DropdownMenuTrigger asChild>
           <div className="flex items-center">
-            <button className="inline-flex items-center gap-2 h-[40px] px-4 rounded-full bg-white/70 backdrop-blur-md border border-gray-200 text-black font-semibold transition-all hover:bg-white truncate max-w-[160px]">
+            <Button  variant="outline" className="inline-flex items-center gap-2 h-[40px] px-4 rounded-full bg-white/70 backdrop-blur-md border border-gray-200 text-black font-semibold transition-all hover:bg-white truncate max-w-[160px]">
               <span className="text-base font-medium truncate">
                 {firstLetter}
               </span>
-            </button>
+            </Button>
           </div>
         </DropdownMenuTrigger>
 
@@ -126,13 +126,13 @@ export default function DropdownMenuCheckboxes() {
           </DropdownMenuItem>
       
           <div className="w-full">
-            <button
+            <Button  variant="outline"
               onClick={handleSignOut}
               className="flex items-center w-full justify-center gap-2 px-4 py-2 mt-3 text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors shadow-md"
             >
               <FaSignOutAlt className="w-5 h-5" />
               <span className="text-[16px] font-medium">{t("signOut")}</span>
-            </button>
+            </Button>
           </div>
         </DropdownMenuContent>
       </DropdownMenu>

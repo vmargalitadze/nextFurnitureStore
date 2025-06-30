@@ -16,6 +16,7 @@ import SideBar from "@/components/Sidebar";
 import ListSideBar from "@/components/ListSidebar";
 import Pagination from "@/components/Pagination";
 import { Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 // Simple Decimal-like class to avoid Prisma import issues
 class SimpleDecimal {
   value: string;
@@ -475,12 +476,12 @@ function PageContentWrapper() {
               </select>
 
               { shouldShowSidebar && (
-              <button
+              <Button  variant="outline"
                 onClick={handleClearFilters}
                 className="w-full flex mx-auto items-center justify-center gap-3 px-4  py-1 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
               >
               <Trash2 size={16} />   {t("clearFilters")}
-              </button>
+              </Button>
 
               )}
 
@@ -491,12 +492,12 @@ function PageContentWrapper() {
         <div className="flex flex-col lg:flex-row gap-8">
           {isListPage && isListPage1 && (
             <div className="mb-6">
-              <button
+              <Button  variant="outline"
                 onClick={handleViewListSidebar}
                 className="w-full px-4 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
               >
                 {t("filter")}
-              </button>
+              </Button>
             </div>
           )}
           <ListSideBar 
@@ -508,12 +509,12 @@ function PageContentWrapper() {
           {shouldShowSidebar && (
             <>
               <div className="mb-6">
-                <button
+                <Button  variant="outline"
                   onClick={handleViewSidebar}
                   className="w-full px-4 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
                 >
                   {t("filter")}
-                </button>
+                </Button>
               </div>
 
               <SideBar

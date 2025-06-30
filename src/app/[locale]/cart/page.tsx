@@ -145,9 +145,9 @@ const CartPage = () => {
               {t('cart.emptyDescription')}
             </p>
             <Link href="/list">
-              <button    className="w-[30%] px-4  mb-10  py-2 text-[18px] font-medium text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors ">
+              <Button  variant="outline"    className="w-[30%] px-4  mb-10  py-2 text-[18px] font-medium text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors ">
                 {t('cart.continueShopping')}
-              </button>
+              </Button>
             </Link>
           </div>
         </div>
@@ -262,20 +262,20 @@ const CartPage = () => {
                   </div>
                 </div>
 
-                <button
+                <Button  variant="outline"
                   onClick={handleCheckout}
                   className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
                 >
                   {t('cart.checkout')}
-                </button>
+                </Button>
 
                 <Link href="/list">
-                  <button  
+                  <Button  variant="outline" 
                  className="w-full  mt-4 px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
                   
                   >
                     {t('cart.continueShopping')}
-                  </button>
+                  </Button>
                 </Link>
               </CardContent>
             </Card>

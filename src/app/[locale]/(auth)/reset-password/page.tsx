@@ -131,13 +131,13 @@ export default function ResetPasswordPage() {
                     required
                     disabled={status === 'loading'}
                   />
-                  <button
+                  <Button  variant="outline"
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-1/2 transform -translate-y-1/2"
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                  </button>
+                  </Button>
                 </div>
               </div>
 
@@ -153,13 +153,13 @@ export default function ResetPasswordPage() {
                     required
                     disabled={status === 'loading'}
                   />
-                  <button
+                  <Button  variant="outline"
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                     className="absolute right-3 top-1/2 transform -translate-y-1/2"
                   >
                     {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                  </button>
+                  </Button>
                 </div>
               </div>
 

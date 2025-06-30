@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 
 import { useState, useEffect } from "react";
 import SideBar from "./Sidebar";
+import { Button } from "./ui/button";
 
 
 
@@ -61,13 +62,13 @@ const Hero = () => {
               <div className="mb-4 flex justify-start">
        
       </div>
-                <button
+                <Button  variant="outline"
                   onClick={handleViewSidebar}
                  className="w-[50%] px-4 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
                 >
                  
                  {t('filter')}
-                </button>
+                </Button>
                 
                 {/* Filter Sidebar - Rendered outside motion context */}
                 {/* <div className="w-full sm:w-auto">

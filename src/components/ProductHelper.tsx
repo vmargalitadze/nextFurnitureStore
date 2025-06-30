@@ -6,6 +6,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
+import { Button } from "./ui/button";
 
 interface ProductItem {
   id: string;
@@ -38,7 +39,7 @@ function ProductHelper({ items }: ProductListProps) {
   return (
     <>
       <div className="hidden md:block">
-        <div className="grid grid-cols-5 gap-4">
+        <div className="grid mt-10 grid-cols-5 gap-4">
           {items.map((item) => (
           <div
           key={item.id}
@@ -85,14 +86,14 @@ function ProductHelper({ items }: ProductListProps) {
       <div className="md:hidden relative">
         {/* Arrow Buttons */}
         <div className="absolute top-[40%] left-0 z-10 -translate-y-1/2">
-          <button className="swiper-button-prev-mobile text-black bg-white/80 hover:bg-white rounded-full w-8 h-8 flex items-center justify-center shadow">
+          <Button  variant="outline" className="swiper-button-prev-mobile text-black bg-white/80 hover:bg-white rounded-full w-8 h-8 flex items-center justify-center shadow">
             ‹
-          </button>
+          </Button>
         </div>
         <div className="absolute top-[40%] right-0 z-10 -translate-y-1/2">
-          <button className="swiper-button-next-mobile text-black bg-white/80 hover:bg-white rounded-full w-8 h-8 flex items-center justify-center shadow">
+          <Button  variant="outline" className="swiper-button-next-mobile text-black bg-white/80 hover:bg-white rounded-full w-8 h-8 flex items-center justify-center shadow">
             ›
-          </button>
+          </Button>
         </div>
         <Swiper
           modules={[Navigation]}
