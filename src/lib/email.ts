@@ -26,7 +26,7 @@ export const sendVerificationEmail = async (email: string, token: string) => {
   const verificationUrl = `${baseUrl}/en/verify-email?token=${token}`;
 
   const mailOptions = {
-    from: process.env.EMAIL_USER,
+    from: `"Furniture Store" <${process.env.EMAIL_USER}>`,
     to: email,
     subject: 'Verify your email address',
     html: `
@@ -82,7 +82,7 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
   const resetUrl = `${baseUrl}/ge/reset-password?token=${token}`;
 
   const mailOptions = {
-    from: process.env.EMAIL_USER,
+    from: `"Furniture Store" <${process.env.EMAIL_USER}>`,
     to: email,
     subject: 'Reset your password',
     html: `
@@ -142,7 +142,7 @@ export const sendOrderReceipt = async (email: string, order: any, customerName: 
   `).join('');
 
   const mailOptions = {
-    from: process.env.EMAIL_USER,
+    from: `"Furniture Store" <${process.env.EMAIL_USER}>`,
     to: email,
     subject: `Order Confirmation #${order.id}`,
     html: `

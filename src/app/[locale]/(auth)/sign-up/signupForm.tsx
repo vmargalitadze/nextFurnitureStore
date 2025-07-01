@@ -34,36 +34,6 @@ function SignupForm({ callbackUrl }: { callbackUrl: string }) {
   const router = useRouter();
   const t = useTranslations("auth.signUp");
 
-  // Load verification state from localStorage on component mount
-  useEffect(() => {
-    const savedVerificationState = localStorage.getItem('signupVerificationState');
-    if (savedVerificationState) {
-      const parsedState = JSON.parse(savedVerificationState);
-      setShowVerificationMessage(parsedState.showVerificationMessage);
-      setVerificationData(parsedState.verificationData);
-    }
-  }, []);
-
-  // Save verification state to localStorage whenever it changes
-  useEffect(() => {
-    if (showVerificationMessage && verificationData) {
-      localStorage.setItem('signupVerificationState', JSON.stringify({
-        showVerificationMessage,
-        verificationData
-      }));
-    } else if (!showVerificationMessage) {
-      localStorage.removeItem('signupVerificationState');
-    }
-  }, [showVerificationMessage, verificationData]);
-
-  // Cleanup localStorage when component unmounts
-  useEffect(() => {
-    return () => {
-      // Only clear if user navigates away without completing verification
-      // Keep it if they're just changing language
-    };
-  }, []);
-
   useEffect(() => {
     if (data.success && data.email) {
       setShowVerificationMessage(true);
@@ -103,7 +73,6 @@ function SignupForm({ callbackUrl }: { callbackUrl: string }) {
   const clearVerificationState = () => {
     setShowVerificationMessage(false);
     setVerificationData(null);
-    localStorage.removeItem('signupVerificationState');
   };
 
   if (showVerificationMessage) {
