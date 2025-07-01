@@ -248,40 +248,43 @@ export default async function ProfilePage() {
                 {user.Order && user.Order.length > 0 ? (
                   <div className="space-y-4">
                     {user.Order.map((order) => (
-                      <div
+                      <Link
                         key={order.id}
-                        className="flex items-center justify-between p-4 border rounded-lg"
+                        href={`/order-confirmation?orderId=${order.id}`}
+                        className="block"
                       >
-                        <div>
-                          <p className="font-medium">
-                            {t("recentOrders.orderNumber", {
-                              number: order.id.slice(-8),
-                            })}
-                          </p>
-                          <p className="text-sm text-gray-500">
-                            {format(new Date(order.createdAt), "MMM dd, yyyy")}
-                          </p>
-                          <p className="text-sm text-gray-500">
-                            {t("recentOrders.total", {
-                              amount: order.totalPrice.toString(),
-                            })}
-                          </p>
-                        </div>
-                        <div className="text-right">
-                          <Badge
-                            variant={order.isPaid ? "default" : "secondary"}
-                          >
-                            {order.isPaid
-                              ? t("recentOrders.paid")
-                              : t("recentOrders.pending")}
-                          </Badge>
-                          {order.isDelivered && (
-                            <Badge variant="outline" className="ml-2">
-                              {t("recentOrders.delivered")}
+                        <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition">
+                          <div>
+                            <p className="font-medium">
+                              {t("recentOrders.orderNumber", {
+                                number: order.id.slice(-8),
+                              })}
+                            </p>
+                            <p className="text-sm text-gray-500">
+                              {format(new Date(order.createdAt), "MMM dd, yyyy")}
+                            </p>
+                            <p className="text-sm text-gray-500">
+                              {t("recentOrders.total", {
+                                amount: order.totalPrice.toString(),
+                              })}
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <Badge
+                              variant={order.isPaid ? "default" : "secondary"}
+                            >
+                              {order.isPaid
+                                ? t("recentOrders.paid")
+                                : t("recentOrders.pending")}
                             </Badge>
-                          )}
+                            {order.isDelivered && (
+                              <Badge variant="outline" className="ml-2">
+                                {t("recentOrders.delivered")}
+                              </Badge>
+                            )}
+                          </div>
                         </div>
-                      </div>
+                      </Link>
                     ))}
                   </div>
                 ) : (

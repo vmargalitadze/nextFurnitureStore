@@ -49,4 +49,42 @@ export async function GET(
       { status: 500 }
     );
   }
+}
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    const orderId = params.id;
+    // Find the order
+    const order = await prisma.order.findUnique({
+      where: { id: orderId },
+    });
+    if (!order) {
+      return NextResponse.json({ error: 'Order not found' }, { status: 404 });
+    }
+    // Only allow if admin or order owner
+    if (
+      session.user.role !== 'admin' &&
+      order.userId !== session.user.id
+    ) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+    // Delete order items first (if needed by your schema)
+    await prisma.orderItem.deleteMany({ where: { orderId } });
+    // Delete the order
+    await prisma.order.delete({ where: { id: orderId } });
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Error deleting order:', error);
+    return NextResponse.json(
+      { error: 'Failed to delete order' },
+      { status: 500 }
+    );
+  }
 } 

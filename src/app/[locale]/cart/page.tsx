@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { CartItem } from '@/lib/types';
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -19,7 +19,7 @@ const CartPage = () => {
   const t = useTranslations();
   const router = useRouter();
   const params = useParams();
-  const { cart, loading, refreshCart, removeFromCartOptimistic } = useCart();
+  const { cart, loading, refreshCart, removeFromCartOptimistic, updateCart } = useCart();
   const [updating, setUpdating] = useState<string | null>(null);
 
   console.log('CartPage - cart:', cart, 'loading:', loading);
@@ -28,6 +28,35 @@ const CartPage = () => {
     if (newQuantity < 1) return;
     
     setUpdating(`${productId}-${size}`);
+    
+    // Store original cart state for rollback
+    const originalCart = cart;
+    
+    // Optimistically update the UI immediately
+    if (cart) {
+      const updatedItems = cart.items.map(item => 
+        item.productId === productId && item.size === size 
+          ? { ...item, qty: newQuantity }
+          : item
+      );
+      
+      // Calculate new totals
+      const itemsPrice = updatedItems.reduce((sum, item) => sum + (parseFloat(item.price) * item.qty), 0);
+      const taxPrice = itemsPrice * 0.18; // 18% tax
+      const shippingPrice = itemsPrice > 100 ? 0 : 10; // Free shipping over 100
+      const totalPrice = itemsPrice + taxPrice + shippingPrice;
+      
+      // Update cart immediately
+      updateCart({
+        ...cart,
+        items: updatedItems,
+        itemsPrice: itemsPrice.toString(),
+        totalPrice: totalPrice.toString(),
+        shippingPrice: shippingPrice.toString(),
+        taxPrice: taxPrice.toString(),
+      });
+    }
+    
     try {
       const response = await fetch('/api/cart/update-quantity', {
         method: 'POST',
@@ -41,11 +70,17 @@ const CartPage = () => {
         throw new Error('Failed to update quantity');
       }
 
-      await refreshCart();
+      // Force refresh cart to ensure sync with server
+      await refreshCart(true);
       toast.success('Cart updated');
     } catch (error) {
       console.error('Error updating quantity:', error);
       toast.error('Failed to update quantity');
+      
+      // Rollback to original state on error
+      if (originalCart) {
+        updateCart(originalCart);
+      }
     } finally {
       setUpdating(null);
     }

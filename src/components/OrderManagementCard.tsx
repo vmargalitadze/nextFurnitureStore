@@ -30,10 +30,12 @@ import {
   FaDownload,
   FaWhatsapp,
   FaTelegram,
+  FaTrash,
 } from "react-icons/fa";
 import { format } from "date-fns";
 import Image from "next/image";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface OrderItem {
   productId: string;
@@ -83,14 +85,18 @@ interface OrderManagementCardProps {
     orderId: string,
     updates: { isPaid?: boolean; isDelivered?: boolean }
   ) => void;
+  onDelete?: (orderId: string) => void;
 }
 
 const OrderManagementCard: React.FC<OrderManagementCardProps> = ({
   order,
   onStatusUpdate,
+  onDelete,
 }) => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const router = useRouter();
 
   // Safely extract shipping address from JSON
   const shippingAddress: ShippingAddress =
@@ -148,6 +154,31 @@ const OrderManagementCard: React.FC<OrderManagementCardProps> = ({
     return format(new Date(date), "MMM dd, yyyy HH:mm");
   };
 
+  const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete this order? This action cannot be undone.")) {
+      return;
+    }
+    setIsDeleting(true);
+    try {
+      const response = await fetch(`/api/orders/${order.id}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        throw new Error("Failed to delete order");
+      }
+      toast.success("Order deleted successfully");
+      if (onDelete) {
+        onDelete(order.id);
+      }
+      router.push("/adminall");
+    } catch (error) {
+      console.error("Error deleting order:", error);
+      toast.error("Failed to delete order");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   return (
     <Card className="w-full">
       <CardHeader>
@@ -170,6 +201,16 @@ const OrderManagementCard: React.FC<OrderManagementCardProps> = ({
             >
               <FaEye className="w-4 h-4 mr-1" />
               {showDetails ? "Hide" : "Details"}
+            </Button>
+            <Button
+              className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors"
+              variant="destructive"
+              size="sm"
+              onClick={handleDelete}
+              disabled={isDeleting}
+            >
+              <FaTrash className="w-4 h-4 mr-1" />
+              {isDeleting ? "Deleting..." : "Delete"}
             </Button>
           </div>
         </div>

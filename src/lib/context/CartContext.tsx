@@ -18,7 +18,7 @@ interface CartContextType {
   loading: boolean;
   cartItemCount: number;
   updateCart: (newCart: Cart | null) => void;
-  refreshCart: () => Promise<void>;
+  refreshCart: (force?: boolean) => Promise<void>;
   addToCartOptimistic: (item: CartItem) => void;
   removeFromCartOptimistic: (productId: string, size: string) => void;
   clearCart: () => void;
@@ -87,14 +87,14 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     setCart(newCart);
   }, []);
 
-  const refreshCart = useCallback(async () => {
+  const refreshCart = useCallback(async (force = false) => {
     const now = Date.now();
-    if (isLoading || (now - lastFetch < 5000)) {
+    if (!force && (isLoading || (now - lastFetch < 5000))) {
       console.log('Cart refresh skipped - isLoading:', isLoading, 'time since last fetch:', now - lastFetch);
       return;
     }
     
-    console.log('Refreshing cart...');
+    console.log('Refreshing cart...', force ? '(forced)' : '');
     try {
       setIsLoading(true);
       setLastFetch(now);
@@ -265,8 +265,6 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
       fetchCart();
     }
   }, [status, isLoading, lastFetch]);
-
-
 
   const value: CartContextType = useMemo(() => ({
     cart,

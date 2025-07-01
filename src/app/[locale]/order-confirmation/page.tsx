@@ -296,14 +296,7 @@ const OrderConfirmationPage = () => {
                   <span className="text-gray-600">Subtotal</span>
                   <span className="font-semibold">{formatPrice(order.itemsPrice)}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Tax</span>
-                  <span className="font-semibold">{formatPrice(order.taxPrice)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Shipping</span>
-                  <span className="font-semibold">{formatPrice(order.shippingPrice)}</span>
-                </div>
+              
                 <div className="flex justify-between text-lg font-bold border-t pt-2">
                   <span>Total</span>
                   <span className="text-[#438c71]">{formatPrice(order.totalPrice)}</span>
