@@ -132,20 +132,20 @@ const SummaryPage = () => {
       if (!response.ok) {
         throw new Error(data.error || 'Order failed');
       }
-      
+
       // Set order placed flag to prevent empty cart message
       setOrderPlaced(true);
       toast.success(t('checkout.success'));
-      
-      // Clear the cart context to update the cart icon
-      updateCart(null);
-      
-      // Refresh cart context to ensure it's synchronized with server
-      await refreshCart();
-      
-      // Redirect to order confirmation with the order ID
+
+      // Redirect to order confirmation with the order ID FIRST
       router.push(`/${params.locale}/order-confirmation?orderId=${data.order.id}`);
-      
+
+      // Then clear and refresh cart context (after a short delay, or in the background)
+      setTimeout(() => {
+        updateCart(null);
+        refreshCart();
+      }, 500);
+
     } catch (error) {
       console.error('Error placing order:', error);
       toast.error(t('checkout.errors.orderFailed'));

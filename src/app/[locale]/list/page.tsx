@@ -8,6 +8,7 @@ import {
   usePathname,
 } from "next/navigation";
 import React, { Suspense, useState, useEffect, useRef } from "react";
+import { X } from "lucide-react";
 
 import ProductHelper from "@/components/ProductHelper";
 import { getAllProducts } from "@/lib/actions/actions";
@@ -61,8 +62,6 @@ interface Product {
   sales?: number;
 }
 
-
-
 interface FilterState {
   selectedCategories: string[];
   selectedBrands: string[];
@@ -78,7 +77,7 @@ function PageContentWrapper() {
   const [listSidebarOpen, setListSidebarOpen] = useState(false);
   const searchParams = useSearchParams();
   const t = useTranslations("common");
-  
+
   const [selectedType, setSelectedType] = useState<string>("");
 
   // Pagination state
@@ -96,10 +95,10 @@ function PageContentWrapper() {
     checkScreenSize();
 
     // Add event listener for resize
-    window.addEventListener('resize', checkScreenSize);
+    window.addEventListener("resize", checkScreenSize);
 
     // Cleanup
-    return () => window.removeEventListener('resize', checkScreenSize);
+    return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
   // Handle filter changes from ListSidebar
@@ -118,12 +117,24 @@ function PageContentWrapper() {
       // Search query filter
       const matchesQuery =
         !filters.searchQuery ||
-        product.title.toLowerCase().includes(filters.searchQuery.toLowerCase()) ||
-        product.titleEn.toLowerCase().includes(filters.searchQuery.toLowerCase()) ||
-        product.description.toLowerCase().includes(filters.searchQuery.toLowerCase()) ||
-        product.descriptionEn.toLowerCase().includes(filters.searchQuery.toLowerCase()) ||
-        product.brand.toLowerCase().includes(filters.searchQuery.toLowerCase()) ||
-        product.category.toLowerCase().includes(filters.searchQuery.toLowerCase());
+        product.title
+          .toLowerCase()
+          .includes(filters.searchQuery.toLowerCase()) ||
+        product.titleEn
+          .toLowerCase()
+          .includes(filters.searchQuery.toLowerCase()) ||
+        product.description
+          .toLowerCase()
+          .includes(filters.searchQuery.toLowerCase()) ||
+        product.descriptionEn
+          .toLowerCase()
+          .includes(filters.searchQuery.toLowerCase()) ||
+        product.brand
+          .toLowerCase()
+          .includes(filters.searchQuery.toLowerCase()) ||
+        product.category
+          .toLowerCase()
+          .includes(filters.searchQuery.toLowerCase());
 
       // Price range filter
       const priceRange = getProductPriceRange(product);
@@ -206,7 +217,7 @@ function PageContentWrapper() {
     const aPriceRange = getProductPriceRange(a);
     const bPriceRange = getProductPriceRange(b);
 
-    console.log('Sorting by:', sortBy); // Debug log
+    console.log("Sorting by:", sortBy); // Debug log
 
     switch (sortBy) {
       case "price-low":
@@ -224,10 +235,16 @@ function PageContentWrapper() {
   });
 
   // Pagination logic - only on large screens
-  const effectiveItemsPerPage = isLargeScreen ? itemsPerPage : sortedProducts.length;
+  const effectiveItemsPerPage = isLargeScreen
+    ? itemsPerPage
+    : sortedProducts.length;
   const totalPages = Math.ceil(sortedProducts.length / effectiveItemsPerPage);
-  const startIndex = isLargeScreen ? (currentPage - 1) * effectiveItemsPerPage : 0;
-  const endIndex = isLargeScreen ? startIndex + effectiveItemsPerPage : sortedProducts.length;
+  const startIndex = isLargeScreen
+    ? (currentPage - 1) * effectiveItemsPerPage
+    : 0;
+  const endIndex = isLargeScreen
+    ? startIndex + effectiveItemsPerPage
+    : sortedProducts.length;
   const currentProducts = sortedProducts.slice(startIndex, endIndex);
 
   // Handle page change
@@ -268,9 +285,11 @@ function PageContentWrapper() {
 
   const isListPage = pathname?.includes("/list");
 
-  const hasQueryParams = Array.from(searchParams.keys()).length > 0;
+  const hasFilters =
+    Array.from(searchParams.keys()).some((key) => key !== "page") ||
+    (searchParams.get("page") && searchParams.get("page") !== "1");
 
-  const isListPage1 = pathname.endsWith("/list") && !hasQueryParams;
+  const isListPage1 = pathname.endsWith("/list") && !hasFilters;
   // Transform database products to match ProductHelper interface
   const transformedProducts = currentProducts.map((product) => {
     const priceRange = getProductPriceRange(product);
@@ -300,10 +319,12 @@ function PageContentWrapper() {
         sizes:
           product.sizes?.map((size) => ({
             ...size,
-            price: new SimpleDecimal(size.price?.toString() || '0'),
+            price: new SimpleDecimal(size.price?.toString() || "0"),
           })) || undefined,
         // Handle the legacy price field if it exists
-        price: product.price ? new SimpleDecimal(product.price.toString()) : undefined,
+        price: product.price
+          ? new SimpleDecimal(product.price.toString())
+          : undefined,
         sales: product.sales || undefined,
       }));
       setProducts(productsWithDecimalPrices as Product[]);
@@ -321,19 +342,31 @@ function PageContentWrapper() {
   // Apply initial filters when products load or URL params change
   useEffect(() => {
     if (products.length > 0) {
-      console.log('Applying filters:', { category, brand, query, productsCount: products.length });
-      
+      console.log("Applying filters:", {
+        category,
+        brand,
+        query,
+        productsCount: products.length,
+      });
+
       // Parse multiple categories and brands from comma-separated values
-      const selectedCategories = category ? category.split(',').map(c => c.trim()) : [];
-      const selectedBrands = brand ? brand.split(',').map(b => b.trim()) : [];
-      
+      const selectedCategories = category
+        ? category.split(",").map((c) => c.trim())
+        : [];
+      const selectedBrands = brand ? brand.split(",").map((b) => b.trim()) : [];
+
       const filtered = products.filter((product) => {
         const matchesCategory =
           selectedCategories.length === 0 ||
-          selectedCategories.some(cat => product.category?.toLowerCase() === cat.toLowerCase());
+          selectedCategories.some(
+            (cat) => product.category?.toLowerCase() === cat.toLowerCase()
+          );
         const matchesBrand =
           selectedBrands.length === 0 ||
-          selectedBrands.some(brandName => product.brand?.toLowerCase() === brandName.toLowerCase());
+          selectedBrands.some(
+            (brandName) =>
+              product.brand?.toLowerCase() === brandName.toLowerCase()
+          );
         const matchesQuery =
           !query ||
           product.title.toLowerCase().includes(query.toLowerCase()) ||
@@ -342,14 +375,19 @@ function PageContentWrapper() {
           product.descriptionEn.toLowerCase().includes(query.toLowerCase()) ||
           product.brand.toLowerCase().includes(query.toLowerCase()) ||
           product.category.toLowerCase().includes(query.toLowerCase());
-        
+
         if (query && !matchesQuery) {
-          console.log('Product filtered out by query:', product.title, 'Query:', query);
+          console.log(
+            "Product filtered out by query:",
+            product.title,
+            "Query:",
+            query
+          );
         }
-        
+
         return matchesCategory && matchesBrand && matchesQuery;
       });
-      console.log('Filtered products count:', filtered.length);
+      console.log("Filtered products count:", filtered.length);
       setFilteredProducts(filtered);
     }
   }, [products, category, brand, query]);
@@ -411,7 +449,6 @@ function PageContentWrapper() {
           <h2 className="text-primary text-xl md:text-[45px] font-normal leading-none text-center capitalize">
             {getPageTitle()}
           </h2>
-         
         </div>
       </div>
 
@@ -464,7 +501,7 @@ function PageContentWrapper() {
               <select
                 value={sortBy}
                 onChange={(e) => {
-                  console.log('Sort changed to:', e.target.value); // Debug log
+                  console.log("Sort changed to:", e.target.value); // Debug log
                   setSortBy(e.target.value);
                 }}
                 className="px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all bg-white font-medium"
@@ -474,17 +511,29 @@ function PageContentWrapper() {
                 <option value="price-high">{t("priceHighToLow")}</option>
                 <option value="name">{t("nameAZ")}</option>
               </select>
-
-              { shouldShowSidebar && (
-              <Button  variant="outline"
-                onClick={handleClearFilters}
-                className="w-full flex mx-auto items-center justify-center gap-3 px-4  py-1 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
-              >
-              <Trash2 size={16} />   {t("clearFilters")}
-              </Button>
-
+              {query && (
+                <div className="container  flex justify-end">
+                  <Button
+                    onClick={() => {
+                      const basePath = `/${locale}/list`;
+                      router.push(basePath); // Remove query and page
+                    }}
+                   className="w-full flex mx-auto items-center justify-center gap-3 px-4  py-1 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+                  >
+                    <X className="w-4 h-4" />
+                    {t("clearFilters")}
+                  </Button>
+                </div>
               )}
-
+              {shouldShowSidebar && (
+                <Button
+                  variant="outline"
+                  onClick={handleClearFilters}
+                  className="w-full flex mx-auto items-center justify-center gap-3 px-4  py-1 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+                >
+                  <Trash2 size={16} /> {t("clearFilters")}
+                </Button>
+              )}
             </div>
           </div>
         </div>
@@ -492,7 +541,8 @@ function PageContentWrapper() {
         <div className="flex flex-col lg:flex-row gap-8">
           {isListPage && isListPage1 && (
             <div className="mb-6">
-              <Button  variant="outline"
+              <Button
+                variant="outline"
                 onClick={handleViewListSidebar}
                 className="w-full px-4 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
               >
@@ -500,8 +550,8 @@ function PageContentWrapper() {
               </Button>
             </div>
           )}
-          <ListSideBar 
-            isOpen={listSidebarOpen} 
+          <ListSideBar
+            isOpen={listSidebarOpen}
             toggleSidebar={handleViewListSidebar}
             onFilterChange={handleListFilterChange}
           />
@@ -509,7 +559,8 @@ function PageContentWrapper() {
           {shouldShowSidebar && (
             <>
               <div className="mb-6">
-                <Button  variant="outline"
+                <Button
+                  variant="outline"
                   onClick={handleViewSidebar}
                   className="w-full px-4 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
                 >
@@ -526,13 +577,11 @@ function PageContentWrapper() {
             </>
           )}
 
-
-      
           <div className={`${shouldShowSidebar ? "lg:w-3/4" : "w-full"}`}>
             {transformedProducts.length > 0 ? (
               <>
                 <ProductHelper items={transformedProducts} />
-              
+
                 {isLargeScreen && totalPages > 1 && (
                   <div className="mt-8 flex justify-center">
                     <Pagination pageCount={totalPages} />
