@@ -134,19 +134,23 @@ const SideBar: React.FC<SideBarProps> = ({
     (category: string) => {
       const normalized = category.trim().toLowerCase();
 
+      // Handle special case for "OTHERS" category
+      if (normalized === 'others') {
+        return t("others");
+      }
+
       const map: Record<string, { en: string; ge: string }> = {
         bundle: { en: "Bundle", ge: "კომპლექტი" },
         pillow: { en: "Pillow", ge: "ბალიში" },
         mattress: { en: "Mattress", ge: "მატრასი" },
         bed: { en: "Bed", ge: "საწოლი" },
         quilt: { en: "Quilt", ge: "საბანი" },
-        OTHERS: { en: "Others", ge: "სხვა" },
       };
 
       const label = map[normalized] || { en: category, ge: category };
       return locale === "en" ? label.en : label.ge;
     },
-    [locale]
+    [locale, t]
   );
 
   // Memoize text labels

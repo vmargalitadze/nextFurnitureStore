@@ -1,11 +1,23 @@
 import nodemailer from 'nodemailer';
 
-// Create a transporter using SMTP
+// Create a transporter using SMTP with improved configuration
 const transporter = nodemailer.createTransport({
-  service: 'gmail', // You can change this to your email provider
+  service: 'gmail',
   auth: {
-    user: process.env.EMAIL_USER, // Your email address
-    pass: process.env.EMAIL_PASSWORD, // Your email password or app password
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD,
+  },
+  // Add these settings to improve deliverability
+  pool: true,
+  maxConnections: 1,
+  maxMessages: 3,
+  rateLimit: 3,
+  // Add DKIM and SPF support
+  dkim: {
+    domainName: process.env.DOMAIN_NAME || 'yourdomain.com',
+    keySelector: 'default',
+    privateKey: process.env.DKIM_PRIVATE_KEY || '',
+    headerFieldNames: 'to:from:subject:date',
   },
 });
 
@@ -26,9 +38,24 @@ export const sendVerificationEmail = async (email: string, token: string) => {
   const verificationUrl = `${baseUrl}/en/verify-email?token=${token}`;
 
   const mailOptions = {
-    from: `"Furniture Store" <${process.env.EMAIL_USER}>`,
+    from: {
+      name: 'Furniture Store',
+      address: process.env.EMAIL_USER || 'noreply@yourdomain.com'
+    },
     to: email,
     subject: 'Verify your email address',
+    // Add headers to prevent replies and improve deliverability
+    headers: {
+      'X-Auto-Response-Suppress': 'OOF, AutoReply',
+      'Precedence': 'bulk',
+      'X-Mailer': 'Furniture Store Email System',
+      'List-Unsubscribe': `<mailto:${process.env.EMAIL_USER}?subject=unsubscribe>`,
+      'Feedback-ID': 'verification:furniturestore',
+    },
+    // Add message ID for better tracking
+    messageId: `<verification-${Date.now()}@${process.env.DOMAIN_NAME || 'furniturestore.com'}>`,
+    // Set reply-to to prevent replies
+    replyTo: 'noreply@furniturestore.com',
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <h2 style="color: #333;">Welcome to Furniture Store!</h2>
@@ -51,6 +78,7 @@ export const sendVerificationEmail = async (email: string, token: string) => {
         <hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;">
         <p style="color: #666; font-size: 12px;">
           This is an automated email from Furniture Store. Please do not reply to this email.
+          <br>If you need assistance, please contact our support team through our website.
         </p>
       </div>
     `,
@@ -82,9 +110,24 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
   const resetUrl = `${baseUrl}/ge/reset-password?token=${token}`;
 
   const mailOptions = {
-    from: `"Furniture Store" <${process.env.EMAIL_USER}>`,
+    from: {
+      name: 'Furniture Store',
+      address: process.env.EMAIL_USER || 'noreply@yourdomain.com'
+    },
     to: email,
     subject: 'Reset your password',
+    // Add headers to prevent replies and improve deliverability
+    headers: {
+      'X-Auto-Response-Suppress': 'OOF, AutoReply',
+      'Precedence': 'bulk',
+      'X-Mailer': 'Furniture Store Email System',
+      'List-Unsubscribe': `<mailto:${process.env.EMAIL_USER}?subject=unsubscribe>`,
+      'Feedback-ID': 'password-reset:furniturestore',
+    },
+    // Add message ID for better tracking
+    messageId: `<password-reset-${Date.now()}@${process.env.DOMAIN_NAME || 'furniturestore.com'}>`,
+    // Set reply-to to prevent replies
+    replyTo: 'noreply@furniturestore.com',
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <h2 style="color: #333;">Password Reset Request</h2>
@@ -107,6 +150,7 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
         <hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;">
         <p style="color: #666; font-size: 12px;">
           This is an automated email from Furniture Store. Please do not reply to this email.
+          <br>If you need assistance, please contact our support team through our website.
         </p>
       </div>
     `,
@@ -142,9 +186,24 @@ export const sendOrderReceipt = async (email: string, order: any, customerName: 
   `).join('');
 
   const mailOptions = {
-    from: `"Furniture Store" <${process.env.EMAIL_USER}>`,
+    from: {
+      name: 'Furniture Store',
+      address: process.env.EMAIL_USER || 'noreply@yourdomain.com'
+    },
     to: email,
     subject: `Order Confirmation #${order.id}`,
+    // Add headers to prevent replies and improve deliverability
+    headers: {
+      'X-Auto-Response-Suppress': 'OOF, AutoReply',
+      'Precedence': 'bulk',
+      'X-Mailer': 'Furniture Store Email System',
+      'List-Unsubscribe': `<mailto:${process.env.EMAIL_USER}?subject=unsubscribe>`,
+      'Feedback-ID': 'order-receipt:furniturestore',
+    },
+    // Add message ID for better tracking
+    messageId: `<order-${order.id}-${Date.now()}@${process.env.DOMAIN_NAME || 'furniturestore.com'}>`,
+    // Set reply-to to prevent replies
+    replyTo: 'noreply@furniturestore.com',
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9f9f9; padding: 20px;">
         <div style="background-color: white; border-radius: 8px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
@@ -220,13 +279,14 @@ export const sendOrderReceipt = async (email: string, order: any, customerName: 
           </div>
           
           <div style="text-align: center; margin-top: 30px;">
-            <p style="color: #666; margin: 0;">If you have any questions about your order, please contact us.</p>
+            <p style="color: #666; margin: 0;">If you have any questions about your order, please contact us through our website.</p>
             <p style="color: #666; margin: 10px 0 0 0;">Thank you for choosing Furniture Store!</p>
           </div>
           
           <hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;">
           <p style="color: #666; font-size: 12px; text-align: center; margin: 0;">
             This is an automated email from Furniture Store. Please do not reply to this email.
+            <br>For support, please visit our website or contact our customer service team.
           </p>
         </div>
       </div>

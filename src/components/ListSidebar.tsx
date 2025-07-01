@@ -68,17 +68,23 @@ const ListSideBar: React.FC<FilterProps> = ({ isOpen, toggleSidebar, onFilterCha
   const brands = useMemo(() => Array.from(new Set(products.map(p => p.brand))).filter(Boolean), [products]);
 
   const getLocalizedCategoryLabel = useCallback((category: string) => {
+    const normalized = category.toLowerCase();
+
+    // Handle special case for "OTHERS" category
+    if (normalized === 'others') {
+      return t("others");
+    }
+
     const map: Record<string, { en: string; ge: string }> = {
       bundle: { en: "Bundle", ge: "კომპლექტი" },
       pillow: { en: "Pillow", ge: "ბალიში" },
       mattress: { en: "Mattress", ge: "მატრასი" },
       bed: { en: "Bed", ge: "საწოლი" },
       quilt: { en: "Quilt", ge: "საბანი" },
-      OTHERS: { en: "Others", ge: "სხვა" }
     };
-    const label = map[category.toLowerCase()] || { en: category, ge: category };
+    const label = map[normalized] || { en: category, ge: category };
     return locale === "en" ? label.en : label.ge;
-  }, [locale]);
+  }, [locale, t]);
 
   const applyFilters = () => {
     onFilterChange({

@@ -27,14 +27,51 @@ export default function Categories() {
       try {
         setIsLoading(true);
         const products = await getAllProducts();
+        
+        // Create a mapping from database category values to CategoriesList types
+        const categoryMapping: Record<string, string> = {
+          'MATTRESS': 'mattress',
+          'PILLOW': 'pillow', 
+          'QUILT': 'quilt',
+          'PAD': 'quilt', // Map PAD to quilt since there's no PAD in CategoriesList
+          'bundle': 'bundle',
+          'BED': 'bed',
+          'OTHERS': 'OTHERS'
+        };
+
         const counts: Record<string, number> = {};
-        products.forEach((product: any) => {
-          const category = product.category;
-          counts[category] = (counts[category] || 0) + 1;
+        
+        // Initialize counts for all categories in CategoriesList
+        CategoriesList.forEach(category => {
+          counts[category.type] = 0;
         });
+
+        // Count products by category
+        products.forEach((product: any) => {
+          const dbCategory = product.category;
+          const mappedCategory = categoryMapping[dbCategory];
+          
+          if (mappedCategory && counts.hasOwnProperty(mappedCategory)) {
+            counts[mappedCategory]++;
+          } else {
+            // If no mapping found, count as OTHERS
+            if (counts.hasOwnProperty('OTHERS')) {
+              counts['OTHERS']++;
+            }
+          }
+        });
+
+       
+        
         setProductCounts(counts);
       } catch (error) {
         console.error("Error fetching product counts:", error);
+        // Set default counts on error
+        const defaultCounts: Record<string, number> = {};
+        CategoriesList.forEach(category => {
+          defaultCounts[category.type] = 0;
+        });
+        setProductCounts(defaultCounts);
       } finally {
         setIsLoading(false);
       }
@@ -97,8 +134,8 @@ export default function Categories() {
                       {/* Badge */}
                       <div className="absolute top-2 left-2  inline-flex items-center gap-2 h-[40px] px-4 rounded-full bg-white/70 backdrop-blur-md border border-gray-200 text-black font-semibold transition-all hover:bg-white truncate max-w-[160px]">
                         {getLocalizedCategoryLabel(category.type)}
-                        {productCounts[category.type]
-                          ? ` (${productCounts[category.type]})`
+                        {getProductCount(category.type) > 0
+                          ? ` (${getProductCount(category.type)})`
                           : ""}
                       </div>
                     </Link>
@@ -141,8 +178,8 @@ export default function Categories() {
                         </div>
                         <div className="absolute top-2 left-2  inline-flex items-center gap-2 h-[40px] px-4 rounded-full bg-white/70 backdrop-blur-md border border-gray-200 text-black font-semibold transition-all hover:bg-white truncate max-w-[160px]">
                           {getLocalizedCategoryLabel(category.type)}
-                          {productCounts[category.type]
-                            ? ` (${productCounts[category.type]})`
+                          {getProductCount(category.type) > 0
+                            ? ` (${getProductCount(category.type)})`
                             : ""}
                         </div>
                       </Link>

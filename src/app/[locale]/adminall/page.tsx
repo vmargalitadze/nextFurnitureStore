@@ -135,70 +135,70 @@ export default async function AdminAllPage() {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
-          <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+          <Card className="bg-white border-2 border-orange-400 text-orange-400">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-blue-100 text-sm">Total Products</p>
-                  <p className="text-2xl font-bold">{products.length}</p>
+                  <p className="text-sm text-orange-400">Total Products</p>
+                  <p className="text-2xl font-bold text-orange-500">{products.length}</p>
                 </div>
-                <div className="text-blue-200">
+                <div className="text-2xl text-orange-400">
                   <FaCrown className="text-2xl" />
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-r from-green-500 to-green-600 text-white">
+            <Card className="bg-white border-2 border-orange-400 text-orange-400">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-green-100 text-sm">Total Orders</p>
-                  <p className="text-2xl font-bold">{totalOrders}</p>
+                  <p className="text-sm text-orange-400">Total Orders</p>
+                  <p className="text-2xl font-bold text-orange-500">{totalOrders}</p>
                 </div>
-                <div className="text-green-200">
+                <div className="text-2xl text-orange-400">
                   <FaShoppingCart className="text-2xl" />
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-r from-purple-500 to-purple-600 text-white">
+          <Card className="bg-white border-2 border-orange-400 text-orange-400">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-purple-100 text-sm">Total Revenue</p>
-                  <p className="text-2xl font-bold">₾{totalRevenue.toFixed(2)}</p>
+                  <p className="text-sm text-orange-400">Total Revenue</p>
+                  <p className="text-2xl font-bold text-orange-500">₾{totalRevenue.toFixed(2)}</p>
                 </div>
-                <div className="text-purple-200">
+                <div className="text-2xl text-orange-400">
                   <FaDollarSign className="text-2xl" />
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-r from-orange-500 to-orange-600 text-white">
+          <Card className="bg-white border-2 border-orange-400 text-orange-400">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-orange-100 text-sm">Pending Orders</p>
-                  <p className="text-2xl font-bold">{pendingOrders}</p>
+                  <p className="text-sm text-orange-400">Pending Orders</p>
+                  <p className="text-2xl font-bold text-orange-500">{pendingOrders}</p>
                 </div>
-                <div className="text-orange-200">
+                <div className="text-2xl text-orange-400">
                   <FaClock className="text-2xl" />
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white">
+          <Card className="bg-white border-2 border-orange-400 text-orange-400">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-indigo-100 text-sm">Total Users</p>
-                  <p className="text-2xl font-bold">{totalUsers}</p>
+                  <p className="text-sm text-orange-400">Total Users</p>
+                  <p className="text-2xl font-bold text-orange-500">{totalUsers}</p>
                 </div>
-                <div className="text-indigo-200">
+                <div className="text-2xl text-orange-400">
                   <FaUsers className="text-2xl" />
                 </div>
               </div>
