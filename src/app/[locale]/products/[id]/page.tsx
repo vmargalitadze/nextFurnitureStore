@@ -269,7 +269,7 @@ const Page = (props: { params: { id: string; locale: string } }) => {
 
                 {/* Brand - only show for non-OTHERS products */}
                 {!isOthersProduct() && product.brand && (
-                  <p className="text-[18px] uppercase font-bold  mb-1">
+                  <p className="text-[18px]  font-bold  mb-1">
                     {getTranslation("product.brand", "Brand")}:{" "}
                     <span className="font-medium uppercase text-gray-900">
                       {product.brand}
@@ -277,7 +277,7 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                   </p>
                 )}
 
-                <p className="text-[18px] uppercase font-bold ">
+                <p className="text-[18px]  font-bold ">
                   {getTranslation("product.category", "Category")}:{" "}
                   <span className="font-medium uppercase text-gray-900">
                     {product.category}

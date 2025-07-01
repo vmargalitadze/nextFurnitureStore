@@ -165,28 +165,27 @@ export default async function ProfilePage() {
           <div className="lg:col-span-2 space-y-6">
             {/* Quick Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Card className="bg-orange-400 text-white">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-blue-100 text-sm">
-                        {t("totalOrders")}
-                      </p>
-                      <p className="text-2xl font-bold">{orderCount}</p>
-                    </div>
-                    <List className="text-2xl text-blue-200" />
-                  </div>
-                </CardContent>
-              </Card>
+            <Card className="bg-white border-2 border-orange-400 text-orange-400">
+  <CardContent className="p-6">
+    <div className="flex items-center justify-between">
+      <div>
+        <p className="text-sm text-orange-400">{t("totalOrders")}</p>
+        <p className="text-2xl font-bold text-orange-500">{orderCount}</p>
+      </div>
+      <List className="text-2xl text-orange-400" />
+    </div>
+  </CardContent>
+</Card>
 
-              <Card className="bg-orange-400 text-white">
+
+              <Card className="bg-white border-2 border-orange-400 text-orange-400">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-green-100 text-sm">{t("cartItems")}</p>
-                      <p className="text-2xl font-bold">{cartItemCount}</p>
+                      <p className="text-sm text-orange-400">{t("cartItems")}</p>
+                      <p className="text-2xl font-bold text-orange-500">{cartItemCount}</p>
                     </div>
-                    <ShoppingCart className="text-2xl text-green-200" />
+                    <ShoppingCart className="text-2xl text-orange-400" />
                   </div>
                 </CardContent>
               </Card>
@@ -226,7 +225,7 @@ export default async function ProfilePage() {
                         variant="outline"
                       >
                         <List className="mr-2" />
-                        მოქმედებები
+                        {t("adminActions.actions")}
                       </Button>
                     </Link>
                   </div>
@@ -300,7 +299,7 @@ export default async function ProfilePage() {
             {/* Quick Actions */}
             <Card>
               <CardHeader>
-                <CardTitle>{t("quickActions.title")}</CardTitle>
+                <CardTitle className="text-2xl font-bold">{t("quickActions.title")}</CardTitle>
                 <CardDescription>
                   {t("quickActions.description")}
                 </CardDescription>
@@ -309,7 +308,7 @@ export default async function ProfilePage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <Link href="/cart">
                     <Button
-                      className="w-full  flex justify-center mx-auto items-center mb-14 px-4 py-2 text-[20px] font-bold text-[#438c71] bg-white border-2 border-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors flex items-center justify-center gap-2"
+                      className="w-[70%]   mx-auto  mb-14 px-4 py-2 text-[20px] font-bold text-[#438c71] bg-white border-2 border-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors gap-2"
 
                     >
                       <ShoppingCart className="mr-2" />

@@ -5,8 +5,7 @@ import { useTranslations } from 'next-intl';
 import { CartItem } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
+
 import { Separator } from '@/components/ui/separator';
 import { Trash2, Plus, Minus, ShoppingBag, Truck, CreditCard } from 'lucide-react';
 import { Link } from '@/i18n/navigation'; 
@@ -22,6 +21,8 @@ const CartPage = () => {
   const params = useParams();
   const { cart, loading, refreshCart, removeFromCartOptimistic } = useCart();
   const [updating, setUpdating] = useState<string | null>(null);
+
+  console.log('CartPage - cart:', cart, 'loading:', loading);
 
   const handleQuantityChange = async (productId: string, size: string, newQuantity: number) => {
     if (newQuantity < 1) return;
@@ -104,7 +105,7 @@ const CartPage = () => {
       toast.error('Cart is empty');
       return;
     }
-    router.push(`/${params.locale}/checkout`);
+    router.push(`/${params.locale}/checkout/personal`);
   };
 
   const formatPrice = (price: string) => {
@@ -156,13 +157,18 @@ const CartPage = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container min-h-screen mx-auto px-4 py-8">
       <div className="max-w-6xl mx-auto">
         <div className="flex items-center mt-[100px] justify-between mb-8">
           <h1 className="text-3xl font-bold text-gray-900">
             {t('cart.title')}
           </h1>
-        
+          <Button  variant="outline"
+                  onClick={handleClearCart}
+                  className="w-[30%] px-4  py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+                >
+                  {t('cart.clearCart')}
+                </Button>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -200,8 +206,7 @@ const CartPage = () => {
                     </div>
                     <div className="flex items-center space-x-2">
                       <Button
-                        variant="outline"
-                        size="sm"
+                        
                         onClick={() => handleQuantityChange(item.productId, item.size, item.qty - 1)}
                         disabled={updating === `${item.productId}-${item.size}`}
                       >
@@ -211,8 +216,7 @@ const CartPage = () => {
                         {updating === `${item.productId}-${item.size}` ? '...' : item.qty}
                       </span>
                       <Button
-                        variant="outline"
-                        size="sm"
+                       
                         onClick={() => handleQuantityChange(item.productId, item.size, item.qty + 1)}
                         disabled={updating === `${item.productId}-${item.size}`}
                       >

@@ -22,24 +22,8 @@ export const authConfig = {
       // Check if user is not authenticated and accessing a protected path
       if (!auth && protectedPaths.some((p) => p.test(pathname))) return false;
 
-      // Check for session cart cookie
-      if (!request.cookies.get('sessionCartId')) {
-        // Generate new session cart id cookie
-        const sessionCartId = crypto.randomUUID();
-
-        // Create new response and add the new headers
-        const response = NextResponse.next({
-          request: {
-            headers: new Headers(request.headers),
-          },
-        });
-
-        // Set newly generated sessionCartId in the response cookies
-        response.cookies.set('sessionCartId', sessionCartId);
-
-        return response;
-      }
-
+      // Always return true for non-protected paths
+      // Session cart ID will be handled by middleware or individual routes
       return true;
     },
   },

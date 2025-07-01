@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useMemo, useCallback } from 'react';
 import { CartItem } from '@/lib/types';
 import { useSession } from 'next-auth/react';
 
@@ -41,16 +41,27 @@ interface CartProviderProps {
 export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const [cart, setCart] = useState<Cart | null>(null);
   const [loading, setLoading] = useState(true);
+  const [lastFetch, setLastFetch] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState(false);
   const { data: session, status } = useSession();
 
-  const loadCart = async () => {
+  const loadCart = useCallback(async () => {
+    // Prevent multiple simultaneous requests and cache for 5 seconds
+    const now = Date.now();
+    if (isLoading || (now - lastFetch < 5000)) return;
+    
     try {
+      setIsLoading(true);
+      setLastFetch(now);
+      
       const response = await fetch('/api/cart/get');
+      
       if (!response.ok) {
         throw new Error('Failed to load cart');
       }
       
       const { cart: cartData } = await response.json();
+      
       if (cartData) {
         setCart({
           id: cartData.id,
@@ -67,19 +78,59 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
       console.error('Error loading cart:', error);
       setCart(null);
     } finally {
+      setIsLoading(false);
       setLoading(false);
     }
-  };
+  }, [isLoading, lastFetch]);
 
-  const updateCart = (newCart: Cart | null) => {
+  const updateCart = useCallback((newCart: Cart | null) => {
     setCart(newCart);
-  };
+  }, []);
 
-  const refreshCart = async () => {
-    await loadCart();
-  };
+  const refreshCart = useCallback(async () => {
+    const now = Date.now();
+    if (isLoading || (now - lastFetch < 5000)) {
+      console.log('Cart refresh skipped - isLoading:', isLoading, 'time since last fetch:', now - lastFetch);
+      return;
+    }
+    
+    console.log('Refreshing cart...');
+    try {
+      setIsLoading(true);
+      setLastFetch(now);
+      
+      const response = await fetch('/api/cart/get');
+      console.log('Cart refresh response status:', response.status);
+      
+      if (!response.ok) {
+        throw new Error('Failed to load cart');
+      }
+      
+      const { cart: cartData } = await response.json();
+      console.log('Cart refresh data received:', cartData);
+      
+      if (cartData) {
+        setCart({
+          id: cartData.id,
+          items: cartData.items,
+          itemsPrice: cartData.itemsPrice,
+          totalPrice: cartData.totalPrice,
+          shippingPrice: cartData.shippingPrice,
+          taxPrice: cartData.taxPrice,
+        });
+      } else {
+        setCart(null);
+      }
+    } catch (error) {
+      console.error('Error refreshing cart:', error);
+      setCart(null);
+    } finally {
+      setIsLoading(false);
+      setLoading(false);
+    }
+  }, [isLoading, lastFetch]);
 
-  const addToCartOptimistic = (item: CartItem) => {
+  const addToCartOptimistic = useCallback((item: CartItem) => {
     if (!cart) {
       // If no cart exists, create a new one with the item
       const newCart: Cart = {
@@ -122,9 +173,9 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
         taxPrice: taxPrice.toString(),
       });
     }
-  };
+  }, [cart]);
 
-  const removeFromCartOptimistic = (productId: string, size: string) => {
+  const removeFromCartOptimistic = useCallback((productId: string, size: string) => {
     if (!cart) return;
 
     const updatedItems = cart.items.filter(
@@ -150,26 +201,74 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
       shippingPrice: shippingPrice.toString(),
       taxPrice: taxPrice.toString(),
     });
-  };
+  }, [cart]);
 
-  const clearCart = () => {
+  const clearCart = useCallback(() => {
     setCart(null);
-  };
-
-  const cartItemCount = cart?.items?.reduce((total, item) => total + item.qty, 0) || 0;
-
-  useEffect(() => {
-    loadCart();
   }, []);
 
-  // Clear cart when session changes to unauthenticated
-  useEffect(() => {
-    if (status === 'unauthenticated' && cart) {
-      setCart(null);
-    }
-  }, [status, cart]);
+  const cartItemCount = useMemo(() => 
+    cart?.items?.reduce((total, item) => total + item.qty, 0) || 0, 
+    [cart?.items]
+  );
 
-  const value: CartContextType = {
+  useEffect(() => {
+    console.log('Cart context useEffect - status:', status);
+    // Load cart for both authenticated and unauthenticated users
+    // The cart system works with session cart ID for unauthenticated users
+    if (status === 'authenticated' || status === 'unauthenticated') {
+      console.log('Loading cart for status:', status);
+      // Call loadCart directly to avoid circular dependency
+      const fetchCart = async () => {
+        const now = Date.now();
+        if (isLoading || (now - lastFetch < 5000)) {
+          console.log('Cart load skipped - isLoading:', isLoading, 'time since last fetch:', now - lastFetch);
+          return;
+        }
+        
+        console.log('Loading cart...');
+        try {
+          setIsLoading(true);
+          setLastFetch(now);
+          
+          const response = await fetch('/api/cart/get');
+          console.log('Cart response status:', response.status);
+          
+          if (!response.ok) {
+            throw new Error('Failed to load cart');
+          }
+          
+          const { cart: cartData } = await response.json();
+          console.log('Cart data received:', cartData);
+          
+          if (cartData) {
+            setCart({
+              id: cartData.id,
+              items: cartData.items,
+              itemsPrice: cartData.itemsPrice,
+              totalPrice: cartData.totalPrice,
+              shippingPrice: cartData.shippingPrice,
+              taxPrice: cartData.taxPrice,
+            });
+          } else {
+            setCart(null);
+          }
+        } catch (error) {
+          console.error('Error loading cart:', error);
+          setCart(null);
+        } finally {
+          setIsLoading(false);
+          setLoading(false);
+        }
+      };
+      
+      fetchCart();
+    }
+  }, [status, isLoading, lastFetch]);
+
+
+
+  const value: CartContextType = useMemo(() => ({
     cart,
     loading,
     cartItemCount,
@@ -178,7 +277,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     addToCartOptimistic,
     removeFromCartOptimistic,
     clearCart,
-  };
+  }), [cart, loading, cartItemCount]);
 
   return (
     <CartContext.Provider value={value}>

@@ -6,25 +6,54 @@ import { CartItem } from "../types";
 import { Prisma } from "@prisma/client";
 
 export async function getMyCart() {
+    console.log('getMyCart called');
     // Check for cart cookie
     const sessionCartId = (await cookies()).get('sessionCartId')?.value;
-    if (!sessionCartId) throw new Error('Cart session not found');
-  
+    console.log('Session cart ID:', sessionCartId);
+    
     // Get session and user ID
     const session = await auth();
     const userId = session?.user?.id ? (session.user.id as string) : undefined;
+    console.log('User ID:', userId);
+  
+    // If no session cart ID and no user ID, return undefined (no cart)
+    if (!sessionCartId && !userId) {
+      console.log('No session cart ID and no user ID, returning undefined');
+      return undefined;
+    }
   
     // Get user cart from database
     const cart = await prisma.cart.findFirst({
       where: userId ? { userId: userId } : { sessionCartId: sessionCartId },
     });
+    console.log('Found cart:', cart);
   
     if (!cart) return undefined;
+
+    // Get cart items with location information
+    const cartItems = cart.items as CartItem[];
+    
+    const itemsWithLocations = await Promise.all(
+      cartItems.map(async (item) => {
+        // Fetch product location information
+        const product = await prisma.product.findFirst({
+          where: { id: item.productId },
+          select: { tbilisi: true, batumi: true, qutaisi: true }
+        });
+
+        return {
+          ...item,
+          tbilisi: product?.tbilisi ?? false,
+          batumi: product?.batumi ?? false,
+          qutaisi: product?.qutaisi ?? false,
+        };
+      })
+    );
   
     // Convert decimals and return
     return convertToPlainObject({
       ...cart,
-      items: cart.items as CartItem[],
+      items: itemsWithLocations,
       itemsPrice: cart.itemsPrice.toString(),
       totalPrice: cart.totalPrice.toString(),
       shippingPrice: cart.shippingPrice.toString(),
@@ -96,6 +125,9 @@ export async function addToCart(productId: string, size: string, quantity: numbe
         qty: quantity,
         image: product.images[0],
         price: finalPrice.toFixed(2),
+        tbilisi: product.tbilisi || false,
+        batumi: product.batumi || false,
+        qutaisi: product.qutaisi || false,
       };
       updatedItems = [...existingItems, newItem];
     }
@@ -144,8 +176,26 @@ export async function removeFromCart(productId: string, size: string) {
     if (!cart) throw new Error('Cart not found');
 
     const existingItems = cart.items as CartItem[];
-    const updatedItems = existingItems.filter(
+    const filteredItems = existingItems.filter(
       item => !(item.productId === productId && item.size === size)
+    );
+
+    // Ensure remaining items have location information
+    const updatedItems = await Promise.all(
+      filteredItems.map(async (item) => {
+        // Fetch product location information
+        const product = await prisma.product.findFirst({
+          where: { id: item.productId },
+          select: { tbilisi: true, batumi: true, qutaisi: true }
+        });
+
+        return {
+          ...item,
+          tbilisi: product?.tbilisi || false,
+          batumi: product?.batumi || false,
+          qutaisi: product?.qutaisi || false,
+        };
+      })
     );
 
     const { itemsPrice, totalPrice, shippingPrice, taxPrice } = calculateCartTotals(updatedItems);
@@ -190,12 +240,26 @@ export async function updateCartItemQuantity(productId: string, size: string, qu
     if (!cart) throw new Error('Cart not found');
 
     const existingItems = cart.items as CartItem[];
-    const updatedItems = existingItems.map(item => {
-      if (item.productId === productId && item.size === size) {
-        return { ...item, qty: quantity };
-      }
-      return item;
-    });
+    const updatedItems = await Promise.all(
+      existingItems.map(async (item) => {
+        if (item.productId === productId && item.size === size) {
+          // Fetch product location information for updated item
+          const product = await prisma.product.findFirst({
+            where: { id: item.productId },
+            select: { tbilisi: true, batumi: true, qutaisi: true }
+          });
+
+          return { 
+            ...item, 
+            qty: quantity,
+            tbilisi: product?.tbilisi || false,
+            batumi: product?.batumi || false,
+            qutaisi: product?.qutaisi || false,
+          };
+        }
+        return item;
+      })
+    );
 
     const { itemsPrice, totalPrice, shippingPrice, taxPrice } = calculateCartTotals(updatedItems);
 

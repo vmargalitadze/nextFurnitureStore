@@ -11,6 +11,7 @@ import { getMessages } from "next-intl/server";
 import { Toaster } from 'sonner';
 import { CartProvider } from "@/lib/context/CartContext";
 
+
 export const metadata: Metadata = {
   title: "Store Dev E-Commerce Application",
   description: "A complete e-commerce application with Next.js and Wix",
@@ -51,6 +52,7 @@ export default async function RootLayout({
               <Navbar />
               {children}
               <Footer />
+            
               <Toaster 
                 position="top-right"
                 duration={3000}

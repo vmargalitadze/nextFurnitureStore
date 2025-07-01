@@ -253,7 +253,8 @@
       "title": "ადმინისტრატორის ქმედებები",
       "description": "მართეთ თქვენი მაღაზია და პროდუქტები",
       "addNewProduct": "ახალი პროდუქტის დამატება",
-      "manageAllProducts": "ყველა პროდუქტის მართვა"
+      "manageAllProducts": "ყველა პროდუქტის მართვა",
+      "actions": "ქმედებები"
     },
     "recentOrders": {
       "title": "ბოლო შეკვეთები",
@@ -337,7 +338,22 @@
     "checkout": "გადადით გადახდაზე",
     "remove": "წაშლა",
     "quantity": "რაოდენობა",
-    "price": "ფასი"
+    "price": "ფასი",
+    "clearCart": "კალათის გასუფთავება",
+    "orderSummary": "შეკვეთის შემაჯამებელი",
+    "deliveryOptions": "მიწოდების ვარიანტები",
+    "standardDelivery": "სტანდარტული მიწოდება",
+    "expressDelivery": "სწრაფი მიწოდება",
+    "sameDayDelivery": "იმავე დღის მიწოდება",
+    "standardDeliveryDesc": "3-5 სამუშაო დღე",
+    "expressDeliveryDesc": "1-2 სამუშაო დღე",
+    "sameDayDeliveryDesc": "არჩეულ რაიონებში ხელმისაწვდომი",
+    "free": "უფასო",
+    "paymentMethod": "გადახდის მეთოდი",
+    "creditCard": "საკრედიტო/დებეტური ბარათი",
+    "cashOnDelivery": "ნაღდი ფული მიწოდებისას",
+    "placeOrder": "შეკვეთის გაფორმება",
+    "processingOrder": "შეკვეთა მუშავდება..."
   },
   "productForm": {
     "title": "პროდუქტის დამატება",
@@ -398,6 +414,43 @@
   },
   "checkout": {
     "title": "გადახდა",
+    "backToCart": "კალათაზე დაბრუნება",
+    "backToPersonal": "პერსონალურ ინფორმაციაზე დაბრუნება",
+    "step": "ნაბიჯი",
+    "of": "დან",
+    "personalInfo": "პერსონალური ინფორმაცია",
+    "personalInfoDescription": "გთხოვთ მიუთითოთ თქვენი პერსონალური მონაცემები მიწოდებისთვის",
+    "personalDetails": "პერსონალური მონაცემები",
+    "firstName": "სახელი",
+    "lastName": "გვარი",
+    "phone": "ტელეფონის ნომერი",
+    "email": "ელ-ფოსტა",
+    "idNumber": "ქართული პირადობის ნომერი",
+    "streetAddress": "ქუჩის მისამართი",
+    "city": "ქალაქი",
+    "postalCode": "საფოსტო კოდი",
+    "country": "ქვეყანა",
+    "additionalInfo": "დამატებითი ინფორმაცია",
+    "additionalInfoPlaceholder": "ბინა, სართული ან სპეციალური ინსტრუქციები",
+    "continueToSummary": "შემაჯამებელზე გადასვლა",
+    "free": "უფასო",
+    "paymentMethod": "გადახდის მეთოდი",
+    "creditCard": "საკრედიტო/დებეტური ბარათი",
+    "cashOnDelivery": "ნაღდი ფული მიწოდებისას",
+    "orderItems": "შეკვეთის ნაწარმი",
+    "size": "ზომა",
+    "quantity": "რაოდენობა",
+    "subtotal": "ქვეჯამი",
+    "tax": "დღგ",
+    "delivery": "მიწოდება",
+    "total": "სულ",
+    "placeOrder": "შეკვეთის გაფორმება",
+    "securePayment": "უსაფრთხო გადახდა",
+    "noDeliveryLocations": "თქვენი კალათის ნაწარმისთვის მიწოდების ლოკაციები არ არის ხელმისაწვდომი",
+    "yourCity": "თქვენი ქალაქი",
+    "deliveryPricingNote": "თქვენს ქალაქში მიწოდება უფასოა. სხვა ლოკაციებზე სტანდარტული მიწოდების საფასურია.",
+    "processing": "მუშავდება...",
+    "deliveryOptions": "მიწოდების ვარიანტები",
     "breadcrumb": {
       "home": "მთავარი",
       "cart": "კალათა",
@@ -416,7 +469,8 @@
       "idNumber": "პირადობის ნომერი",
       "idNumberPlaceholder": "შეიყვანეთ თქვენი 11-ციფრიანი პირადობის ნომერი"
     },
-    "deliveryAddress": {
+    "deliveryAddress": "მიწოდების მისამართი",
+    "deliveryAddressDetails": {
       "title": "მიწოდების მისამართი",
       "streetAddress": "ქუჩის მისამართი",
       "streetAddressPlaceholder": "შეიყვანეთ ქუჩის მისამართი",
@@ -425,10 +479,11 @@
       "postalCode": "საფოსტო კოდი",
       "postalCodePlaceholder": "შეიყვანეთ საფოსტო კოდი",
       "country": "ქვეყანა",
-      "additionalInfo": "დამატებითი ინფორმაცია",
+      "additionalInfo": "ბინა, სართული ან სპეციალური მითითებები",
       "additionalInfoPlaceholder": "შენიშვნები, ბინის ნომერი, ა.შ."
     },
-    "deliveryOptions": {
+
+    "deliveryOptionsDetails": {
       "title": "მიწოდების ვარიანტები",
       "standard": "სტანდარტული მიწოდება",
       "standardDesc": "3-5 სამუშაო დღე",
@@ -455,7 +510,9 @@
         "description": "გადარიცხვა ბანკის ანგარიშზე"
       }
     },
-    "orderSummary": {
+    "orderSummary": "შეკვეთის შემაჯამებელი",
+    "orderSummaryDescription": "გადახედეთ თქვენს შეკვეთას და დაადასტურეთ დეტალები",
+    "orderSummaryDetails": {
       "title": "შეკვეთის შემაჯამებელი",
       "items": "ნაწარმი",
       "subtotal": "ქვეჯამი",
@@ -486,8 +543,9 @@
       "tryAgain": "სცადეთ თავიდან"
     },
     "success": "შეკვეთა წარმატებით გაფორმდა!",
-    "processing": "თქვენი შეკვეთა მუშავდება...",
+  
     "redirecting": "გადამისამართება შეკვეთის დადასტურებაზე..."
+
   },
   "orderConfirmation": {
     "title": "შეკვეთა დადასტურებულია",
@@ -557,7 +615,7 @@
       "orderStatus": "შეკვეთის სტატუსი",
       "paymentStatus": "გადახდის სტატუსი",
       "deliveryStatus": "მიწოდების სტატუსი",
-      "shipping": "ტრანსპორტირება",
+    
       "orderItems": "შეკვეთის ნაწარმი",
       "customerInformation": "მომხმარებლის ინფორმაცია",
       "contactDetails": "საკონტაქტო დეტალები",
