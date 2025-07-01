@@ -1,4 +1,3 @@
-
 import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma"; 
@@ -7,6 +6,7 @@ import { compare } from "@/lib/encrypt";
 import { authConfig } from "./auth.config";
 import type { DefaultSession, NextAuthConfig } from "next-auth";
 import type { JWT } from "next-auth/jwt";
+import GoogleProvider from "next-auth/providers/google";
 
 declare module "next-auth" {
   interface Session {
@@ -41,6 +41,10 @@ export const config = {
     maxAge: 30 * 24 * 60 * 60,
   },
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
     CredentialsProvider({
       credentials: {
         email: { type: "email", label: "Email" },

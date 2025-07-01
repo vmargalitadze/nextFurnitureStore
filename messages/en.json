@@ -295,7 +295,8 @@
       "signingIn": "Signing In...",
       "dontHaveAccount": "Don't have an account?",
       "signUp": "Sign Up",
-      "invalidCredentials": "Invalid email or password"
+      "invalidCredentials": "Invalid email or password",
+      "signInWithGoogle": "Sign in with Google"
     },
     "signUp": {
       "title": "Create Account",

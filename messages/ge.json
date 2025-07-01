@@ -22,7 +22,8 @@
       "signingIn": "იმყოფება შესვლის პროცესში...",
       "dontHaveAccount": "არ გაქვთ ანგარიში?",
       "signUp": "რეგისტრაცია",
-      "invalidCredentials": "არასწორი ელ-ფოსტა ან პაროლი"
+      "invalidCredentials": "არასწორი ელ-ფოსტა ან პაროლი",
+      "signInWithGoogle": "შესვლა Google-ით"
     },
     "signUp": {
       "title": "ანგარიშის შექმნა",
