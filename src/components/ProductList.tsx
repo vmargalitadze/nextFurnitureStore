@@ -129,9 +129,12 @@ function ProductList({
     if (product.price) {
       // Handle different price types safely
       let price: number;
-      if (typeof product.price === 'object' && 'toNumber' in product.price) {
+      if (typeof product.price === "object" && "toNumber" in product.price) {
         price = product.price.toNumber();
-      } else if (typeof product.price === 'string' || typeof product.price === 'number') {
+      } else if (
+        typeof product.price === "string" ||
+        typeof product.price === "number"
+      ) {
         price = new SimpleDecimal(product.price).toNumber();
       } else {
         price = 0;
@@ -162,15 +165,17 @@ function ProductList({
     });
 
     return products.filter((product) => {
-    
       const byLegacyType =
         !selectedType ||
         product.category.toLowerCase() === selectedType.toLowerCase();
-      
+
       // Handle brand filtering for OTHERS products (they don't have brands)
-      const byLegacyBrand = !selectedBrand || 
-        (product.category === "OTHERS" ? true : product.brand === selectedBrand);
-      
+      const byLegacyBrand =
+        !selectedBrand ||
+        (product.category === "OTHERS"
+          ? true
+          : product.brand === selectedBrand);
+
       const priceRange = getProductPriceRange(product);
       const byLegacyMinPrice =
         selectedPrice.min === null || priceRange.max >= selectedPrice.min;
@@ -181,12 +186,14 @@ function ProductList({
       const byNewType =
         filterState.selectedCategories.length === 0 ||
         filterState.selectedCategories.includes(product.category);
-      
+
       // Handle brand filtering for OTHERS products in new filter system
       const byNewBrand =
         filterState.selectedBrands.length === 0 ||
-        (product.category === "OTHERS" ? true : filterState.selectedBrands.includes(product.brand));
-      
+        (product.category === "OTHERS"
+          ? true
+          : filterState.selectedBrands.includes(product.brand));
+
       const byNewMinPrice = priceRange.max >= filterState.priceRange.min;
       const byNewMaxPrice = priceRange.min <= filterState.priceRange.max;
 
@@ -237,7 +244,7 @@ function ProductList({
     const popular = products.filter((p) => p.popular === true);
     return popular.slice(0, 5);
   }, [products]);
-  
+
   const filteredProducts3 = useMemo(() => {
     const salesProducts = products.filter((p) => p.sales && p.sales > 0);
     return salesProducts.slice(0, 5);
@@ -249,10 +256,11 @@ function ProductList({
         const priceRange = getProductPriceRange(product);
         const originalPrice = priceRange.min;
         const salesPercentage = product.sales || 0;
-        const discountedPrice = salesPercentage > 0 
-          ? originalPrice * (1 - salesPercentage / 100) 
-          : originalPrice;
-        
+        const discountedPrice =
+          salesPercentage > 0
+            ? originalPrice * (1 - salesPercentage / 100)
+            : originalPrice;
+
         return {
           id: product.id,
           image: product.images,
@@ -276,7 +284,7 @@ function ProductList({
     () => transformProducts(filteredProducts2),
     [filteredProducts2, transformProducts]
   );
-  
+
   const transformedProducts3 = useMemo(
     () => transformProducts(filteredProducts3),
     [filteredProducts3, transformProducts]
@@ -307,68 +315,60 @@ function ProductList({
             </div>
           ) : (
             <>
-            {transformedProducts.length > 0 && (
-              <div className="w-full rounded-2xl pt-10 ">
-                <h1 className=" text-3xl md:text-[45px] mb-3  flex justify-center items-center font-light text-gray-900 leading-tight">
-                  {t("newProducts")}
-                </h1>
-                <ProductHelper items={transformedProducts} />
-              </div>
-            )}
-            
-            <div className="w-full rounded-2xl pt-10 ">
-              <h1 className=" text-3xl md:text-[45px] mb-3  flex justify-center items-center font-light text-gray-900 leading-tight">
-                {t("popularProducts")}
-              </h1>
-              {transformedProducts2.length > 0 ? (
-                <ProductHelper items={transformedProducts2} />
-              ) : (
-                <div className="text-center py-8">
-                  <p className="text-gray-500 text-lg">
-                    {locale === "en" ? "No popular products available at the moment." : "ამ მომენტში პოპულარული პროდუქტები არ არის."}
-                  </p>
+              {transformedProducts.length > 0 && (
+                <div className="w-full rounded-2xl pt-10 ">
+                  <h1 className="text-3xl md:text-[45px] mb-3 flex justify-center items-center font-light text-gray-900 leading-tight">
+                    {t("newProducts")}
+                  </h1>
+                  <ProductHelper items={transformedProducts} />
                 </div>
               )}
-            </div>
-            
-            <div className="w-full rounded-2xl pt-10 ">
-              <h1 className=" text-3xl md:text-[45px] mb-3  flex justify-center items-center font-light text-gray-900 leading-tight">
-                {t("salesProducts")}
-              </h1>
-              {transformedProducts3.length > 0 ? (
-                <ProductHelper items={transformedProducts3} />
-              ) : (
-                <div className="text-center py-8">
-                  <p className="text-gray-500 text-lg">
-                    {locale === "en" ? "No products on sale at the moment." : "ამ მომენტში ფასდაკლებული პროდუქტები არ არის."}
-                  </p>
+
+              {transformedProducts2.length > 0 && (
+                <div className="w-full rounded-2xl pt-10 ">
+                  <h1 className="text-3xl md:text-[45px] mb-3 flex justify-center items-center font-light text-gray-900 leading-tight">
+                    {t("popularProducts")}
+                  </h1>
+                  <ProductHelper items={transformedProducts2} />
                 </div>
               )}
-            </div>
-            
-            {transformedProducts.length === 0 && transformedProducts2.length === 0 && transformedProducts3.length === 0 && (
-              <div className="text-center py-4">
-                <div className="text-gray-400 mb-4">
-                  <svg
-                    className="w-16 h-16 mx-auto"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
-                    />
-                  </svg>
+
+              {transformedProducts3.length > 0 && (
+                <div className="w-full rounded-2xl pt-10 ">
+                  <h1 className="text-3xl md:text-[45px] mb-3 flex justify-center items-center font-light text-gray-900 leading-tight">
+                    {t("salesProducts")}
+                  </h1>
+                  <ProductHelper items={transformedProducts3} />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  პროდუქტი ვერ მოიძებნა
-                </h3>
-                <p className="text-gray-600">ამ კატეგორიაში პროდუქტები არ არის</p>
-              </div>
-            )}
+              )}
+
+              {transformedProducts.length === 0 &&
+                transformedProducts2.length === 0 &&
+                transformedProducts3.length === 0 && (
+                  <div className="text-center py-4">
+                    <div className="text-gray-400 mb-4">
+                      <svg
+                        className="w-16 h-16 mx-auto"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
+                        />
+                      </svg>
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                      პროდუქტი ვერ მოიძებნა
+                    </h3>
+                    <p className="text-gray-600">
+                      ამ კატეგორიაში პროდუქტები არ არის
+                    </p>
+                  </div>
+                )}
             </>
           )}
 

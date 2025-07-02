@@ -86,14 +86,14 @@ function ProductHelper({ items }: ProductListProps) {
       <div className="md:hidden relative">
         {/* Arrow Buttons */}
         <div className="absolute top-[40%] left-0 z-10 -translate-y-1/2">
-          <Button  variant="outline" className="swiper-button-prev-mobile text-black bg-white/80 hover:bg-white rounded-full w-8 h-8 flex items-center justify-center shadow">
+          <button   className="swiper-button-prev-mobile text-black bg-white/80 hover:bg-white rounded-full w-10 h-10 flex items-center justify-center shadow">
             ‹
-          </Button>
+          </button>
         </div>
         <div className="absolute top-[40%] right-0 z-10 -translate-y-1/2">
-          <Button  variant="outline" className="swiper-button-next-mobile text-black bg-white/80 hover:bg-white rounded-full w-8 h-8 flex items-center justify-center shadow">
+          <button   className="swiper-button-next-mobile text-black bg-white/80 hover:bg-white rounded-full w-10 h-10 flex items-center justify-center shadow">
             ›
-          </Button>
+          </button>
         </div>
         <Swiper
           modules={[Navigation]}
