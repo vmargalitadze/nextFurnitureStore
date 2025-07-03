@@ -1,51 +1,66 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { useTranslations } from 'next-intl';
+import React, { useState } from "react";
+import { useTranslations } from "next-intl";
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-import { Separator } from '@/components/ui/separator';
-import { Trash2, Plus, Minus, ShoppingBag, Truck, CreditCard } from 'lucide-react';
-import { Link } from '@/i18n/navigation'; 
-import { useRouter } from 'next/navigation';
-import { useParams } from 'next/navigation';
-import { toast } from 'sonner';
-import { useCart } from '@/lib/context/CartContext';
-import Image from 'next/image';
+import { Separator } from "@/components/ui/separator";
+import {
+  Trash2,
+  Plus,
+  Minus,
+  ShoppingBag,
+  Truck,
+  CreditCard,
+} from "lucide-react";
+import { Link } from "@/i18n/navigation";
+import { useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
+import { toast } from "sonner";
+import { useCart } from "@/lib/context/CartContext";
+import Image from "next/image";
 
 const CartPage = () => {
   const t = useTranslations();
   const router = useRouter();
   const params = useParams();
-  const { cart, loading, refreshCart, removeFromCartOptimistic, updateCart } = useCart();
+  const { cart, loading, refreshCart, removeFromCartOptimistic, updateCart } =
+    useCart();
   const [updating, setUpdating] = useState<string | null>(null);
 
-  console.log('CartPage - cart:', cart, 'loading:', loading);
 
-  const handleQuantityChange = async (productId: string, size: string, newQuantity: number) => {
+
+  const handleQuantityChange = async (
+    productId: string,
+    size: string,
+    newQuantity: number
+  ) => {
     if (newQuantity < 1) return;
-    
+
     setUpdating(`${productId}-${size}`);
-    
+
     // Store original cart state for rollback
     const originalCart = cart;
-    
+
     // Optimistically update the UI immediately
     if (cart) {
-      const updatedItems = cart.items.map(item => 
-        item.productId === productId && item.size === size 
+      const updatedItems = cart.items.map((item) =>
+        item.productId === productId && item.size === size
           ? { ...item, qty: newQuantity }
           : item
       );
-      
+
       // Calculate new totals
-      const itemsPrice = updatedItems.reduce((sum, item) => sum + (parseFloat(item.price) * item.qty), 0);
+      const itemsPrice = updatedItems.reduce(
+        (sum, item) => sum + parseFloat(item.price) * item.qty,
+        0
+      );
       const taxPrice = itemsPrice * 0.18; // 18% tax
       const shippingPrice = itemsPrice > 100 ? 0 : 10; // Free shipping over 100
       const totalPrice = itemsPrice + taxPrice + shippingPrice;
-      
+
       // Update cart immediately
       updateCart({
         ...cart,
@@ -56,27 +71,27 @@ const CartPage = () => {
         taxPrice: taxPrice.toString(),
       });
     }
-    
+
     try {
-      const response = await fetch('/api/cart/update-quantity', {
-        method: 'POST',
+      const response = await fetch("/api/cart/update-quantity", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ productId, size, quantity: newQuantity }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to update quantity');
+        throw new Error("Failed to update quantity");
       }
 
       // Force refresh cart to ensure sync with server
       await refreshCart(true);
-      toast.success('Cart updated');
+      toast.success("Cart updated");
     } catch (error) {
-      console.error('Error updating quantity:', error);
-      toast.error('Failed to update quantity');
-      
+      console.error("Error updating quantity:", error);
+      toast.error("Failed to update quantity");
+
       // Rollback to original state on error
       if (originalCart) {
         updateCart(originalCart);
@@ -88,28 +103,28 @@ const CartPage = () => {
 
   const handleRemoveItem = async (productId: string, size: string) => {
     setUpdating(`${productId}-${size}`);
-    
+
     // Optimistically remove from UI
     removeFromCartOptimistic(productId, size);
-    
+
     try {
-      const response = await fetch('/api/cart/remove', {
-        method: 'POST',
+      const response = await fetch("/api/cart/remove", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ productId, size }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to remove item');
+        throw new Error("Failed to remove item");
       }
 
       await refreshCart();
-      toast.success('Item removed from cart');
+      toast.success("Item removed from cart");
     } catch (error) {
-      console.error('Error removing item:', error);
-      toast.error('Failed to remove item');
+      console.error("Error removing item:", error);
+      toast.error("Failed to remove item");
       // Refresh cart to revert optimistic update on error
       await refreshCart();
     } finally {
@@ -119,25 +134,25 @@ const CartPage = () => {
 
   const handleClearCart = async () => {
     try {
-      const response = await fetch('/api/cart/clear', {
-        method: 'POST',
+      const response = await fetch("/api/cart/clear", {
+        method: "POST",
       });
 
       if (!response.ok) {
-        throw new Error('Failed to clear cart');
+        throw new Error("Failed to clear cart");
       }
 
       await refreshCart();
-      toast.success('Cart cleared');
+      toast.success("Cart cleared");
     } catch (error) {
-      console.error('Error clearing cart:', error);
-      toast.error('Failed to clear cart');
+      console.error("Error clearing cart:", error);
+      toast.error("Failed to clear cart");
     }
   };
 
   const handleCheckout = () => {
     if (!cart || cart.items.length === 0) {
-      toast.error('Cart is empty');
+      toast.error("Cart is empty");
       return;
     }
     router.push(`/${params.locale}/checkout/personal`);
@@ -148,7 +163,7 @@ const CartPage = () => {
   };
 
   const formatSize = (size: string) => {
-    return size.replace('SIZE_', '').replace('_', 'x');
+    return size.replace("SIZE_", "").replace("_", "x");
   };
 
   if (loading) {
@@ -175,14 +190,15 @@ const CartPage = () => {
           <div className="mb-8">
             <ShoppingBag className="mx-auto h-16 w-16 text-gray-400 mb-4" />
             <h1 className="text-2xl font-bold text-gray-900 mb-2">
-              {t('cart.empty')}
+              {t("cart.empty")}
             </h1>
-            <p className="text-gray-600 mb-8">
-              {t('cart.emptyDescription')}
-            </p>
+            <p className="text-gray-600 mb-8">{t("cart.emptyDescription")}</p>
             <Link href="/list">
-              <Button  variant="outline"    className="w-[30%] px-4  mb-10  py-2 text-[18px] font-medium text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors ">
-                {t('cart.continueShopping')}
+              <Button
+                variant="outline"
+                className="w-[30%] px-4  mb-10  py-2 text-[18px] font-medium text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors "
+              >
+                {t("cart.continueShopping")}
               </Button>
             </Link>
           </div>
@@ -196,14 +212,14 @@ const CartPage = () => {
       <div className="max-w-6xl mx-auto">
         <div className="flex items-center mt-[100px] justify-between mb-8">
           <h1 className="text-3xl font-bold text-gray-900">
-            {t('cart.title')}
+            {t("cart.title")}
           </h1>
-          <Button  
-                  onClick={handleClearCart}
-                   className="w-[20%]  md:mr-16  px-4 py-2 text-[20px] font-bold text-[#438c71] bg-white border-2 border-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors flex items-center justify-center gap-2"
-                >
-                  {t('cart.clearCart')}
-                </Button>
+          <Button
+            onClick={handleClearCart}
+            className="w-[20%]  md:mr-16  px-4 py-2 text-[20px] font-bold text-[#438c71] bg-white border-2 border-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors flex items-center justify-center gap-2"
+          >
+            {t("cart.clearCart")}
+          </Button>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -213,12 +229,15 @@ const CartPage = () => {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <ShoppingBag className="h-5 w-5 mr-2" />
-                  {t('cart.items')} ({cart.items.length})
+                  {t("cart.items")} ({cart.items.length})
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 {cart.items.map((item) => (
-                  <div key={`${item.productId}-${item.size}`} className="flex items-center space-x-4 p-4 border rounded-lg">
+                  <div
+                    key={`${item.productId}-${item.size}`}
+                    className="flex items-center space-x-4 p-4 border rounded-lg"
+                  >
                     <div className="flex-shrink-0">
                       <Image
                         src={item.image}
@@ -241,18 +260,32 @@ const CartPage = () => {
                     </div>
                     <div className="flex items-center space-x-2">
                       <Button
-                        className='text-[#438c71] bg-white border-2 border-[#438c71]  hover:bg-[#438c71] hover:text-white rounded-full'
-                        onClick={() => handleQuantityChange(item.productId, item.size, item.qty - 1)}
+                        className="text-[#438c71] bg-white border-2 border-[#438c71]  hover:bg-[#438c71] hover:text-white rounded-full"
+                        onClick={() =>
+                          handleQuantityChange(
+                            item.productId,
+                            item.size,
+                            item.qty - 1
+                          )
+                        }
                         disabled={updating === `${item.productId}-${item.size}`}
                       >
                         <Minus className="h-4 w-4" />
                       </Button>
                       <span className="w-12 text-center font-semibold">
-                        {updating === `${item.productId}-${item.size}` ? '...' : item.qty}
+                        {updating === `${item.productId}-${item.size}`
+                          ? "..."
+                          : item.qty}
                       </span>
                       <Button
-                       className='text-[#438c71] bg-white border-2 border-[#438c71]  hover:bg-[#438c71] hover:text-white rounded-full'
-                        onClick={() => handleQuantityChange(item.productId, item.size, item.qty + 1)}
+                        className="text-[#438c71] bg-white border-2 border-[#438c71]  hover:bg-[#438c71] hover:text-white rounded-full"
+                        onClick={() =>
+                          handleQuantityChange(
+                            item.productId,
+                            item.size,
+                            item.qty + 1
+                          )
+                        }
                         disabled={updating === `${item.productId}-${item.size}`}
                       >
                         <Plus className="h-4 w-4" />
@@ -260,18 +293,21 @@ const CartPage = () => {
                     </div>
                     <div className="text-right">
                       <p className="text-lg font-bold text-[#438c71]">
-                        {formatPrice((parseFloat(item.price) * item.qty).toString())}
+                        {formatPrice(
+                          (parseFloat(item.price) * item.qty).toString()
+                        )}
                       </p>
                     </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleRemoveItem(item.productId, item.size)}
-                        disabled={updating === `${item.productId}-${item.size}`}
-                        className="text-red-600 hover:text-red-700 mt-2"
-                      >
-                        <Trash2 className="h-8 w-8" />
-                      </Button>
+                    <button
+                    
+                      onClick={() =>
+                        handleRemoveItem(item.productId, item.size)
+                      }
+                      disabled={updating === `${item.productId}-${item.size}`}
+                      className="text-red-600  mt-2 p-0 mb-2 h-auto w-auto"
+                    >
+                      <Trash2 className="h-8 w-8" />
+                    </button>
                   </div>
                 ))}
               </CardContent>
@@ -290,30 +326,32 @@ const CartPage = () => {
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">{t('cart.subtotal')}</span>
-                    <span className="font-semibold">{formatPrice(cart.itemsPrice)}</span>
+                    <span className="text-gray-600">{t("cart.subtotal")}</span>
+                    <span className="font-semibold">
+                      {formatPrice(cart.itemsPrice)}
+                    </span>
                   </div>
-                 
+
                   <Separator />
                   <div className="flex justify-between text-lg font-bold">
-                    <span>{t('cart.total')}</span>
-                    <span className="text-[#438c71]">{formatPrice(cart.totalPrice)}</span>
+                    <span>{t("cart.total")}</span>
+                    <span className="text-[#438c71]">
+                      {formatPrice(cart.totalPrice)}
+                    </span>
                   </div>
                 </div>
 
-                <Button  variant="outline"
+                <Button
+                  variant="outline"
                   onClick={handleCheckout}
                   className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
                 >
-                  {t('cart.checkout')}
+                  {t("cart.checkout")}
                 </Button>
 
                 <Link href="/list">
-                  <Button  
-                 className="w-[80%] mx-auto mt-8 px-4 py-2 text-[20px] font-bold text-[#438c71] bg-white border-2 border-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors flex items-center justify-center gap-2"
-                  
-                  >
-                    {t('cart.continueShopping')}
+                  <Button className="w-[80%] mx-auto mt-8 px-4 py-2 text-[20px] font-bold text-[#438c71] bg-white border-2 border-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors flex items-center justify-center gap-2">
+                    {t("cart.continueShopping")}
                   </Button>
                 </Link>
               </CardContent>
