@@ -111,7 +111,7 @@ const SideBar: React.FC<SideBarProps> = ({
       );
     }
 
-    console.log("Categories found:", cats, "URL category:", urlCategory);
+ 
     return cats;
   }, [products, urlCategory, selectedCategories]);
 
@@ -517,27 +517,19 @@ const SideBar: React.FC<SideBarProps> = ({
             {/* Search Button */}
             <button
               onClick={handleSearch}
-              className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+              className="w-full px-4 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
             >
               {labels.search}
             </button>
 
-       
-            {(selectedCategories.length > 0 ||
-              selectedBrands.length > 0 ||
-              currentPriceRange.min !== priceRange.min ||
-              currentPriceRange.max !== priceRange.max ||
-              searchQuery.trim() ||
-              urlCategory ||
-              urlBrand ||
-              urlQuery) && (
               <button
                 onClick={clearFilters}
-              className="w-full mb-14 px-4 py-2 text-[20px] font-bold text-[#438c71] bg-white border-2 border-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors flex items-center justify-center gap-2"
+              className="w-full mt-4 mb-14 px-4 py-2 text-[20px] font-bold text-[#438c71] bg-white border-2 border-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors flex items-center justify-center gap-2"
               >
                 {labels.clearFilters}
               </button>
-            )}
+       
+       
           </div>
         </div>
       </div>
