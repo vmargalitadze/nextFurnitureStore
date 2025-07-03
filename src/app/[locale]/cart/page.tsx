@@ -208,26 +208,26 @@ const CartPage = () => {
   }
 
   return (
-    <div className="container min-h-screen mx-auto px-4 py-8">
+    <div className="container min-h-screen mx-auto px-2 sm:px-4 py-4 sm:py-8">
       <div className="max-w-6xl mx-auto">
-        <div className="flex items-center mt-[100px] justify-between mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">
+        <div className="flex flex-col sm:flex-row items-center mt-[60px] sm:mt-[100px] justify-between mb-6 sm:mb-8 gap-4 sm:gap-0">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 w-full sm:w-auto text-center sm:text-left">
             {t("cart.title")}
           </h1>
           <Button
             onClick={handleClearCart}
-            className="w-[20%]  md:mr-16  px-4 py-2 text-[20px] font-bold text-[#438c71] bg-white border-2 border-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors flex items-center justify-center gap-2"
+            className="w-full sm:w-[40%] md:w-[20%] px-4 py-2 text-base sm:text-lg md:text-[20px] font-bold text-[#438c71] bg-white border-2 border-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors flex items-center justify-center gap-2"
           >
             {t("cart.clearCart")}
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-8">
           {/* Cart Items */}
           <div className="lg:col-span-2">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center">
+                <CardTitle className="flex items-center text-lg sm:text-xl md:text-2xl">
                   <ShoppingBag className="h-5 w-5 mr-2" />
                   {t("cart.items")} ({cart.items.length})
                 </CardTitle>
@@ -236,31 +236,31 @@ const CartPage = () => {
                 {cart.items.map((item) => (
                   <div
                     key={`${item.productId}-${item.size}`}
-                    className="flex items-center space-x-4 p-4 border rounded-lg"
+                    className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 p-2 sm:p-4 border rounded-lg"
                   >
                     <div className="flex-shrink-0">
                       <Image
                         src={item.image}
                         alt={item.name}
-                        className="w-20 h-20 object-cover rounded-md"
+                        className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-md"
                         width={80}
                         height={80}
                       />
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-lg font-semibold text-gray-900 truncate">
+                    <div className="flex-1 min-w-0 w-full">
+                      <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">
                         {item.name}
                       </h3>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-xs sm:text-sm text-gray-600">
                         Size: {formatSize(item.size)}
                       </p>
-                      <p className="text-lg font-bold text-[#438c71]">
+                      <p className="text-base sm:text-lg font-bold text-[#438c71]">
                         {formatPrice(item.price)}
                       </p>
                     </div>
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-2 mt-2 sm:mt-0">
                       <Button
-                        className="text-[#438c71] bg-white border-2 border-[#438c71]  hover:bg-[#438c71] hover:text-white rounded-full"
+                        className="text-[#438c71] bg-white border-2 border-[#438c71] hover:bg-[#438c71] hover:text-white rounded-full px-2 sm:px-3"
                         onClick={() =>
                           handleQuantityChange(
                             item.productId,
@@ -272,13 +272,13 @@ const CartPage = () => {
                       >
                         <Minus className="h-4 w-4" />
                       </Button>
-                      <span className="w-12 text-center font-semibold">
+                      <span className="w-8 sm:w-12 text-center font-semibold">
                         {updating === `${item.productId}-${item.size}`
                           ? "..."
                           : item.qty}
                       </span>
                       <Button
-                        className="text-[#438c71] bg-white border-2 border-[#438c71]  hover:bg-[#438c71] hover:text-white rounded-full"
+                        className="text-[#438c71] bg-white border-2 border-[#438c71] hover:bg-[#438c71] hover:text-white rounded-full px-2 sm:px-3"
                         onClick={() =>
                           handleQuantityChange(
                             item.productId,
@@ -291,22 +291,21 @@ const CartPage = () => {
                         <Plus className="h-4 w-4" />
                       </Button>
                     </div>
-                    <div className="text-right">
-                      <p className="text-lg font-bold text-[#438c71]">
+                    <div className="text-right w-full sm:w-auto mt-2 sm:mt-0">
+                      <p className="text-base sm:text-lg font-bold text-[#438c71]">
                         {formatPrice(
                           (parseFloat(item.price) * item.qty).toString()
                         )}
                       </p>
                     </div>
                     <button
-                    
                       onClick={() =>
                         handleRemoveItem(item.productId, item.size)
                       }
                       disabled={updating === `${item.productId}-${item.size}`}
-                      className="text-red-600  mt-2 p-0 mb-2 h-auto w-auto"
+                      className="text-red-600 mt-2 p-0 mb-2 h-auto w-auto"
                     >
-                      <Trash2 className="h-8 w-8" />
+                      <Trash2 className="h-6 w-6 sm:h-8 sm:w-8" />
                     </button>
                   </div>
                 ))}
@@ -315,25 +314,25 @@ const CartPage = () => {
           </div>
 
           {/* Order Summary */}
-          <div className="lg:col-span-1">
-            <Card className="sticky top-8">
+          <div className="lg:col-span-1 w-full">
+            <Card className="sticky top-8 w-full max-w-full">
               <CardHeader>
-                <CardTitle className="flex items-center">
+                <CardTitle className="flex items-center text-lg sm:text-xl md:text-2xl">
                   <CreditCard className="h-5 w-5 mr-2" />
-                  Order Summary
+                  {t("cart.orderSummary")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">{t("cart.subtotal")}</span>
-                    <span className="font-semibold">
+                    <span className="text-gray-600 text-sm sm:text-base">{t("cart.subtotal")}</span>
+                    <span className="font-semibold text-sm sm:text-base">
                       {formatPrice(cart.itemsPrice)}
                     </span>
                   </div>
 
                   <Separator />
-                  <div className="flex justify-between text-lg font-bold">
+                  <div className="flex justify-between text-base sm:text-lg font-bold">
                     <span>{t("cart.total")}</span>
                     <span className="text-[#438c71]">
                       {formatPrice(cart.totalPrice)}
@@ -344,13 +343,13 @@ const CartPage = () => {
                 <Button
                   variant="outline"
                   onClick={handleCheckout}
-                  className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+                  className="w-full px-4 mb-6 py-2 text-base sm:text-lg md:text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
                 >
                   {t("cart.checkout")}
                 </Button>
 
                 <Link href="/list">
-                  <Button className="w-[80%] mx-auto mt-8 px-4 py-2 text-[20px] font-bold text-[#438c71] bg-white border-2 border-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors flex items-center justify-center gap-2">
+                  <Button className="w-full sm:w-[80%] mx-auto mt-4 sm:mt-8 px-4 py-2 text-base sm:text-lg md:text-[20px] font-bold text-[#438c71] bg-white border-2 border-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors flex items-center justify-center gap-2">
                     {t("cart.continueShopping")}
                   </Button>
                 </Link>
