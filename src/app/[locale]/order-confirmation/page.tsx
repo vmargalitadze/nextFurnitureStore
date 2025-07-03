@@ -18,6 +18,7 @@ import {
 import { Link } from "@/i18n/navigation";
 import { useSearchParams, useParams } from "next/navigation";
 import Image from "next/image";
+import { useCart } from "@/lib/context/CartContext";
 
 interface OrderItem {
   productId: string;
@@ -61,6 +62,7 @@ const OrderConfirmationPage = () => {
   const t = useTranslations();
   const searchParams = useSearchParams();
   const params = useParams();
+  const { updateCart } = useCart();
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -68,8 +70,17 @@ const OrderConfirmationPage = () => {
   useEffect(() => {
     const fetchOrder = async () => {
       try {
-        // Get order ID from URL params or try to get the latest order
-        const orderId = searchParams.get("orderId");
+        // Get order ID from URL params first, then try sessionStorage as fallback
+        let orderId = searchParams.get("orderId");
+        
+        // If no orderId in URL, try to get it from sessionStorage
+        if (!orderId) {
+          orderId = sessionStorage.getItem("lastOrderId");
+          if (orderId) {
+            // Clear it from sessionStorage after using it
+            sessionStorage.removeItem("lastOrderId");
+          }
+        }
 
         let url = "/api/orders/latest";
         if (orderId) {
@@ -83,6 +94,9 @@ const OrderConfirmationPage = () => {
 
         const data = await response.json();
         setOrder(data.order);
+        
+        // Clear the cart after successfully loading the order
+        updateCart(null);
       } catch (error) {
         console.error("Error fetching order:", error);
         setError("Failed to load order details");
@@ -92,7 +106,7 @@ const OrderConfirmationPage = () => {
     };
 
     fetchOrder();
-  }, [searchParams]);
+  }, [searchParams, updateCart]);
 
   const formatPrice = (price: number | string | undefined) => {
     if (price === undefined || price === null)

@@ -137,19 +137,18 @@ const SummaryPage = () => {
       setOrderPlaced(true);
       toast.success(t('checkout.success'));
 
-      // Redirect to order confirmation with the order ID FIRST
-      router.push(`/${params.locale}/order-confirmation?orderId=${data.order.id}`);
-
-      // Then clear and refresh cart context (after a short delay, or in the background)
-      setTimeout(() => {
-        updateCart(null);
-        refreshCart();
-      }, 500);
+      // Store order ID in sessionStorage as backup
+      sessionStorage.setItem('lastOrderId', data.order.id);
+      
+      // Use a more reliable redirect approach
+      const orderConfirmationUrl = `/${params.locale}/order-confirmation?orderId=${data.order.id}`;
+      
+      // Redirect immediately without clearing cart first
+      window.location.href = orderConfirmationUrl;
 
     } catch (error) {
       console.error('Error placing order:', error);
       toast.error(t('checkout.errors.orderFailed'));
-    } finally {
       setProcessing(false);
     }
   };
