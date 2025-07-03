@@ -216,7 +216,7 @@ const CartPage = () => {
           </h1>
           <Button
             onClick={handleClearCart}
-            className="w-full sm:w-[40%] md:w-[20%] px-4 py-2 text-base sm:text-lg md:text-[20px] font-bold text-[#438c71] bg-white border-2 border-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors flex items-center justify-center gap-2"
+            className="w-full mr-0 md:mr-14 sm:w-[40%] md:w-[20%] px-4 py-2 text-base sm:text-lg md:text-[20px] font-bold text-[#438c71] bg-white border-2 border-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors flex items-center justify-center gap-2"
           >
             {t("cart.clearCart")}
           </Button>
