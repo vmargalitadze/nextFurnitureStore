@@ -316,7 +316,7 @@ const PersonalInfoPage = () => {
             <Link
               href={`/${params.locale}/summary?address=${encodeURIComponent(JSON.stringify(address))}`}
               onClick={handleContinue}
-              className="inline-flex items-center gap-2 px-8 py-3 text-lg font-semibold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+              className="inline-flex text-[20px] font-bold items-center gap-2 px-8 py-3  text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
             >
               {t('checkout.continueToSummary')}
             </Link>

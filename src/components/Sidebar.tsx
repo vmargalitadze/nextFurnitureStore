@@ -489,7 +489,7 @@ const SideBar: React.FC<SideBarProps> = ({
                       onChange={(e) =>
                         handlePriceChange("min", parseInt(e.target.value) || 0)
                       }
-                      className="w-1/2 px-3 py-2 border border-gray-300 rounded-md text-[14px] focus:outline-none focus:border-[#ce7c2a]"
+                      className="w-1/2 px-3 py-2 border font-normal border-gray-300 rounded-md text-[14px] focus:outline-none focus:border-[#ce7c2a]"
                       placeholder="0"
                     />
                     <input
@@ -500,7 +500,7 @@ const SideBar: React.FC<SideBarProps> = ({
                       onChange={(e) =>
                         handlePriceChange("max", parseInt(e.target.value) || 0)
                       }
-                      className="w-1/2 px-3 py-2 border border-gray-300 rounded-md text-[14px] focus:outline-none focus:border-[#ce7c2a]"
+                      className="w-1/2 px-3 py-2 border font-normal border-gray-300 rounded-md text-[14px] focus:outline-none focus:border-[#ce7c2a]"
                       placeholder="0"
                     />
                   </div>

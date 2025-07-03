@@ -18,9 +18,7 @@ export default function VerifyEmailForm() {
 
   useEffect(() => {
     const verifyEmail = async () => {
-      console.log('🔍 Starting email verification...');
-      console.log('Token:', token);
-      console.log('Current URL:', window.location.href);
+ 
       
       if (!token) {
         console.log('❌ No token provided');
@@ -41,18 +39,17 @@ export default function VerifyEmailForm() {
           body: JSON.stringify({ token }),
         });
 
-        console.log('📡 Response status:', response.status);
-        console.log('📡 Response headers:', Object.fromEntries(response.headers.entries()));
+  
         
         const data = await response.json();
         console.log('📡 Response data:', data);
 
         if (response.ok) {
-          console.log('✅ Verification successful');
+    
           setStatus('success');
           setMessage(data.message);
         } else {
-          console.log('❌ Verification failed:', data.error);
+          
           setStatus('error');
           setMessage(data.error || t('verificationFailed'));
         }
@@ -126,7 +123,7 @@ export default function VerifyEmailForm() {
           <CardTitle>
             {status === 'success' ? t('success') : t('error')}
           </CardTitle>
-          <CardDescription>{message}</CardDescription>
+          <CardDescription className='text-[18px] font-bold'>{message}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           {status === 'success' ? (
@@ -146,11 +143,12 @@ export default function VerifyEmailForm() {
               >
                 {t('resendVerification')}
               </Button>
-              <Button asChild variant="outline" className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors">
+              <button
+             className="w-full mb-14 px-4 py-2 text-[20px] font-bold text-[#438c71] bg-white border-2 border-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors flex items-center justify-center gap-2">
                 <Link href="/sign-in">
                   {t('backToSignIn')}
                 </Link>
-              </Button>
+              </button>
             </div>
           )}
         </CardContent>

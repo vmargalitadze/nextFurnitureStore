@@ -254,14 +254,8 @@ export const sendOrderReceipt = async (email: string, order: any, customerName: 
               <span style="color: #666;">Subtotal:</span>
               <span style="font-weight: 600;">${formatPrice(parseFloat(order.itemsPrice.toString()))}</span>
             </div>
-            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-              <span style="color: #666;">Tax (18%):</span>
-              <span style="font-weight: 600;">${formatPrice(parseFloat(order.taxPrice.toString()))}</span>
-            </div>
-            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-              <span style="color: #666;">Shipping:</span>
-              <span style="font-weight: 600;">${order.shippingPrice === 0 ? 'Free' : formatPrice(order.shippingPrice)}</span>
-            </div>
+           
+            
             <div style="display: flex; justify-content: space-between; border-top: 2px solid #438c71; padding-top: 8px; margin-top: 8px;">
               <span style="font-weight: 700; color: #333; font-size: 18px;">Total:</span>
               <span style="font-weight: 700; color: #438c71; font-size: 18px;">${formatPrice(parseFloat(order.totalPrice.toString()))}</span>

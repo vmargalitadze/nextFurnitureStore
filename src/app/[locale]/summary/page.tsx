@@ -409,7 +409,7 @@ const SummaryPage = () => {
             {/* Order Items */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-[18px] font-bold">{t('checkout.orderItems')}</CardTitle>
+                <CardTitle className="text-[20px] font-bold">{t('checkout.orderItems')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -477,17 +477,19 @@ const SummaryPage = () => {
                 <Button
                   onClick={handlePlaceOrder}
                   disabled={!deliveryOption || processing}
-                  className="w-full flex items-center justify-center gap-2 px-6 py-3 text-lg font-semibold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full flex text-[20px] font-bold items-center justify-center gap-2 px-6 py-3 text-lg  text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {processing ? (
                     <>
-                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                      <div className="animate-spin text-[20px] font-bold rounded-full h-5 w-5 border-b-2 border-white"></div>
                       {t('checkout.processing')}
                     </>
                   ) : (
                     <>
                       <Lock className="h-5 w-5" />
-                      {t('checkout.placeOrder')}
+                      <span className="text-[20px] font-bold">
+                        {t('checkout.placeOrder')}
+                      </span>
                     </>
                   )}
                 </Button>

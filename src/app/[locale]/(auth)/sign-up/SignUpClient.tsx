@@ -19,7 +19,7 @@ export default function SignUpClient({ callbackUrl }: SignUpClientProps) {
 
   return (
     <div className="w-full max-w-md mx-auto">
-      <Card className="mt-[100px]">
+      <Card className="mt-[170px]">
         <CardHeader className="space-y-4">
           <CardTitle className="text-center text-xl"> {t("description")}</CardTitle>
       

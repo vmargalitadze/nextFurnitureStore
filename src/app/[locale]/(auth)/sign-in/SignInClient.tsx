@@ -18,7 +18,7 @@ export default function SignInClient({ callbackUrl }: SignInClientProps) {
   const t = useTranslations("auth.signIn");
 
   return (
-    <div className="w-full max-w-md mt-48 mx-auto">
+    <div className="w-full max-w-md mt-40 mx-auto">
       <Card>
         <CardHeader className="space-y-4">
           <CardTitle className="text-center text-xl"> {t("description")}</CardTitle>

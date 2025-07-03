@@ -62,13 +62,13 @@ const Hero = () => {
               <div className="mb-4 flex justify-start">
        
       </div>
-                <Button  variant="outline"
+                <button
                   onClick={handleViewSidebar}
                  className="w-[50%] px-4 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
                 >
                  
                  {t('filter')}
-                </Button>
+                </button>
                 
                 {/* Filter Sidebar - Rendered outside motion context */}
                 {/* <div className="w-full sm:w-auto">

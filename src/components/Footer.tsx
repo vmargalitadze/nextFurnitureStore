@@ -48,25 +48,25 @@ const Footer = () => {
                 href="#" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="w-8 h-8 bg-gray-300  rounded-full flex items-center justify-center transition-all duration-300"
+                className="w-12 h-12 bg-gray-300  rounded-full flex items-center justify-center transition-all duration-300"
               >
-                <FaFacebook className="w-4 h-4" />
+                <FaFacebook className="w-7 h-7" />
               </a>
               <a 
                 href="#" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="w-8 h-8 bg-gray-300  rounded-full flex items-center justify-center transition-all duration-300"
+                className="w-12 h-12 bg-gray-300  rounded-full flex items-center justify-center transition-all duration-300"
               >
-                <FaInstagram className="w-4 h-4" />
+                <FaInstagram className="w-7 h-7" />
               </a>
               <a 
                 href="#" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="w-8 h-8 bg-gray-300  rounded-full flex items-center justify-center transition-all duration-300"
+                className="w-12 h-12 bg-gray-300  rounded-full flex items-center justify-center transition-all duration-300"
               >
-                <FaTiktok className="w-4 h-4" />
+                <FaTiktok className="w-7 h-7" />
               </a>
             </div>
           </div>

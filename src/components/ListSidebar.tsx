@@ -213,7 +213,7 @@ const ListSideBar: React.FC<FilterProps> = ({ isOpen, toggleSidebar, onFilterCha
                 min={priceRange.min}
                 max={priceRange.max}
                 onChange={(e) => setCurrentPriceRange(prev => ({ ...prev, min: parseInt(e.target.value) || 0 }))}
-                className="w-1/2 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#438c71]"
+                className="w-1/2 px-3 py-2 border font-normal  border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#438c71]"
                 placeholder="Min"
               />
               <input
@@ -222,7 +222,7 @@ const ListSideBar: React.FC<FilterProps> = ({ isOpen, toggleSidebar, onFilterCha
                 min={priceRange.min}
                 max={priceRange.max}
                 onChange={(e) => setCurrentPriceRange(prev => ({ ...prev, max: parseInt(e.target.value) || 0 }))}
-                className="w-1/2 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#438c71]"
+                className="w-1/2 px-3 py-2 border font-normal border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#438c71]"
                 placeholder="Max"
               />
             </div>

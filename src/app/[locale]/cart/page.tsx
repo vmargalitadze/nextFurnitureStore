@@ -198,9 +198,9 @@ const CartPage = () => {
           <h1 className="text-3xl font-bold text-gray-900">
             {t('cart.title')}
           </h1>
-          <Button  variant="outline"
+          <Button  
                   onClick={handleClearCart}
-                  className="w-[30%] px-4  py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+                   className="w-[20%]  md:mr-16  px-4 py-2 text-[20px] font-bold text-[#438c71] bg-white border-2 border-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors flex items-center justify-center gap-2"
                 >
                   {t('cart.clearCart')}
                 </Button>
@@ -241,7 +241,7 @@ const CartPage = () => {
                     </div>
                     <div className="flex items-center space-x-2">
                       <Button
-                        
+                        className='text-[#438c71] bg-white border-2 border-[#438c71]  hover:bg-[#438c71] hover:text-white rounded-full'
                         onClick={() => handleQuantityChange(item.productId, item.size, item.qty - 1)}
                         disabled={updating === `${item.productId}-${item.size}`}
                       >
@@ -251,7 +251,7 @@ const CartPage = () => {
                         {updating === `${item.productId}-${item.size}` ? '...' : item.qty}
                       </span>
                       <Button
-                       
+                       className='text-[#438c71] bg-white border-2 border-[#438c71]  hover:bg-[#438c71] hover:text-white rounded-full'
                         onClick={() => handleQuantityChange(item.productId, item.size, item.qty + 1)}
                         disabled={updating === `${item.productId}-${item.size}`}
                       >
@@ -270,7 +270,7 @@ const CartPage = () => {
                         disabled={updating === `${item.productId}-${item.size}`}
                         className="text-red-600 hover:text-red-700 mt-2"
                       >
-                        <Trash2 className="h-4 w-4" />
+                        <Trash2 className="h-8 w-8" />
                       </Button>
                   </div>
                 ))}
@@ -309,8 +309,8 @@ const CartPage = () => {
                 </Button>
 
                 <Link href="/list">
-                  <Button  variant="outline" 
-                 className="w-full  mt-4 px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+                  <Button  
+                 className="w-[80%] mx-auto mt-8 px-4 py-2 text-[20px] font-bold text-[#438c71] bg-white border-2 border-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors flex items-center justify-center gap-2"
                   
                   >
                     {t('cart.continueShopping')}

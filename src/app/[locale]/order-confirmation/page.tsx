@@ -1,13 +1,23 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import { useTranslations } from 'next-intl';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { CheckCircle, Package, Truck, Home, ShoppingBag, User, MapPin, Phone, Mail } from 'lucide-react';
-import { Link } from '@/i18n/navigation';
-import { useSearchParams, useParams } from 'next/navigation';
-import Image from 'next/image';
+import React, { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  CheckCircle,
+  Package,
+  Truck,
+  Home,
+  ShoppingBag,
+  User,
+  MapPin,
+  Phone,
+  Mail,
+} from "lucide-react";
+import { Link } from "@/i18n/navigation";
+import { useSearchParams, useParams } from "next/navigation";
+import Image from "next/image";
 
 interface OrderItem {
   productId: string;
@@ -59,23 +69,23 @@ const OrderConfirmationPage = () => {
     const fetchOrder = async () => {
       try {
         // Get order ID from URL params or try to get the latest order
-        const orderId = searchParams.get('orderId');
-        
-        let url = '/api/orders/latest';
+        const orderId = searchParams.get("orderId");
+
+        let url = "/api/orders/latest";
         if (orderId) {
           url = `/api/orders/${orderId}`;
         }
 
         const response = await fetch(url);
         if (!response.ok) {
-          throw new Error('Failed to fetch order');
+          throw new Error("Failed to fetch order");
         }
 
         const data = await response.json();
         setOrder(data.order);
       } catch (error) {
-        console.error('Error fetching order:', error);
-        setError('Failed to load order details');
+        console.error("Error fetching order:", error);
+        setError("Failed to load order details");
       } finally {
         setLoading(false);
       }
@@ -85,12 +95,13 @@ const OrderConfirmationPage = () => {
   }, [searchParams]);
 
   const formatPrice = (price: number | string | undefined) => {
-    if (price === undefined || price === null) return params.locale === 'ge' ? '0 ლარი' : '₾0.00';
-    const numPrice = typeof price === 'string' ? parseFloat(price) : price;
-    if (isNaN(numPrice)) return params.locale === 'ge' ? '0 ლარი' : '₾0.00';
-    
+    if (price === undefined || price === null)
+      return params.locale === "ge" ? "0 ლარი" : "₾0.00";
+    const numPrice = typeof price === "string" ? parseFloat(price) : price;
+    if (isNaN(numPrice)) return params.locale === "ge" ? "0 ლარი" : "₾0.00";
+
     // Format based on locale
-    if (params.locale === 'ge') {
+    if (params.locale === "ge") {
       return `${numPrice.toFixed(2)} ლარი`;
     } else {
       return `₾${numPrice.toFixed(2)}`;
@@ -136,7 +147,8 @@ const OrderConfirmationPage = () => {
               Order Not Found
             </h1>
             <p className="text-gray-600 mb-8">
-              {error || 'Unable to load order details. Please check your order history.'}
+              {error ||
+                "Unable to load order details. Please check your order history."}
             </p>
             <Link href="/">
               <Button className="bg-[#438c71] hover:bg-[#3a7a5f]">
@@ -159,8 +171,9 @@ const OrderConfirmationPage = () => {
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Order Confirmed!
           </h1>
+          <p className="text-gray-600">Thank you for your purchase.</p>
           <p className="text-gray-600">
-            Thank you for your purchase. We have received your order and will begin processing it right away.
+            We have received your order and will begin processing it right away.
           </p>
         </div>
 
@@ -175,7 +188,9 @@ const OrderConfirmationPage = () => {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="text-sm text-gray-600">Order Number</p>
-                <p className="font-semibold">#{order.id.slice(-8).toUpperCase()}</p>
+                <p className="font-semibold">
+                  #{order.id.slice(-8).toUpperCase()}
+                </p>
               </div>
               <div>
                 <p className="text-sm text-gray-600">Order Date</p>
@@ -188,7 +203,7 @@ const OrderConfirmationPage = () => {
               <div>
                 <p className="text-sm text-gray-600">Payment Status</p>
                 <p className="font-semibold text-green-600">
-                  {order.isPaid ? 'Paid' : 'Pending'}
+                  {order.isPaid ? "Paid" : "Pending"}
                 </p>
               </div>
             </div>
@@ -294,12 +309,16 @@ const OrderConfirmationPage = () => {
               <div className="border-t pt-4 space-y-2">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Subtotal</span>
-                  <span className="font-semibold">{formatPrice(order.itemsPrice)}</span>
+                  <span className="font-semibold">
+                    {formatPrice(order.itemsPrice)}
+                  </span>
                 </div>
-              
+
                 <div className="flex justify-between text-lg font-bold border-t pt-2">
                   <span>Total</span>
-                  <span className="text-[#438c71]">{formatPrice(order.totalPrice)}</span>
+                  <span className="text-[#438c71]">
+                    {formatPrice(order.totalPrice)}
+                  </span>
                 </div>
               </div>
             </div>
@@ -323,7 +342,8 @@ const OrderConfirmationPage = () => {
 
         <div className="mt-8 text-center">
           <p className="text-sm text-gray-600">
-            You will receive an email confirmation with your order details shortly.
+            You will receive an email confirmation with your order details
+            shortly.
           </p>
           <p className="text-sm text-gray-600 mt-2">
             If you have any questions, please contact our customer support.
@@ -334,4 +354,4 @@ const OrderConfirmationPage = () => {
   );
 };
 
-export default OrderConfirmationPage; 
+export default OrderConfirmationPage;

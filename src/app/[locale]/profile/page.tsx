@@ -77,13 +77,13 @@ export default async function ProfilePage() {
                     {isAdmin ? (
                       <>
                       
-                        <div className="text-2xl font-bold">
+                        <div className="text-[18px] font-bold">
                           {t("admin")}
                         </div>
 
                       </>
                     ) : (
-                      <div className="text-2xl font-bold">
+                      <div className="text-[18px] font-bold">
                         {t("user")}
                       </div>
                     )}
@@ -170,9 +170,9 @@ export default async function ProfilePage() {
     <div className="flex items-center justify-between">
       <div>
         <p className="text-sm text-orange-400">{t("totalOrders")}</p>
-        <p className="text-2xl font-bold text-orange-500">{orderCount}</p>
+        <p className="text-[20px] font-bold text-orange-500">{orderCount}</p>
       </div>
-      <List className="text-2xl text-orange-400" />
+      <List className="text-[20px] text-orange-400" />
     </div>
   </CardContent>
 </Card>
@@ -183,9 +183,9 @@ export default async function ProfilePage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm text-orange-400">{t("cartItems")}</p>
-                      <p className="text-2xl font-bold text-orange-500">{cartItemCount}</p>
+                      <p className="text-[20px] font-bold text-orange-500">{cartItemCount}</p>
                     </div>
-                    <ShoppingCart className="text-2xl text-orange-400" />
+                    <ShoppingCart className="text-[20px] text-orange-400" />
                   </div>
                 </CardContent>
               </Card>
@@ -199,7 +199,7 @@ export default async function ProfilePage() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                
-                    <div className="text-2xl font-bold">
+                    <div className="text-[20px] font-bold">
 
                       {t("adminActions.title")}
                     </div>
@@ -236,7 +236,7 @@ export default async function ProfilePage() {
             {/* Recent Orders */}
             <Card>
               <CardHeader>
-                <div className="text-2xl font-bold">
+                <div className="text-[20px] font-bold">
                   {t("recentOrders.title")}
                 </div>
 
@@ -253,7 +253,7 @@ export default async function ProfilePage() {
                         href={`/order-confirmation?orderId=${order.id}`}
                         className="block"
                       >
-                        <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition">
+                        <div className="flex items-center justify-between p-3.5 border rounded-lg hover:bg-gray-50 transition">
                           <div>
                             <p className="font-medium">
                               {t("recentOrders.orderNumber", {
@@ -302,7 +302,7 @@ export default async function ProfilePage() {
             {/* Quick Actions */}
             <Card>
               <CardHeader>
-                <CardTitle className="text-2xl font-bold">{t("quickActions.title")}</CardTitle>
+              <CardTitle className="text-[20px] font-bold">{t("quickActions.title")}</CardTitle>
                 <CardDescription>
                   {t("quickActions.description")}
                 </CardDescription>
