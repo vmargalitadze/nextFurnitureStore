@@ -580,10 +580,12 @@ function PageContentWrapper() {
           <div className={`${shouldShowSidebar ? "lg:w-3/4" : "w-full"}`}>
             {transformedProducts.length > 0 ? (
               <>
-                <ProductHelper items={transformedProducts} />
+                <div className="mt-0">
+                  <ProductHelper items={transformedProducts} sliderId={"list"} />
+                </div>
 
                 {isLargeScreen && totalPages > 1 && (
-                  <div className="mt-8 flex justify-center">
+                  <div className="mb-10 mt-10 flex justify-center">
                     <Pagination pageCount={totalPages} />
                   </div>
                 )}

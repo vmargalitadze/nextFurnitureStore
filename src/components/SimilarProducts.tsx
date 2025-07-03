@@ -7,19 +7,20 @@ import { getSimilarProducts } from "@/lib/actions/actions";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import "swiper/css";
-import "swiper/css/pagination"
+import "swiper/css/pagination";
+import ProductHelper from "@/components/ProductHelper";
 // Simple Decimal-like class to avoid Prisma import issues
 class SimpleDecimal {
   value: string;
-  
+
   constructor(value: string | number) {
     this.value = value.toString();
   }
-  
+
   toString() {
     return this.value;
   }
-  
+
   toNumber() {
     return parseFloat(this.value);
   }
@@ -56,10 +57,13 @@ interface SimilarProductsProps {
   category: string;
 }
 
-const SimilarProducts: React.FC<SimilarProductsProps> = ({ currentProductId, category }) => {
+const SimilarProducts: React.FC<SimilarProductsProps> = ({
+  currentProductId,
+  category,
+}) => {
   const [similarProducts, setSimilarProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const t = useTranslations('productDetail');
+  const t = useTranslations("productDetail");
   const locale = useLocale();
 
   useEffect(() => {
@@ -70,11 +74,12 @@ const SimilarProducts: React.FC<SimilarProductsProps> = ({ currentProductId, cat
         // Convert the data to match the Product interface
         const productsWithDecimalPrices = data.map((product: any) => ({
           ...product,
-          sizes: product.sizes?.map((size: any) => ({
-            ...size,
-            price: new SimpleDecimal(size.price)
-          })) || undefined,
-          sales: product.sales || undefined
+          sizes:
+            product.sizes?.map((size: any) => ({
+              ...size,
+              price: new SimpleDecimal(size.price),
+            })) || undefined,
+          sales: product.sales || undefined,
         }));
         setSimilarProducts(productsWithDecimalPrices as Product[]);
       } catch (error) {
@@ -103,10 +108,10 @@ const SimilarProducts: React.FC<SimilarProductsProps> = ({ currentProductId, cat
   };
 
   const getLocalizedTitle = (product: Product): string => {
-    if (locale === 'en') {
+    if (locale === "en") {
       return product.titleEn ?? product.title;
     }
-    return product.title ?? product.titleEn ?? '';
+    return product.title ?? product.titleEn ?? "";
   };
 
   const getTranslation = (key: string, fallback: string) => {
@@ -124,7 +129,7 @@ const SimilarProducts: React.FC<SimilarProductsProps> = ({ currentProductId, cat
       <div className="py-8">
         <div className="container mx-auto">
           <h2 className="text-3xl md:text-[45px] font-bold text-gray-900 mb-6">
-            {getTranslation('similarProducts.title', 'Similar Products')}
+            {getTranslation("similarProducts.title", "Similar Products")}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[...Array(4)].map((_, index) => (
@@ -145,13 +150,15 @@ const SimilarProducts: React.FC<SimilarProductsProps> = ({ currentProductId, cat
       <div className="mt-20">
         <div className="container mx-auto px-4">
           <h2 className="text-[45px] font-bold text-gray-900 mb-6 text-center">
-            {getTranslation('similarProducts.title', 'Similar Products')}
+            {getTranslation("similarProducts.title", "Similar Products")}
           </h2>
           <div className="text-center py-8">
             <div className="text-gray-500 text-lg mb-2">
-              {getTranslation('similarProducts.noProducts', 'No similar products found')}
+              {getTranslation(
+                "similarProducts.noProducts",
+                "No similar products found"
+              )}
             </div>
-           
           </div>
         </div>
       </div>
@@ -159,103 +166,32 @@ const SimilarProducts: React.FC<SimilarProductsProps> = ({ currentProductId, cat
   }
 
   return (
-    <div className="py-8 ">
-      <div className="">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-          {getTranslation('similarProducts.title', 'Similar Products')}
+    <div className="py-8  mx-auto">
+      <div className="text-center">
+        <h2 className="text-2xl font-bold text-gray-900 mb-6">
+          {getTranslation("similarProducts.title", "Similar Products")}
         </h2>
-        <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-    {similarProducts.map((product) => {
-      const priceRange = getProductPriceRange(product);
-      const localizedTitle = getLocalizedTitle(product);
-      return (
-        <div
-          key={product.id}
-          className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300"
-        >
-          <Link href={`/products/${product.id}`}>
-            <div className="relative h-48 overflow-hidden">
-              <Image
-                src={product.images[0]}
-                alt={localizedTitle}
-                fill
-                className="object-cover"
-              />
-            </div>
-          </Link>
-          <div className="p-4">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
-              <Link
-                href={`/products/${product.id}`}
-                className="hover:text-primary transition-colors"
-              >
-                {localizedTitle}
-              </Link>
-            </h3>
-            <p className="text-[16px] text-gray-600 mb-2">{product.brand}</p>
-         
-          </div>
-        </div>
-      );
-    })}
-  </div>
+      </div>
 
-  {/* ✅ Mobile View: Swiper */}
-  <div className="md:hidden mt-6">
-    <Swiper
-      modules={[Pagination]}
-      slidesPerView={1}
-      spaceBetween={16}
-      pagination={{
-        clickable: true,
-        el: ".custom-swiper-pagination",
-        renderBullet: (index, className) =>
-          `<span class="${className} w-3 h-3 rounded-full bg-gray-300 transition-all duration-300 hover:bg-gray-400"></span>`,
-      }}
-      className="pb-12"
-    >
-      {similarProducts.map((product) => {
-        const priceRange = getProductPriceRange(product);
-        const localizedTitle = getLocalizedTitle(product);
-        return (
-          <SwiperSlide key={product.id}>
-            <div className="w-full">
-              <div className="relative group rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
-                <Link href={`/products/${product.id}`}>
-                  <div className="relative h-[200px] w-full">
-                    <Image
-                      src={product.images[0]}
-                      alt={localizedTitle}
-                      fill
-                      className="object-cover rounded-xl"
-                    />
-                  </div>
-                  <div className="absolute bottom-2 left-2 bg-white backdrop-blur-md px-3 py-1 rounded-full text-black font-medium text-[18px] max-w-[90%] truncate">
-                    {localizedTitle}
-                  </div>
-                </Link>
-              </div>
-              <div className="mt-2 px-2">
-                <p className="text-[16px] text-gray-600">{product.brand}</p>
-                <div className="flex justify-between items-center">
-                  <span className="text-[16px] font-bold text-primary">{priceRange.min} ₾</span>
-                  <Link
-                    href={`/products/${product.id}`}
-                    className="text-[16px] text-primary hover:text-primary/80 font-medium transition-colors"
-                  >
-                    {getTranslation("similarProducts.viewDetails", "View Details")} →
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </SwiperSlide>
-        );
-      })}
-    </Swiper>
-    <div className="custom-swiper-pagination flex justify-center gap-2 mt-4" />
-  </div>
+      <div className="flex justify-center ">
+        <div className="w-full mt-10  px-4">
+          <ProductHelper
+            items={similarProducts.slice(0, 4).map((product) => ({
+              id: product.id,
+              image: product.images,
+              price: product.price
+                ? product.price.toNumber()
+                : product.sizes?.[0]?.price.toNumber() || 0,
+              originalPrice: undefined,
+              sales: product.sales,
+              title: product.title,
+              titleEn: product.titleEn,
+            }))}
+            sliderId={`similar-products-${currentProductId}`}
+          />
+        </div>
+      </div>
     </div>
-  </div>
-);
-}
+  );
+};
 export default SimilarProducts;

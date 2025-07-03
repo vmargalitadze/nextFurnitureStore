@@ -320,7 +320,10 @@ function ProductList({
                   <h1 className="text-3xl  mb-3 flex justify-center items-center font-light text-gray-900 leading-tight">
                     {t("newProducts")}
                   </h1>
-                  <ProductHelper items={transformedProducts} />
+                  <div className="mt-10">
+                    
+                    <ProductHelper items={transformedProducts} sliderId="newProducts" />
+                  </div>
                 </div>
               )}
 
@@ -329,7 +332,9 @@ function ProductList({
                   <h1 className="text-3xl  mb-3 flex justify-center items-center font-light text-gray-900 leading-tight">
                     {t("popularProducts")}
                   </h1>
-                  <ProductHelper items={transformedProducts2} />
+                  <div className="mt-10">
+                    <ProductHelper items={transformedProducts2} sliderId="popularProducts" />
+                  </div>
                 </div>
               )}
 
@@ -338,7 +343,9 @@ function ProductList({
                   <h1 className="text-3xl  mb-3 flex justify-center items-center font-light text-gray-900 leading-tight">
                     {t("salesProducts")}
                   </h1>
-                  <ProductHelper items={transformedProducts3} />
+                  <div className="mt-10">
+                    <ProductHelper items={transformedProducts3} sliderId="salesProducts" />
+                  </div>
                 </div>
               )}
 
