@@ -464,11 +464,7 @@ function PageContentWrapper() {
                     {sortedProducts.length}
                   </span>{" "}
                   {t("products")}
-                  {isLargeScreen && totalPages > 1 && (
-                    <span className="text-gray-500 ml-2">
-                      (Page {currentPage} of {totalPages})
-                    </span>
-                  )}
+                
                 </p>
 
                 {activeFiltersCount > 0 && (
