@@ -193,7 +193,7 @@ const OrderConfirmationPage = () => {
 
         <Card className="mb-8">
           <CardHeader>
-            <CardTitle className="flex items-center">
+            <CardTitle className="flex text-[20px] font-bold items-center">
               <Package className="h-5 w-5 mr-2" />
               Order Details
             </CardTitle>
@@ -226,7 +226,7 @@ const OrderConfirmationPage = () => {
 
         <Card className="mb-8">
           <CardHeader>
-            <CardTitle className="flex items-center">
+            <CardTitle className="flex text-[20px] font-bold items-center">
               <User className="h-5 w-5 mr-2" />
               Customer Information
             </CardTitle>
@@ -259,7 +259,7 @@ const OrderConfirmationPage = () => {
 
         <Card className="mb-8">
           <CardHeader>
-            <CardTitle className="flex items-center">
+            <CardTitle className="flex text-[20px] font-bold items-center">
               <Truck className="h-5 w-5 mr-2" />
               Delivery Information
             </CardTitle>
@@ -291,7 +291,7 @@ const OrderConfirmationPage = () => {
 
         <Card className="mb-8">
           <CardHeader>
-            <CardTitle className="flex items-center">
+            <CardTitle className="flex text-[20px] font-bold items-center">
               <Package className="h-5 w-5 mr-2" />
               Order Summary
             </CardTitle>

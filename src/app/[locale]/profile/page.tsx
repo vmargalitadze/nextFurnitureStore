@@ -96,7 +96,7 @@ export default async function ProfilePage() {
                       <FaEnvelope className="w-6 h-6 text-orange-600" />
                     </div>
                   <div>
-                    <p className="text-sm text-gray-500">{t("email")}</p>
+                    <p className="text-[16px] font-bold">{t("email")}</p>
                     <p className="font-medium">{user.email}</p>
                   </div>
                 </div>
@@ -106,7 +106,7 @@ export default async function ProfilePage() {
                       <FaCalendarAlt className="w-6 h-6 text-orange-600" />
                     </div>
                   <div>
-                    <p className="text-sm text-gray-500">{t("memberSince")}</p>
+                    <p className="text-[16px] font-bold">{t("memberSince")}</p>
                     <p className="font-medium">
                       {format(new Date(user.createdAt), "MMM dd, yyyy")}
                     </p>
@@ -120,7 +120,7 @@ export default async function ProfilePage() {
                     </div>
                     
                     <div>
-                      <p className="text-sm text-gray-500">{t("address")}</p>
+                      <p className="text-[16px] font-bold">{t("address")}</p>
                       <p className="font-medium text-sm">
                         {typeof user.address === "object" &&
                           user.address !== null
@@ -137,7 +137,7 @@ export default async function ProfilePage() {
                       <FaCreditCard className="w-6 h-6 text-orange-600" />
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-[16px] font-bold">
                         {t("paymentMethod")}
                       </p>
                       <p className="font-medium text-sm">
@@ -260,7 +260,7 @@ export default async function ProfilePage() {
                                 number: order.id.slice(-8),
                               })}
                             </p>
-                            <p className="text-sm text-gray-500">
+                            <p className="text-[16px] text-gray-500">
                               {format(new Date(order.createdAt), "MMM dd, yyyy")}
                             </p>
                             <p className="text-sm text-gray-500">
@@ -271,7 +271,7 @@ export default async function ProfilePage() {
                           </div>
                           <div className="text-right">
                             <Badge
-                              variant={order.isPaid ? "default" : "secondary"}
+                           className="text-[16px]"   variant={order.isPaid ? "default" : "secondary"}
                             >
                               {order.isPaid
                                 ? t("recentOrders.paid")

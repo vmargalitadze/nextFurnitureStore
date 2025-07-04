@@ -196,7 +196,7 @@ const CartPage = () => {
             <Link href="/list">
               <Button
                 variant="outline"
-                className="w-[30%] px-4  mb-10  py-2 text-[18px] font-medium text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors "
+                className="w-[30%] px-4  mb-10  py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors "
               >
                 {t("cart.continueShopping")}
               </Button>
@@ -216,7 +216,7 @@ const CartPage = () => {
           </h1>
           <Button
             onClick={handleClearCart}
-            className="w-full mr-0 md:mr-14 sm:w-[40%] md:w-[20%] px-4 py-2 text-base sm:text-lg md:text-[20px] font-bold text-[#438c71] bg-white border-2 border-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors flex items-center justify-center gap-2"
+            className="w-full mr-0 md:mr-[38px] sm:w-[40%] md:w-[25%] px-4 py-2 text-base sm:text-lg md:text-[20px] font-bold text-[#438c71] bg-white border-2 border-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors flex items-center justify-center gap-2"
           >
             {t("cart.clearCart")}
           </Button>
@@ -305,7 +305,7 @@ const CartPage = () => {
                       disabled={updating === `${item.productId}-${item.size}`}
                       className="text-red-600 mt-2 p-0 mb-2 h-auto w-auto"
                     >
-                      <Trash2 className="h-6 w-6 sm:h-8 sm:w-8" />
+                      <Trash2 className="h-6 w-6 " />
                     </button>
                   </div>
                 ))}
@@ -341,9 +341,9 @@ const CartPage = () => {
                 </div>
 
                 <Button
-                  variant="outline"
+                 
                   onClick={handleCheckout}
-                  className="w-full px-4 mb-6 py-2 text-base sm:text-lg md:text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+                  className="w-full  px-4 mb-6 py-2 text-base sm:text-lg md:text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
                 >
                   {t("cart.checkout")}
                 </Button>

@@ -439,7 +439,7 @@ const Page = (props: { params: { id: string; locale: string } }) => {
               )}
             </div>
           </div>
-          <div className="container mx-auto mt-10">
+          <div className="container mx-auto mt-6">
             <div className="max-w-7xl mx-auto">
               <div className="pb-2">
                 <h3 className="text-[20px] text-center sm:text-[20px] font-semibold text-gray-900 mb-2">

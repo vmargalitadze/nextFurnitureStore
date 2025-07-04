@@ -317,7 +317,7 @@ function ProductList({
             <>
               {transformedProducts.length > 0 && (
                 <div className="w-full rounded-2xl pt-10 ">
-                  <h1 className="text-3xl  mb-3 flex justify-center items-center font-light text-gray-900 leading-tight">
+                  <h1 className="text-3xl  mb-3 flex justify-center items-center text-bold text-gray-900 leading-tight">
                     {t("newProducts")}
                   </h1>
                   <div className="mt-10">
@@ -329,7 +329,7 @@ function ProductList({
 
               {transformedProducts2.length > 0 && (
                 <div className="w-full rounded-2xl pt-10 ">
-                  <h1 className="text-3xl  mb-3 flex justify-center items-center font-light text-gray-900 leading-tight">
+                  <h1 className="text-3xl  mb-3 flex justify-center items-center text-bold text-gray-900 leading-tight">
                     {t("popularProducts")}
                   </h1>
                   <div className="mt-10">
@@ -340,7 +340,7 @@ function ProductList({
 
               {transformedProducts3.length > 0 && (
                 <div className="w-full rounded-2xl pt-10 ">
-                  <h1 className="text-3xl  mb-3 flex justify-center items-center font-light text-gray-900 leading-tight">
+                  <h1 className="text-3xl  mb-3 flex justify-center items-center text-bold text-gray-900 leading-tight">
                     {t("salesProducts")}
                   </h1>
                   <div className="mt-10">

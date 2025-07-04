@@ -174,7 +174,7 @@ const SimilarProducts: React.FC<SimilarProductsProps> = ({
       </div>
 
       <div className="flex justify-center ">
-        <div className="w-full mt-10  px-4">
+        <div className="w-full   px-4">
           <ProductHelper
             items={similarProducts.slice(0, 4).map((product) => ({
               id: product.id,

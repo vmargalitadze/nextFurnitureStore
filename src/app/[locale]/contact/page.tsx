@@ -123,7 +123,7 @@ function ContactPage() {
                       />
                     </div>
 
-                    <Button className="w-[50%] mx-auto flex justify-center items-center px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors">
+                    <Button className="w-[30%] mx-auto flex justify-center items-center px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors">
                       {t('form.submit')}
                     </Button>
                   </form>
@@ -148,8 +148,8 @@ function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-gray-800 mb-1">{t('info.locations')}</h3>
-                      <p className="text-gray-600 text-sm">{t('info.batumiAddress')}</p>
-                      <p className="text-gray-600 text-sm">{t('info.tbilisiAddress')}</p>
+                      <p className="text-gray-600 text-[16px]">{t('info.batumiAddress')}</p>
+                      <p className="text-gray-600 text-[16px]">{t('info.tbilisiAddress')}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -165,7 +165,7 @@ function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-gray-800 mb-1">{t('info.email')}</h3>
-                      <a href="mailto:info@sleepandbed.ge" className="text-orange-600 hover:text-orange-700 text-sm transition-colors">
+                      <a href="mailto:info@sleepandbed.ge" className="text-orange-600 hover:text-orange-700 text-[16px] transition-colors">
                         {t('info.emailAddress')}
                       </a>
                     </div>
@@ -183,7 +183,7 @@ function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-gray-800 mb-1">{t('info.call')}</h3>
-                      <a href="tel:+995123456789" className="text-orange-600 hover:text-orange-700 text-sm transition-colors">
+                      <a href="tel:+995123456789" className="text-orange-600 hover:text-orange-700 text-[16px] transition-colors">
                         {t('info.phoneNumber')}
                       </a>
                     </div>

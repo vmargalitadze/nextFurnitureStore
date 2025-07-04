@@ -231,12 +231,12 @@ const SummaryPage = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 mt-[80px]">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
-            <Link href={`/${params.locale}/checkout/personal`}>
+            <Link href={`/checkout/personal`}>
               <Button variant="ghost" className="flex items-center gap-2">
                 <ArrowLeft className="h-4 w-4" />
                 {t('checkout.backToPersonal')}
@@ -444,7 +444,7 @@ const SummaryPage = () => {
 
           {/* Order Summary Sidebar */}
           <div className="lg:col-span-1">
-            <Card className="sticky top-8">
+            <Card className=" top-8">
               <CardHeader>
                 <CardTitle className="flex text-[20px] font-bold items-center gap-2">
                   <CheckCircle className="h-5 w-5" />

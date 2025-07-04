@@ -217,7 +217,7 @@ function PageContentWrapper() {
     const aPriceRange = getProductPriceRange(a);
     const bPriceRange = getProductPriceRange(b);
 
-    console.log("Sorting by:", sortBy); // Debug log
+  
 
     switch (sortBy) {
       case "price-low":
@@ -492,7 +492,7 @@ function PageContentWrapper() {
                 </svg>
                 <label className="text-[18px] font-medium text-gray-700">
                   {t("sortBy")}
-                </label>
+                </label>F
               </div>
               <select
                 value={sortBy}
@@ -587,7 +587,7 @@ function PageContentWrapper() {
                 )}
               </>
             ) : (
-              <div className="text-center py-12">
+              <div className="text-center flex flex-col md:ml-[100px] justify-center items-center py-12">
                 <div className="text-gray-400 mb-4">
                   <svg
                     className="w-20 h-20 mx-auto"
@@ -603,7 +603,7 @@ function PageContentWrapper() {
                     />
                   </svg>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                <h3 className="text-2xl text-center  font-bold text-gray-900 mb-3">
                   No products found
                 </h3>
                 <p className="text-gray-600">

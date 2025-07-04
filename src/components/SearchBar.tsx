@@ -77,7 +77,7 @@ function SearchHelper() {
           }}
           type="text"
           placeholder={t("placeholder") || "Search products..."}
-          className="flex-1 bg-transparent placeholder:text-[20px] outline-none border-none text-sm text-black placeholder-black font-medium"
+          className="flex-1 bg-transparent placeholder:text-[16px] outline-none border-none text-sm text-black placeholder-black font-normal"
         />
 
         {query && (

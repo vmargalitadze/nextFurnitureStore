@@ -55,7 +55,7 @@ function ProductImage({ image }: { image: string[] }) {
     <section className="w-full">
       <div className="flex flex-col lg:grid lg:grid-cols-[1fr_auto] gap-6 items-start">
         {/* Main Image Container */}
-        <div className="relative w-full aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 shadow-lg">
+        <div className="relative w-full  rounded-2xl overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 shadow-lg">
           {/* Loading Skeleton */}
           {isLoading && (
             <div className="absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-300 animate-pulse rounded-2xl" />
@@ -69,7 +69,7 @@ function ProductImage({ image }: { image: string[] }) {
               animate="enter"
               exit="exit"
               variants={imageVariants}
-              className="relative w-full h-full group"
+              className="relative w-full h-[500px] group"
             >
               <Image
                 src={image[current]}
@@ -139,7 +139,7 @@ function ProductImage({ image }: { image: string[] }) {
                   variants={thumbnailVariants}
                   whileHover="hover"
                   whileTap="tap"
-                  className={`relative flex-shrink-0 w-20 h-20 lg:w-16 lg:h-16 rounded-xl overflow-hidden transition-all duration-300 ${
+                  className={`relative flex-shrink-0 w-20 h-16 lg:w-16 lg:h-14 rounded-xl overflow-hidden transition-all duration-300 ${
                     current === index
                       ? "ring-3 ring-blue-500 shadow-lg scale-105"
                       : "ring-1 ring-gray-200 hover:ring-2 hover:ring-gray-300 hover:shadow-md"
@@ -177,8 +177,8 @@ function ProductImage({ image }: { image: string[] }) {
               src={image[current]}
               alt={`Product image ${current + 1}`}
               width={800}
-              height={800}
-              className="w-full h-[700px] object-contain rounded-lg"
+              height={600}
+              className="w-full  object-contain rounded-lg"
             />
             <Button  variant="outline"
               onClick={() => setIsZoomed(false)}
