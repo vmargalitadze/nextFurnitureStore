@@ -377,7 +377,7 @@ function ContactPage() {
             <div className="lg:col-span-2">
               <Card className="border-0 shadow-lg overflow-hidden">
                 <CardContent className="p-0">
-                  <div className="relative h-[400px] md:h-[450px]">
+                  <div className="relative h-[400px] md:h-[590px]">
                     <iframe
                       className="w-full h-full"
                       src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2933.203682968321!2d41.6285049!3d41.6399867!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40678700245cd783%3A0xa1c772006499c03c!2sSleep%26Bed%20Georgia!5e0!3m2!1sen!2s!4v1712549012345"
