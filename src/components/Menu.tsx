@@ -34,7 +34,7 @@ const Menu = () => {
         
       
             <Link href="/contact" onClick={handleClose}> {t('contact')} </Link>
-            
+            <Link href="/list" onClick={handleClose}> {t('products')} </Link>
         
             {session ? (
               <Link href="/profile" onClick={handleClose}>

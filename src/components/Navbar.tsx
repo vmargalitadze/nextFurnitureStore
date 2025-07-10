@@ -35,6 +35,7 @@ function Navbar() {
 
         
             <Link href="/contact" className="text-[20px] font-semibold georgian-text"> {t('contact')}</Link>
+            <Link href="/list" className="text-[20px] font-semibold georgian-text"> {t('products')} </Link>
           </div>
         
     </div>
