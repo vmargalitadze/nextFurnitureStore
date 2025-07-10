@@ -492,7 +492,7 @@ function PageContentWrapper() {
                 </svg>
                 <label className="text-[18px] font-medium text-gray-700">
                   {t("sortBy")}
-                </label>F
+                </label>
               </div>
               <select
                 value={sortBy}
