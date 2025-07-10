@@ -295,3 +295,91 @@ export const sendOrderReceipt = async (email: string, order: any, customerName: 
     return { success: false, error: 'Failed to send order receipt' };
   }
 }; 
+
+export const sendContactEmail = async (contactData: {
+  fullName: string;
+  email: string;
+  phone?: string;
+  subject: string;
+  message: string;
+}) => {
+  const mailOptions = {
+    from: {
+      name: `${contactData.email} via Furniture Store`,
+      address: process.env.EMAIL_USER || 'noreply@yourdomain.com'
+    },
+    to: 'kipianistore@gmail.com', // The email where contact form submissions will be sent
+    subject: `Contact Form: ${contactData.subject} - From: ${contactData.fullName}`,
+    // Add headers for better deliverability but allow replies
+    headers: {
+      'X-Mailer': 'Furniture Store Contact System',
+      'Feedback-ID': 'contact-form:furniturestore',
+    },
+    // Add message ID for better tracking
+    messageId: `<contact-${Date.now()}@${process.env.DOMAIN_NAME || 'furniturestore.com'}>`,
+    // Set reply-to to the customer's email so you can reply directly
+    replyTo: contactData.email,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9f9f9; padding: 20px;">
+        <div style="background-color: white; border-radius: 8px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+          <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="color: #438c71; margin: 0; font-size: 28px;">Furniture Store</h1>
+            <p style="color: #666; margin: 10px 0 0 0;">New Contact Form Submission</p>
+            <div style="background-color: #438c71; color: white; padding: 10px; border-radius: 6px; margin-top: 15px;">
+              <p style="margin: 0; font-weight: 600;">📧 Message from: ${contactData.fullName}</p>
+            </div>
+          </div>
+          
+          <div style="background-color: #f8f9fa; border-radius: 6px; padding: 20px; margin-bottom: 30px;">
+            <h2 style="color: #333; margin: 0 0 20px 0;">Contact Information</h2>
+            <div style="margin-bottom: 15px;">
+              <strong style="color: #333;">Name:</strong>
+              <span style="color: #666; margin-left: 10px;">${contactData.fullName}</span>
+            </div>
+            <div style="margin-bottom: 15px;">
+              <strong style="color: #333;">Email:</strong>
+              <span style="color: #666; margin-left: 10px;">${contactData.email}</span>
+            </div>
+            ${contactData.phone ? `
+            <div style="margin-bottom: 15px;">
+              <strong style="color: #333;">Phone:</strong>
+              <span style="color: #666; margin-left: 10px;">${contactData.phone}</span>
+            </div>
+            ` : ''}
+            <div style="margin-bottom: 15px;">
+              <strong style="color: #333;">Subject:</strong>
+              <span style="color: #666; margin-left: 10px;">${contactData.subject}</span>
+            </div>
+          </div>
+          
+          <div style="margin-bottom: 30px;">
+            <h3 style="color: #333; margin: 0 0 15px 0;">Message</h3>
+            <div style="background-color: #f8f9fa; border-radius: 6px; padding: 20px; border-left: 4px solid #438c71;">
+              <p style="color: #333; margin: 0; line-height: 1.6; white-space: pre-wrap;">${contactData.message}</p>
+            </div>
+          </div>
+          
+          <div style="text-align: center; margin-top: 30px;">
+            <p style="color: #666; margin: 0;">This message was sent from the contact form on your website.</p>
+            <p style="color: #666; margin: 10px 0 0 0; font-weight: 600; color: #438c71;">💬 You can reply directly to this email to respond to the customer!</p>
+            <p style="color: #666; margin: 5px 0 0 0; font-size: 14px;">Customer Email: ${contactData.email}</p>
+          </div>
+          
+          <hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;">
+          <p style="color: #666; font-size: 12px; text-align: center; margin: 0;">
+            This is an automated email from Furniture Store Contact Form.
+            <br>Submitted on ${new Date().toLocaleString()}
+          </p>
+        </div>
+      </div>
+    `,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    return { success: true };
+  } catch (error) {
+    console.error('Error sending contact email:', error);
+    return { success: false, error: 'Failed to send contact email' };
+  }
+}; 

@@ -1,12 +1,79 @@
+"use client";
+
 import { Link } from "@/i18n/navigation";
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Loader2, CheckCircle, XCircle } from "lucide-react";
 
 function ContactPage() {
   const t = useTranslations("contact");
+  
+  // Form state
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    phone: "",
+    subject: "",
+    message: ""
+  });
+  
+  // Form submission state
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [submitMessage, setSubmitMessage] = useState("");
+
+  // Handle input changes
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
+    setSubmitMessage("");
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSubmitStatus('success');
+        setSubmitMessage(data.message);
+        // Reset form on success
+        setFormData({
+          fullName: "",
+          email: "",
+          phone: "",
+          subject: "",
+          message: ""
+        });
+      } else {
+        setSubmitStatus('error');
+        setSubmitMessage(data.error || 'Something went wrong. Please try again.');
+      }
+    } catch (error) {
+      setSubmitStatus('error');
+      setSubmitMessage('Network error. Please check your connection and try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <>
@@ -22,19 +89,16 @@ function ContactPage() {
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50 z-10" />
         <div className="relative z-20 text-center w-full max-w-4xl mx-auto px-4">
           <h1 className="text-primary text-xl md:text-[45px] font-normal leading-none text-center capitalize">
-            {t('hero.title')}
+            {t("hero.title")}
           </h1>
-         
         </div>
       </div>
 
       {/* Main Content */}
       <div className="py-16 md:py-24 bg-gray-50">
         <div className="container mx-auto max-w-7xl px-4">
-          
           {/* Contact Form Section */}
           <div className="grid lg:grid-cols-2 gap-12 mb-16">
-            
             {/* Contact Image */}
             <div className="order-2 lg:order-1">
               <div className="relative group">
@@ -56,32 +120,55 @@ function ContactPage() {
                 <CardContent className="p-8">
                   <div className="mb-8">
                     <h2 className="text-3xl font-bold text-gray-800 mb-4">
-                    {t('breadcrumb.sendMessage')}
+                      {t("breadcrumb.sendMessage")}
                     </h2>
                     <p className="text-gray-600 text-lg leading-relaxed">
-                      {t('form.description')}
+                      {t("form.description")}
                     </p>
                   </div>
 
-                  <form className="space-y-6">
+                  {/* Status Messages */}
+                  {submitStatus === 'success' && (
+                    <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center space-x-2">
+                      <CheckCircle className="w-5 h-5 text-green-600" />
+                      <p className="text-green-800">{submitMessage}</p>
+                    </div>
+                  )}
+
+                  {submitStatus === 'error' && (
+                    <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center space-x-2">
+                      <XCircle className="w-5 h-5 text-red-600" />
+                      <p className="text-red-800">{submitMessage}</p>
+                    </div>
+                  )}
+
+                  <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid sm:grid-cols-2 gap-6">
                       <div className="space-y-2">
-                        <label className="text-[18px] font-bold text-gray-700  tracking-wide">
-                          {t('form.fullName')}
+                        <label className="text-[18px] font-bold text-gray-700 tracking-wide">
+                          {t("form.fullName")} *
                         </label>
                         <input
+                          name="fullName"
+                          value={formData.fullName}
+                          onChange={handleInputChange}
+                          required
                           className="w-full h-12 px-4 bg-white border-2 border-gray-200 rounded-lg text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all duration-300 placeholder-gray-400"
-                          placeholder={t('form.fullNamePlaceholder')}
+                          placeholder={t("form.fullNamePlaceholder")}
                           type="text"
                         />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-[18px] font-bold  text-gray-700  tracking-wide">
-                          {t('form.email')}
+                        <label className="text-[18px] font-bold text-gray-700 tracking-wide">
+                          {t("form.email")} *
                         </label>
                         <input
+                          name="email"
+                          value={formData.email}
+                          onChange={handleInputChange}
+                          required
                           className="w-full h-12 px-4 bg-white border-2 border-gray-200 rounded-lg text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all duration-300 placeholder-gray-400"
-                          placeholder={t('form.emailPlaceholder')}
+                          placeholder={t("form.emailPlaceholder")}
                           type="email"
                         />
                       </div>
@@ -89,42 +176,76 @@ function ContactPage() {
 
                     <div className="grid sm:grid-cols-2 gap-6">
                       <div className="space-y-2">
-                        <label className="text-[18px] font-bold text-gray-700  tracking-wide">
-                          {t('form.phone')}
+                        <label className="text-[18px] font-bold text-gray-700 tracking-wide">
+                          {t("form.phone")}
                         </label>
                         <input
+                          name="phone"
+                          value={formData.phone}
+                          onChange={handleInputChange}
                           className="w-full h-12 px-4 bg-white border-2 border-gray-200 rounded-lg text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all duration-300 placeholder-gray-400"
-                          placeholder={t('form.phonePlaceholder')}
+                          placeholder={t("form.phonePlaceholder")}
                           type="tel"
                         />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-[18px] font-bold  text-gray-700  tracking-wide">
-                          {t('form.subject')}
+                        <label className="text-[18px] font-bold text-gray-700 tracking-wide">
+                          {t("form.subject")} *
                         </label>
-                        <select className="w-full h-12 px-4 bg-white border-2 text-gray-400 border-gray-200 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all duration-300">
-                          <option  className="text-gray-400" value="">{t('info.selectSubject')}</option>
-                          <option className="text-gray-400"  value="payment">{t('form.subjectOptions.payment')}</option>
-                          <option className="text-gray-400"  value="furniture">{t('form.subjectOptions.furniture')}</option>
-                          <option className="text-gray-400"  value="agreement">{t('form.subjectOptions.agreement')}</option>
-                          <option className="text-gray-400"  value="carrying">{t('form.subjectOptions.carrying')}</option>
+                        <select 
+                          name="subject"
+                          value={formData.subject}
+                          onChange={handleInputChange}
+                          required
+                          className="w-full h-12 px-4 bg-white border-2 text-gray-400 border-gray-200 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all duration-300"
+                        >
+                          <option className="text-gray-400" value="">
+                            {t("info.selectSubject")}
+                          </option>
+                          <option className="text-gray-400" value="payment">
+                            {t("form.subjectOptions.payment")}
+                          </option>
+                          <option className="text-gray-400" value="furniture">
+                            {t("form.subjectOptions.furniture")}
+                          </option>
+                          <option className="text-gray-400" value="agreement">
+                            {t("form.subjectOptions.agreement")}
+                          </option>
+                          <option className="text-gray-400" value="carrying">
+                            {t("form.subjectOptions.carrying")}
+                          </option>
                         </select>
                       </div>
                     </div>
 
                     <div className="space-y-2">
-                      <label className="text-[18px] font-bold  text-gray-700  tracking-wide">
-                        {t('form.message')}
+                      <label className="text-[18px] font-bold text-gray-700 tracking-wide">
+                        {t("form.message")} *
                       </label>
                       <textarea
+                        name="message"
+                        value={formData.message}
+                        onChange={handleInputChange}
+                        required
                         className="w-full h-32 px-4 py-3 bg-white border-2 border-gray-200 rounded-lg text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all duration-300 placeholder-gray-400 resize-none"
-                        placeholder={t('form.messagePlaceholder')}
+                        placeholder={t("form.messagePlaceholder")}
                         rows={5}
                       />
                     </div>
 
-                    <Button className="w-[30%] mx-auto flex justify-center items-center px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors">
-                      {t('form.submit')}
+                    <Button 
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-[30%] mx-auto flex justify-center items-center px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                          Sending...
+                        </>
+                      ) : (
+                        t("form.submit")
+                      )}
                     </Button>
                   </form>
                 </CardContent>
@@ -132,24 +253,49 @@ function ContactPage() {
             </div>
           </div>
 
-    
           <div className="grid lg:grid-cols-3 gap-8">
-            
             {/* Contact Information Cards */}
             <div className="lg:col-span-1 space-y-6">
               <Card className="border-0 shadow-lg bg-white hover:shadow-xl transition-shadow duration-300">
                 <CardContent className="p-6">
                   <div className="flex items-center space-x-4">
                     <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
-                      <svg className="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <svg
+                        className="w-6 h-6 text-orange-600"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                        />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
                       </svg>
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-800 mb-1">{t('info.locations')}</h3>
-                      <p className="text-gray-600 text-[16px]">{t('info.batumiAddress')}</p>
-                      <p className="text-gray-600 text-[16px]">{t('info.tbilisiAddress')}</p>
+                      <h3 className="font-semibold text-gray-800 mb-1">
+                        {t("info.locations")}
+                      </h3>
+                      <p className="text-gray-600 text-[16px]">
+                        {t("info.kobuleti")}
+                      </p>
+                      <p className="text-gray-600 text-[16px]">
+                        {t("info.kutaisi")}
+                      </p>
+                      <p className="text-gray-600 text-[16px]">
+                        {t("info.tbilisi")}
+                      </p>
+                      <p className="text-gray-600 text-[16px]">
+                        {t("info.batumi")}
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -159,14 +305,29 @@ function ContactPage() {
                 <CardContent className="p-6">
                   <div className="flex items-center space-x-4">
                     <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
-                      <svg className="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      <svg
+                        className="w-6 h-6 text-orange-600"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                        />
                       </svg>
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-800 mb-1">{t('info.email')}</h3>
-                      <a href="mailto:info@sleepandbed.ge" className="text-orange-600 hover:text-orange-700 text-[16px] transition-colors">
-                        {t('info.emailAddress')}
+                      <h3 className="font-semibold text-gray-800 mb-1">
+                        {t("info.email")}
+                      </h3>
+                      <a
+                        href="mailto:info@sleepandbed.ge"
+                        className="text-orange-600 hover:text-orange-700 text-[16px] transition-colors"
+                      >
+                        kipianistore@gmail.com
                       </a>
                     </div>
                   </div>
@@ -177,14 +338,34 @@ function ContactPage() {
                 <CardContent className="p-6">
                   <div className="flex items-center space-x-4">
                     <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
-                      <svg className="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                      <svg
+                        className="w-6 h-6 text-orange-600"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                        />
                       </svg>
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-800 mb-1">{t('info.call')}</h3>
-                      <a href="tel:+995123456789" className="text-orange-600 hover:text-orange-700 text-[16px] transition-colors">
-                        {t('info.phoneNumber')}
+                      <h3 className="font-semibold text-gray-800 mb-1">
+                        {t("info.call")}
+                      </h3>
+                      <a
+                        href="tel:+995557394374"
+                        className="text-orange-600 hover:text-orange-700 text-[16px] transition-colors"
+                      >
+                        {t("info.batumi2")}: <br /> +995557394374, <br />{" "}
+                        +995568613022 <br />
+                      
+                        {t("info.kutaisi2")}: <br /> + 995514079898 <br />
+                        {t("info.kobuleti2")}: <br /> + 995555244403 <br /> +
+                        995597808047 <br />
                       </a>
                     </div>
                   </div>
@@ -204,7 +385,6 @@ function ContactPage() {
                       allowFullScreen
                       referrerPolicy="no-referrer-when-downgrade"
                     />
-                  
                   </div>
                 </CardContent>
               </Card>

@@ -26,16 +26,22 @@ const Footer = () => {
                 href="mailto:hello@lama.dev" 
                 className="text-white transition-colors duration-300 text-xl"
               >
-                hello@lama.dev
+               kipianistore@gmail.com
               </a>
               <a 
-                href="tel:+1234567890" 
+                href="tel:+995557394374" 
                 className="text-white transition-colors duration-300 text-xl"
               >
-                +1 (234) 567-890
+                +995557394374,
               </a>
               <p className="text-white text-xl">
-                3252 Winding Way, CA 90210
+              {t('batumi')}
+              </p>
+              <p className="text-white text-xl">
+              {t('kobuleti')}
+              </p>
+              <p className="text-white text-xl">
+              {t('kutaisi')}
               </p>
             </div>
           </div>

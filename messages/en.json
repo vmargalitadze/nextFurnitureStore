@@ -53,11 +53,17 @@
     },
     "info": {
       "address": "ADDRESS",
+      "batumi2": "Batumi",
+      "kobuleti2": "Kobuleti",
+      "kutaisi2": "Kutaisi",
+      "tbilisi2": "Tbilisi",
       "email": "Email",
       "phone": "PHONE",
-      "batumiAddress": "Batumi: A. Pushkin St. 44",
-      "tbilisiAddress": "Tbilisi: T. Eristavi St. 1",
-      "emailAddress": "Sleepandbedgeorgia@gmail.com",
+      "kobuleti": "Kobuleti: Sh. Rustaveli 151",
+      "kutaisi": "Kutaisi: I. Chavchavadze 51",
+      "tbilisi": "Tbilisi: T. Eristavi 1",
+      "batumi": "Batumi: A. Pushkin 117",
+      
       "phoneNumber": "123-456-7890",
       "locations": "Locations",
       "call": "Phone No",
@@ -491,7 +497,12 @@
     "followUs": "Follow Us",
     "copyright": "© 2024 Furniture Store. All rights reserved.",
     "privacy": "Privacy",
-    "terms": "Terms"
+    "terms": "Terms",
+    "kobuleti": "Kobuleti: Sh. Rustaveli 151",
+    "kutaisi": "Kutaisi: I. Chavchavadze 51",
+    "tbilisi": "Tbilisi: T. Eristavi 1",
+    "batumi": "Batumi: A. Pushkin 117"
+   
   },
   "common": {
     "filter": "Filter",

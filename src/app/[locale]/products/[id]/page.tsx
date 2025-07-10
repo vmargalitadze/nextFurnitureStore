@@ -5,7 +5,7 @@ import React, { useState, useEffect } from "react";
 import ProductImage from "../ProductImage";
 import { getProductById } from "@/lib/actions/actions";
 import SimilarProducts from "@/components/SimilarProducts";
-import { toast } from 'sonner';
+import { toast } from "sonner";
 import { useCart } from "@/lib/context/CartContext";
 import { CartItem } from "@/lib/types";
 import { useSession } from "next-auth/react";
@@ -75,7 +75,9 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                 ...size,
                 price: new SimpleDecimal(size.price.toString()),
               })) || undefined,
-            price: data.price ? new SimpleDecimal(data.price.toString()) : undefined,
+            price: data.price
+              ? new SimpleDecimal(data.price.toString())
+              : undefined,
             sales: data.sales || undefined,
           };
           setProduct(productWithDecimalPrices as Product);
@@ -160,13 +162,13 @@ const Page = (props: { params: { id: string; locale: string } }) => {
     // For OTHERS products, no size selection needed
     if (isOthersProduct()) {
       if (!product.price) {
-        toast.error('Product price not available');
+        toast.error("Product price not available");
         return;
       }
     } else {
       // For sized products, size selection is required
       if (!selectedSize) {
-        toast.error('Please select a size');
+        toast.error("Please select a size");
         return;
       }
     }
@@ -176,43 +178,43 @@ const Page = (props: { params: { id: string; locale: string } }) => {
     const finalPrice = getDiscountedPrice();
 
     // Show toast immediately for better UX
-    toast.success('Added to cart successfully!');
+    toast.success("Added to cart successfully!");
 
     // Optimistically update the cart UI
     const newItem: CartItem = {
       productId: product.id,
-      name: getLocalizedTitle() || product.title || 'Product',
-      size: isOthersProduct() ? 'N/A' : (selectedSizeData?.size || ''),
+      name: getLocalizedTitle() || product.title || "Product",
+      size: isOthersProduct() ? "N/A" : selectedSizeData?.size || "",
       qty: 1,
       image: product.images[0],
       price: finalPrice.toFixed(2),
     };
-    
+
     addToCartOptimistic(newItem);
 
     setAddingToCart(true);
     try {
-      const response = await fetch('/api/cart/add', {
-        method: 'POST',
+      const response = await fetch("/api/cart/add", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           productId: product.id,
-          size: isOthersProduct() ? 'N/A' : (selectedSizeData?.size || ''),
+          size: isOthersProduct() ? "N/A" : selectedSizeData?.size || "",
           quantity: 1,
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to add to cart');
+        throw new Error("Failed to add to cart");
       }
 
       // Refresh cart to get the actual server state
       await refreshCart();
     } catch (error) {
-      console.error('Error adding to cart:', error);
-      toast.error('Failed to add to cart');
+      console.error("Error adding to cart:", error);
+      toast.error("Failed to add to cart");
       // Refresh cart to revert optimistic update on error
       await refreshCart();
     } finally {
@@ -288,9 +290,11 @@ const Page = (props: { params: { id: string; locale: string } }) => {
               {/* Size and Price Section */}
               <div className="flex flex-col gap-2 mb-4">
                 {!isOthersProduct() && (
-                  <div className="flex items-center gap-2">
-                    <span className="text-[18px] font-semibold">{getTranslation("product.size", "Size")}:</span>
-                    <div className="flex gap-2">
+                  <div className="flex flex-col items-start gap-2">
+                    <span className="text-[18px] font-semibold">
+                      {getTranslation("product.size", "Size")}:
+                    </span>
+                    <div className="grid grid-cols-3 gap-2">
                       {product.sizes?.map((size) => (
                         <button
                           key={size.id}
@@ -308,7 +312,9 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                   </div>
                 )}
                 <div className="flex items-center gap-2">
-                  <span className="text-[18px] font-semibold">{getTranslation("product.price", "Price")}:</span>
+                  <span className="text-[18px] font-semibold">
+                    {getTranslation("product.price", "Price")}:
+                  </span>
                   <span className="text-[20px] font-bold text-[#438c71]">
                     ₾{getDiscountedPrice().toFixed(2)}
                   </span>
@@ -411,28 +417,32 @@ const Page = (props: { params: { id: string; locale: string } }) => {
 
               {/* Add to Cart Button */}
               {session && (
-              <div className="pt-1">
-                <Button  
-                  onClick={handleAddToCart}
-                  disabled={(!isOthersProduct() && !selectedSize) || addingToCart}
-                  className={`w-[50%] px-4 py-2 text-[15px] md:text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors ${
-                    (isOthersProduct() || selectedSize) && !addingToCart
-                      ? "bg-[#438c71] text-white"
-                      : "bg-gray-400 cursor-not-allowed"
-                  }`}
-                >
-                  <span>
-                    {addingToCart 
-                      ? "Adding..." 
-                      : getTranslation("product.addToCart", "Add to Cart")
+                <div className="pt-1">
+                  <Button
+                    onClick={handleAddToCart}
+                    disabled={
+                      (!isOthersProduct() && !selectedSize) || addingToCart
                     }
-                  </span>
-                </Button>
-              </div>
+                    className={`w-[50%] px-4 py-2 text-[15px] md:text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors ${
+                      (isOthersProduct() || selectedSize) && !addingToCart
+                        ? "bg-[#438c71] text-white"
+                        : "bg-gray-400 cursor-not-allowed"
+                    }`}
+                  >
+                    <span>
+                      {addingToCart
+                        ? "Adding..."
+                        : getTranslation("product.addToCart", "Add to Cart")}
+                    </span>
+                  </Button>
+                </div>
               )}
               {!session && (
                 <div className="pt-1">
-                  <Button  variant="outline" className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors">
+                  <Button
+                    variant="outline"
+                    className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+                  >
                     <Link href="/sign-in">Login to add to cart</Link>
                   </Button>
                 </div>
@@ -449,11 +459,13 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                   {localizedDescription}
                 </p>
               </div>
-        <SimilarProducts currentProductId={id} category={product.category} />
+              <SimilarProducts
+                currentProductId={id}
+                category={product.category}
+              />
             </div>
           </div>
         </div>
-
       </div>
     </>
   );
