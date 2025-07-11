@@ -10,6 +10,7 @@ import { auth } from "../../../auth";
 import { getMessages } from "next-intl/server";
 import { Toaster } from 'sonner';
 import { CartProvider } from "@/lib/context/CartContext";
+import SideLogo from "@/components/SideLogo";
 
 
 export const metadata: Metadata = {
@@ -51,6 +52,7 @@ export default async function RootLayout({
             <CartProvider>
               <Navbar />
               {children}
+              <SideLogo />
               <Footer />
             
               <Toaster 

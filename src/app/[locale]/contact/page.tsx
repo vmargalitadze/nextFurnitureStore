@@ -281,19 +281,19 @@ function ContactPage() {
                       </svg>
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-800 mb-1">
+                      <h3 className="font-semibold  text-gray-800 mb-1">
                         {t("info.locations")}
                       </h3>
-                      <p className="text-gray-600 text-[16px]">
+                      <p className="text-orange-600 text-[16px]">
                         {t("info.kobuleti")}
                       </p>
-                      <p className="text-gray-600 text-[16px]">
+                      <p className="text-orange-600 text-[16px]">
                         {t("info.kutaisi")}
                       </p>
-                      <p className="text-gray-600 text-[16px]">
+                      <p className="text-orange-600 text-[16px]">
                         {t("info.tbilisi")}
                       </p>
-                      <p className="text-gray-600 text-[16px]">
+                      <p className="text-orange-600 text-[16px]">
                         {t("info.batumi")}
                       </p>
                     </div>

@@ -2,8 +2,7 @@
 import BrandSlider from "@/components/BrandSlider";
 import Categories from "@/components/Categories";
 import ProductList from "@/components/ProductList";
-import SideLogo from "@/components/SideLogo";
-import Hero from "@/components/Slider";
+
 import React, { useState, Suspense, useEffect } from "react";
 import { getAllProducts } from "@/lib/actions/actions";
 import Slider from "@/components/Slider";
@@ -37,9 +36,7 @@ const HomePage = () => {
         <Suspense fallback={<LoadingSpinner />}>
           <Categories />
         </Suspense>
-        <Suspense fallback={<LoadingSpinner />}>
-          <SideLogo />
-        </Suspense>
+      
         <div className="">
           <Suspense fallback={<LoadingSpinner />}>
             <ProductList />

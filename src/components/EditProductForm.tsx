@@ -116,15 +116,14 @@ export default function EditProductForm({ productId }: EditProductFormProps) {
   const onSubmit = async (data: EditProductFormValues) => {
     try {
       setError(null);
-      console.log("Form data being submitted:", data);
-      console.log("Popular field value:", data.popular);
+    
       
       const res = await updateProduct({
         ...data,
         images: data.images.filter((url: any): url is string => typeof url === "string"),
       });
 
-      console.log("Update response:", res);
+    
 
       if (res.success) {
         router.push("/adminall");

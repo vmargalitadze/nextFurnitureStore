@@ -342,12 +342,7 @@ function PageContentWrapper() {
   // Apply initial filters when products load or URL params change
   useEffect(() => {
     if (products.length > 0) {
-      console.log("Applying filters:", {
-        category,
-        brand,
-        query,
-        productsCount: products.length,
-      });
+    
 
       // Parse multiple categories and brands from comma-separated values
       const selectedCategories = category
@@ -376,19 +371,10 @@ function PageContentWrapper() {
           product.brand.toLowerCase().includes(query.toLowerCase()) ||
           product.category.toLowerCase().includes(query.toLowerCase());
 
-        if (query && !matchesQuery) {
-          console.log(
-            "Product filtered out by query:",
-            product.title,
-            "Query:",
-            query
-          );
-        }
+     
 
         return matchesCategory && matchesBrand && matchesQuery;
-      });
-      console.log("Filtered products count:", filtered.length);
-      setFilteredProducts(filtered);
+      });  setFilteredProducts(filtered);
     }
   }, [products, category, brand, query]);
 
@@ -497,7 +483,7 @@ function PageContentWrapper() {
               <select
                 value={sortBy}
                 onChange={(e) => {
-                  console.log("Sort changed to:", e.target.value); // Debug log
+              
                   setSortBy(e.target.value);
                 }}
                 className="px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all bg-white font-medium"
