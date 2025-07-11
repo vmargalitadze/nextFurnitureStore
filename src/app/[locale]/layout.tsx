@@ -14,7 +14,7 @@ import SideLogo from "@/components/SideLogo";
 
 
 export const metadata: Metadata = {
-  title: "Store Dev E-Commerce Application",
+  title: "Kipiani store",
   description: "A complete e-commerce application with Next.js and Wix",
   other: {
     "preload-images": "true",
@@ -39,6 +39,8 @@ export default async function RootLayout({
   return (
     <html lang={params.locale}>
       <head>
+        {/* Favicon */}
+        <link rel="icon" type="image/png" href="/logo.png" />
         {/* Preload critical images for better performance */}
         <link rel="preload" as="image" href="/slider/1.jpg" />
         <link rel="preload" as="image" href="/slider/2.jpg" />
