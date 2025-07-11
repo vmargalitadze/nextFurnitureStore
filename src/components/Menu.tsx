@@ -6,6 +6,7 @@ import { useState } from "react";
 import LocaleSwitcher from "./switcher";
 import { useTranslations } from "next-intl";
 import { useSession } from "next-auth/react";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 const Menu = () => {
   const [open, setOpen] = useState(false);
@@ -46,7 +47,7 @@ const Menu = () => {
               </Link>
             )}
             
-            <LocaleSwitcher onOpen={handleLanguageSwitcherOpen} />
+            <LanguageSwitcher />
           </div>
         </div>
       )}

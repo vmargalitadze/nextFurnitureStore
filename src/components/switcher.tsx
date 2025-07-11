@@ -127,10 +127,7 @@ export default function LocaleSwitcher({ onOpen }: { onOpen?: () => void }) {
   };
 
   const handleChange = (nextLocale: string) => {
-    console.log('Switching to locale:', nextLocale);
-    console.log('Current pathname:', pathname);
-    console.log('Current search params:', window.location.search);
-    console.log('Current full URL:', window.location.href);
+
     setOpen(false);
     setActiveDropdown(null);
     
