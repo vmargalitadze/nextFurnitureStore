@@ -14,14 +14,14 @@ import Image from 'next/image';
 
 const languages = [
   {
-    code: 'en',
-    label: 'English',
-    flag: '/America.png',
-  },
-  {
     code: 'ge',
     label: 'ქართული',
     flag: '/Georgia.png',
+  },
+  {
+    code: 'en',
+    label: 'English',
+    flag: '/America.png',
   },
 ];
 
