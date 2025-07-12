@@ -20,6 +20,7 @@ const LanguageSwitcher = () => {
     });
   };
 
+
   return (
     <button
       onClick={toggleLocale}
