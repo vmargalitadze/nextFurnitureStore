@@ -43,12 +43,12 @@ const Hero = () => {
 
              
               <div className="space-y-4">
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-light text-gray-900 leading-tight">
-                  Elegant
+                <h1 className=" text-3xl md:text-5xl  font-light text-gray-900 leading-tight">
+                {t('title2')}
                   <span className="block font-bold bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 bg-clip-text text-transparent leading-tight">
-  Living
+  {t('title3')}
 </span>
-                  Spaces
+                  {t('title4')}
                 </h1>
               </div>
 

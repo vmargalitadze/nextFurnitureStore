@@ -158,15 +158,14 @@ const OrderConfirmationPage = () => {
         <div className="max-w-2xl mx-auto text-center">
           <div className="mb-8">
             <h1 className="text-2xl font-bold text-gray-900 mb-2">
-              Order Not Found
+              {t('orderConfirmation.orderNotFound')}
             </h1>
             <p className="text-gray-600 mb-8">
-              {error ||
-                "Unable to load order details. Please check your order history."}
+              {error || t('orderConfirmation.orderNotFoundMessage')}
             </p>
             <Link href="/">
               <Button className="bg-[#438c71] hover:bg-[#3a7a5f]">
-                Continue Shopping
+                {t('orderConfirmation.continueShopping')}
               </Button>
             </Link>
           </div>
@@ -183,11 +182,11 @@ const OrderConfirmationPage = () => {
         <div className="text-center mb-8">
           <CheckCircle className="mx-auto h-16 w-16 text-green-500 mb-4" />
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Order Confirmed!
+            {t('orderConfirmation.title')}
           </h1>
-          <p className="text-gray-600">Thank you for your purchase.</p>
+          <p className="text-gray-600">{t('orderConfirmation.thankYou')}</p>
           <p className="text-gray-600">
-            We have received your order and will begin processing it right away.
+            {t('orderConfirmation.processingMessage')}
           </p>
         </div>
 
@@ -195,29 +194,29 @@ const OrderConfirmationPage = () => {
           <CardHeader>
             <CardTitle className="flex text-[20px] font-bold items-center">
               <Package className="h-5 w-5 mr-2" />
-              Order Details
+              {t('orderConfirmation.orderDetails')}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-sm text-gray-600">Order Number</p>
+                <p className="text-sm text-gray-600">{t('orderConfirmation.orderNumber')}</p>
                 <p className="font-semibold">
                   #{order.id.slice(-8).toUpperCase()}
                 </p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">Order Date</p>
+                <p className="text-sm text-gray-600">{t('orderConfirmation.orderDate')}</p>
                 <p className="font-semibold">{formatDate(order.createdAt)}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">Estimated Delivery</p>
+                <p className="text-sm text-gray-600">{t('orderConfirmation.estimatedDelivery')}</p>
                 <p className="font-semibold">{getEstimatedDelivery()}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-600">Payment Status</p>
+                <p className="text-sm text-gray-600">{t('orderConfirmation.paymentStatus')}</p>
                 <p className="font-semibold text-green-600">
-                  {order.isPaid ? "Paid" : "Pending"}
+                  {order.isPaid ? t('orderConfirmation.paid') : t('orderConfirmation.pending')}
                 </p>
               </div>
             </div>
@@ -228,7 +227,7 @@ const OrderConfirmationPage = () => {
           <CardHeader>
             <CardTitle className="flex text-[20px] font-bold items-center">
               <User className="h-5 w-5 mr-2" />
-              Customer Information
+              {t('orderConfirmation.customerInformation')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -261,7 +260,7 @@ const OrderConfirmationPage = () => {
           <CardHeader>
             <CardTitle className="flex text-[20px] font-bold items-center">
               <Truck className="h-5 w-5 mr-2" />
-              Delivery Information
+              {t('orderConfirmation.deliveryInformation')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -293,7 +292,7 @@ const OrderConfirmationPage = () => {
           <CardHeader>
             <CardTitle className="flex text-[20px] font-bold items-center">
               <Package className="h-5 w-5 mr-2" />
-              Order Summary
+              {t('orderConfirmation.orderSummary')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -312,7 +311,7 @@ const OrderConfirmationPage = () => {
                       {item.title}
                     </h4>
                     <p className="text-xs text-gray-600">
-                      Quantity: {item.qty}
+                      {t('orderConfirmation.quantity')}: {item.qty}
                     </p>
                   </div>
                   <span className="text-sm font-semibold">
@@ -322,14 +321,14 @@ const OrderConfirmationPage = () => {
               ))}
               <div className="border-t pt-4 space-y-2">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Subtotal</span>
+                  <span className="text-gray-600">{t('orderConfirmation.subtotal')}</span>
                   <span className="font-semibold">
                     {formatPrice(order.itemsPrice)}
                   </span>
                 </div>
 
                 <div className="flex justify-between text-lg font-bold border-t pt-2">
-                  <span>Total</span>
+                  <span>{t('orderConfirmation.total')}</span>
                   <span className="text-[#438c71]">
                     {formatPrice(order.totalPrice)}
                   </span>
@@ -343,24 +342,23 @@ const OrderConfirmationPage = () => {
           <Link href="/" className="flex-1">
             <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors">
               <Home className="h-4 w-4 mr-2" />
-              Continue Shopping
+              {t('orderConfirmation.continueShopping')}
             </Button>
           </Link>
           <Link href="/profile" className="flex-1">
             <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors">
               <ShoppingBag className="h-4 w-4 mr-2" />
-              View Orders
+              {t('orderConfirmation.viewOrders')}
             </Button>
           </Link>
         </div>
 
         <div className="mt-8 text-center">
           <p className="text-sm text-gray-600">
-            You will receive an email confirmation with your order details
-            shortly.
+            {t('orderConfirmation.emailConfirmation')}
           </p>
           <p className="text-sm text-gray-600 mt-2">
-            If you have any questions, please contact our customer support.
+            {t('orderConfirmation.contactSupport')}
           </p>
         </div>
       </div>

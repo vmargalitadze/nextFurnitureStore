@@ -229,6 +229,7 @@
     "yourCity": "Your City",
     "deliveryPricingNote": "Delivery to your city is free. Other locations have standard delivery fees."
   },
+
   "productForm": {
     "title": "Add Product",
 
@@ -385,7 +386,10 @@
     "title": "Premium Lounge Sofa Chair",
     "description": "We offer you an extremely comfortable lounge sofa chair. Taking the time to relax at home or the office will be more appealing than ever when you choose a modern lounge sofa chair.",
     "cta": "Let's Shop Now",
-    "filter": "Filter"
+    "filter": "Filter",
+    "title2": " Wake Up in",
+    "title3": "Comfort",
+    "title4": "Every Morning."
   },
   "productList": {
     "title": "Our",

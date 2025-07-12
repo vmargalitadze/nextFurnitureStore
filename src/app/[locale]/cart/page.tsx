@@ -196,7 +196,7 @@ const CartPage = () => {
             <Link href="/list">
               <Button
                 variant="outline"
-                className="w-[30%] px-4  mb-10  py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors "
+                className="w-full md:w-[30%] px-4  mb-10  py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors "
               >
                 {t("cart.continueShopping")}
               </Button>
