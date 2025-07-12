@@ -13,6 +13,7 @@ const Menu = () => {
   const t = useTranslations("navitems");
   const { data: session } = useSession();
   const handleClose = () => setOpen(false);
+console.log('aq');
 
   // Callback to close menu when language switcher opens
   const handleLanguageSwitcherOpen = () => {
