@@ -19,6 +19,7 @@ const LanguageSwitcher = () => {
       router.replace(`${newPath}${query ? `?${query}` : ''}`);
     });
   };
+console.log('new');
 
   return (
     <button
