@@ -31,13 +31,13 @@ export default async function RootLayout({
   params,
 }: Readonly<{
   children: React.ReactNode;
-  params: { locale: string };
+  params: { locale: 'ge' | 'en' };
 }>) {
   const session = await auth();
   const messages = await getMessages();
   
   return (
-    <html lang={params.locale}>
+    <html lang={params.locale} data-locale={params.locale}>
       <head>
         {/* Favicon */}
         <link rel="icon" type="image/png" href="/logo.png" />
