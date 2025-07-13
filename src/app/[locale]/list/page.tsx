@@ -217,7 +217,7 @@ function PageContentWrapper() {
     const aPriceRange = getProductPriceRange(a);
     const bPriceRange = getProductPriceRange(b);
 
-  
+
 
     switch (sortBy) {
       case "price-low":
@@ -342,7 +342,7 @@ function PageContentWrapper() {
   // Apply initial filters when products load or URL params change
   useEffect(() => {
     if (products.length > 0) {
-    
+
 
       // Parse multiple categories and brands from comma-separated values
       const selectedCategories = category
@@ -371,10 +371,10 @@ function PageContentWrapper() {
           product.brand.toLowerCase().includes(query.toLowerCase()) ||
           product.category.toLowerCase().includes(query.toLowerCase());
 
-     
+
 
         return matchesCategory && matchesBrand && matchesQuery;
-      });  setFilteredProducts(filtered);
+      }); setFilteredProducts(filtered);
     }
   }, [products, category, brand, query]);
 
@@ -450,7 +450,7 @@ function PageContentWrapper() {
                     {sortedProducts.length}
                   </span>{" "}
                   {t("products")}
-                
+
                 </p>
 
                 {activeFiltersCount > 0 && (
@@ -460,62 +460,98 @@ function PageContentWrapper() {
                 )}
               </div>
             </div>
-
-            <div className="flex justify-center  flex-col sm:flex-row items-center gap-4">
-              <div className="flex items-center gap-2">
-                <svg
-                  className="w-5 h-5 text-gray-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M3 4h18M3 8h18M3 12h18M3 16h18"
-                  />
-                </svg>
-                <label className="text-[18px] font-medium text-gray-700">
-                  {t("sortBy")}
-                </label>
-              </div>
-              <select
-                value={sortBy}
-                onChange={(e) => {
-              
-                  setSortBy(e.target.value);
-                }}
-                className="px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all bg-white font-medium"
-              >
-                <option value="newest">{t("newest")}</option>
-                <option value="price-low">{t("priceLowToHigh")}</option>
-                <option value="price-high">{t("priceHighToLow")}</option>
-                <option value="name">{t("nameAZ")}</option>
-              </select>
-              {query && (
-                <div className="container  flex justify-end">
-                  <Button
-                    onClick={() => {
-                      const basePath = `/${locale}/list`;
-                      router.push(basePath); // Remove query and page
-                    }}
-                   className="w-full flex mx-auto items-center justify-center gap-3 px-4  py-1 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+            <div className="hidden md:block ">
+              <div className="flex justify-center  flex-col sm:flex-row items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <svg
+                    className="w-5 h-5 text-gray-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
-                    <X className="w-4 h-4" />
-                    {t("clearFilters")}
-                  </Button>
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M3 4h18M3 8h18M3 12h18M3 16h18"
+                    />
+                  </svg>
+                  <label className="text-[18px] font-medium text-gray-700">
+                    {t("sortBy")}
+                  </label>
                 </div>
-              )}
-              {shouldShowSidebar && (
-                <Button
-                  variant="outline"
-                  onClick={handleClearFilters}
-                  className="w-full flex mx-auto items-center justify-center gap-3 px-4  py-1 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+                <select
+                  value={sortBy}
+                  onChange={(e) => {
+
+                    setSortBy(e.target.value);
+                  }}
+                  className="px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all bg-white font-medium"
                 >
-                  <Trash2 size={16} /> {t("clearFilters")}
-                </Button>
-              )}
+                  <option value="newest">{t("newest")}</option>
+                  <option value="price-low">{t("priceLowToHigh")}</option>
+                  <option value="price-high">{t("priceHighToLow")}</option>
+                  <option value="name">{t("nameAZ")}</option>
+                </select>
+                {query && (
+                  <div className="container  flex justify-end">
+                    <Button
+                      onClick={() => {
+                        const basePath = `/${locale}/list`;
+                        router.push(basePath); // Remove query and page
+                      }}
+                      className="w-full flex mx-auto items-center justify-center gap-3 px-4  py-1 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+                    >
+                      <X className="w-4 h-4" />
+                      {t("clearFilters")}
+                    </Button>
+                  </div>
+                )}
+                {shouldShowSidebar && (
+                  <Button
+                    variant="outline"
+                    onClick={handleClearFilters}
+                    className="w-full flex mx-auto items-center justify-center gap-3 px-4  py-1 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+                  >
+                    <Trash2 size={16} /> {t("clearFilters")}
+                  </Button>
+                )}
+              </div>
+
+            </div>
+            <div className="block md:hidden">
+              <div className="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto">
+                <div className="flex items-center gap-2">
+                  <svg
+                    className="w-5 h-5 text-gray-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M3 4h18M3 8h18M3 12h18M3 16h18"
+                    />
+                  </svg>
+                  <label className="text-base lg:text-lg font-medium text-gray-700 whitespace-nowrap">
+                    {t("sortBy")}
+                  </label>
+                </div>
+                <select
+                  value={sortBy}
+                  onChange={(e) => {
+                    setSortBy(e.target.value);
+                  }}
+                  className="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all bg-white font-medium text-sm lg:text-base"
+                >
+                  <option value="newest">{t("newest")}</option>
+                  <option value="price-low">{t("priceLowToHigh")}</option>
+                  <option value="price-high">{t("priceHighToLow")}</option>
+                  <option value="name">{t("nameAZ")}</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
@@ -553,7 +589,7 @@ function PageContentWrapper() {
               <SideBar
                 isOpen={sidebarOpen}
                 toggleSidebar={handleViewSidebar}
-                onFilterChange={() => {}}
+                onFilterChange={() => { }}
                 ref={sidebarRef}
               />
             </>
