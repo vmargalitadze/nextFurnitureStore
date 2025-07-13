@@ -57,6 +57,7 @@ function ProductHelper({ items, sliderId }: ProductListProps) {
                     alt={getLocalizedTitle(item, locale)}
                     fill
                     className="object-cover"
+                    unoptimized
                   />
                 </div>
               </Link>

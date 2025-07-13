@@ -80,6 +80,7 @@ function ProductImage({ image }: { image: string[] }) {
                 }`}
                 priority
                 onLoad={handleImageLoad}
+                unoptimized
               />
 
               {/* Zoom Overlay */}
@@ -150,6 +151,7 @@ function ProductImage({ image }: { image: string[] }) {
                     alt={`Thumbnail ${index + 1}`}
                     fill
                     className="object-cover"
+                    unoptimized
                   />
 
                   {/* Active Indicator */}
@@ -179,6 +181,7 @@ function ProductImage({ image }: { image: string[] }) {
               width={800}
               height={600}
               className="w-full  object-contain rounded-lg"
+              unoptimized
             />
             <Button  variant="outline"
               onClick={() => setIsZoomed(false)}
