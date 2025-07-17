@@ -461,7 +461,7 @@ function PageContentWrapper() {
               </div>
             </div>
             <div className="hidden md:block ">
-              <div className="flex justify-center  flex-col sm:flex-row items-center gap-4">
+              <div className="flex justify-center   flex-col sm:flex-row items-center gap-4">
                 <div className="flex items-center gap-2">
                   <svg
                     className="w-5 h-5 text-gray-600"
@@ -595,7 +595,7 @@ function PageContentWrapper() {
             </>
           )}
 
-          <div className={`${shouldShowSidebar ? "lg:w-3/4" : "w-full"}`}>
+          <div className={`${shouldShowSidebar ? "lg:w-full" : "w-full"}`}>
             {transformedProducts.length > 0 ? (
               <>
                 <div className="mt-0">

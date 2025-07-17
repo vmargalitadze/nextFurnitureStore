@@ -10,10 +10,16 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
+import SideBar from "./Sidebar";
 
 export default function Categories() {
   const t = useTranslations("categories");
   const locale = useLocale();
+  const [sidebarOpen, setSideBarOpen] = useState(false);
+
+  const handleViewSidebar = () => {
+    setSideBarOpen(!sidebarOpen);
+  };
   const [productCounts, setProductCounts] = useState<Record<string, number>>(
     {}
   );
@@ -27,11 +33,11 @@ export default function Categories() {
       try {
         setIsLoading(true);
         const products = await getAllProducts();
-        
+
         // Create a mapping from database category values to CategoriesList types
         const categoryMapping: Record<string, string> = {
           'MATTRESS': 'mattress',
-          'PILLOW': 'pillow', 
+          'PILLOW': 'pillow',
           'QUILT': 'quilt',
           'PAD': 'quilt', // Map PAD to quilt since there's no PAD in CategoriesList
           'bundle': 'bundle',
@@ -40,7 +46,7 @@ export default function Categories() {
         };
 
         const counts: Record<string, number> = {};
-        
+
         // Initialize counts for all categories in CategoriesList
         CategoriesList.forEach(category => {
           counts[category.type] = 0;
@@ -50,7 +56,7 @@ export default function Categories() {
         products.forEach((product: any) => {
           const dbCategory = product.category;
           const mappedCategory = categoryMapping[dbCategory];
-          
+
           if (mappedCategory && counts.hasOwnProperty(mappedCategory)) {
             counts[mappedCategory]++;
           } else {
@@ -61,8 +67,8 @@ export default function Categories() {
           }
         });
 
-       
-        
+
+
         setProductCounts(counts);
       } catch (error) {
         console.error("Error fetching product counts:", error);
@@ -107,11 +113,22 @@ export default function Categories() {
 
   return (
     <>
-     
+
       <div className="hidden  md:block">
         <div className="container mx-auto">
           <div className="max-w-7xl pt-16 mx-auto">
-            <div className="flex pt-16 flex-wrap -mx-2">
+            <div className="pt-16 mb-10">
+
+              <button
+                onClick={handleViewSidebar}
+                className="w-[17%] h-[50px]  px-4 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+              >
+
+                {t('filter')}
+              </button>
+            </div>
+            <div className="flex  flex-wrap -mx-2">
+              <SideBar isOpen={sidebarOpen} toggleSidebar={handleViewSidebar} onFilterChange={() => { }} />
               {filteredCategories.map((category, index) => (
                 <div
                   key={category.id}
@@ -148,7 +165,18 @@ export default function Categories() {
       {/* Mobile View – Swiper */}
       <div className="md:hidden">
         <div className="container pt-10 mx-auto">
-          <div className="relative pt-10 mt-5">
+          <div className="pt-14">
+
+          <button
+            onClick={handleViewSidebar}
+            className="w-[40%] h-[50px] ml-2 px-4 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+          >
+
+            {t('filter')}
+          </button>
+          </div>
+          <SideBar isOpen={sidebarOpen} toggleSidebar={handleViewSidebar} onFilterChange={() => { }} />
+          <div className="relative mt-5">
             <Swiper
               modules={[Pagination]}
               slidesPerView={1}

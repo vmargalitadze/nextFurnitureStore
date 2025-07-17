@@ -211,7 +211,7 @@ const CartPage = () => {
     <div className="container min-h-screen mx-auto px-2 sm:px-4 py-4 sm:py-8">
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col sm:flex-row items-center mt-[60px] sm:mt-[100px] justify-between mb-6 sm:mb-8 gap-4 sm:gap-0">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 w-full sm:w-auto text-center sm:text-left">
+          <h1 className="text-2xl mt-5 md:mt-0 sm:text-3xl font-bold text-gray-900 w-full sm:w-auto text-center sm:text-left">
             {t("cart.title")}
           </h1>
           <Button

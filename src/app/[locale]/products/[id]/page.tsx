@@ -290,20 +290,19 @@ const Page = (props: { params: { id: string; locale: string } }) => {
               {/* Size and Price Section */}
               <div className="flex flex-col gap-2 mb-4">
                 {!isOthersProduct() && (
-                  <div className="flex flex-col items-start gap-2">
+                  <div className="flex flex-row items-start gap-2">
                     <span className="text-[18px] font-semibold">
                       {getTranslation("product.size", "Size")}:
                     </span>
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                       {product.sizes?.map((size) => (
                         <button
                           key={size.id}
                           onClick={() => setSelectedSize(size.id)}
-                          className={`px-4 py-1 rounded-lg font-bold text-[18px] ${
-                            selectedSize === size.id
+                          className={`px-3 py-1 rounded-lg font-bold text-[18px] ${selectedSize === size.id
                               ? "bg-[#438c71] text-white"
                               : "bg-white text-[#438c71]"
-                          }`}
+                            }`}
                         >
                           {formatSizeDisplay(size.size)}
                         </button>
@@ -362,9 +361,27 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                       <span className="text-sm md:text-[18px] text-gray-600">
                         {getTranslation(
                           "locations.batumiAddress",
-                          "Batumi, A. Pushkin 117"
+                          " A. Pushkin 117"
                         )}
                       </span>
+
+                    </div>
+                  )}
+                  {product?.batumi && (
+                    <div className="flex items-center justify-between p-2 bg-[#f8f5f0] rounded-lg border border-gray-200">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <span className="text-sm md:text-[18px] sm:text-base font-medium text-gray-900">
+                          {getTranslation("locations.batumi", "Batumi")}
+                        </span>
+                      </div>
+                      <span className="text-sm md:text-[18px] text-gray-600">
+                        {getTranslation(
+                          "locations.batumiAddress2",
+                          " A. Pushkin 44"
+                        )}
+                      </span>
+
                     </div>
                   )}
 
@@ -423,11 +440,10 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                     disabled={
                       (!isOthersProduct() && !selectedSize) || addingToCart
                     }
-                    className={`w-[50%] px-4 py-2 text-[15px] md:text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors ${
-                      (isOthersProduct() || selectedSize) && !addingToCart
+                    className={`w-full md:w-[50%] px-4 py-2 text-[20px] md:text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors ${(isOthersProduct() || selectedSize) && !addingToCart
                         ? "bg-[#438c71] text-white"
                         : "bg-gray-400 cursor-not-allowed"
-                    }`}
+                      }`}
                   >
                     <span>
                       {addingToCart
@@ -452,10 +468,10 @@ const Page = (props: { params: { id: string; locale: string } }) => {
           <div className="container mx-auto mt-6">
             <div className="max-w-7xl mx-auto">
               <div className="pb-2">
-                <h3 className="text-[20px] text-center sm:text-[20px] font-semibold text-gray-900 mb-2">
+                <h3 className="text-[18px] text-center sm:text-[18px] font-semibold text-gray-900 mb-2">
                   {getTranslation("product.description", "Description")}
                 </h3>
-                <p className="text-[18px] sm:text-[16px] leading-relaxed text-gray-700  md:line-clamp-none">
+                <p className="text-[15px] sm:text-[16px] leading-relaxed text-gray-700  md:line-clamp-none">
                   {localizedDescription}
                 </p>
               </div>

@@ -375,7 +375,8 @@
     "allCategories": "All Categories",
     "products": "Products",
     "viewAll": "View All Categories",
-    "viewCategory": "View Category"
+    "viewCategory": "View Category",
+    "filter": "Filter"
   },
 
   "brands": {
@@ -430,9 +431,10 @@
       "tbilisi": "Tbilisi",
       "batumi": "Batumi",
       "qutaisi": "Kutaisi",
-      "tbilisiAddress": "Tbilisi, T. Eristavi 1",
-      "batumiAddress": "Batumi, A. Pushkin 115/117",
-      "qutaisiAddress": "Kutaisi, Z. Purtzeladze 15"
+      "tbilisiAddress": " T. Eristavi 1",
+      "batumiAddress": " A. Pushkin 115/117",
+      "batumiAddress2": " A. Pushkin 44",
+      "qutaisiAddress": " Z. Purtzeladze 15"
     },
     "similarProducts": {
       "title": "Similar Products",

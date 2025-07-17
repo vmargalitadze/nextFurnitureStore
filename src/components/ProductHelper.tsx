@@ -109,7 +109,7 @@ function ProductHelper({ items, sliderId }: ProductListProps) {
         >
           {items.map((item) => (
             <SwiperSlide key={item.id}>
-              <div className="py-3">
+              <div className="">
                 <div className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
                   <Link href={`/products/${item.id}`}>
                     <div className="relative h-48 overflow-hidden">
@@ -118,6 +118,7 @@ function ProductHelper({ items, sliderId }: ProductListProps) {
                         alt={getLocalizedTitle(item, locale)}
                         fill
                         className="object-cover"
+                        unoptimized
                       />
                     </div>
                   </Link>
