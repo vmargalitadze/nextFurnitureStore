@@ -63,7 +63,7 @@
       "kutaisi": "Kutaisi: I. Chavchavadze 51",
       "tbilisi": "Tbilisi: T. Eristavi 1",
       "batumi": "Batumi: A. Pushkin 115/117",
-      
+      "batumi3": "A. Pushkin 44",
       "phoneNumber": "123-456-7890",
       "locations": "Locations",
       "call": "Phone No",
@@ -502,10 +502,15 @@
     "copyright": "© 2024 Furniture Store. All rights reserved.",
     "privacy": "Privacy",
     "terms": "Terms",
-    "kobuleti": "Kobuleti: Sh. Rustaveli 151",
-    "kutaisi": "Kutaisi: I. Chavchavadze 51",
-    "tbilisi": "Tbilisi: T. Eristavi 1",
-    "batumi": "Batumi: A. Pushkin 115/117"
+    "kobuleti": "Kobuleti: ",
+    "kutaisi": "Kutaisi: ",
+    "tbilisi": "Tbilisi:",
+    "tbilisiAddress": " T. Eristavi 1",
+    "kutaisiAddress": " I. Chavchavadze 51",
+    "kobuletiAddress": " Sh. Rustaveli 151",
+    "batumiAddress": " A. Pushkin 115/117",
+    "batumiAddress2": "A. Pushkin 44",
+    "batumi": "Batumi:"
    
   },
   "common": {

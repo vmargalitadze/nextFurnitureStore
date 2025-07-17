@@ -10,7 +10,7 @@ import { Loader2, CheckCircle, XCircle } from "lucide-react";
 
 function ContactPage() {
   const t = useTranslations("contact");
-  
+
   // Form state
   const [formData, setFormData] = useState({
     fullName: "",
@@ -19,7 +19,7 @@ function ContactPage() {
     subject: "",
     message: ""
   });
-  
+
   // Form submission state
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -192,7 +192,7 @@ function ContactPage() {
                         <label className="text-[18px] font-bold text-gray-700 tracking-wide">
                           {t("form.subject")} *
                         </label>
-                        <select 
+                        <select
                           name="subject"
                           value={formData.subject}
                           onChange={handleInputChange}
@@ -233,7 +233,7 @@ function ContactPage() {
                       />
                     </div>
 
-                    <Button 
+                    <Button
                       type="submit"
                       disabled={isSubmitting}
                       className="w-[30%] mx-auto flex justify-center items-center px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
@@ -296,6 +296,9 @@ function ContactPage() {
                       <p className="text-orange-600 text-[16px]">
                         {t("info.batumi")}
                       </p>
+                      <p className="text-orange-600 text-[16px]">
+                        {t("info.batumi3")}
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -353,20 +356,46 @@ function ContactPage() {
                       </svg>
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-800 mb-1">
+                      <h3 className="font-semibold  mb-1">
                         {t("info.call")}
                       </h3>
-                      <a
-                        href="tel:+995557394374"
-                        className="text-orange-600 hover:text-orange-700 text-[16px] transition-colors"
-                      >
-                        {t("info.batumi2")}: <br /> +995557394374, <br />{" "}
-                        +995568613022 <br />
-                      
-                        {t("info.kutaisi2")}: <br /> + 995514079898 <br />
-                        {t("info.kobuleti2")}: <br /> + 995555244403 <br /> +
-                        995597808047 <br />
-                      </a>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        {/* Left Column: Batumi & Kobuleti */}
+                        <div className="space-y-6">
+                          <div>
+                            <h3 className="text-[16px] text-orange-600 font-semibold mb-2">{t("info.batumi2")}</h3>
+                            <p className="text-orange-600">
+                              +995 557 394 374<br />
+                              +995 568 613 022
+                            </p>
+                          </div>
+                          <div>
+                            <h3 className="text-[16px] text-orange-600 font-semibold mb-2">{t("info.tbilisi2")}</h3>
+                            <p className="text-orange-600">
+                              +995 557 226 880
+                            </p>
+                          </div>
+
+
+                        </div>
+
+                        {/* Right Column: Tbilisi & Kutaisi */}
+                        <div className="space-y-6">
+                          <div>
+                            <h3 className="text-[16px] text-orange-600 font-semibold mb-2">{t("info.kobuleti2")}</h3>
+                            <p className="text-orange-600">
+                              +995 555 244 403<br />
+                              +995 597 808 047
+                            </p>
+                          </div>
+                          <div>
+                            <h3 className="text-[16px] text-orange-600 font-semibold mb-2">{t("info.kutaisi2")}</h3>
+                            <p className="text-orange-600">
+                              +995 514 079 898
+                            </p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </CardContent>

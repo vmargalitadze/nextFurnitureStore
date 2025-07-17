@@ -5,7 +5,7 @@ import ProductList from "@/components/ProductList";
 
 import React, { useState, Suspense, useEffect } from "react";
 import { getAllProducts } from "@/lib/actions/actions";
-import Slider from "@/components/Slider";
+
 
 // Loading component for Suspense boundaries
 const LoadingSpinner = () => (
@@ -27,9 +27,7 @@ const HomePage = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <div className="w-full">
-        <Slider />
-      </div>
+   
 
       {/* Main Content Area */}
       <div className="w-full">

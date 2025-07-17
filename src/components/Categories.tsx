@@ -107,17 +107,15 @@ export default function Categories() {
 
   return (
     <>
-      <h1 className=" text-3xl    flex justify-center items-center text-bold text-gray-900 leading-tight">
-        {t("title")}
-      </h1>
-      <div className="hidden mt-10 md:block">
+     
+      <div className="hidden  md:block">
         <div className="container mx-auto">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex flex-wrap -mx-2">
+          <div className="max-w-7xl pt-16 mx-auto">
+            <div className="flex pt-16 flex-wrap -mx-2">
               {filteredCategories.map((category, index) => (
                 <div
                   key={category.id}
-                  className="w-full md:w-4/12 lg:w-4/12 px-2 mb-6"
+                  className="w-full md:w-4/12 mb-10 lg:w-4/12 px-2 "
                 >
                   <div className="relative group rounded-xl overflow-hidden  shadow-lg  hover:shadow-xl transition-all duration-300">
                     <Link href={`/list?cat=${category.type}`}>
@@ -149,8 +147,8 @@ export default function Categories() {
 
       {/* Mobile View – Swiper */}
       <div className="md:hidden">
-        <div className="container mx-auto">
-          <div className="relative mt-5">
+        <div className="container pt-10 mx-auto">
+          <div className="relative pt-10 mt-5">
             <Swiper
               modules={[Pagination]}
               slidesPerView={1}
