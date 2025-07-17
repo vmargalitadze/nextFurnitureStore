@@ -170,9 +170,11 @@ export async function createProduct(data: z.infer<typeof ProductSchema>) {
         }
       }
       
-      export async function getAllProducts() {
+      export async function getAllProducts(page = 1, pageSize = 20) {
         try {
           const products = await prisma.product.findMany({
+            skip: (page - 1) * pageSize,
+            take: pageSize,
             include: {
               sizes: {
                 select: {
@@ -185,7 +187,6 @@ export async function createProduct(data: z.infer<typeof ProductSchema>) {
             orderBy: { createdAt: "desc" }
           });
         
-          // Optimize the conversion process
           return products.map((product) => ({
             ...product,
             sizes: product.sizes.map(size => ({

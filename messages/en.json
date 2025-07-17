@@ -62,7 +62,7 @@
       "kobuleti": "Kobuleti: Sh. Rustaveli 151",
       "kutaisi": "Kutaisi: I. Chavchavadze 51",
       "tbilisi": "Tbilisi: T. Eristavi 1",
-      "batumi": "Batumi: A. Pushkin 117",
+      "batumi": "Batumi: A. Pushkin 115/117",
       
       "phoneNumber": "123-456-7890",
       "locations": "Locations",
@@ -431,7 +431,7 @@
       "batumi": "Batumi",
       "qutaisi": "Kutaisi",
       "tbilisiAddress": "Tbilisi, T. Eristavi 1",
-      "batumiAddress": "Batumi, A. Pushkin 117",
+      "batumiAddress": "Batumi, A. Pushkin 115/117",
       "qutaisiAddress": "Kutaisi, Z. Purtzeladze 15"
     },
     "similarProducts": {
@@ -505,7 +505,7 @@
     "kobuleti": "Kobuleti: Sh. Rustaveli 151",
     "kutaisi": "Kutaisi: I. Chavchavadze 51",
     "tbilisi": "Tbilisi: T. Eristavi 1",
-    "batumi": "Batumi: A. Pushkin 117"
+    "batumi": "Batumi: A. Pushkin 115/117"
    
   },
   "common": {

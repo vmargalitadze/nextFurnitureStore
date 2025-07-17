@@ -28,21 +28,45 @@ const Footer = () => {
               >
                kipianistore@gmail.com
               </a>
+              <p className="text-white text-xl">
+              {t('batumi')}
+              </p>
               <a 
                 href="tel:+995557394374" 
                 className="text-white transition-colors duration-300 text-xl"
               >
                 +995557394374,
               </a>
-              <p className="text-white text-xl">
-              {t('batumi')}
-              </p>
+              <a 
+                href="tel:+995568613022" 
+                className="text-white transition-colors duration-300 text-xl"
+              >
+                +995568613022,
+              </a>
               <p className="text-white text-xl">
               {t('kobuleti')}
               </p>
+              <a 
+                href="tel:+995555244403" 
+                className="text-white transition-colors duration-300 text-xl"
+              >
+                +995555244403,
+              </a>
+              <a 
+                href="tel:+995597808047" 
+                className="text-white transition-colors duration-300 text-xl"
+              >
+                +995597808047,
+              </a>
               <p className="text-white text-xl">
               {t('kutaisi')}
               </p>
+              <a 
+                href="tel:+99551407989" 
+                className="text-white transition-colors duration-300 text-xl"
+              >
+                +99551407989,
+              </a>
             </div>
           </div>
 
