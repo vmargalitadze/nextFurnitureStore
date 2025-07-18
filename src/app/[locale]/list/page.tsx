@@ -314,14 +314,21 @@ function PageContentWrapper() {
       setLoading(true);
       const { products } = await getAllProducts();
       // Convert the data to match the Product interface
-      const productsWithDecimalPrices = products.map((product) => ({
+      const productsWithDecimalPrices = products.map((product: any) => ({
         ...product,
-        sizes:
-          product.sizes?.map((size) => ({
-            ...size,
-            price: new SimpleDecimal(size.price?.toString() || "0"),
-          })) || undefined,
-        // Handle the legacy price field if it exists
+        description: product.description ?? "",
+        descriptionEn: product.descriptionEn ?? "",
+        tbilisi: product.tbilisi ?? false,
+        batumi: product.batumi ?? false,
+        qutaisi: product.qutaisi ?? false,
+        kobuleti: product.kobuleti ?? false,
+        batumi44: product.batumi44 ?? false,
+        sizes: product.sizes
+          ? product.sizes.map((size: any) => ({
+              ...size,
+              price: new SimpleDecimal(size.price?.toString() || "0"),
+            }))
+          : [],
         price: product.price
           ? new SimpleDecimal(product.price.toString())
           : undefined,
