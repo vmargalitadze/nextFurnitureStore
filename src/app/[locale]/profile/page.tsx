@@ -250,7 +250,7 @@ export default async function ProfilePage() {
                     {user.Order.map((order: {
                       id: string;
                       createdAt: string | Date;
-                      totalPrice: number;
+                      totalPrice: any; // or Decimal if you import it
                       isPaid: boolean;
                       isDelivered: boolean;
                     }) => (
