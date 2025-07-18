@@ -48,6 +48,7 @@ interface Product {
   tbilisi: boolean;
   batumi: boolean;
   qutaisi: boolean;
+  kobuleti: boolean;
   sizes?: ProductSize[];
   price?: SimpleDecimal; // For OTHERS category products
   sales?: number;
@@ -329,7 +330,7 @@ const Page = (props: { params: { id: string; locale: string } }) => {
 
               {/* Availability */}
               <div className="pb-2">
-                <h3 className="text-[15px] md:text-[18px] sm:text-base font-semibold text-gray-900 mb-2">
+                <h3 className="text-[18px] md:text-[20px] sm:text-base font-semibold text-gray-900 mb-2">
                   {getTranslation("product.availability", "Availability")}
                 </h3>
                 <div className="space-y-1">
@@ -337,11 +338,11 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                     <div className="flex items-center justify-between p-2 bg-[#f8f5f0] rounded-lg border border-gray-200">
                       <div className="flex items-center space-x-2">
                         <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                        <span className="text-sm md:text-[18px] font-medium text-gray-900">
+                        <span className="text-[18px] md:text-[20px] font-medium text-gray-900">
                           {getTranslation("locations.tbilisi", "Tbilisi")}
                         </span>
                       </div>
-                      <span className=" text-sm md:text-[18px] text-gray-600">
+                      <span className=" text-[18px] md:text-[20px] text-gray-600">
                         {getTranslation(
                           "locations.tbilisiAddress",
                           "Tbilisi, T. Eristavi 1"
@@ -354,11 +355,11 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                     <div className="flex items-center justify-between p-2 bg-[#f8f5f0] rounded-lg border border-gray-200">
                       <div className="flex items-center space-x-2">
                         <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                        <span className="text-sm md:text-[18px] sm:text-base font-medium text-gray-900">
+                        <span className="text-[16px] md:text-[20px] sm:text-base font-medium text-gray-900">
                           {getTranslation("locations.batumi", "Batumi")}
                         </span>
                       </div>
-                      <span className="text-sm md:text-[18px] text-gray-600">
+                      <span className="text-[16px] md:text-[20px] text-gray-600">
                         {getTranslation(
                           "locations.batumiAddress",
                           " A. Pushkin 117"
@@ -371,11 +372,11 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                     <div className="flex items-center justify-between p-2 bg-[#f8f5f0] rounded-lg border border-gray-200">
                       <div className="flex items-center space-x-2">
                         <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                        <span className="text-sm md:text-[18px] sm:text-base font-medium text-gray-900">
+                        <span className="text-[16px] md:text-[20px] sm:text-base font-medium text-gray-900">
                           {getTranslation("locations.batumi", "Batumi")}
                         </span>
                       </div>
-                      <span className="text-sm md:text-[18px] text-gray-600">
+                      <span className="text-[16px] md:text-[20px] text-gray-600">
                         {getTranslation(
                           "locations.batumiAddress2",
                           " A. Pushkin 44"
@@ -389,11 +390,11 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                     <div className="flex items-center justify-between p-2 bg-[#f8f5f0] rounded-lg border border-gray-200">
                       <div className="flex items-center space-x-2">
                         <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                        <span className="text-sm md:text-[18px] font-medium text-gray-900">
+                        <span className="text-[16px] md:text-[20px] font-medium text-gray-900">
                           {getTranslation("locations.qutaisi", "Kutaisi")}
                         </span>
                       </div>
-                      <span className="text-sm md:text-[18px] text-gray-600">
+                      <span className="text-[16px] md:text-[20px] text-gray-600">
                         {getTranslation(
                           "locations.qutaisiAddress",
                           "Kutaisi, Z. Purtzeladze 15"
@@ -402,9 +403,28 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                     </div>
                   )}
 
+                  {product?.kobuleti && (
+                    <div className="flex items-center justify-between p-2 bg-[#f8f5f0] rounded-lg border border-gray-200">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                        <span className="text-[16px] md:text-[20px] font-medium text-gray-900">
+                          {getTranslation("locations.kobuleti", "Kobuleti")}
+                        </span>
+                      </div>
+                      <span className="text-[16px] md:text-[20px] text-gray-600">
+                        {getTranslation(
+                          "locations.kobuletiAddress",
+                          "Kobuleti, Central Street 15"
+                        )}
+                      </span>
+                    </div>
+                  )}
+                 
+
                   {!product?.tbilisi &&
                     !product?.batumi &&
-                    !product?.qutaisi && (
+                    !product?.qutaisi &&
+                    !product?.kobuleti && (
                       <div className="flex items-center justify-center p-2 bg-red-50 rounded-lg border border-red-200">
                         <div className="flex items-center space-x-2">
                           <svg
@@ -468,10 +488,10 @@ const Page = (props: { params: { id: string; locale: string } }) => {
           <div className="container mx-auto mt-6">
             <div className="max-w-7xl mx-auto">
               <div className="pb-2">
-                <h3 className="text-[18px] text-center sm:text-[18px] font-semibold text-gray-900 mb-2">
+                <h3 className="text-[20px] md:text-[30px] text-center  font-semibold text-gray-900 mb-2">
                   {getTranslation("product.description", "Description")}
                 </h3>
-                <p className="text-[15px] sm:text-[16px] leading-relaxed text-gray-700  md:line-clamp-none">
+                <p className="text-[18px] md:text-[20px]  leading-relaxed text-gray-700  md:line-clamp-none">
                   {localizedDescription}
                 </p>
               </div>

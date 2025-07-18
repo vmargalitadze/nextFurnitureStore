@@ -82,7 +82,8 @@ const SummaryPage = () => {
     const isUserCity = 
       (location === 'tbilisi' && userCity.includes('tbilisi')) ||
       (location === 'batumi' && userCity.includes('batumi')) ||
-      (location === 'qutaisi' && userCity.includes('qutaisi'));
+      (location === 'qutaisi' && userCity.includes('qutaisi')) ||
+      (location === 'kobuleti' && userCity.includes('kobuleti'));
     
     // If it's the user's city, delivery is free
     if (isUserCity) {
@@ -97,6 +98,8 @@ const SummaryPage = () => {
         return 50; // ₾10 for Batumi (if not user's city)
       case 'qutaisi':
         return 30; // ₾8 for Kutaisi (if not user's city)
+      case 'kobuleti':
+        return 30; // ₾8 for Kobuleti (if not user's city)
       default:
         return 0;
     }
@@ -174,12 +177,14 @@ const SummaryPage = () => {
       tbilisi: false,
       batumi: false,
       qutaisi: false,
+      kobuleti: false,
     };
 
     cart.items.forEach(item => {
       if (item.tbilisi) locations.tbilisi = true;
       if (item.batumi) locations.batumi = true;
       if (item.qutaisi) locations.qutaisi = true;
+      if (item.kobuleti) locations.kobuleti = true;
     });
 
     return Object.entries(locations)
@@ -199,6 +204,8 @@ const SummaryPage = () => {
         setDeliveryOption('batumi');
       } else if (userCity.includes('qutaisi') && availableLocations.includes('qutaisi')) {
         setDeliveryOption('qutaisi');
+      } else if (userCity.includes('kobuleti') && availableLocations.includes('kobuleti')) {
+        setDeliveryOption('kobuleti');
       } else {
         // If no match, select the first available location
         setDeliveryOption(availableLocations[0]);
@@ -234,7 +241,7 @@ const SummaryPage = () => {
     <div className="container mx-auto px-4 py-8 mt-[80px]">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-8 text-center md:text-left">
           <div className="flex items-center justify-between mb-4">
             <Link href={`/checkout/personal`}>
               <Button variant="ghost" className="flex items-center gap-2">
@@ -242,11 +249,9 @@ const SummaryPage = () => {
                 {t('checkout.backToPersonal')}
               </Button>
             </Link>
-            <div className="text-sm text-gray-500">
-              {t('checkout.step')} 2 {t('checkout.of')} 2
-            </div>
+        
           </div>
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-[20px] md:text-3xl font-bold text-gray-900">
             {t('checkout.orderSummary')}
           </h1>
           <p className="text-gray-600 mt-2">

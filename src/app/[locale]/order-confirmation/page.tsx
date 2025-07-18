@@ -181,7 +181,7 @@ const OrderConfirmationPage = () => {
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-8">
           <CheckCircle className="mx-auto h-16 w-16 text-green-500 mb-4" />
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="md:text-3xl text-[20px] font-bold text-gray-900 mb-2">
             {t('orderConfirmation.title')}
           </h1>
           <p className="text-gray-600">{t('orderConfirmation.thankYou')}</p>
@@ -340,7 +340,7 @@ const OrderConfirmationPage = () => {
 
         <div className="flex flex-col sm:flex-row gap-4">
           <Link href="/" className="flex-1">
-            <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors">
+            <Button className="w-full px-4 mb-3 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors">
               <Home className="h-4 w-4 mr-2" />
               {t('orderConfirmation.continueShopping')}
             </Button>

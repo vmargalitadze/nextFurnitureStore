@@ -143,22 +143,20 @@ const PersonalInfoPage = () => {
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-8 mt-14">
           <div className="flex items-center justify-between mb-4">
             <Link href={`/${params.locale}/cart`}>
-              <Button variant="ghost" className="flex items-center gap-2">
+              <Button variant="ghost" className="flex text-[20px] items-center gap-2">
                 <ArrowLeft className="h-4 w-4" />
                 {t('checkout.backToCart')}
               </Button>
             </Link>
-            <div className="text-sm text-gray-500">
-              {t('checkout.step')} 1 {t('checkout.of')} 2
-            </div>
+           
           </div>
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="  md:text-3xl text-[20px] text-center font-bold text-gray-900">
             {t('checkout.personalInfo')}
           </h1>
-          <p className="text-gray-600 mt-2">
+          <p className="text-gray-600 mt-2 text-center md:text-left">
             {t('checkout.personalInfoDescription')}
           </p>
         </div>

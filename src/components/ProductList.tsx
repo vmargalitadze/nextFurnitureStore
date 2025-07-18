@@ -48,6 +48,7 @@ interface Product {
   tbilisi: boolean;
   batumi: boolean;
   qutaisi: boolean;
+  kobuleti: boolean;
   sizes?: ProductSize[];
   size?: string;
   price?: SimpleDecimal;
@@ -317,7 +318,7 @@ function ProductList({
             <>
               {transformedProducts.length > 0 && (
                 <div className="w-full rounded-2xl pt-10 ">
-                  <h1 className="text-2xl  md:text-3xl   flex justify-center items-center text-bold text-gray-900 leading-tight">
+                  <h1 className="text-[20px]  md:text-3xl   flex justify-center items-center text-bold text-gray-900 leading-tight">
                     {t("newProducts")}
                   </h1>
                   <div className="mt-5">
@@ -329,7 +330,7 @@ function ProductList({
 
               {transformedProducts2.length > 0 && (
                 <div className="w-full rounded-2xl pt-10 ">
-                  <h1 className="text-2xl  md:text-3xl  flex justify-center items-center text-bold text-gray-900 leading-tight">
+                  <h1 className="text-[20px] text-center  md:text-3xl flex justify-center items-center text-bold text-gray-900 leading-tight">
                     {t("popularProducts")}
                   </h1>
                   <div className="mt-5">
@@ -340,7 +341,7 @@ function ProductList({
 
               {transformedProducts3.length > 0 && (
                 <div className="w-full rounded-2xl pt-10 ">
-                  <h1 className="text-2xl  md:text-3xl  flex justify-center items-center text-bold text-gray-900 leading-tight">
+                  <h1 className="text-[20px]  md:text-3xl text-center  flex justify-center items-center text-bold text-gray-900 leading-tight">
                     {t("salesProducts")}
                   </h1>
                   <div className="mt-5">

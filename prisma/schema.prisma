@@ -99,6 +99,7 @@ model Product {
   tbilisi       Boolean @default(false)
   batumi        Boolean @default(false)
   qutaisi       Boolean @default(false)
+  kobuleti      Boolean @default(false)
 
   popular Boolean @default(false)
   sales   Int?    @default(0)

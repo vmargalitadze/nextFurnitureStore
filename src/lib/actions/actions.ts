@@ -134,6 +134,7 @@ export async function createProduct(data: z.infer<typeof ProductSchema>) {
             tbilisi: product.tbilisi,
             batumi: product.batumi,
             qutaisi: product.qutaisi,
+            kobuleti: product.kobuleti,
           };
 
           // Handle price for OTHERS category or sizes for other categories

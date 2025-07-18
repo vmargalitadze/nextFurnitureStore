@@ -113,7 +113,7 @@
     "lastName": "Last Name",
     "phone": "Phone Number",
     "email": "Email",
-    "idNumber": "Georgian ID Number",
+    "idNumber": " ID Number",
     "streetAddress": "Street Address",
     "city": "City",
     "postalCode": "Postal Code",
@@ -431,10 +431,12 @@
       "tbilisi": "Tbilisi",
       "batumi": "Batumi",
       "qutaisi": "Kutaisi",
+      "kobuleti": "Kobuleti",
       "tbilisiAddress": " T. Eristavi 1",
       "batumiAddress": " A. Pushkin 115/117",
       "batumiAddress2": " A. Pushkin 44",
-      "qutaisiAddress": " Z. Purtzeladze 15"
+      "qutaisiAddress": " Z. Purtzeladze 15",
+      "kobuletiAddress": " Sh. Rustaveli 151"
     },
     "similarProducts": {
       "title": "Similar Products",

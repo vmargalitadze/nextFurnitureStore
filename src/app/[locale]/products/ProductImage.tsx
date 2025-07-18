@@ -129,9 +129,7 @@ function ProductImage({ image }: { image: string[] }) {
         {/* Thumbnail Navigation */}
         {image.length > 1 && (
           <div className="flex flex-col gap-3 w-full lg:w-auto">
-            <h3 className="text-sm font-medium text-gray-700 mb-2 lg:hidden">
-              Select Image
-            </h3>
+          
             <div className="flex lg:flex-col gap-3 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0">
               {image.map((img, index) => (
                 <motion.button

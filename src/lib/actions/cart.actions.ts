@@ -38,7 +38,7 @@ export async function getMyCart() {
         // Fetch product location information
         const product = await prisma.product.findFirst({
           where: { id: item.productId },
-          select: { tbilisi: true, batumi: true, qutaisi: true }
+          select: { tbilisi: true, batumi: true, qutaisi: true, kobuleti: true }
         });
 
         return {
@@ -46,6 +46,7 @@ export async function getMyCart() {
           tbilisi: product?.tbilisi ?? false,
           batumi: product?.batumi ?? false,
           qutaisi: product?.qutaisi ?? false,
+          kobuleti: product?.kobuleti ?? false,
         };
       })
     );
@@ -128,6 +129,7 @@ export async function addToCart(productId: string, size: string, quantity: numbe
         tbilisi: product.tbilisi || false,
         batumi: product.batumi || false,
         qutaisi: product.qutaisi || false,
+        kobuleti: product.kobuleti || false,
       };
       updatedItems = [...existingItems, newItem];
     }
@@ -186,7 +188,7 @@ export async function removeFromCart(productId: string, size: string) {
         // Fetch product location information
         const product = await prisma.product.findFirst({
           where: { id: item.productId },
-          select: { tbilisi: true, batumi: true, qutaisi: true }
+          select: { tbilisi: true, batumi: true, qutaisi: true, kobuleti: true }
         });
 
         return {
@@ -194,6 +196,7 @@ export async function removeFromCart(productId: string, size: string) {
           tbilisi: product?.tbilisi || false,
           batumi: product?.batumi || false,
           qutaisi: product?.qutaisi || false,
+          kobuleti: product?.kobuleti || false,
         };
       })
     );
@@ -246,7 +249,7 @@ export async function updateCartItemQuantity(productId: string, size: string, qu
           // Fetch product location information for updated item
           const product = await prisma.product.findFirst({
             where: { id: item.productId },
-            select: { tbilisi: true, batumi: true, qutaisi: true }
+            select: { tbilisi: true, batumi: true, qutaisi: true, kobuleti: true }
           });
 
           return { 
@@ -255,6 +258,7 @@ export async function updateCartItemQuantity(productId: string, size: string, qu
             tbilisi: product?.tbilisi || false,
             batumi: product?.batumi || false,
             qutaisi: product?.qutaisi || false,
+            kobuleti: product?.kobuleti || false,
           };
         }
         return item;

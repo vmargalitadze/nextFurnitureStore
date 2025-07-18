@@ -46,6 +46,7 @@ interface Product {
   tbilisi: boolean;
   batumi: boolean;
   qutaisi: boolean;
+  kobuleti: boolean;
   sizes?: ProductSize[];
   size?: string;
   price?: SimpleDecimal;
@@ -128,9 +129,7 @@ const SimilarProducts: React.FC<SimilarProductsProps> = ({
     return (
       <div className="py-8">
         <div className="container mx-auto">
-          <h2 className="text-3xl md:text-[45px] font-bold text-gray-900 mb-6">
-            {getTranslation("similarProducts.title", "Similar Products")}
-          </h2>
+       
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[...Array(4)].map((_, index) => (
               <div key={index} className="animate-pulse">
@@ -168,9 +167,9 @@ const SimilarProducts: React.FC<SimilarProductsProps> = ({
   return (
     <div className="py-8  mx-auto">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">
-          {getTranslation("similarProducts.title", "Similar Products")}
-        </h2>
+          <h2 className="text-[20px] md:text-[30px] font-bold text-gray-900 mb-6">
+            {getTranslation("similarProducts.title", "Similar Products")}
+          </h2>
       </div>
 
       <div className="flex justify-center ">

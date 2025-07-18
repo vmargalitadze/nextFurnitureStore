@@ -46,6 +46,7 @@ export default function EditProductForm({ productId }: EditProductFormProps) {
       tbilisi: false,
       batumi: false,
       qutaisi: false,
+      kobuleti: false,
       popular: false,
       sales: 0,
     },
@@ -98,6 +99,7 @@ export default function EditProductForm({ productId }: EditProductFormProps) {
             tbilisi: product.tbilisi || false,
             batumi: product.batumi || false,
             qutaisi: product.qutaisi || false,
+            kobuleti: product.kobuleti || false,
             popular: product.popular || false,
             sales: product.sales || 0,
           });
@@ -415,7 +417,7 @@ export default function EditProductForm({ productId }: EditProductFormProps) {
             {/* Location checkboxes */}
             <div className="space-y-4">
               <FormLabel className="text-base font-medium">Location</FormLabel>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <FormField
                   control={form.control}
                   name="tbilisi"
@@ -467,6 +469,25 @@ export default function EditProductForm({ productId }: EditProductFormProps) {
                             onChange={e => field.onChange(e.target.checked)} 
                           />
                           Qutaisi
+                        </label>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="kobuleti"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <label className="flex items-center gap-2">
+                          <input 
+                            type="checkbox" 
+                            checked={field.value} 
+                            onChange={e => field.onChange(e.target.checked)} 
+                          />
+                          Kobuleti
                         </label>
                       </FormControl>
                     </FormItem>

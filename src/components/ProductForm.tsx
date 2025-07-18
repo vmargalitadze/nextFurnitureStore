@@ -45,6 +45,7 @@ export default function ProductForm() {
       tbilisi: false,
       batumi: false,
       qutaisi: false,
+      kobuleti: false,
       popular: false,
       sales: 0,
     },
@@ -404,6 +405,22 @@ export default function ProductForm() {
                   <label className="flex items-center gap-2">
                     <input type="checkbox" checked={field.value} onChange={e => field.onChange(e.target.checked)} />
                     ქუთაისი
+                  </label>
+                </FormControl>
+              </FormItem>
+            )}
+          />
+
+          {/* kobuleti */}
+          <FormField
+            control={form.control}
+            name="kobuleti"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <label className="flex items-center gap-2">
+                    <input type="checkbox" checked={field.value} onChange={e => field.onChange(e.target.checked)} />
+                    ქობულეთი
                   </label>
                 </FormControl>
               </FormItem>

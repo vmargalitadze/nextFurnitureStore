@@ -211,12 +211,12 @@ const CartPage = () => {
     <div className="container min-h-screen mx-auto px-2 sm:px-4 py-4 sm:py-8">
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col sm:flex-row items-center mt-[60px] sm:mt-[100px] justify-between mb-6 sm:mb-8 gap-4 sm:gap-0">
-          <h1 className="text-2xl mt-5 md:mt-0 sm:text-3xl font-bold text-gray-900 w-full sm:w-auto text-center sm:text-left">
+          <h1 className="text-[20px] md:text-3xl mt-5 md:mt-0  font-bold text-gray-900 w-full sm:w-auto text-center sm:text-left">
             {t("cart.title")}
           </h1>
           <Button
             onClick={handleClearCart}
-            className="w-full mr-0 md:mr-[38px] sm:w-[40%] md:w-[25%] px-4 py-2 text-base sm:text-lg md:text-[20px] font-bold text-[#438c71] bg-white border-2 border-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors flex items-center justify-center gap-2"
+            className="w-full mr-0 md:mr-[38px] sm:w-[40%] md:w-[25%] px-4 py-2 text-[20px] font-bold text-[#438c71] bg-white border-2 border-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors flex items-center justify-center gap-2"
           >
             {t("cart.clearCart")}
           </Button>
@@ -236,7 +236,7 @@ const CartPage = () => {
                 {cart.items.map((item) => (
                   <div
                     key={`${item.productId}-${item.size}`}
-                    className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 p-2 sm:p-4 border rounded-lg"
+                    className="flex flex-col md:text-start text-center sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 p-2 sm:p-4 border rounded-lg"
                   >
                     <div className="flex-shrink-0">
                       <Image
@@ -259,8 +259,8 @@ const CartPage = () => {
                       </p>
                     </div>
                     <div className="flex items-center space-x-2 mt-2 sm:mt-0">
-                      <Button
-                        className="text-[#438c71] bg-white border-2 border-[#438c71] hover:bg-[#438c71] hover:text-white rounded-full px-2 sm:px-3"
+                      <button
+                        className="text-[#438c71] bg-white border-2 border-[#438c71] hover:bg-[#438c71] hover:text-white rounded-lg px-2 sm:px-3"
                         onClick={() =>
                           handleQuantityChange(
                             item.productId,
@@ -271,14 +271,14 @@ const CartPage = () => {
                         disabled={updating === `${item.productId}-${item.size}`}
                       >
                         <Minus className="h-4 w-4" />
-                      </Button>
+                      </button>
                       <span className="w-8 sm:w-12 text-center font-semibold">
                         {updating === `${item.productId}-${item.size}`
                           ? "..."
                           : item.qty}
                       </span>
-                      <Button
-                        className="text-[#438c71] bg-white border-2 border-[#438c71] hover:bg-[#438c71] hover:text-white rounded-full px-2 sm:px-3"
+                      <button
+                        className="text-[#438c71] bg-white border-2 border-[#438c71] hover:bg-[#438c71] hover:text-white rounded-lg px-2 sm:px-3"
                         onClick={() =>
                           handleQuantityChange(
                             item.productId,
@@ -289,10 +289,10 @@ const CartPage = () => {
                         disabled={updating === `${item.productId}-${item.size}`}
                       >
                         <Plus className="h-4 w-4" />
-                      </Button>
+                      </button>
                     </div>
                     <div className="text-right w-full sm:w-auto mt-2 sm:mt-0">
-                      <p className="text-base sm:text-lg font-bold text-[#438c71]">
+                      <p className="text-base text-center md:text-left sm:text-lg font-bold text-[#438c71]">
                         {formatPrice(
                           (parseFloat(item.price) * item.qty).toString()
                         )}
@@ -325,14 +325,14 @@ const CartPage = () => {
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span className="text-gray-600 text-sm sm:text-base">{t("cart.subtotal")}</span>
-                    <span className="font-semibold text-sm sm:text-base">
+                    <span className="text-gray-600 md:text-[20px] text-[18px]">{t("cart.subtotal")}</span>
+                    <span className="font-semibold md:text-[20px] text-[18px]">
                       {formatPrice(cart.itemsPrice)}
                     </span>
                   </div>
 
                   <Separator />
-                  <div className="flex justify-between text-base sm:text-lg font-bold">
+                  <div className="flex justify-between md:text-[20px] text-[18px] font-bold">
                     <span>{t("cart.total")}</span>
                     <span className="text-[#438c71]">
                       {formatPrice(cart.totalPrice)}
@@ -343,13 +343,13 @@ const CartPage = () => {
                 <Button
                  
                   onClick={handleCheckout}
-                  className="w-full  px-4 mb-6 py-2 text-base sm:text-lg md:text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+                  className="w-full  px-4 mb-6 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
                 >
                   {t("cart.checkout")}
                 </Button>
 
                 <Link href="/list">
-                  <Button className="w-full sm:w-[80%] mx-auto mt-4 sm:mt-8 px-4 py-2 text-base sm:text-lg md:text-[20px] font-bold text-[#438c71] bg-white border-2 border-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors flex items-center justify-center gap-2">
+                  <Button className="w-full sm:w-[80%] mx-auto mt-4 sm:mt-8 px-4 py-2 text-[20px] font-bold text-[#438c71] bg-white border-2 border-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors flex items-center justify-center gap-2">
                     {t("cart.continueShopping")}
                   </Button>
                 </Link>
