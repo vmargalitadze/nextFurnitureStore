@@ -6,19 +6,19 @@ import { CartItem } from "../types";
 import { Prisma } from "@prisma/client";
 
 export async function getMyCart() {
-    console.log('getMyCart called');
+  
     // Check for cart cookie
     const sessionCartId = (await cookies()).get('sessionCartId')?.value;
-    console.log('Session cart ID:', sessionCartId);
+
     
     // Get session and user ID
     const session = await auth();
     const userId = session?.user?.id ? (session.user.id as string) : undefined;
-    console.log('User ID:', userId);
+   
   
     // If no session cart ID and no user ID, return undefined (no cart)
     if (!sessionCartId && !userId) {
-      console.log('No session cart ID and no user ID, returning undefined');
+    
       return undefined;
     }
   
@@ -26,7 +26,7 @@ export async function getMyCart() {
     const cart = await prisma.cart.findFirst({
       where: userId ? { userId: userId } : { sessionCartId: sessionCartId },
     });
-    console.log('Found cart:', cart);
+   
   
     if (!cart) return undefined;
 
@@ -38,13 +38,14 @@ export async function getMyCart() {
         // Fetch product location information
         const product = await prisma.product.findFirst({
           where: { id: item.productId },
-          select: { tbilisi: true, batumi: true, qutaisi: true, kobuleti: true }
+          select: { tbilisi: true, batumi: true, batumi44: true, qutaisi: true, kobuleti: true }
         });
 
         return {
           ...item,
           tbilisi: product?.tbilisi ?? false,
           batumi: product?.batumi ?? false,
+          batumi44: product?.batumi44 ?? false,
           qutaisi: product?.qutaisi ?? false,
           kobuleti: product?.kobuleti ?? false,
         };
@@ -128,6 +129,7 @@ export async function addToCart(productId: string, size: string, quantity: numbe
         price: finalPrice.toFixed(2),
         tbilisi: product.tbilisi || false,
         batumi: product.batumi || false,
+        batumi44: product.batumi44 || false,
         qutaisi: product.qutaisi || false,
         kobuleti: product.kobuleti || false,
       };
@@ -188,13 +190,14 @@ export async function removeFromCart(productId: string, size: string) {
         // Fetch product location information
         const product = await prisma.product.findFirst({
           where: { id: item.productId },
-          select: { tbilisi: true, batumi: true, qutaisi: true, kobuleti: true }
+          select: { tbilisi: true, batumi: true, batumi44: true, qutaisi: true, kobuleti: true }
         });
 
         return {
           ...item,
           tbilisi: product?.tbilisi || false,
           batumi: product?.batumi || false,
+          batumi44: product?.batumi44 || false,
           qutaisi: product?.qutaisi || false,
           kobuleti: product?.kobuleti || false,
         };
@@ -249,7 +252,7 @@ export async function updateCartItemQuantity(productId: string, size: string, qu
           // Fetch product location information for updated item
           const product = await prisma.product.findFirst({
             where: { id: item.productId },
-            select: { tbilisi: true, batumi: true, qutaisi: true, kobuleti: true }
+            select: { tbilisi: true, batumi: true, batumi44: true, qutaisi: true, kobuleti: true }
           });
 
           return { 
@@ -257,6 +260,7 @@ export async function updateCartItemQuantity(productId: string, size: string, qu
             qty: quantity,
             tbilisi: product?.tbilisi || false,
             batumi: product?.batumi || false,
+            batumi44: product?.batumi44 || false,
             qutaisi: product?.qutaisi || false,
             kobuleti: product?.kobuleti || false,
           };

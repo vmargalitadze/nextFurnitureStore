@@ -118,7 +118,7 @@
     "city": "City",
     "postalCode": "Postal Code",
     "country": "Country",
-    "paymentMethod": "Payment Method",
+    "paymentMethod": "Payment Method",  
     "creditCard": "Credit/Debit Card",
     "subtotal": "Subtotal",
     "tax": "Tax",
@@ -430,13 +430,15 @@
     "locations": {
       "tbilisi": "Tbilisi",
       "batumi": "Batumi",
+      "batumi44": "Batumi",
       "qutaisi": "Kutaisi",
       "kobuleti": "Kobuleti",
       "tbilisiAddress": " T. Eristavi 1",
       "batumiAddress": " A. Pushkin 115/117",
       "batumiAddress2": " A. Pushkin 44",
       "qutaisiAddress": " Z. Purtzeladze 15",
-      "kobuletiAddress": " Sh. Rustaveli 151"
+      "kobuletiAddress": " Sh. Rustaveli 151",
+      "batumi44Address": " A. Pushkin 44"
     },
     "similarProducts": {
       "title": "Similar Products",

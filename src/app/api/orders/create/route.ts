@@ -78,6 +78,7 @@ export async function POST(request: NextRequest) {
         shippingPrice: shippingPrice,
         taxPrice: cart.taxPrice,
         totalPrice: parseFloat(cart.itemsPrice.toString()) + parseFloat(cart.taxPrice.toString()) + shippingPrice,
+        deliveryLocation: deliveryOption, // Save the selected delivery city/location
         orderitems: {
           create: orderItems
         }

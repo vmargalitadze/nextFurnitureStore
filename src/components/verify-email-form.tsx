@@ -28,9 +28,7 @@ export default function VerifyEmailForm() {
       }
 
       try {
-        console.log('📡 Making API call to /api/auth/verify-email...');
-        console.log('📡 Request body:', { token });
-        
+      
         const response = await fetch('/api/auth/verify-email', {
           method: 'POST',
           headers: {
@@ -42,7 +40,7 @@ export default function VerifyEmailForm() {
   
         
         const data = await response.json();
-        console.log('📡 Response data:', data);
+   
 
         if (response.ok) {
     
@@ -68,7 +66,7 @@ export default function VerifyEmailForm() {
   const handleResendVerification = async () => {
     try {
       const email = searchParams.get('email');
-      console.log('📧 Resending verification email to:', email);
+
       
       const response = await fetch('/api/auth/resend-verification', {
         method: 'POST',

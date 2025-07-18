@@ -36,6 +36,7 @@ import { format } from "date-fns";
 import Image from "next/image";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 interface OrderItem {
   productId: string;
@@ -77,6 +78,7 @@ interface Order {
     name: string;
     email: string;
   };
+  deliveryLocation?: string; // Add deliveryLocation to Order type
 }
 
 interface OrderManagementCardProps {
@@ -97,6 +99,7 @@ const OrderManagementCard: React.FC<OrderManagementCardProps> = ({
   const [showDetails, setShowDetails] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const router = useRouter();
+  const t = useTranslations();
 
   // Safely extract shipping address from JSON
   const shippingAddress: ShippingAddress =
@@ -259,7 +262,7 @@ const OrderManagementCard: React.FC<OrderManagementCardProps> = ({
               <div>
                 <p className="font-medium text-sm">Total</p>
                 <p className="text-xs text-gray-500">
-                  {order.orderitems.length} items
+                  {order.orderitems.length} ნივთი
                 </p>
               </div>
             </div>
@@ -274,7 +277,7 @@ const OrderManagementCard: React.FC<OrderManagementCardProps> = ({
           <div>
             <h4 className="font-medium mb-3 flex items-center">
               <FaUser className="w-4 h-4 mr-2 text-[#438c71]" />
-              Customer Details
+              მომხმარებლის დეტალები
             </h4>
             <div className="space-y-2 text-sm">
               <div className="flex items-center">
@@ -297,9 +300,23 @@ const OrderManagementCard: React.FC<OrderManagementCardProps> = ({
           <div>
             <h4 className="font-medium mb-3 flex items-center">
               <FaMapMarkerAlt className="w-4 h-4 mr-2 text-[#438c71]" />
-              Delivery Address
+              გადაცემის მისამართი
             </h4>
             <div className="space-y-1 text-sm">
+              {/* Show delivery location/city if present */}
+              {order.deliveryLocation && (
+                <div className="flex items-center space-x-2">
+                  <FaMapMarkerAlt className="w-3 h-3 text-gray-400" />
+                  <span className="font-semibold">
+                    {t(`productDetail.locations.${order.deliveryLocation}`, { defaultMessage: order.deliveryLocation.charAt(0).toUpperCase() + order.deliveryLocation.slice(1) })}
+                    <span className="text-gray-600 ml-2">
+                      (
+                      {t(`productDetail.locations.${order.deliveryLocation}Address`, { defaultMessage: "" })}
+                      )
+                    </span>
+                  </span>
+                </div>
+              )}
               <p className="font-medium">
                 {shippingAddress.firstName} {shippingAddress.lastName}
               </p>
@@ -310,7 +327,7 @@ const OrderManagementCard: React.FC<OrderManagementCardProps> = ({
               <p>{shippingAddress.country}</p>
               {shippingAddress.additionalInfo && (
                 <p className="text-gray-500 text-xs">
-                  Additional Info: {shippingAddress.additionalInfo}
+                    დამატებითი ინფორმაცია: {shippingAddress.additionalInfo}
                 </p>
               )}
             </div>
@@ -326,7 +343,7 @@ const OrderManagementCard: React.FC<OrderManagementCardProps> = ({
             <div>
               <h4 className="font-medium mb-3 flex items-center">
                 <FaBox className="w-4 h-4 mr-2 text-[#438c71]" />
-                Order Items ({order.orderitems.length})
+                შეკვეთილი ნივთები ({order.orderitems.length})
               </h4>
               <div className="space-y-3">
                 {order.orderitems.map((item, index) => (
@@ -346,7 +363,7 @@ const OrderManagementCard: React.FC<OrderManagementCardProps> = ({
                         {item.title}
                       </h5>
                       <p className="text-xs text-gray-500">
-                        Qty: {item.qty} × ₾
+                        რაოდენობა: {item.qty} × ₾
                         {getPriceValue(item.price).toFixed(2)}
                       </p>
                     </div>
@@ -360,20 +377,17 @@ const OrderManagementCard: React.FC<OrderManagementCardProps> = ({
 
             {/* Price Breakdown */}
             <div className="bg-gray-50 p-4 rounded-lg">
-              <h4 className="font-medium mb-3">Price Breakdown</h4>
+              <h4 className="font-medium mb-3">ფასების განლაგება</h4>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span>Items Total</span>
+                  <span>ნივთების ჯამი</span>
                   <span>₾{getPriceValue(order.itemsPrice).toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Shipping</span>
+                  <span>გადაცემის საფუძველი</span>
                   <span>₾{getPriceValue(order.shippingPrice).toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span>Tax (18%)</span>
-                  <span>₾{getPriceValue(order.taxPrice).toFixed(2)}</span>
-                </div>
+             
                 <Separator />
                 <div className="flex justify-between font-bold">
                   <span>Total</span>
@@ -403,7 +417,7 @@ const OrderManagementCard: React.FC<OrderManagementCardProps> = ({
                     </Button>
                     {order.isPaid && order.paidAt && (
                       <span className="text-xs text-gray-500">
-                        Paid: {formatDate(order.paidAt)}
+                        გაგადახდილია: {formatDate(order.paidAt)}
                       </span>
                     )}
                   </div>
@@ -425,7 +439,7 @@ const OrderManagementCard: React.FC<OrderManagementCardProps> = ({
                     </Button>
                     {order.isDelivered && order.deliveredAt && (
                       <span className="text-xs text-gray-500">
-                        Delivered: {formatDate(order.deliveredAt)}
+                        გადაცემულია: {formatDate(order.deliveredAt)}
                       </span>
                     )}
                   </div>
@@ -435,12 +449,12 @@ const OrderManagementCard: React.FC<OrderManagementCardProps> = ({
 
             {/* Order Timeline */}
             <div>
-              <h4 className="font-medium mb-3">Order Timeline</h4>
+              <h4 className="font-medium mb-3">შეკვეთილი ნივთების დროშემობრუნება</h4>
               <div className="space-y-3">
                 <div className="flex items-center">
                   <div className="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
                   <div className="flex-1">
-                    <p className="text-sm font-medium">Order Placed</p>
+                    <p className="text-sm font-medium">შეკვეთილია</p>
                     <p className="text-xs text-gray-500">
                       {formatDate(order.createdAt)}
                     </p>
@@ -450,7 +464,7 @@ const OrderManagementCard: React.FC<OrderManagementCardProps> = ({
                   <div className="flex items-center">
                     <div className="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
                     <div className="flex-1">
-                      <p className="text-sm font-medium">Payment Received</p>
+                      <p className="text-sm font-medium">გაგადახდილია</p>
                       <p className="text-xs text-gray-500">
                         {formatDate(order.paidAt)}
                       </p>
@@ -461,7 +475,7 @@ const OrderManagementCard: React.FC<OrderManagementCardProps> = ({
                   <div className="flex items-center">
                     <div className="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
                     <div className="flex-1">
-                      <p className="text-sm font-medium">Delivered</p>
+                      <p className="text-sm font-medium">გადაცემულია</p>
                       <p className="text-xs text-gray-500">
                         {formatDate(order.deliveredAt)}
                       </p>
@@ -472,7 +486,7 @@ const OrderManagementCard: React.FC<OrderManagementCardProps> = ({
                   <div className="flex items-center">
                     <div className="w-3 h-3 bg-gray-300 rounded-full mr-3"></div>
                     <div className="flex-1">
-                      <p className="text-sm font-medium">Estimated Delivery</p>
+                      <p className="text-sm font-medium">გადაცემის დრო</p>
                       <p className="text-xs text-gray-500">
                         {getEstimatedDelivery()}
                       </p>

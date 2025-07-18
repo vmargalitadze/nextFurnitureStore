@@ -122,13 +122,13 @@ export default async function AdminAllPage() {
         {/* Header Section */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Admin Dashboard</h1>
-            <p className="text-gray-600">Manage your store, products, orders, and users</p>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">ადმინის პანელი</h1>
+            <p className="text-gray-600">მართეთ თქვენი პროდუქტები, შეკვეთები და მომხმარებლები</p>
           </div>
           <Link href="/new">
             <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="default">
               <FaPlus className="mr-2" />
-              Add New Product
+              პროდუქტის დამატება
             </Button>
           </Link>
         </div>
@@ -139,7 +139,7 @@ export default async function AdminAllPage() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-orange-400">Total Products</p>
+                  <p className="text-sm text-orange-400">ყველა პროდუქტი</p>
                   <p className="text-2xl font-bold text-orange-500">{products.length}</p>
                 </div>
                 <div className="text-2xl text-orange-400">
@@ -153,7 +153,7 @@ export default async function AdminAllPage() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-orange-400">Total Orders</p>
+                  <p className="text-sm text-orange-400">ყველა შეკვეთა</p>
                   <p className="text-2xl font-bold text-orange-500">{totalOrders}</p>
                 </div>
                 <div className="text-2xl text-orange-400">
@@ -167,7 +167,7 @@ export default async function AdminAllPage() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-orange-400">Total Revenue</p>
+                  <p className="text-sm text-orange-400">ყველა შემოსავსები</p>
                   <p className="text-2xl font-bold text-orange-500">₾{totalRevenue.toFixed(2)}</p>
                 </div>
                 <div className="text-2xl text-orange-400">
@@ -181,7 +181,7 @@ export default async function AdminAllPage() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-orange-400">Pending Orders</p>
+                  <p className="text-sm text-orange-400">მიმდინარე შეკვეთები</p>
                   <p className="text-2xl font-bold text-orange-500">{pendingOrders}</p>
                 </div>
                 <div className="text-2xl text-orange-400">
@@ -195,7 +195,7 @@ export default async function AdminAllPage() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-orange-400">Total Users</p>
+                  <p className="text-sm text-orange-400">ყველა მომხმარებელი</p>
                   <p className="text-2xl font-bold text-orange-500">{totalUsers}</p>
                 </div>
                 <div className="text-2xl text-orange-400">
@@ -209,18 +209,18 @@ export default async function AdminAllPage() {
         {/* Tabs */}
         <Tabs defaultValue="products" className="space-y-6">
           <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="products">Products</TabsTrigger>
-            <TabsTrigger value="orders">Orders</TabsTrigger>
-            <TabsTrigger value="users">Users</TabsTrigger>
+            <TabsTrigger value="products">პროდუქტები</TabsTrigger>
+            <TabsTrigger value="orders">შეკვეთები</TabsTrigger>
+            <TabsTrigger value="users">მომხმარებლები</TabsTrigger>
           </TabsList>
 
           <TabsContent value="products" className="space-y-6">
             {/* Products Table */}
             <Card>
               <CardHeader>
-                <CardTitle>All Products</CardTitle>
+                <CardTitle>ყველა პროდუქტი</CardTitle>
                 <CardDescription>
-                  View and manage all products in your inventory
+                 დაამატეთ ან გამართეთ ყველა პროდუქტი
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -229,13 +229,13 @@ export default async function AdminAllPage() {
                     <table className="w-full">
                       <thead>
                         <tr className="border-b">
-                          <th className="text-left p-4 font-semibold">Product</th>
-                          <th className="text-left p-4 font-semibold">Category</th>
-                          <th className="text-left p-4 font-semibold">Brand</th>
-                          <th className="text-left p-4 font-semibold">Sizes</th>
-                          <th className="text-left p-4 font-semibold">Sales</th>
-                          <th className="text-left p-4 font-semibold">Status</th>
-                          <th className="text-left p-4 font-semibold">Actions</th>
+                          <th className="text-left p-4 font-semibold">პროდუქტი</th>
+                          <th className="text-left p-4 font-semibold">კატეგორია</th>
+                          <th className="text-left p-4 font-semibold">ბრენდი</th>
+                          <th className="text-left p-4 font-semibold">ზომა</th>
+                          <th className="text-left p-4 font-semibold">გაყიდვები</th>
+                          <th className="text-left p-4 font-semibold">სტატუსი</th>
+                          <th className="text-left p-4 font-semibold">ქონება</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -284,17 +284,22 @@ export default async function AdminAllPage() {
                                 <div className="flex gap-1">
                                   {product.tbilisi && (
                                     <Badge variant="secondary" className="text-xs">
-                                      Tbilisi
+                                      თბილისი
                                     </Badge>
                                   )}
                                   {product.batumi && (
                                     <Badge variant="secondary" className="text-xs">
-                                      Batumi
+                                      ბათუმი
                                     </Badge>
                                   )}
                                   {product.qutaisi && (
                                     <Badge variant="secondary" className="text-xs">
-                                      Qutaisi
+                                      ქუთაისი
+                                    </Badge>
+                                  )}
+                                   {product.qutaisi && (
+                                    <Badge variant="secondary" className="text-xs">
+                                      ქობულეთი
                                     </Badge>
                                   )}
                                 </div>
@@ -331,7 +336,7 @@ export default async function AdminAllPage() {
                     <Link href="/new">
                       <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="default">
                         <FaPlus className="mr-2" />
-                        Add First Product
+                        პროდუქტის დამატება
                       </Button>
                     </Link>
                   </div>
@@ -344,9 +349,9 @@ export default async function AdminAllPage() {
             {/* Enhanced Orders Section */}
             <Card>
               <CardHeader>
-                <CardTitle>Order Management</CardTitle>
+                <CardTitle>ყველა შეკვეთა</CardTitle>
                 <CardDescription>
-                  View and manage all customer orders with detailed buyer information
+                 დაამატეთ ან გამართეთ ყველა შეკვეთა
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -357,6 +362,7 @@ export default async function AdminAllPage() {
                         key={order.id}
                         order={{
                           ...order,
+                          deliveryLocation: order.deliveryLocation ?? undefined,
                           itemsPrice: order.itemsPrice.toString(),
                           shippingPrice: order.shippingPrice.toString(),
                           taxPrice: order.taxPrice.toString(),

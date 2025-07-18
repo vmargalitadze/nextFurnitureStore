@@ -47,6 +47,7 @@ interface Product {
   createdAt: Date;
   tbilisi: boolean;
   batumi: boolean;
+  batumi44: boolean;
   qutaisi: boolean;
   kobuleti: boolean;
   sizes?: ProductSize[];
@@ -368,7 +369,7 @@ const Page = (props: { params: { id: string; locale: string } }) => {
 
                     </div>
                   )}
-                  {product?.batumi && (
+                  {product?.batumi44 && (
                     <div className="flex items-center justify-between p-2 bg-[#f8f5f0] rounded-lg border border-gray-200">
                       <div className="flex items-center space-x-2">
                         <div className="w-2 h-2 bg-green-500 rounded-full"></div>

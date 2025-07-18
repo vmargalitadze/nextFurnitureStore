@@ -312,9 +312,9 @@ function PageContentWrapper() {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const data = await getAllProducts();
+      const { products } = await getAllProducts();
       // Convert the data to match the Product interface
-      const productsWithDecimalPrices = data.map((product) => ({
+      const productsWithDecimalPrices = products.map((product) => ({
         ...product,
         sizes:
           product.sizes?.map((size) => ({

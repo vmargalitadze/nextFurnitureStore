@@ -34,11 +34,7 @@ export default function LocaleSwitcher({ onOpen }: { onOpen?: () => void }) {
 
   // Debug logging
   useEffect(() => {
-    console.log('LocaleSwitcher Debug:', {
-      localeActive,
-      pathname,
-      router: typeof router
-    });
+ 
   }, [localeActive, pathname, router]);
 
   // Listen for other dropdowns opening
@@ -139,14 +135,14 @@ export default function LocaleSwitcher({ onOpen }: { onOpen?: () => void }) {
         
         // Try next-intl router first with full path including search params
         router.replace(fullPath, { locale: nextLocale });
-        console.log('Used next-intl router with search params:', fullPath);
+      
       } catch (error) {
         console.error('next-intl router failed:', error);
         // Fallback to manual navigation with search params
         const currentPath = pathname.replace(/^\/[a-zA-Z]+/, '');
         const searchParams = window.location.search;
         const newPath = `/${nextLocale}${currentPath}${searchParams}`;
-        console.log('Falling back to manual navigation with search params:', newPath);
+
         window.location.href = newPath;
       }
     });

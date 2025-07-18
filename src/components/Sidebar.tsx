@@ -125,7 +125,6 @@ const SideBar: React.FC<SideBarProps> = ({
       );
     }
 
-    console.log("Brands found:", brs, "URL brand:", urlBrand);
     return brs;
   }, [products, urlBrand, selectedBrands]);
 
@@ -171,10 +170,10 @@ const SideBar: React.FC<SideBarProps> = ({
   useEffect(() => {
     const fetch = async () => {
       try {
-        const data = await getAllProducts();
-        setProducts(data);
+        const { products } = await getAllProducts();
+        setProducts(products);
 
-        const prices = data
+        const prices = products
           .flatMap(
             (product: any) =>
               product.sizes?.map((s: any) => parseFloat(s.price)) || [

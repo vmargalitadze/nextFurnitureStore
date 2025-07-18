@@ -56,6 +56,7 @@ interface Order {
   deliveredAt?: string;
   createdAt: string;
   orderitems: OrderItem[];
+  deliveryLocation?: string; // Added for delivery location
 }
 
 const OrderConfirmationPage = () => {
@@ -176,6 +177,7 @@ const OrderConfirmationPage = () => {
 
   const address = order.shippingAddress;
 
+
   return (
     <div className="container  mt-[120px] mx-auto px-4 py-8">
       <div className="max-w-2xl mx-auto">
@@ -265,6 +267,29 @@ const OrderConfirmationPage = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
+              {/* Show delivery location/city if present */}
+              {order.deliveryLocation && (
+                <div className="flex items-center space-x-2">
+                  <MapPin className="h-4 w-4 text-gray-500 mt-0.5" />
+                  <span className="font-semibold">
+                    {t(`productDetail.locations.${order.deliveryLocation}`, { defaultMessage: order.deliveryLocation.charAt(0).toUpperCase() + order.deliveryLocation.slice(1) })}
+                    {order.deliveryLocation === "batumi" ? (
+                      <>
+                        <span className="text-gray-600 ml-2">
+                          ({t("productDetail.locations.batumiAddress")})
+                        </span>
+                        <span className="text-gray-600 ml-2">
+                          ({t("productDetail.locations.batumiAddress2")})
+                        </span>
+                      </>
+                    ) : (
+                      <span className="text-gray-600 ml-2">
+                        ({t(`productDetail.locations.${order.deliveryLocation}Address`, { defaultMessage: "" })})
+                      </span>
+                    )}
+                  </span>
+                </div>
+              )}
               <div className="flex items-start space-x-2">
                 <MapPin className="h-4 w-4 text-gray-500 mt-0.5" />
                 <div>

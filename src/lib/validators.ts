@@ -39,6 +39,7 @@ const BaseProductSchema = z.object({
 
   tbilisi: z.boolean().optional(),
   batumi: z.boolean().optional(),
+  batumi44: z.boolean().optional(),
   qutaisi: z.boolean().optional(),
   kobuleti: z.boolean().optional(),
 
@@ -131,6 +132,7 @@ export const cartItemSchema = z.object({
   price: currency,
   tbilisi: z.boolean().optional(),
   batumi: z.boolean().optional(),
+  batumi44: z.boolean().optional(),
   qutaisi: z.boolean().optional(),
   kobuleti: z.boolean().optional(),
 });

@@ -166,13 +166,15 @@
     "locations": {
       "tbilisi": "თბილისი",
       "batumi": "ბათუმი",
+      "batumi44": "ბათუმი",
       "qutaisi": "ქუთაისი",
       "kobuleti": "ქობულეთი",
       "tbilisiAddress": " თ. ერისთავის 1",
       "batumiAddress": " ალ. პუშკინის 115/117",
       "batumiAddress2": " ალ. პუშკინის 44",
-      "qutaisiAddress": " ზ. ფურცელაძეს 15",
-      "kobuletiAddress": " შ. რუსთაველის 151"
+      "qutaisiAddress": " ი. ჭავჭავაძის 51",
+      "kobuletiAddress": " შ. რუსთაველის 151",
+      "batumi44Address": " ალ. პუშკინის 44"
     },
     "similarProducts": {
       "title": "მსგავსი პროდუქტები",

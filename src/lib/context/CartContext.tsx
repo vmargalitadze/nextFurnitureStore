@@ -90,24 +90,24 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const refreshCart = useCallback(async (force = false) => {
     const now = Date.now();
     if (!force && (isLoading || (now - lastFetch < 5000))) {
-      console.log('Cart refresh skipped - isLoading:', isLoading, 'time since last fetch:', now - lastFetch);
+    
       return;
     }
     
-    console.log('Refreshing cart...', force ? '(forced)' : '');
+ 
     try {
       setIsLoading(true);
       setLastFetch(now);
       
       const response = await fetch('/api/cart/get');
-      console.log('Cart refresh response status:', response.status);
+     
       
       if (!response.ok) {
         throw new Error('Failed to load cart');
       }
       
       const { cart: cartData } = await response.json();
-      console.log('Cart refresh data received:', cartData);
+    
       
       if (cartData) {
         setCart({
@@ -213,33 +213,33 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   );
 
   useEffect(() => {
-    console.log('Cart context useEffect - status:', status);
+ 
     // Load cart for both authenticated and unauthenticated users
     // The cart system works with session cart ID for unauthenticated users
     if (status === 'authenticated' || status === 'unauthenticated') {
-      console.log('Loading cart for status:', status);
+
       // Call loadCart directly to avoid circular dependency
       const fetchCart = async () => {
         const now = Date.now();
         if (isLoading || (now - lastFetch < 5000)) {
-          console.log('Cart load skipped - isLoading:', isLoading, 'time since last fetch:', now - lastFetch);
+       
           return;
         }
         
-        console.log('Loading cart...');
+
         try {
           setIsLoading(true);
           setLastFetch(now);
           
           const response = await fetch('/api/cart/get');
-          console.log('Cart response status:', response.status);
+    
           
           if (!response.ok) {
             throw new Error('Failed to load cart');
           }
           
           const { cart: cartData } = await response.json();
-          console.log('Cart data received:', cartData);
+     
           
           if (cartData) {
             setCart({

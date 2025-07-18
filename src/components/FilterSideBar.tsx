@@ -106,10 +106,10 @@ export default function FilterSidebar({ onFilterChange }: FilterSidebarProps) {
   useEffect(() => {
     const fetch = async () => {
       try {
-        const data = await getAllProducts();
-        setProducts(data);
+        const { products } = await getAllProducts();
+        setProducts(products);
 
-        const prices = data.flatMap((product: any) =>
+        const prices = products.flatMap((product: any) =>
           product.sizes?.map((s: any) => parseFloat(s.price)) || [parseFloat(product.price)]
         ).filter((p: number) => !isNaN(p));
 

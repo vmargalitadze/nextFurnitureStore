@@ -46,9 +46,9 @@ const ListSideBar: React.FC<FilterProps> = ({ isOpen, toggleSidebar, onFilterCha
   useEffect(() => {
     const fetch = async () => {
       try {
-        const data = await getAllProducts();
-        setProducts(data);
-        const prices = data.flatMap((product: any) => product.sizes?.map((s: any) => parseFloat(s.price)) || [parseFloat(product.price)]).filter(p => !isNaN(p));
+        const { products } = await getAllProducts();
+        setProducts(products);
+        const prices = products.flatMap((product: any) => product.sizes?.map((s: any) => parseFloat(s.price)) || [parseFloat(product.price)]).filter(p => !isNaN(p));
         if (prices.length > 0) {
           const min = Math.min(...prices);
           const max = Math.max(...prices);

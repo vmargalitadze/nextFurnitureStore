@@ -18,7 +18,7 @@ const HomePage = () => {
 
   useEffect(() => {
     const fetchCategories = async () => {
-      const products = await getAllProducts();
+      const { products } = await getAllProducts();
       setCategories(Array.from(new Set(products.map((p: any) => p.category))));
     };
     fetchCategories();

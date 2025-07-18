@@ -45,6 +45,7 @@ export default function EditProductForm({ productId }: EditProductFormProps) {
       sizes: [{ size: "SIZE_80_190", price: 0 }],
       tbilisi: false,
       batumi: false,
+      batumi44: false,
       qutaisi: false,
       kobuleti: false,
       popular: false,
@@ -98,6 +99,7 @@ export default function EditProductForm({ productId }: EditProductFormProps) {
             })) || [{ size: "SIZE_80_190", price: 0 }],
             tbilisi: product.tbilisi || false,
             batumi: product.batumi || false,
+            batumi44: product.batumi44 || false,
             qutaisi: product.qutaisi || false,
             kobuleti: product.kobuleti || false,
             popular: product.popular || false,
@@ -450,6 +452,21 @@ export default function EditProductForm({ productId }: EditProductFormProps) {
                             onChange={e => field.onChange(e.target.checked)} 
                           />
                           Batumi
+                        </label>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="batumi44"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <label className="flex items-center gap-2">
+                          <input type="checkbox" checked={field.value} onChange={e => field.onChange(e.target.checked)} />
+                          ბათუმი (44)
                         </label>
                       </FormControl>
                     </FormItem>

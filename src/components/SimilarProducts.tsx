@@ -45,6 +45,7 @@ interface Product {
   createdAt: Date;
   tbilisi: boolean;
   batumi: boolean;
+  batumi44: boolean;
   qutaisi: boolean;
   kobuleti: boolean;
   sizes?: ProductSize[];

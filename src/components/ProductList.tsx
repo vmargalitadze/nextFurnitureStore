@@ -47,12 +47,14 @@ interface Product {
   createdAt: Date;
   tbilisi: boolean;
   batumi: boolean;
+  batumi44: boolean;
   qutaisi: boolean;
   kobuleti: boolean;
   sizes?: ProductSize[];
   size?: string;
   price?: SimpleDecimal;
   sales?: number;
+  minSizePrice?: SimpleDecimal;
 }
 
 interface ProductItem {
@@ -82,6 +84,9 @@ function ProductList({
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [total, setTotal] = useState(0);
 
   // New filter state for FilterSidebar
   const [filterState, setFilterState] = useState({
@@ -94,20 +99,27 @@ function ProductList({
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        const data = await getAllProducts();
+        const { products: newProducts, total: totalCount } = await getAllProducts(page, 20);
         // Convert the data to match the Product interface
-        const productsWithDecimalPrices = data.map((product: any) => ({
+        const productsWithDecimalPrices = newProducts.map((product: any) => ({
           ...product,
-          sizes:
-            product.sizes?.map((size: any) => ({
-              ...size,
-              price: new SimpleDecimal(size.price),
-            })) || undefined,
           price: product.price ? new SimpleDecimal(product.price) : undefined,
+          minSizePrice: product.minSizePrice !== undefined ? new SimpleDecimal(product.minSizePrice) : undefined,
           sales: product.sales || undefined,
+          sizes: product.sizes
+            ? product.sizes.map((size: any) => ({
+                ...size,
+                price: new SimpleDecimal(size.price),
+              }))
+            : [],
         }));
-        setProducts(productsWithDecimalPrices as Product[]);
-        // Set images as loaded immediately after data fetch
+        if (page === 1) {
+          setProducts(productsWithDecimalPrices as Product[]);
+        } else {
+          setProducts((prev) => [...prev, ...productsWithDecimalPrices]);
+        }
+        setTotal(totalCount);
+        setHasMore((page * 20) < totalCount);
         setImagesLoaded(true);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -117,7 +129,12 @@ function ProductList({
       }
     };
     fetchProducts();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
+
+  const handleLoadMore = () => {
+    setPage((prev) => prev + 1);
+  };
 
   const getProductPriceRange = useCallback((product: Product) => {
     if (product.sizes && product.sizes.length > 0) {
@@ -157,13 +174,7 @@ function ProductList({
 
   // Updated filter function to work with both old and new filter interfaces
   const getFilteredProducts = useCallback(() => {
-    console.log("Filtering products:", {
-      selectedType,
-      selectedBrand,
-      selectedPrice,
-      filterState,
-      totalProducts: products.length,
-    });
+   
 
     return products.filter((product) => {
       const byLegacyType =
@@ -198,18 +209,7 @@ function ProductList({
       const byNewMinPrice = priceRange.max >= filterState.priceRange.min;
       const byNewMaxPrice = priceRange.min <= filterState.priceRange.max;
 
-      console.log("Product filtering:", {
-        productId: product.id,
-        productCategory: product.category,
-        byLegacyType,
-        byLegacyBrand,
-        byLegacyMinPrice,
-        byLegacyMaxPrice,
-        byNewType,
-        byNewBrand,
-        byNewMinPrice,
-        byNewMaxPrice,
-      });
+  
 
       return (
         byLegacyType &&
@@ -234,7 +234,7 @@ function ProductList({
   const filteredProducts = useMemo(() => {
     const filtered = getFilteredProducts();
 
-    // console.log('All available categories:', Array.from(new Set(products.map(p => p.category))));
+ 
 
     const matress = filtered.filter((p) => p.category === "MATTRESS");
 
@@ -383,6 +383,7 @@ function ProductList({
           {/* View All Button */}
         </div>
       </div>
+   
     </section>
   );
 }

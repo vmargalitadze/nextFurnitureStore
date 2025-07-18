@@ -44,6 +44,7 @@ export default function ProductForm() {
       sizes: [{ size: "SIZE_80_190", price: 0 }],
       tbilisi: false,
       batumi: false,
+      batumi44: false,
       qutaisi: false,
       kobuleti: false,
       popular: false,
@@ -389,6 +390,22 @@ export default function ProductForm() {
                   <label className="flex items-center gap-2">
                     <input type="checkbox" checked={field.value} onChange={e => field.onChange(e.target.checked)} />
                     ბათუმი
+                  </label>
+                </FormControl>
+              </FormItem>
+            )}
+          />
+
+          {/* batumi44 */}
+          <FormField
+            control={form.control}
+            name="batumi44"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <label className="flex items-center gap-2">
+                    <input type="checkbox" checked={field.value} onChange={e => field.onChange(e.target.checked)} />
+                    ბათუმი (44)
                   </label>
                 </FormControl>
               </FormItem>

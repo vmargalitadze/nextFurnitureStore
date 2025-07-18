@@ -82,6 +82,7 @@ const SummaryPage = () => {
     const isUserCity = 
       (location === 'tbilisi' && userCity.includes('tbilisi')) ||
       (location === 'batumi' && userCity.includes('batumi')) ||
+      (location === 'batumi44' && userCity.includes('batumi')) ||
       (location === 'qutaisi' && userCity.includes('qutaisi')) ||
       (location === 'kobuleti' && userCity.includes('kobuleti'));
     
@@ -96,6 +97,8 @@ const SummaryPage = () => {
         return 50; // ₾15 for Tbilisi (if not user's city)
       case 'batumi':
         return 50; // ₾10 for Batumi (if not user's city)
+      case 'batumi44':
+        return 50;
       case 'qutaisi':
         return 30; // ₾8 for Kutaisi (if not user's city)
       case 'kobuleti':
@@ -176,6 +179,7 @@ const SummaryPage = () => {
     const locations = {
       tbilisi: false,
       batumi: false,
+      batumi44: false,
       qutaisi: false,
       kobuleti: false,
     };
@@ -183,6 +187,7 @@ const SummaryPage = () => {
     cart.items.forEach(item => {
       if (item.tbilisi) locations.tbilisi = true;
       if (item.batumi) locations.batumi = true;
+      if (item.batumi44) locations.batumi44 = true;
       if (item.qutaisi) locations.qutaisi = true;
       if (item.kobuleti) locations.kobuleti = true;
     });
@@ -202,7 +207,8 @@ const SummaryPage = () => {
         setDeliveryOption('tbilisi');
       } else if (userCity.includes('batumi') && availableLocations.includes('batumi')) {
         setDeliveryOption('batumi');
-      } else if (userCity.includes('qutaisi') && availableLocations.includes('qutaisi')) {
+      } 
+      else if (userCity.includes('qutaisi') && availableLocations.includes('qutaisi')) {
         setDeliveryOption('qutaisi');
       } else if (userCity.includes('kobuleti') && availableLocations.includes('kobuleti')) {
         setDeliveryOption('kobuleti');
@@ -336,6 +342,7 @@ const SummaryPage = () => {
                          <div>
                            <span className="font-medium">{t('productDetail.locations.batumi')}</span>
                            <span className="text-gray-600 ml-2">({t('productDetail.locations.batumiAddress')})</span>
+                           
                            <span className="text-[#438c71] font-semibold ml-2">
                              - {calculateDeliveryPrice('batumi') === 0 ? t('checkout.free') : formatPrice(calculateDeliveryPrice('batumi').toString())}
                            </span>
@@ -345,6 +352,30 @@ const SummaryPage = () => {
                          </div>
                        </label>
                      )}
+                     
+                     {availableLocations.includes('batumi44') && (
+                       <label className="flex items-center space-x-3 cursor-pointer">
+                         <input
+                           type="radio"
+                           name="delivery"
+                           value="batumi44"
+                           checked={deliveryOption === 'batumi44'}
+                           onChange={(e) => setDeliveryOption(e.target.value)}
+                           className="text-[#438c71]"
+                         />
+                         <div>
+                           <span className="font-medium">{t('productDetail.locations.batumi')}</span>
+                           <span className="text-gray-600 ml-2">({t('productDetail.locations.batumiAddress2')})</span>
+                           <span className="text-[#438c71] font-semibold ml-2">
+                             - {calculateDeliveryPrice('batumi44') === 0 ? t('checkout.free') : formatPrice(calculateDeliveryPrice('batumi44').toString())}
+                           </span>
+                           {calculateDeliveryPrice('batumi44') === 0 && (
+                             <span className="text-green-600 text-sm ml-2">({t('checkout.yourCity')})</span>
+                           )}
+                         </div>
+                       </label>
+                     )}
+
                      {availableLocations.includes('qutaisi') && (
                        <label className="flex items-center space-x-3 cursor-pointer">
                          <input
@@ -362,6 +393,28 @@ const SummaryPage = () => {
                              - {calculateDeliveryPrice('qutaisi') === 0 ? t('checkout.free') : formatPrice(calculateDeliveryPrice('qutaisi').toString())}
                            </span>
                            {calculateDeliveryPrice('qutaisi') === 0 && (
+                             <span className="text-green-600 text-sm ml-2">({t('checkout.yourCity')})</span>
+                           )}
+                         </div>
+                       </label>
+                     )}
+                     {availableLocations.includes('kobuleti') && (
+                       <label className="flex items-center space-x-3 cursor-pointer">
+                         <input
+                           type="radio"
+                           name="delivery"
+                           value="kobuleti"
+                           checked={deliveryOption === 'kobuleti'}
+                           onChange={(e) => setDeliveryOption(e.target.value)}
+                           className="text-[#438c71]"
+                         />
+                         <div>
+                           <span className="font-medium">{t('productDetail.locations.kobuleti')}</span>
+                           <span className="text-gray-600 ml-2">({t('productDetail.locations.kobuletiAddress')})</span>
+                           <span className="text-[#438c71] font-semibold ml-2">
+                             - {calculateDeliveryPrice('kobuleti') === 0 ? t('checkout.free') : formatPrice(calculateDeliveryPrice('kobuleti').toString())}
+                           </span>
+                           {calculateDeliveryPrice('kobuleti') === 0 && (
                              <span className="text-green-600 text-sm ml-2">({t('checkout.yourCity')})</span>
                            )}
                          </div>
