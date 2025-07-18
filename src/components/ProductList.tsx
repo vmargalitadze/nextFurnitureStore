@@ -294,7 +294,7 @@ function ProductList({
   return (
     <section className=" px-5 md:px-20 from-gray-50 via-white to-gray-50">
       <div className="container mx-auto ">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mb-14 mx-auto">
           {/* Section Header */}
 
           {/* Swiper Product Slider */}

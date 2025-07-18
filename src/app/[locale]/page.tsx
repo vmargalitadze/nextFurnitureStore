@@ -6,7 +6,6 @@ import ProductList from "@/components/ProductList";
 import React, { useState, Suspense, useEffect } from "react";
 import { getAllProducts } from "@/lib/actions/actions";
 
-
 // Loading component for Suspense boundaries
 const LoadingSpinner = () => (
   <div className="flex items-center justify-center p-8">
@@ -27,22 +26,20 @@ const HomePage = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-  
-
       {/* Main Content Area */}
       <div className="w-full">
         <Suspense fallback={<LoadingSpinner />}>
           <Categories />
         </Suspense>
-      
+        <Suspense fallback={<LoadingSpinner />}>
+          <BrandSlider />
+        </Suspense>
+
         <div className="">
           <Suspense fallback={<LoadingSpinner />}>
             <ProductList />
           </Suspense>
         </div>
-        <Suspense fallback={<LoadingSpinner />}>
-          <BrandSlider />
-        </Suspense>
       </div>
     </div>
   );

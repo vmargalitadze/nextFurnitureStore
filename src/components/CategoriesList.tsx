@@ -1,21 +1,4 @@
 const CategoriesList = [
-
-  { 
-    id: "1", 
-    type: "bundle", 
-    label: 'კომპლექტი', 
-    labelEn: 'Bundle',  
-    quantity: 0,  
-    image: '/khampha-phimmachak-vdkAt1S7fCc-unsplash.jpg'  
-  },
-  { 
-    id: "2", 
-    type: "pillow", 
-    label: 'ბალიში', 
-    labelEn: 'Pillow',  
-    quantity: 2,  
-    image: '/pillow.jpg'  
-  },
   { 
     id: "3", 
     type: "mattress", 
@@ -27,11 +10,21 @@ const CategoriesList = [
   { 
     id: "4", 
     type: "bed", 
-    label: 'ლოგინი', 
+    label: 'საწოლი', 
     labelEn: 'Bed',  
     quantity: 5,  
     image: '/bed1.jpg'  
   },
+  { 
+    id: "2", 
+    type: "pillow", 
+    label: 'ბალიში', 
+    labelEn: 'Pillow',  
+    quantity: 2,  
+    image: '/pillow.jpg'  
+  },
+
+
   { 
     id: "5", 
     type: "quilt", 

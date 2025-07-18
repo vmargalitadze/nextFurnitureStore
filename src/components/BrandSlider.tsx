@@ -25,8 +25,8 @@ function BrandSlider() {
   const t = useTranslations("brands");
 
   return (
-    <section className="">
-      <div className="container mx-auto py-10 px-4">
+    <section className="max-w-7xl pt-16 mx-auto">
+      <div >
    
 
         {/* Brands Container */}
