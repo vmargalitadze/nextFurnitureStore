@@ -249,8 +249,8 @@ const SummaryPage = () => {
         {/* Header */}
         <div className="mb-8 text-center md:text-left">
           <div className="flex items-center justify-between mb-4">
-            <Link href={`/checkout/personal`}>
-              <Button variant="ghost" className="flex items-center gap-2">
+            <Link className="mx-auto" href={`/checkout/personal`}>
+              <Button variant="ghost" className="flex text-[20px] text-center items-center md:items-center gap-2">
                 <ArrowLeft className="h-4 w-4" />
                 {t('checkout.backToPersonal')}
               </Button>
