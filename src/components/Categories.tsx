@@ -136,6 +136,7 @@ export default function Categories() {
                           src={category.image}
                           alt={getLocalizedCategoryLabel(category.type)}
                           fill
+                          unoptimized
                           className="object-cover rounded-xl"
                         />
                       </div>
@@ -195,6 +196,7 @@ export default function Categories() {
                             src={category.image}
                             alt={getLocalizedCategoryLabel(category.type)}
                             fill
+                            unoptimized
                             className="object-cover rounded-xl"
                           />
                         </div>

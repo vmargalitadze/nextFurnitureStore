@@ -190,5 +190,3 @@ model OrderItem {
 
   @@id([orderId, productId], map: "orderitems_orderId_productId_pk")
 }
-
-
