@@ -21,7 +21,7 @@ const CategoriesList = [
     label: "ბალიში",
     labelEn: "Pillow",
     quantity: 2,
-    image: "/pillow.jpg",
+    image: "/photo_2025-07-19_08-19-19.jpg",
   },
 
   {
