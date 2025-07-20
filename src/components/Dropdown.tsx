@@ -90,7 +90,7 @@ export default function DropdownMenuCheckboxes() {
     
     // Sign out
     signOut({
-      callbackUrl: window.location.origin + "/login",
+      callbackUrl: window.location.origin + "/",
     });
   };
 
