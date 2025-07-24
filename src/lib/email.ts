@@ -406,6 +406,15 @@ export const sendOrderToAdmin = async (order: any) => {
   const shipping = order.shippingAddress;
   const user = order.user;
 
+  // Map deliveryLocation codes to full Georgian addresses
+  const deliveryLocationMap: Record<string, string> = {
+    'tbilisi': 'თბილისი, თ. ერისთავის 1',
+    'batumi': 'ბათუმი, ალ. პუშკინის 115/117',
+    'batumi44': 'ბათუმი, ალ. პუშკინის 44',
+    'qutaisi': 'ქუთაისი, ი. ჭავჭავაძის 51',
+    'kobuleti': 'ქობულეთი, შ. რუსთაველის 151',
+  };
+
   const mailOptions = {
     from: {
       name: 'Furniture Store',
@@ -460,7 +469,7 @@ export const sendOrderToAdmin = async (order: any) => {
             <li><strong>Tax:</strong> ${formatPrice(parseFloat(order.taxPrice.toString()))}</li>
             <li><strong>Total:</strong> ${formatPrice(parseFloat(order.totalPrice.toString()))}</li>
             <li><strong>Payment Method:</strong> ${order.paymentMethod}</li>
-            <li><strong>Delivery Option:</strong> ${order.deliveryLocation}</li>
+            <li><strong>Delivery Option:</strong> ${deliveryLocationMap[order.deliveryLocation] || order.deliveryLocation}</li>
           </ul>
         </div>
       </div>
