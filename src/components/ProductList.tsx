@@ -11,27 +11,12 @@ import { Navigation, Autoplay, FreeMode } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 
-// Simple Decimal-like class to avoid Prisma import issues
-class SimpleDecimal {
-  value: string;
-
-  constructor(value: string | number) {
-    this.value = value.toString();
-  }
-
-  toString() {
-    return this.value;
-  }
-
-  toNumber() {
-    return parseFloat(this.value);
-  }
-}
+// SimpleDecimal class removed - now using regular numbers
 
 interface ProductSize {
   id: string;
   size: string;
-  price: SimpleDecimal;
+  price: number;
 }
 
 interface Product {
@@ -52,9 +37,9 @@ interface Product {
   kobuleti: boolean;
   sizes?: ProductSize[];
   size?: string;
-  price?: SimpleDecimal;
+  price?: number;
   sales?: number;
-  minSizePrice?: SimpleDecimal;
+  minSizePrice?: number;
 }
 
 interface ProductItem {
@@ -100,23 +85,18 @@ function ProductList({
       try {
         setLoading(true);
         const { products: newProducts, total: totalCount } = await getAllProducts(page, 20);
-        // Convert the data to match the Product interface
-        const productsWithDecimalPrices = newProducts.map((product: any) => ({
+        // The data is already converted to numbers by the server action
+        const productsWithPrices = newProducts.map((product: any) => ({
           ...product,
-          price: product.price ? new SimpleDecimal(product.price) : undefined,
-          minSizePrice: product.minSizePrice !== undefined ? new SimpleDecimal(product.minSizePrice) : undefined,
+          price: product.price || undefined,
+          minSizePrice: product.minSizePrice || undefined,
           sales: product.sales || undefined,
-          sizes: product.sizes
-            ? product.sizes.map((size: any) => ({
-                ...size,
-                price: new SimpleDecimal(size.price),
-              }))
-            : [],
+          sizes: product.sizes || [],
         }));
         if (page === 1) {
-          setProducts(productsWithDecimalPrices as Product[]);
+          setProducts(productsWithPrices as Product[]);
         } else {
-          setProducts((prev) => [...prev, ...productsWithDecimalPrices]);
+          setProducts((prev) => [...prev, ...productsWithPrices]);
         }
         setTotal(totalCount);
         setHasMore((page * 20) < totalCount);
@@ -138,26 +118,14 @@ function ProductList({
 
   const getProductPriceRange = useCallback((product: Product) => {
     if (product.sizes && product.sizes.length > 0) {
-      const prices = product.sizes.map((s) => s.price.toNumber());
+      const prices = product.sizes.map((s) => s.price);
       return {
         min: Math.min(...prices),
         max: Math.max(...prices),
       };
     }
     if (product.price) {
-      // Handle different price types safely
-      let price: number;
-      if (typeof product.price === "object" && "toNumber" in product.price) {
-        price = product.price.toNumber();
-      } else if (
-        typeof product.price === "string" ||
-        typeof product.price === "number"
-      ) {
-        price = new SimpleDecimal(product.price).toNumber();
-      } else {
-        price = 0;
-      }
-      return { min: price, max: price };
+      return { min: product.price, max: product.price };
     }
     return { min: 0, max: 0 };
   }, []);

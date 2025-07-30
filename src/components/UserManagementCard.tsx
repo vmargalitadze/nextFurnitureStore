@@ -10,7 +10,7 @@ import {
   FaEnvelope,
   FaPhone,
   FaShoppingCart,
-  FaDollarSign,
+  FaMoneyBillWave,
   FaCalendar,
   FaMapMarkerAlt,
   FaEye,
@@ -202,7 +202,7 @@ const UserManagementCard: React.FC<UserManagementCardProps> = ({ user, currentUs
 
           <div className="flex items-center justify-between p-4 border rounded-lg bg-gray-50">
             <div className="flex items-center">
-              <FaDollarSign className="w-5 h-5 mr-3 text-green-500" />
+              <FaMoneyBillWave className="w-5 h-5 mr-3 text-green-500" />
               <div>
                 <p className="font-medium text-sm">Total Spent</p>
                 <p className="text-xs text-gray-500">All time</p>

@@ -47,23 +47,22 @@ const SummaryPage = () => {
   const [processing, setProcessing] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
 
-  // Load address data from URL parameters
+  // Load address data from sessionStorage
   useEffect(() => {
-    const addressData = searchParams.get('address');
+    const addressData = sessionStorage.getItem('checkoutAddress');
     if (addressData) {
       try {
-        const decodedAddress = JSON.parse(decodeURIComponent(addressData));
+        const decodedAddress = JSON.parse(addressData);
         setAddress(decodedAddress);
-   
       } catch (error) {
-  
+        console.error('Error parsing address data:', error);
         router.push(`/${params.locale}/checkout/personal`);
       }
     } else {
-     
+      // No address data found, redirect to personal info page
       router.push(`/${params.locale}/checkout/personal`);
     }
-  }, [searchParams, router, params.locale]);
+  }, [router, params.locale]);
 
   // Redirect if cart is empty
   useEffect(() => {
@@ -94,15 +93,15 @@ const SummaryPage = () => {
     // Otherwise, apply standard pricing for all locations
     switch (location) {
       case 'tbilisi':
-        return 50; // ₾15 for Tbilisi (if not user's city)
+        return 0; // ₾50 for Tbilisi (if not user's city)
       case 'batumi':
-        return 50; // ₾10 for Batumi (if not user's city)
+        return 0; // ₾50 for Batumi (if not user's city)
       case 'batumi44':
-        return 50;
+        return 0;
       case 'qutaisi':
-        return 30; // ₾8 for Kutaisi (if not user's city)
+        return 0; // ₾30 for Kutaisi (if not user's city)
       case 'kobuleti':
-        return 30; // ₾8 for Kobuleti (if not user's city)
+        return 0; // ₾30 for Kobuleti (if not user's city)
       default:
         return 0;
     }
@@ -145,6 +144,9 @@ const SummaryPage = () => {
 
       // Store order ID in sessionStorage as backup
       sessionStorage.setItem('lastOrderId', data.order.id);
+      
+      // Clean up checkout address data from sessionStorage
+      sessionStorage.removeItem('checkoutAddress');
       
       // Use a more reliable redirect approach
       const orderConfirmationUrl = `/${params.locale}/order-confirmation?orderId=${data.order.id}`;
@@ -218,6 +220,17 @@ const SummaryPage = () => {
       }
     }
   }, [address, availableLocations, deliveryOption]);
+
+  // Cleanup effect to remove address data when component unmounts
+  useEffect(() => {
+    return () => {
+      // Only clean up if order was not placed successfully
+      if (!orderPlaced) {
+        // Keep the address data in sessionStorage for potential back navigation
+        // It will be cleaned up when order is placed successfully
+      }
+    };
+  }, [orderPlaced]);
 
   if (loading) {
     return (
@@ -323,9 +336,7 @@ const SummaryPage = () => {
                            <span className="text-[#438c71] font-semibold ml-2">
                              - {calculateDeliveryPrice('tbilisi') === 0 ? t('checkout.free') : formatPrice(calculateDeliveryPrice('tbilisi').toString())}
                            </span>
-                           {calculateDeliveryPrice('tbilisi') === 0 && (
-                             <span className="text-green-600 text-sm ml-2">({t('checkout.yourCity')})</span>
-                           )}
+
                          </div>
                        </label>
                      )}
@@ -346,9 +357,7 @@ const SummaryPage = () => {
                            <span className="text-[#438c71] font-semibold ml-2">
                              - {calculateDeliveryPrice('batumi') === 0 ? t('checkout.free') : formatPrice(calculateDeliveryPrice('batumi').toString())}
                            </span>
-                           {calculateDeliveryPrice('batumi') === 0 && (
-                             <span className="text-green-600 text-sm ml-2">({t('checkout.yourCity')})</span>
-                           )}
+                           
                          </div>
                        </label>
                      )}
@@ -369,9 +378,7 @@ const SummaryPage = () => {
                            <span className="text-[#438c71] font-semibold ml-2">
                              - {calculateDeliveryPrice('batumi44') === 0 ? t('checkout.free') : formatPrice(calculateDeliveryPrice('batumi44').toString())}
                            </span>
-                           {calculateDeliveryPrice('batumi44') === 0 && (
-                             <span className="text-green-600 text-sm ml-2">({t('checkout.yourCity')})</span>
-                           )}
+                           
                          </div>
                        </label>
                      )}
@@ -392,9 +399,7 @@ const SummaryPage = () => {
                            <span className="text-[#438c71] font-semibold ml-2">
                              - {calculateDeliveryPrice('qutaisi') === 0 ? t('checkout.free') : formatPrice(calculateDeliveryPrice('qutaisi').toString())}
                            </span>
-                           {calculateDeliveryPrice('qutaisi') === 0 && (
-                             <span className="text-green-600 text-sm ml-2">({t('checkout.yourCity')})</span>
-                           )}
+                           
                          </div>
                        </label>
                      )}
@@ -414,9 +419,7 @@ const SummaryPage = () => {
                            <span className="text-[#438c71] font-semibold ml-2">
                              - {calculateDeliveryPrice('kobuleti') === 0 ? t('checkout.free') : formatPrice(calculateDeliveryPrice('kobuleti').toString())}
                            </span>
-                           {calculateDeliveryPrice('kobuleti') === 0 && (
-                             <span className="text-green-600 text-sm ml-2">({t('checkout.yourCity')})</span>
-                           )}
+                           
                          </div>
                        </label>
                      )}

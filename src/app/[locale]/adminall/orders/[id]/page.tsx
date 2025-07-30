@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { 
   FaShoppingCart,
-  FaDollarSign,
+  FaMoneyBillWave,
   FaTruck,
   FaCheckCircle,
   FaClock,
@@ -40,7 +40,20 @@ async function getOrderById(id: string) {
     }
   });
 
-  return order;
+  if (!order) return null;
+
+  // Convert Decimal objects to numbers
+  return {
+    ...order,
+    itemsPrice: Number(order.itemsPrice),
+    shippingPrice: Number(order.shippingPrice),
+    taxPrice: Number(order.taxPrice),
+    totalPrice: Number(order.totalPrice),
+    orderitems: order.orderitems.map(item => ({
+      ...item,
+      price: Number(item.price)
+    }))
+  };
 }
 
 export default async function OrderDetailPage({ params }: { params: { id: string } }) {
@@ -249,7 +262,7 @@ export default async function OrderDetailPage({ params }: { params: { id: string
             <Card className="sticky top-8">
               <CardHeader>
                 <CardTitle className="flex items-center">
-                  <FaDollarSign className="w-5 h-5 mr-2" />
+                  <FaMoneyBillWave className="w-5 h-5 mr-2" />
                   Order Summary
                 </CardTitle>
               </CardHeader>

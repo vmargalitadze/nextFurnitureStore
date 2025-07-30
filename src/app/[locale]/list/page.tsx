@@ -18,27 +18,12 @@ import ListSideBar from "@/components/ListSidebar";
 import Pagination from "@/components/Pagination";
 import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-// Simple Decimal-like class to avoid Prisma import issues
-class SimpleDecimal {
-  value: string;
-
-  constructor(value: string | number) {
-    this.value = value.toString();
-  }
-
-  toString() {
-    return this.value;
-  }
-
-  toNumber() {
-    return parseFloat(this.value);
-  }
-}
+// SimpleDecimal class removed - now using regular numbers
 
 interface ProductSize {
   id: string;
   size: string;
-  price: SimpleDecimal;
+  price: number;
 }
 
 interface Product {
@@ -58,7 +43,7 @@ interface Product {
   sizes?: ProductSize[];
   // Keep old fields for backward compatibility during migration
   size?: string;
-  price?: SimpleDecimal;
+  price?: number;
   sales?: number;
 }
 
@@ -164,7 +149,7 @@ function PageContentWrapper() {
   const router = useRouter();
   const getProductPriceRange = (product: Product) => {
     if (product.sizes && product.sizes.length > 0) {
-      const prices = product.sizes.map((s) => s.price.toNumber());
+      const prices = product.sizes.map((s) => s.price);
       return {
         min: Math.min(...prices),
         max: Math.max(...prices),
@@ -172,8 +157,7 @@ function PageContentWrapper() {
     }
     // Fallback to old structure
     if (product.price) {
-      const price = product.price.toNumber();
-      return { min: price, max: price };
+      return { min: product.price, max: product.price };
     }
     return { min: 0, max: 0 };
   };
@@ -323,15 +307,8 @@ function PageContentWrapper() {
         qutaisi: product.qutaisi ?? false,
         kobuleti: product.kobuleti ?? false,
         batumi44: product.batumi44 ?? false,
-        sizes: product.sizes
-          ? product.sizes.map((size: any) => ({
-              ...size,
-              price: new SimpleDecimal(size.price?.toString() || "0"),
-            }))
-          : [],
-        price: product.price
-          ? new SimpleDecimal(product.price.toString())
-          : undefined,
+        sizes: product.sizes || [],
+        price: product.price || undefined,
         sales: product.sales || undefined,
       }));
       setProducts(productsWithDecimalPrices as Product[]);

@@ -10,9 +10,24 @@ export async function convertToPlainObject<T>(value: T): Promise<T> {
 }
 
 export async function getSingleProduct(id: string) {
-  return await prisma.product.findFirst({
+  const product = await prisma.product.findFirst({
     where: { id: id },
+    include: {
+      sizes: true,
+    },
   });
+
+  if (!product) return null;
+
+  // Convert Decimal objects to numbers
+  return {
+    ...product,
+    price: product.price ? Number(product.price) : undefined,
+    sizes: product.sizes?.map(size => ({
+      ...size,
+      price: Number(size.price)
+    })) || []
+  };
 }
 
 export async function formatError(error: any) {
@@ -201,12 +216,17 @@ export async function getAllProducts(page = 1, pageSize = 20) {
       let minSizePrice = undefined;
       if (product.sizes && product.sizes.length > 0) {
         minSizePrice = product.sizes
-          .map((s) => parseFloat(s.price.toString()))
+          .map((s) => Number(s.price))
           .reduce((min, p) => (p < min ? p : min), Infinity);
       }
       return {
         ...product,
+        price: product.price ? Number(product.price) : undefined,
         minSizePrice: minSizePrice !== Infinity ? minSizePrice : undefined,
+        sizes: product.sizes?.map(size => ({
+          ...size,
+          price: Number(size.price)
+        })) || []
       };
     });
 
@@ -225,7 +245,17 @@ export async function getProductById(productId: string) {
     },
   });
 
-  return convertToPlainObject(data);
+  if (!data) return null;
+
+  // Convert Decimal objects to numbers
+  return {
+    ...data,
+    price: data.price ? Number(data.price) : undefined,
+    sizes: data.sizes?.map(size => ({
+      ...size,
+      price: Number(size.price)
+    })) || []
+  };
 }
 
 export async function getSimilarProducts(
@@ -260,9 +290,10 @@ export async function getSimilarProducts(
 
     return products.map((product) => ({
       ...product,
+      price: product.price ? Number(product.price) : undefined,
       sizes: product.sizes.map((size) => ({
         ...size,
-        price: size.price.toString(),
+        price: Number(size.price),
       })),
     }));
   } catch (error) {

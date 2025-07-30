@@ -15,7 +15,7 @@ import {
   FaSort,
   FaCrown,
   FaShoppingCart,
-  FaDollarSign,
+  FaMoneyBillWave,
   FaTruck,
   FaCheckCircle,
   FaClock,
@@ -59,7 +59,18 @@ async function getAllOrders() {
     }
   });
 
-  return orders;
+  // Convert Decimal objects to numbers
+  return orders.map(order => ({
+    ...order,
+    itemsPrice: Number(order.itemsPrice),
+    shippingPrice: Number(order.shippingPrice),
+    taxPrice: Number(order.taxPrice),
+    totalPrice: Number(order.totalPrice),
+    orderitems: order.orderitems.map(item => ({
+      ...item,
+      price: Number(item.price)
+    }))
+  }));
 }
 
 async function getAllUsers() {
@@ -83,7 +94,21 @@ async function getAllUsers() {
     }
   });
 
-  return users;
+  // Convert Decimal objects to numbers in user orders
+  return users.map(user => ({
+    ...user,
+    Order: user.Order.map(order => ({
+      ...order,
+      itemsPrice: Number(order.itemsPrice),
+      shippingPrice: Number(order.shippingPrice),
+      taxPrice: Number(order.taxPrice),
+      totalPrice: Number(order.totalPrice),
+      orderitems: order.orderitems.map(item => ({
+        ...item,
+        price: Number(item.price)
+      }))
+    }))
+  }));
 }
 
 export default async function AdminAllPage() {
@@ -171,7 +196,7 @@ export default async function AdminAllPage() {
                   <p className="text-2xl font-bold text-orange-500">₾{totalRevenue.toFixed(2)}</p>
                 </div>
                 <div className="text-2xl text-orange-400">
-                  <FaDollarSign className="text-2xl" />
+                  <FaMoneyBillWave className="text-2xl" />
                 </div>
               </div>
             </CardContent>

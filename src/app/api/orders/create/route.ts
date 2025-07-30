@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '../../../../../auth';
 import { prisma } from '@/lib/prisma';
 import { sendOrderReceipt } from '@/lib/email';
+import { sendOrderToAdmin } from '@/lib/email';
 
 export async function POST(request: NextRequest) {
   try {
@@ -33,32 +34,22 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Cart is empty' }, { status: 400 });
     }
 
-    // Calculate delivery price based on option and cart total
-    const itemsPrice = parseFloat(cart.itemsPrice.toString());
+    // Calculate delivery price based on delivery location
+    const freeLocations = [
+      'Tbilisi( T. Eristavi 1)',
+      'Batumi( A. Pushkin 115/117)',
+      'Batumi( A. Pushkin 44)',
+      'Kutaisi( Z. Purtzeladze 15)',
+      'Kobuleti( Sh. Rustaveli 151)'
+    ];
     let shippingPrice = 0;
-    
-    // Base shipping calculation
-    if (itemsPrice >= 500) {
-      shippingPrice = 0; // Free shipping for orders over ₾500
-    } else if (itemsPrice >= 200) {
-      shippingPrice = 15; // ₾15 shipping for orders ₾200-₾499
+    if (freeLocations.includes(deliveryOption)) {
+      shippingPrice = 0;
     } else {
-      shippingPrice = 25; // ₾25 shipping for orders under ₾200
+      // fallback for any other location, if needed
+      shippingPrice = 0;
     }
     
-    // Add delivery option surcharge
-    switch (deliveryOption) {
-      case 'express':
-        shippingPrice += 15;
-        break;
-      case 'same-day':
-        shippingPrice += 25;
-        break;
-      default:
-        // Standard delivery - no additional charge
-        break;
-    }
-
     // Create order items from cart items
     const orderItems = cart.items.map((item: any) => ({
       productId: item.productId,
@@ -95,6 +86,14 @@ export async function POST(request: NextRequest) {
       await sendOrderReceipt(shippingAddress.email, order, customerName);
     } catch (emailError) {
       console.error('Error sending order receipt email:', emailError);
+      // Don't fail the order if email fails
+    }
+
+    // Send order info to admin
+    try {
+      await sendOrderToAdmin(order);
+    } catch (adminEmailError) {
+      console.error('Error sending order info to admin:', adminEmailError);
       // Don't fail the order if email fails
     }
 

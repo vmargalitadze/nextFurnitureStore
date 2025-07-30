@@ -98,6 +98,9 @@ const OrderConfirmationPage = () => {
         
         // Clear the cart after successfully loading the order
         updateCart(null);
+        
+        // Clean up any remaining checkout data from sessionStorage
+        sessionStorage.removeItem('checkoutAddress');
       } catch (error) {
         console.error("Error fetching order:", error);
         setError("Failed to load order details");
@@ -108,6 +111,12 @@ const OrderConfirmationPage = () => {
 
     fetchOrder();
   }, [searchParams, updateCart]);
+
+  // Additional cleanup effect to ensure address data is removed
+  useEffect(() => {
+    // Clean up checkout address data when component mounts
+    sessionStorage.removeItem('checkoutAddress');
+  }, []);
 
   const formatPrice = (price: number | string | undefined) => {
     if (price === undefined || price === null)

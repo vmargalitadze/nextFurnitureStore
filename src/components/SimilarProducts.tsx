@@ -9,27 +9,12 @@ import { Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import ProductHelper from "@/components/ProductHelper";
-// Simple Decimal-like class to avoid Prisma import issues
-class SimpleDecimal {
-  value: string;
-
-  constructor(value: string | number) {
-    this.value = value.toString();
-  }
-
-  toString() {
-    return this.value;
-  }
-
-  toNumber() {
-    return parseFloat(this.value);
-  }
-}
+// SimpleDecimal class removed - now using regular numbers
 
 interface ProductSize {
   id: string;
   size: string;
-  price: SimpleDecimal;
+  price: number;
 }
 
 interface Product {
@@ -50,7 +35,7 @@ interface Product {
   kobuleti: boolean;
   sizes?: ProductSize[];
   size?: string;
-  price?: SimpleDecimal;
+  price?: number;
   sales?: number;
 }
 
@@ -73,17 +58,13 @@ const SimilarProducts: React.FC<SimilarProductsProps> = ({
       try {
         setLoading(true);
         const data = await getSimilarProducts(currentProductId, category, 4);
-        // Convert the data to match the Product interface
-        const productsWithDecimalPrices = data.map((product: any) => ({
+        // The data is already converted to numbers by the server action
+        const productsWithPrices = data.map((product: any) => ({
           ...product,
-          sizes:
-            product.sizes?.map((size: any) => ({
-              ...size,
-              price: new SimpleDecimal(size.price),
-            })) || undefined,
+          sizes: product.sizes || [],
           sales: product.sales || undefined,
         }));
-        setSimilarProducts(productsWithDecimalPrices as Product[]);
+        setSimilarProducts(productsWithPrices as Product[]);
       } catch (error) {
         console.error("Error fetching similar products:", error);
       } finally {
@@ -96,15 +77,14 @@ const SimilarProducts: React.FC<SimilarProductsProps> = ({
 
   const getProductPriceRange = (product: Product) => {
     if (product.sizes && product.sizes.length > 0) {
-      const prices = product.sizes.map((s) => s.price.toNumber());
+      const prices = product.sizes.map((s) => s.price);
       return {
         min: Math.min(...prices),
         max: Math.max(...prices),
       };
     }
     if (product.price) {
-      const price = product.price.toNumber();
-      return { min: price, max: price };
+      return { min: product.price, max: product.price };
     }
     return { min: 0, max: 0 };
   };
@@ -180,8 +160,8 @@ const SimilarProducts: React.FC<SimilarProductsProps> = ({
               id: product.id,
               image: product.images,
               price: product.price
-                ? product.price.toNumber()
-                : product.sizes?.[0]?.price.toNumber() || 0,
+                ? product.price
+                : product.sizes?.[0]?.price || 0,
               originalPrice: undefined,
               sales: product.sales,
               title: product.title,

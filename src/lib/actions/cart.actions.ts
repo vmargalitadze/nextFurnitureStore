@@ -53,7 +53,7 @@ export async function getMyCart() {
     );
   
     // Convert decimals and return
-    return convertToPlainObject({
+    const plainCart = convertToPlainObject({
       ...cart,
       items: itemsWithLocations,
       itemsPrice: cart.itemsPrice.toString(),
@@ -61,6 +61,8 @@ export async function getMyCart() {
       shippingPrice: cart.shippingPrice.toString(),
       taxPrice: cart.taxPrice.toString(),
     });
+    
+    return plainCart;
   }
 
 export async function addToCart(productId: string, size: string, quantity: number = 1) {
@@ -344,11 +346,11 @@ function calculateCartTotals(items: CartItem[]) {
   let shippingPrice = 0;
   if (itemsPrice > 0) {
     if (itemsPrice >= 500) {
-      shippingPrice = 0; // Free shipping for orders over $500
+      shippingPrice = 0; // Free shipping for orders over ₾500
     } else if (itemsPrice >= 200) {
-      shippingPrice = 15; // $15 shipping for orders $200-$499
+      shippingPrice = 0; // ₾15 shipping for orders ₾200-₾499
     } else {
-      shippingPrice = 25; // $25 shipping for orders under $200
+      shippingPrice = 0; // ₾25 shipping for orders under ₾200
     }
   }
 

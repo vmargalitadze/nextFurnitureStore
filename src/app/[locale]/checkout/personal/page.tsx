@@ -100,7 +100,7 @@ const PersonalInfoPage = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleContinue = (e: React.MouseEvent) => {
+  const handleContinue = async (e: React.MouseEvent) => {
     e.preventDefault();
     
     const isValid = validateForm();
@@ -110,12 +110,31 @@ const PersonalInfoPage = () => {
       return;
     }
 
-    // Store address data in sessionStorage as backup
-    sessionStorage.setItem('checkoutAddress', JSON.stringify(address));
-    
-    // Navigate to summary page with address data in URL
-    const addressData = encodeURIComponent(JSON.stringify(address));
-    router.push(`/${params.locale}/summary?address=${addressData}`);
+    try {
+      // Send address data via POST to the API
+      const response = await fetch('/api/checkout/address', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ address }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to process address');
+      }
+
+      // Store address data in sessionStorage as backup
+      sessionStorage.setItem('checkoutAddress', JSON.stringify(address));
+      
+      // Navigate to summary page without address in URL
+      router.push(`/${params.locale}/summary`);
+    } catch (error) {
+      console.error('Error processing address:', error);
+      toast.error(t('checkout.errors.tryAgain'));
+    }
   };
 
   if (loading) {
@@ -311,13 +330,12 @@ const PersonalInfoPage = () => {
 
                   {/* Continue Button */}
           <div className="mt-8 flex justify-end">
-            <Link
-              href={`/${params.locale}/summary?address=${encodeURIComponent(JSON.stringify(address))}`}
+            <button
               onClick={handleContinue}
               className="inline-flex text-[20px] font-bold items-center gap-2 px-8 py-3  text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
             >
               {t('checkout.continueToSummary')}
-            </Link>
+            </button>
           </div>
       </div>
     </div>

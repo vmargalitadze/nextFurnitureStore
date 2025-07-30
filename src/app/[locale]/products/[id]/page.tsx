@@ -11,27 +11,12 @@ import { CartItem } from "@/lib/types";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 
-// Simple Decimal-like class to avoid Prisma import issues
-class SimpleDecimal {
-  value: string;
-
-  constructor(value: string | number) {
-    this.value = value.toString();
-  }
-
-  toString() {
-    return this.value;
-  }
-
-  toNumber() {
-    return parseFloat(this.value);
-  }
-}
+// SimpleDecimal class removed - now using regular numbers
 
 interface ProductSize {
   id: string;
   size: string;
-  price: SimpleDecimal;
+  price: number;
 }
 
 interface Product {
@@ -51,7 +36,7 @@ interface Product {
   qutaisi: boolean;
   kobuleti: boolean;
   sizes?: ProductSize[];
-  price?: SimpleDecimal; // For OTHERS category products
+  price?: number; // For OTHERS category products
   sales?: number;
 }
 
@@ -68,21 +53,15 @@ const Page = (props: { params: { id: string; locale: string } }) => {
     const fetchProduct = async () => {
       try {
         const data = await getProductById(id);
-        // Convert the data to match the Product interface
+        // The data is already converted to numbers by the server action
         if (data) {
-          const productWithDecimalPrices = {
+          const productWithPrices = {
             ...data,
-            sizes:
-              data.sizes?.map((size) => ({
-                ...size,
-                price: new SimpleDecimal(size.price.toString()),
-              })) || undefined,
-            price: data.price
-              ? new SimpleDecimal(data.price.toString())
-              : undefined,
+            sizes: data.sizes || [],
+            price: data.price || undefined,
             sales: data.sales || undefined,
           };
-          setProduct(productWithDecimalPrices as Product);
+          setProduct(productWithPrices as Product);
           // Set the first size as default selected for products with sizes
           if (
             data.sizes &&
@@ -113,10 +92,10 @@ const Page = (props: { params: { id: string; locale: string } }) => {
 
   const getProductPrice = () => {
     if (isOthersProduct() && product?.price) {
-      return product.price.toNumber();
+      return product.price;
     }
     if (selectedSizeData) {
-      return selectedSizeData.price.toNumber();
+      return selectedSizeData.price;
     }
     return 0;
   };

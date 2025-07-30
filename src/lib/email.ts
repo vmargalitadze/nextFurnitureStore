@@ -165,6 +165,23 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
   }
 };
 
+const getDeliveryLocationText = (deliveryLocation: string) => {
+  switch (deliveryLocation) {
+    case 'tbilisi':
+      return 'Tbilisi( T. Eristavi 1)';
+    case 'batumi':
+      return 'Batumi( A. Pushkin 115/117)';
+    case 'batumi44':
+      return 'Batumi( A. Pushkin 44)';
+    case 'qutaisi':
+      return 'Kutaisi( I. Chavchavadze 51)';
+    case 'kobuleti':
+      return 'Kobuleti( Sh. Rustaveli 151)';
+    default:
+      return deliveryLocation || 'Not specified';
+  }
+};
+
 export const sendOrderReceipt = async (email: string, order: any, customerName: string) => {
   const formatPrice = (price: number) => `₾${price.toFixed(2)}`;
   
@@ -260,6 +277,13 @@ export const sendOrderReceipt = async (email: string, order: any, customerName: 
               <span style="font-weight: 700; color: #333; font-size: 18px;">Total:</span>
               <span style="font-weight: 700; color: #438c71; font-size: 18px;">${formatPrice(parseFloat(order.totalPrice.toString()))}</span>
             </div>
+          </div>
+          
+          <div style="background-color: #f8f9fa; border-radius: 6px; padding: 20px; margin-bottom: 30px;">
+            <h3 style="color: #333; margin: 0 0 15px 0;">Delivery Information</h3>
+            <p style="color: #666; margin: 0; line-height: 1.6;">
+              ${getDeliveryLocationText(order.deliveryLocation)}
+            </p>
           </div>
           
           <div style="background-color: #f8f9fa; border-radius: 6px; padding: 20px; margin-bottom: 30px;">
@@ -381,5 +405,106 @@ export const sendContactEmail = async (contactData: {
   } catch (error) {
     console.error('Error sending contact email:', error);
     return { success: false, error: 'Failed to send contact email' };
+  }
+}; 
+
+export const sendOrderToAdmin = async (order: any) => {
+  const formatPrice = (price: number) => `₾${price.toFixed(2)}`;
+  const orderItemsHtml = order.orderitems.map((item: any) => `
+    <tr>
+      <td style="padding: 12px; border-bottom: 1px solid #eee;">
+        <div style="display: flex; align-items: center;">
+          <img src="${item.image}" alt="${item.title}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px; margin-right: 12px;">
+          <div>
+            <div style="font-weight: 600; color: #333;">${item.title}</div>
+            <div style="font-size: 14px; color: #666;">Qty: ${item.qty}</div>
+          </div>
+        </div>
+      </td>
+      <td style="padding: 12px; border-bottom: 1px solid #eee; text-align: right; font-weight: 600;">
+        ${formatPrice(item.price * item.qty)}
+      </td>
+    </tr>
+  `).join('');
+
+  const shipping = order.shippingAddress;
+  const user = order.user;
+
+  // Map deliveryLocation codes to full Georgian addresses
+  const deliveryLocationMap: Record<string, string> = {
+    'tbilisi': 'თბილისი, თ. ერისთავის 1',
+    'batumi': 'ბათუმი, ალ. პუშკინის 115/117',
+    'batumi44': 'ბათუმი, ალ. პუშკინის 44',
+    'qutaisi': 'ქუთაისი, ი. ჭავჭავაძის 51',
+    'kobuleti': 'ქობულეთი, შ. რუსთაველის 151',
+  };
+
+  const mailOptions = {
+    from: {
+      name: 'Furniture Store',
+      address: process.env.EMAIL_USER || 'noreply@yourdomain.com'
+    },
+    to: 'kipianistore@gmail.com',
+    subject: `New Order Received #${order.id}`,
+    headers: {
+      'X-Auto-Response-Suppress': 'OOF, AutoReply',
+      'Precedence': 'bulk',
+      'X-Mailer': 'Furniture Store Admin System',
+      'Feedback-ID': 'order-admin:furniturestore',
+    },
+    messageId: `<order-admin-${order.id}-${Date.now()}@${process.env.DOMAIN_NAME || 'furniturestore.com'}>`,
+    replyTo: 'noreply@furniturestore.com',
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 700px; margin: 0 auto; background-color: #f9f9f9; padding: 20px;">
+        <div style="background-color: white; border-radius: 8px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+          <h1 style="color: #438c71;">New Order Received</h1>
+          <h2 style="color: #333;">Order #${order.id}</h2>
+          <p><strong>Order Date:</strong> ${new Date(order.createdAt).toLocaleString()}</p>
+          <h3>Customer Information</h3>
+          <ul style="color: #333;">
+            <li><strong>სახელი და გვარი:</strong> ${shipping.firstName} ${shipping.lastName}</li>
+            <li><strong>ემეილი:</strong> ${shipping.email}</li>
+            <li><strong>ტელეფონი:</strong> ${shipping.phone || 'N/A'}</li>
+         
+            <li><strong>მყიდველის ემეილი:</strong> ${user?.email || 'N/A'}</li>
+          </ul>
+          <h3>მყიდველის მისამართი</h3>
+          <p style="color: #333;">
+            ${shipping.streetAddress}<br>
+            ${shipping.city}, ${shipping.postalCode}<br>
+            ${shipping.country}
+          </p>
+          <h3>ნაყიდი ნივთები</h3>
+          <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+              <tr style="border-bottom: 2px solid #438c71;">
+                <th style="padding: 12px; text-align: left; color: #333;">Item</th>
+                <th style="padding: 12px; text-align: right; color: #333;">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${orderItemsHtml}
+            </tbody>
+          </table>
+          <h3>ჯამი</h3>
+          <ul style="color: #333;">
+            <li><strong>Subtotal:</strong> ${formatPrice(parseFloat(order.itemsPrice.toString()))}</li>
+            <li><strong>Shipping:</strong> ${formatPrice(parseFloat(order.shippingPrice.toString()))}</li>
+            <li><strong>Tax:</strong> ${formatPrice(parseFloat(order.taxPrice.toString()))}</li>
+            <li><strong>Total:</strong> ${formatPrice(parseFloat(order.totalPrice.toString()))}</li>
+            <li><strong>Payment Method:</strong> ${order.paymentMethod}</li>
+            <li><strong>Delivery Option:</strong> ${deliveryLocationMap[order.deliveryLocation] || order.deliveryLocation}</li>
+          </ul>
+        </div>
+      </div>
+    `,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    return { success: true };
+  } catch (error) {
+    console.error('Error sending admin order email:', error);
+    return { success: false, error: 'Failed to send admin order email' };
   }
 }; 
