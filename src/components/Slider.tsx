@@ -30,7 +30,7 @@ const Hero = () => {
       </div>
 
       {/* Main Container */}
-      <div className="relative z-10 mt-24 mb-[40px] flex items-center">
+      <div className="relative z-10 mt-16 mb-[40px] flex items-center">
         <div className="container mx-auto ">
           <div className="grid lg:grid-cols-2 gap-5 items-center">
             

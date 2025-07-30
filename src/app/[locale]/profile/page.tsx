@@ -212,7 +212,7 @@ export default async function ProfilePage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <Link href="/new">
                       <Button
-                        className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+                        className="w-full px-4  py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
                         variant="default"
                       >
                         <FaPlus className="mr-2" />
@@ -221,7 +221,7 @@ export default async function ProfilePage() {
                     </Link>
                     <Link href="/adminall">
                       <Button
-                        className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+                        className="w-full px-4  py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
                         variant="outline"
                       >
                         <List className="mr-2" />
@@ -247,7 +247,13 @@ export default async function ProfilePage() {
               <CardContent>
                 {user.Order && user.Order.length > 0 ? (
                   <div className="space-y-4">
-                    {user.Order.map((order) => (
+                    {user.Order.map((order: {
+                      id: string;
+                      createdAt: string | Date;
+                      totalPrice: any; // or Decimal if you import it
+                      isPaid: boolean;
+                      isDelivered: boolean;
+                    }) => (
                       <Link
                         key={order.id}
                         href={`/order-confirmation?orderId=${order.id}`}
@@ -301,17 +307,17 @@ export default async function ProfilePage() {
 
             {/* Quick Actions */}
             <Card>
-              <CardHeader>
-              <CardTitle className="text-[20px] font-bold">{t("quickActions.title")}</CardTitle>
-                <CardDescription>
+              <CardHeader className="text-start md:text-center">
+              <CardTitle className="text-[20px] md:text-start text-start font-bold">{t("quickActions.title")}</CardTitle>
+                <CardDescription className="md:text-start  text-start">
                   {t("quickActions.description")}
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Link href="/cart">
+                <div className="grid mx-auto grid-cols-1 md:grid-cols-2 gap-4">
+                  <Link className="flex  justify-center md:justify-start" href="/cart">
                     <Button
-                      className="w-[70%]   mx-auto  mb-14 px-4 py-2 text-[20px] font-bold text-[#438c71] bg-white border-2 border-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors gap-2"
+                      className="w-full md:w-[70%]    px-4 py-2 text-[20px] font-bold text-[#438c71] bg-white border-2 border-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors gap-2"
 
                     >
                       <ShoppingCart className="mr-2" />

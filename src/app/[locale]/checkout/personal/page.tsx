@@ -163,9 +163,9 @@ const PersonalInfoPage = () => {
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="mb-8 mt-14">
-          <div className="flex items-center justify-between mb-4">
-            <Link href={`/${params.locale}/cart`}>
-              <Button variant="ghost" className="flex text-[20px] items-center gap-2">
+          <div className="flex text-center md:text-left mx-auto items-center justify-between mb-4">
+            <Link className="mx-auto" href={`/${params.locale}/cart`}>
+              <Button variant="ghost" className="flex text-[20px] text-center items-center md:items-center gap-2">
                 <ArrowLeft className="h-4 w-4" />
                 {t('checkout.backToCart')}
               </Button>
@@ -175,7 +175,7 @@ const PersonalInfoPage = () => {
           <h1 className="  md:text-3xl text-[20px] text-center font-bold text-gray-900">
             {t('checkout.personalInfo')}
           </h1>
-          <p className="text-gray-600 mt-2 text-center md:text-left">
+          <p className="text-gray-600 mt-2 text-center ">
             {t('checkout.personalInfoDescription')}
           </p>
         </div>

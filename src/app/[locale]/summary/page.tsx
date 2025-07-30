@@ -73,38 +73,8 @@ const SummaryPage = () => {
   }, [cart, loading, router, params.locale]);
 
   const calculateDeliveryPrice = (location: string) => {
-    if (!cart || !address) return 0;
-    
-    const userCity = address.city.toLowerCase();
-    
-    // Check if user's city matches the location
-    const isUserCity = 
-      (location === 'tbilisi' && userCity.includes('tbilisi')) ||
-      (location === 'batumi' && userCity.includes('batumi')) ||
-      (location === 'batumi44' && userCity.includes('batumi')) ||
-      (location === 'qutaisi' && userCity.includes('qutaisi')) ||
-      (location === 'kobuleti' && userCity.includes('kobuleti'));
-    
-    // If it's the user's city, delivery is free
-    if (isUserCity) {
-      return 0;
-    }
-    
-    // Otherwise, apply standard pricing for all locations
-    switch (location) {
-      case 'tbilisi':
-        return 0; // ₾50 for Tbilisi (if not user's city)
-      case 'batumi':
-        return 0; // ₾50 for Batumi (if not user's city)
-      case 'batumi44':
-        return 0;
-      case 'qutaisi':
-        return 0; // ₾30 for Kutaisi (if not user's city)
-      case 'kobuleti':
-        return 0; // ₾30 for Kobuleti (if not user's city)
-      default:
-        return 0;
-    }
+    // All listed locations are always free
+    return 0;
   };
 
   const calculateTotalPrice = () => {
@@ -262,8 +232,8 @@ const SummaryPage = () => {
         {/* Header */}
         <div className="mb-8 text-center md:text-left">
           <div className="flex items-center justify-between mb-4">
-            <Link href={`/checkout/personal`}>
-              <Button variant="ghost" className="flex items-center gap-2">
+            <Link className="mx-auto" href={`/checkout/personal`}>
+              <Button variant="ghost" className="flex text-[20px] text-center items-center md:items-center gap-2">
                 <ArrowLeft className="h-4 w-4" />
                 {t('checkout.backToPersonal')}
               </Button>
@@ -334,9 +304,8 @@ const SummaryPage = () => {
                            <span className="font-medium">{t('productDetail.locations.tbilisi')}</span>
                            <span className="text-gray-600 ml-2">({t('productDetail.locations.tbilisiAddress')})</span>
                            <span className="text-[#438c71] font-semibold ml-2">
-                             - {calculateDeliveryPrice('tbilisi') === 0 ? t('checkout.free') : formatPrice(calculateDeliveryPrice('tbilisi').toString())}
+                             - {t('checkout.free')}
                            </span>
-
                          </div>
                        </label>
                      )}
@@ -355,9 +324,8 @@ const SummaryPage = () => {
                            <span className="text-gray-600 ml-2">({t('productDetail.locations.batumiAddress')})</span>
                            
                            <span className="text-[#438c71] font-semibold ml-2">
-                             - {calculateDeliveryPrice('batumi') === 0 ? t('checkout.free') : formatPrice(calculateDeliveryPrice('batumi').toString())}
+                             - {t('checkout.free')}
                            </span>
-                           
                          </div>
                        </label>
                      )}
@@ -376,9 +344,8 @@ const SummaryPage = () => {
                            <span className="font-medium">{t('productDetail.locations.batumi')}</span>
                            <span className="text-gray-600 ml-2">({t('productDetail.locations.batumiAddress2')})</span>
                            <span className="text-[#438c71] font-semibold ml-2">
-                             - {calculateDeliveryPrice('batumi44') === 0 ? t('checkout.free') : formatPrice(calculateDeliveryPrice('batumi44').toString())}
+                             - {t('checkout.free')}
                            </span>
-                           
                          </div>
                        </label>
                      )}
@@ -397,9 +364,8 @@ const SummaryPage = () => {
                            <span className="font-medium">{t('productDetail.locations.qutaisi')}</span>
                            <span className="text-gray-600 ml-2">({t('productDetail.locations.qutaisiAddress')})</span>
                            <span className="text-[#438c71] font-semibold ml-2">
-                             - {calculateDeliveryPrice('qutaisi') === 0 ? t('checkout.free') : formatPrice(calculateDeliveryPrice('qutaisi').toString())}
+                             - {t('checkout.free')}
                            </span>
-                           
                          </div>
                        </label>
                      )}
@@ -417,9 +383,8 @@ const SummaryPage = () => {
                            <span className="font-medium">{t('productDetail.locations.kobuleti')}</span>
                            <span className="text-gray-600 ml-2">({t('productDetail.locations.kobuletiAddress')})</span>
                            <span className="text-[#438c71] font-semibold ml-2">
-                             - {calculateDeliveryPrice('kobuleti') === 0 ? t('checkout.free') : formatPrice(calculateDeliveryPrice('kobuleti').toString())}
+                             - {t('checkout.free')}
                            </span>
-                           
                          </div>
                        </label>
                      )}

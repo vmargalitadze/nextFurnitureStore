@@ -98,7 +98,7 @@ function ContactPage() {
       <div className="py-16 md:py-24 bg-gray-50">
         <div className="container mx-auto max-w-7xl px-4">
           {/* Contact Form Section */}
-          <div className="grid lg:grid-cols-2 gap-12 mb-16">
+          <div className="grid lg:grid-cols-2 gap-12 mb-12 md:mb-16">
             {/* Contact Image */}
             <div className="order-2 lg:order-1">
               <div className="relative group">
@@ -119,7 +119,7 @@ function ContactPage() {
               <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
                 <CardContent className="p-8">
                   <div className="mb-8">
-                    <h2 className="text-3xl font-bold text-gray-800 mb-4">
+                    <h2 className="text-[20px] md:text-3xl font-bold text-gray-800 mb-4">
                       {t("breadcrumb.sendMessage")}
                     </h2>
                     <p className="text-gray-600 text-lg leading-relaxed">
@@ -256,6 +256,8 @@ function ContactPage() {
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Contact Information Cards */}
             <div className="lg:col-span-1 space-y-6">
+              
+
               <Card className="border-0 shadow-lg bg-white hover:shadow-xl transition-shadow duration-300">
                 <CardContent className="p-6">
                   <div className="flex items-center space-x-4">
@@ -281,24 +283,47 @@ function ContactPage() {
                       </svg>
                     </div>
                     <div>
-                      <h3 className="font-semibold  text-gray-800 mb-1">
-                        {t("info.locations")}
+                      <h3 className="font-semibold  mb-1">
+                      {t("info.locations")}
                       </h3>
-                      <p className="text-orange-600 text-[16px]">
-                        {t("info.kobuleti")}
-                      </p>
-                      <p className="text-orange-600 text-[16px]">
-                        {t("info.kutaisi")}
-                      </p>
-                      <p className="text-orange-600 text-[16px]">
-                        {t("info.tbilisi")}
-                      </p>
-                      <p className="text-orange-600 text-[16px]">
-                        {t("info.batumi")}
-                      </p>
-                      <p className="text-orange-600 text-[16px]">
-                        {t("info.batumi3")}
-                      </p>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        {/* Left Column: Batumi & Kobuleti */}
+                        <div className="space-y-6">
+                          <div>
+                            <h3 className="text-[16px] text-black font-semibold mb-2"> {t("info.kobuleti")}</h3>
+                            <p className="text-orange-600">
+                            {t("info.kobuleti3")}
+                            </p>
+                          </div>
+                          <div>
+                            <h3 className="text-[16px] text-black font-bold mb-2">{t("info.kutaisi")}</h3>
+                            <p className="text-orange-600">
+                            {t("info.kutaisi3")}
+                            </p>
+                          </div>
+
+
+                        </div>
+
+                        {/* Right Column: Tbilisi & Kutaisi */}
+                        <div className="space-y-6">
+                          <div>
+                            <h3 className="text-[16px] text-black font-semibold mb-2">{t("info.tbilisi")}</h3>
+                            <p className="text-orange-600">
+                            {t("info.tbilisi3")}
+                            </p>
+                          </div>
+                          <div>
+                            <h3 className="text-[16px] text-black font-bold mb-2">{t("info.batumi")}</h3>
+                            <p className="text-orange-600">
+                            {t("info.batumi4")}
+                            <p className="text-orange-600 text-[16px]">
+                            {t("info.batumi3")}
+                            </p>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -363,14 +388,14 @@ function ContactPage() {
                         {/* Left Column: Batumi & Kobuleti */}
                         <div className="space-y-6">
                           <div>
-                            <h3 className="text-[16px] text-orange-600 font-semibold mb-2">{t("info.batumi2")}</h3>
+                            <h3 className="text-[16px] text-black font-semibold mb-2">{t("info.batumi2")}</h3>
                             <p className="text-orange-600">
                               +995 557 394 374<br />
                               +995 568 613 022
                             </p>
                           </div>
                           <div>
-                            <h3 className="text-[16px] text-orange-600 font-semibold mb-2">{t("info.tbilisi2")}</h3>
+                            <h3 className="text-[16px] text-black font-bold mb-2">{t("info.tbilisi2")}</h3>
                             <p className="text-orange-600">
                               +995 557 226 880
                             </p>
@@ -382,14 +407,14 @@ function ContactPage() {
                         {/* Right Column: Tbilisi & Kutaisi */}
                         <div className="space-y-6">
                           <div>
-                            <h3 className="text-[16px] text-orange-600 font-semibold mb-2">{t("info.kobuleti2")}</h3>
+                            <h3 className="text-[16px] text-black font-semibold mb-2">{t("info.kobuleti2")}</h3>
                             <p className="text-orange-600">
                               +995 555 244 403<br />
                               +995 597 808 047
                             </p>
                           </div>
                           <div>
-                            <h3 className="text-[16px] text-orange-600 font-semibold mb-2">{t("info.kutaisi2")}</h3>
+                            <h3 className="text-[16px] text-black font-bold mb-2">{t("info.kutaisi2")}</h3>
                             <p className="text-orange-600">
                               +995 514 079 898
                             </p>

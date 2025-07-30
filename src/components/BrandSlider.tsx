@@ -25,7 +25,7 @@ function BrandSlider() {
   const t = useTranslations("brands");
 
   return (
-    <section className="max-w-7xl pt-16 mx-auto">
+    <section className="max-w-7xl pt-12 mx-auto">
       <div >
    
 

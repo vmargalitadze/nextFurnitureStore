@@ -111,6 +111,7 @@ const OrderConfirmationPage = () => {
 
     fetchOrder();
   }, [searchParams, updateCart]);
+console.log(order?.deliveryLocation);
 
   // Additional cleanup effect to ensure address data is removed
   useEffect(() => {
@@ -237,28 +238,28 @@ const OrderConfirmationPage = () => {
         <Card className="mb-8">
           <CardHeader>
             <CardTitle className="flex text-[20px] font-bold items-center">
-              <User className="h-5 w-5 mr-2" />
+            
               {t('orderConfirmation.customerInformation')}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              <div className="flex items-center space-x-2">
+              <div className="flex flex-col items-start md:flex-row md:items-center space-x-2">
                 <User className="h-4 w-4 text-gray-500" />
                 <span className="font-semibold">
                   {address.firstName} {address.lastName}
                 </span>
               </div>
-              <div className="flex items-center space-x-2">
+              <div className="flex flex-col items-start md:flex-row md:items-center space-x-2">
                 <Phone className="h-4 w-4 text-gray-500" />
                 <span className="text-gray-600">{address.phone}</span>
               </div>
-              <div className="flex items-center space-x-2">
+              <div className="flex flex-col items-start md:flex-row md:items-center space-x-2">
                 <Mail className="h-4 w-4 text-gray-500" />
                 <span className="text-gray-600">{address.email}</span>
               </div>
               {address.idNumber && (
-                <div className="flex items-center space-x-2">
+                <div className="flex flex-col items-start md:flex-row md:items-center space-x-2">
                   <User className="h-4 w-4 text-gray-500" />
                   <span className="text-gray-600">ID: {address.idNumber}</span>
                 </div>
@@ -278,7 +279,7 @@ const OrderConfirmationPage = () => {
             <div className="space-y-2">
               {/* Show delivery location/city if present */}
               {order.deliveryLocation && (
-                <div className="flex items-center space-x-2">
+                <div className="flex flex-col items-start md:flex-row md:items-center space-x-2">
                   <MapPin className="h-4 w-4 text-gray-500 mt-0.5" />
                   <span className="font-semibold">
                     {t(`productDetail.locations.${order.deliveryLocation}`, { defaultMessage: order.deliveryLocation.charAt(0).toUpperCase() + order.deliveryLocation.slice(1) })}
@@ -287,9 +288,19 @@ const OrderConfirmationPage = () => {
                         <span className="text-gray-600 ml-2">
                           ({t("productDetail.locations.batumiAddress")})
                         </span>
+                       
+                      </>
+                    ) : (
+                      <span className="text-gray-600 ml-2">
+                        ({t(`productDetail.locations.${order.deliveryLocation}Address`, { defaultMessage: "" })})
+                      </span>
+                    )}
+                       {order.deliveryLocation === "batumi44" ? (
+                      <>
                         <span className="text-gray-600 ml-2">
                           ({t("productDetail.locations.batumiAddress2")})
                         </span>
+                       
                       </>
                     ) : (
                       <span className="text-gray-600 ml-2">
@@ -300,7 +311,7 @@ const OrderConfirmationPage = () => {
                 </div>
               )}
               <div className="flex items-start space-x-2">
-                <MapPin className="h-4 w-4 text-gray-500 mt-0.5" />
+           
                 <div>
                   <p className="font-semibold">
                     {address.firstName} {address.lastName}
@@ -387,7 +398,7 @@ const OrderConfirmationPage = () => {
           </Link>
         </div>
 
-        <div className="mt-8 text-center">
+        <div className=" text-center">
           <p className="text-sm text-gray-600">
             {t('orderConfirmation.emailConfirmation')}
           </p>

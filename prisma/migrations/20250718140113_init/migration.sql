@@ -1,8 +1,8 @@
 -- CreateEnum
-CREATE TYPE "ProductType" AS ENUM ('MATTRESS', 'PILLOW', 'QUILT', 'PAD', 'bundle');
+CREATE TYPE "ProductType" AS ENUM ('MATTRESS', 'PILLOW', 'QUILT', 'PAD', 'bundle', 'BED', 'OTHERS');
 
 -- CreateEnum
-CREATE TYPE "Size" AS ENUM ('SIZE_80_190', 'SIZE_80_200', 'SIZE_90_190', 'SIZE_90_200', 'SIZE_100_190', 'SIZE_100_200', 'SIZE_110_190', 'SIZE_110_200', 'SIZE_120_190', 'SIZE_120_200', 'SIZE_130_190', 'SIZE_130_200', 'SIZE_140_190', 'SIZE_140_200', 'SIZE_150_190', 'SIZE_150_200', 'SIZE_160_190', 'SIZE_160_200', 'SIZE_170_190', 'SIZE_170_200', 'SIZE_180_190', 'SIZE_180_200', 'SIZE_190_190', 'SIZE_190_200', 'SIZE_200_200');
+CREATE TYPE "Size" AS ENUM ('SIZE_80_190', 'SIZE_80_200', 'SIZE_90_190', 'SIZE_90_200', 'SIZE_100_190', 'SIZE_100_200', 'SIZE_110_190', 'SIZE_110_200', 'SIZE_120_190', 'SIZE_120_200', 'SIZE_130_190', 'SIZE_130_200', 'SIZE_140_190', 'SIZE_140_200', 'SIZE_150_190', 'SIZE_150_200', 'SIZE_160_190', 'SIZE_160_200', 'SIZE_170_190', 'SIZE_170_200', 'SIZE_180_190', 'SIZE_180_200', 'SIZE_190_190', 'SIZE_190_200', 'SIZE_200_200', 'SIZE_200_220', 'SIZE_220_220');
 
 -- CreateTable
 CREATE TABLE "Session" (
@@ -35,6 +35,16 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
+CREATE TABLE "VerificationToken" (
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
+    "email" TEXT NOT NULL,
+    "token" TEXT NOT NULL,
+    "expires" TIMESTAMP(6) NOT NULL,
+
+    CONSTRAINT "VerificationToken_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Product" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "title" TEXT NOT NULL,
@@ -44,9 +54,12 @@ CREATE TABLE "Product" (
     "brand" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "descriptionEn" TEXT NOT NULL,
+    "price" DECIMAL(12,2),
     "tbilisi" BOOLEAN NOT NULL DEFAULT false,
     "batumi" BOOLEAN NOT NULL DEFAULT false,
+    "batumi44" BOOLEAN NOT NULL DEFAULT false,
     "qutaisi" BOOLEAN NOT NULL DEFAULT false,
+    "kobuleti" BOOLEAN NOT NULL DEFAULT false,
     "popular" BOOLEAN NOT NULL DEFAULT false,
     "sales" INTEGER DEFAULT 0,
     "createdAt" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -114,6 +127,7 @@ CREATE TABLE "Order" (
     "isDelivered" BOOLEAN NOT NULL DEFAULT false,
     "deliveredAt" TIMESTAMP(6),
     "createdAt" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "deliveryLocation" TEXT,
 
     CONSTRAINT "Order_pkey" PRIMARY KEY ("id")
 );
@@ -135,6 +149,12 @@ CREATE UNIQUE INDEX "user_email_idx" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_resetToken_key" ON "User"("resetToken");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "VerificationToken_token_key" ON "VerificationToken"("token");
+
+-- CreateIndex
+CREATE INDEX "Product_category_idx" ON "Product"("category");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "ProductSize_productId_size_key" ON "ProductSize"("productId", "size");
