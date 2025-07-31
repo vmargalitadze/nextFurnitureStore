@@ -4,7 +4,7 @@ import { Link } from "@/i18n/navigation";
 import React, { useState, useEffect, useRef } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import CategoriesList from "./CategoriesList";
-import {  getProductCategoryCounts } from "@/lib/actions/actions";
+import { getProductCategoryCounts } from "@/lib/actions/actions";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
@@ -123,35 +123,37 @@ export default function Categories() {
                 toggleSidebar={handleViewSidebar}
                 onFilterChange={() => {}}
               />
-              {filteredCategories.map((category, index) => (
-                <div
-                  key={category.id}
-                  className="w-full md:w-4/12 mb-10 lg:w-4/12 px-2 "
-                >
-                  <div className="relative group rounded-xl overflow-hidden  shadow-lg  hover:shadow-xl transition-all duration-300">
-                    <Link href={`/list?cat=${category.type}`}>
-                      {/* Image */}
-                      <div className="relative h-[200px] w-full">
-                        <Image
-                          src={category.image}
-                          alt={getLocalizedCategoryLabel(category.type)}
-                          fill
-                          unoptimized
-                          className="object-cover rounded-xl"
-                        />
-                      </div>
+              <div className="flex flex-wrap  w-full justify-center -mx-2">
+                {filteredCategories.map((category, index) => (
+                  <div
+                    key={category.id}
+                    className="w-full md:w-4/12 lg:w-4/12 px-2 mb-10"
+                  >
+                    <div className="relative group rounded-xl overflow-hidden  shadow-lg  hover:shadow-xl transition-all duration-300">
+                      <Link href={`/list?cat=${category.type}`}>
+                        {/* Image */}
+                        <div className="relative h-[200px] w-full">
+                          <Image
+                            src={category.image}
+                            alt={getLocalizedCategoryLabel(category.type)}
+                            fill
+                            unoptimized
+                            className="object-cover rounded-xl"
+                          />
+                        </div>
 
-                      {/* Badge */}
-                      <div className="absolute top-2 left-2  inline-flex items-center gap-2 h-[40px] px-4 rounded-full bg-white/70 backdrop-blur-md border border-gray-200 text-black font-semibold transition-all hover:bg-white truncate max-w-[160px]">
-                        {getLocalizedCategoryLabel(category.type)}
-                        {getProductCount(category.type) > 0
-                          ? ` (${getProductCount(category.type)})`
-                          : ""}
-                      </div>
-                    </Link>
+                        {/* Badge */}
+                        <div className="absolute top-2 left-2  inline-flex items-center gap-2 h-[40px] px-4 rounded-full bg-white/70 backdrop-blur-md border border-gray-200 text-black font-semibold transition-all hover:bg-white truncate max-w-[160px]">
+                          {getLocalizedCategoryLabel(category.type)}
+                          {getProductCount(category.type) > 0
+                            ? ` (${getProductCount(category.type)})`
+                            : ""}
+                        </div>
+                      </Link>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </div>
