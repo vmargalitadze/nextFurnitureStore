@@ -150,7 +150,7 @@ export default function LocaleSwitcher({ onOpen }: { onOpen?: () => void }) {
 
   const locales = [
     { code: 'en', label: 'English', flag: '/America.png' },
-    { code: 'ge', label: 'ქართული', flag: '/Georgia.png' },
+    { code: 'ka', label: 'ქართული', flag: '/Georgia.png' },
   ];
 
   const currentLocale = locales.find(l => l.code === localeActive);

@@ -1,47 +1,48 @@
-import { NextRequest, NextResponse } from 'next/server'
-import axios from 'axios'
+import { NextRequest, NextResponse } from 'next/server';
+import axios from 'axios';
+import qs from 'qs'; // npm install qs
 
-export async function GET(request: NextRequest) {
-  const client_id = '10002062'
-  const client_secret = '9XIHAVHT0Iby'
+export async function GET(req: NextRequest) {
+  const client_id = '10002062';
+  const client_secret = '9XIHAVHT0Iby';
 
-  if (!client_id || !client_secret) {
-    return NextResponse.json(
-      { error: 'BOG credentials not configured' },
-      { status: 500 }
-    )
-  }
-
-  const credentials = Buffer.from(`${client_id}:${client_secret}`).toString('base64')
+  // base64 encode
+  const credentials = Buffer.from(`${client_id}:${client_secret}`).toString('base64');
 
   try {
     const response = await axios.post(
       'https://oauth2.bog.ge/auth/realms/bog/protocol/openid-connect/token',
-      new URLSearchParams({ grant_type: 'client_credentials' }),
+      qs.stringify({ grant_type: 'client_credentials' }), // Body – correct encoding
       {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          Authorization: `Basic ${credentials}`,
+          Authorization: `Basic ${credentials}`, // Basic auth header
         },
       }
-    )
+    );
 
-    const { access_token, expires_in, token_type } = response.data
+    const { access_token, token_type, expires_in } = response.data;
 
     return NextResponse.json({
       access_token,
-      expires_in,
       token_type,
+      expires_in,
       success: true,
-    })
+    });
   } catch (error: any) {
-    console.error('BOG Token error:', error.response?.data || error.message)
+    console.error('BOG Token error:', {
+      status: error.response?.status,
+      data: error.response?.data,
+      headers: error.response?.headers,
+      message: error.message,
+    });
+
     return NextResponse.json(
       {
         error: 'Failed to get BOG access token',
         details: error.response?.data || error.message,
       },
       { status: 500 }
-    )
+    );
   }
 }

@@ -4,8 +4,8 @@ import { defineRouting, LocalePrefix } from 'next-intl/routing';
 import createMiddleware from 'next-intl/middleware';
 
 const routing = defineRouting({
-  locales: ['ge', 'en'],
-  defaultLocale: 'ge',
+  locales: ['ka', 'en'],
+  defaultLocale: 'ka',
 });
 
 export function middleware(request: NextRequest) {
@@ -14,7 +14,7 @@ export function middleware(request: NextRequest) {
   // გადამისამართება მხოლოდ root ან EN root-ზე
   if (pathname === '/' ) {
     const url = request.nextUrl.clone();
-    url.pathname = '/ge';
+    url.pathname = '/ka';
     return NextResponse.redirect(url);
   }
 
@@ -22,7 +22,7 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/', '/(ge|en)/:path*'],
+  matcher: ['/', '/(ka|en)/:path*'],
 };
 
 

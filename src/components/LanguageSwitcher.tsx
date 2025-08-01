@@ -12,7 +12,7 @@ const LanguageSwitcher = () => {
   const localeActive = useLocale();
 
   const toggleLocale = () => {
-    const nextLocale = localeActive === 'en' ? 'ge' : 'en';
+    const nextLocale = localeActive === 'en' ? 'ka' : 'en';
     startTransition(() => {
       const newPath = `/${nextLocale}${pathname.replace(/^\/[a-zA-Z]+/, '')}`;
       const query = searchParams?.toString();
