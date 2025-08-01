@@ -46,6 +46,7 @@ const SummaryPage = () => {
   const [paymentMethod, setPaymentMethod] = useState('card');
   const [processing, setProcessing] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [pendingPayment, setPendingPayment] = useState<any>(null);
 
   // Load address data from sessionStorage
   useEffect(() => {
@@ -67,10 +68,23 @@ const SummaryPage = () => {
   // Redirect if cart is empty
   useEffect(() => {
     if (!loading && (!cart || cart.items.length === 0)) {
-  
+
       router.push(`/${params.locale}/cart`);
     }
   }, [cart, loading, router, params.locale]);
+
+  // Check for pending payment
+  useEffect(() => {
+    const pendingPaymentData = sessionStorage.getItem('pendingPayment');
+    if (pendingPaymentData) {
+      try {
+        const payment = JSON.parse(pendingPaymentData);
+        setPendingPayment(payment);
+      } catch (error) {
+        console.error('Error parsing pending payment:', error);
+      }
+    }
+  }, []);
 
   const calculateDeliveryPrice = (location: string) => {
     // All listed locations are always free
@@ -86,11 +100,25 @@ const SummaryPage = () => {
   };
 
   const handlePlaceOrder = async () => {
-    if (!address || !deliveryOption) {
+    if (!address || !deliveryOption || !paymentMethod) {
       toast.error('Please complete all required fields');
       return;
     }
 
+    // If credit card payment is selected, handle BOG payment
+    if (paymentMethod === 'card') {
+      try {
+        const token = await getToken();
+        await createPaymentOrder(token);
+        return; // Exit early as createPaymentOrder handles the flow
+      } catch (error) {
+        console.error('BOG payment error:', error);
+        toast.error('გადახდის ინიცირება ვერ მოხერხდა');
+        return;
+      }
+    }
+
+    // For cash on delivery, proceed with normal order creation
     setProcessing(true);
     try {
       const response = await fetch('/api/orders/create', {
@@ -114,13 +142,13 @@ const SummaryPage = () => {
 
       // Store order ID in sessionStorage as backup
       sessionStorage.setItem('lastOrderId', data.order.id);
-      
+
       // Clean up checkout address data from sessionStorage
       sessionStorage.removeItem('checkoutAddress');
-      
+
       // Use a more reliable redirect approach
       const orderConfirmationUrl = `/${params.locale}/order-confirmation?orderId=${data.order.id}`;
-      
+
       // Redirect immediately without clearing cart first
       window.location.href = orderConfirmationUrl;
 
@@ -147,7 +175,7 @@ const SummaryPage = () => {
   // Get available delivery locations based on cart items
   const availableLocations = useMemo(() => {
     if (!cart?.items) return [];
-    
+
     const locations = {
       tbilisi: false,
       batumi: false,
@@ -173,13 +201,13 @@ const SummaryPage = () => {
   useEffect(() => {
     if (address && availableLocations.length > 0 && !deliveryOption) {
       const userCity = address.city.toLowerCase();
-      
+
       // Check if user's city matches any available location
       if (userCity.includes('tbilisi') && availableLocations.includes('tbilisi')) {
         setDeliveryOption('tbilisi');
       } else if (userCity.includes('batumi') && availableLocations.includes('batumi')) {
         setDeliveryOption('batumi');
-      } 
+      }
       else if (userCity.includes('qutaisi') && availableLocations.includes('qutaisi')) {
         setDeliveryOption('qutaisi');
       } else if (userCity.includes('kobuleti') && availableLocations.includes('kobuleti')) {
@@ -225,6 +253,109 @@ const SummaryPage = () => {
   if (!cart || cart.items.length === 0 || !address) {
     return null; // Will redirect
   }
+  const getToken = async () => {
+    try {
+      const res = await fetch('/api/token')
+      const data = await res.json()
+
+      if (!data.success) {
+        throw new Error(data.error || 'Failed to get token')
+      }
+
+      return data.access_token
+    } catch (error) {
+      console.error('Token error:', error)
+      throw new Error('Failed to get BOG access token')
+    }
+  }
+
+  const createPaymentOrder = async (token: string) => {
+    try {
+      // Calculate delivery price
+      const deliveryPrice = calculateDeliveryPrice(deliveryOption)
+
+      // Calculate total amount
+      const totalAmount = calculateTotalPrice()
+
+      // Prepare order data
+      const orderData = {
+        cart,
+        address,
+        deliveryOption,
+        deliveryPrice,
+        totalAmount,
+        orderId: `order_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`
+      }
+
+      const res = await fetch('/api/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          token,
+          orderData
+        }),
+      })
+
+      const data = await res.json()
+
+      if (data.success && data.redirectUrl) {
+        console.log('Payment order created successfully:', data)
+
+        // Ask user if they want to proceed to payment
+        const proceedToPayment = confirm('გსურთ BOG გადახდის გვერდზე გადასვლა? (Do you want to proceed to BOG payment page?)')
+
+        if (proceedToPayment) {
+          window.location.href = data.redirectUrl // Redirect to BOG payment page
+        } else {
+          // Store payment info for later use
+          sessionStorage.setItem('pendingPayment', JSON.stringify({
+            redirectUrl: data.redirectUrl,
+            orderId: data.orderId,
+            bogOrderId: data.bogOrderId
+          }))
+
+          toast.success('გადახდა შენახულია. შეგიძლიათ მოგვიანებით გააგრძელოთ. (Payment saved. You can continue later.)')
+        }
+      } else {
+        console.error('Payment order creation failed:', data)
+        toast.error(data.error || 'დაფიქსირდა შეცდომა გადახდის დაწყებისას')
+      }
+    } catch (error) {
+      console.error('Payment order creation error:', error)
+      toast.error('გადახდის ინიცირება ვერ მოხერხდა')
+    }
+  }
+
+  const handlePendingPayment = () => {
+    if (pendingPayment?.redirectUrl) {
+      window.location.href = pendingPayment.redirectUrl;
+    }
+  }
+
+  const clearPendingPayment = () => {
+    sessionStorage.removeItem('pendingPayment');
+    setPendingPayment(null);
+    toast.success('Pending payment cleared');
+  }
+
+  const handleBOGPayment = async () => {
+    const tokenRes = await fetch('/api/token');
+    const { access_token } = await tokenRes.json();
+
+    const orderRes = await fetch('/api/create-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: access_token }),
+    });
+
+    const { redirectUrl } = await orderRes.json();
+
+    if (redirectUrl) {
+      window.location.href = redirectUrl;
+    } else {
+      alert('გადახდის შექმნა ვერ მოხერხდა');
+    }
+  };
 
   return (
     <div className="container mx-auto px-4 py-8 mt-[80px]">
@@ -238,7 +369,7 @@ const SummaryPage = () => {
                 {t('checkout.backToPersonal')}
               </Button>
             </Link>
-        
+
           </div>
           <h1 className="text-[20px] md:text-3xl font-bold text-gray-900">
             {t('checkout.orderSummary')}
@@ -290,104 +421,104 @@ const SummaryPage = () => {
                     <p className="text-sm text-gray-600 mb-3">
                       {t('checkout.deliveryPricingNote')}
                     </p>
-                                         {availableLocations.includes('tbilisi') && (
-                       <label className="flex items-center space-x-3 cursor-pointer">
-                         <input
-                           type="radio"
-                           name="delivery"
-                           value="tbilisi"
-                           checked={deliveryOption === 'tbilisi'}
-                           onChange={(e) => setDeliveryOption(e.target.value)}
-                           className="text-[#438c71]"
-                         />
-                         <div>
-                           <span className="font-medium">{t('productDetail.locations.tbilisi')}</span>
-                           <span className="text-gray-600 ml-2">({t('productDetail.locations.tbilisiAddress')})</span>
-                           <span className="text-[#438c71] font-semibold ml-2">
-                             - {t('checkout.free')}
-                           </span>
-                         </div>
-                       </label>
-                     )}
-                     {availableLocations.includes('batumi') && (
-                       <label className="flex items-center space-x-3 cursor-pointer">
-                         <input
-                           type="radio"
-                           name="delivery"
-                           value="batumi"
-                           checked={deliveryOption === 'batumi'}
-                           onChange={(e) => setDeliveryOption(e.target.value)}
-                           className="text-[#438c71]"
-                         />
-                         <div>
-                           <span className="font-medium">{t('productDetail.locations.batumi')}</span>
-                           <span className="text-gray-600 ml-2">({t('productDetail.locations.batumiAddress')})</span>
-                           
-                           <span className="text-[#438c71] font-semibold ml-2">
-                             - {t('checkout.free')}
-                           </span>
-                         </div>
-                       </label>
-                     )}
-                     
-                     {availableLocations.includes('batumi44') && (
-                       <label className="flex items-center space-x-3 cursor-pointer">
-                         <input
-                           type="radio"
-                           name="delivery"
-                           value="batumi44"
-                           checked={deliveryOption === 'batumi44'}
-                           onChange={(e) => setDeliveryOption(e.target.value)}
-                           className="text-[#438c71]"
-                         />
-                         <div>
-                           <span className="font-medium">{t('productDetail.locations.batumi')}</span>
-                           <span className="text-gray-600 ml-2">({t('productDetail.locations.batumiAddress2')})</span>
-                           <span className="text-[#438c71] font-semibold ml-2">
-                             - {t('checkout.free')}
-                           </span>
-                         </div>
-                       </label>
-                     )}
+                    {availableLocations.includes('tbilisi') && (
+                      <label className="flex items-center space-x-3 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="delivery"
+                          value="tbilisi"
+                          checked={deliveryOption === 'tbilisi'}
+                          onChange={(e) => setDeliveryOption(e.target.value)}
+                          className="text-[#438c71]"
+                        />
+                        <div>
+                          <span className="font-medium">{t('productDetail.locations.tbilisi')}</span>
+                          <span className="text-gray-600 ml-2">({t('productDetail.locations.tbilisiAddress')})</span>
+                          <span className="text-[#438c71] font-semibold ml-2">
+                            - {t('checkout.free')}
+                          </span>
+                        </div>
+                      </label>
+                    )}
+                    {availableLocations.includes('batumi') && (
+                      <label className="flex items-center space-x-3 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="delivery"
+                          value="batumi"
+                          checked={deliveryOption === 'batumi'}
+                          onChange={(e) => setDeliveryOption(e.target.value)}
+                          className="text-[#438c71]"
+                        />
+                        <div>
+                          <span className="font-medium">{t('productDetail.locations.batumi')}</span>
+                          <span className="text-gray-600 ml-2">({t('productDetail.locations.batumiAddress')})</span>
 
-                     {availableLocations.includes('qutaisi') && (
-                       <label className="flex items-center space-x-3 cursor-pointer">
-                         <input
-                           type="radio"
-                           name="delivery"
-                           value="qutaisi"
-                           checked={deliveryOption === 'qutaisi'}
-                           onChange={(e) => setDeliveryOption(e.target.value)}
-                           className="text-[#438c71]"
-                         />
-                         <div>
-                           <span className="font-medium">{t('productDetail.locations.qutaisi')}</span>
-                           <span className="text-gray-600 ml-2">({t('productDetail.locations.qutaisiAddress')})</span>
-                           <span className="text-[#438c71] font-semibold ml-2">
-                             - {t('checkout.free')}
-                           </span>
-                         </div>
-                       </label>
-                     )}
-                     {availableLocations.includes('kobuleti') && (
-                       <label className="flex items-center space-x-3 cursor-pointer">
-                         <input
-                           type="radio"
-                           name="delivery"
-                           value="kobuleti"
-                           checked={deliveryOption === 'kobuleti'}
-                           onChange={(e) => setDeliveryOption(e.target.value)}
-                           className="text-[#438c71]"
-                         />
-                         <div>
-                           <span className="font-medium">{t('productDetail.locations.kobuleti')}</span>
-                           <span className="text-gray-600 ml-2">({t('productDetail.locations.kobuletiAddress')})</span>
-                           <span className="text-[#438c71] font-semibold ml-2">
-                             - {t('checkout.free')}
-                           </span>
-                         </div>
-                       </label>
-                     )}
+                          <span className="text-[#438c71] font-semibold ml-2">
+                            - {t('checkout.free')}
+                          </span>
+                        </div>
+                      </label>
+                    )}
+
+                    {availableLocations.includes('batumi44') && (
+                      <label className="flex items-center space-x-3 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="delivery"
+                          value="batumi44"
+                          checked={deliveryOption === 'batumi44'}
+                          onChange={(e) => setDeliveryOption(e.target.value)}
+                          className="text-[#438c71]"
+                        />
+                        <div>
+                          <span className="font-medium">{t('productDetail.locations.batumi')}</span>
+                          <span className="text-gray-600 ml-2">({t('productDetail.locations.batumiAddress2')})</span>
+                          <span className="text-[#438c71] font-semibold ml-2">
+                            - {t('checkout.free')}
+                          </span>
+                        </div>
+                      </label>
+                    )}
+
+                    {availableLocations.includes('qutaisi') && (
+                      <label className="flex items-center space-x-3 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="delivery"
+                          value="qutaisi"
+                          checked={deliveryOption === 'qutaisi'}
+                          onChange={(e) => setDeliveryOption(e.target.value)}
+                          className="text-[#438c71]"
+                        />
+                        <div>
+                          <span className="font-medium">{t('productDetail.locations.qutaisi')}</span>
+                          <span className="text-gray-600 ml-2">({t('productDetail.locations.qutaisiAddress')})</span>
+                          <span className="text-[#438c71] font-semibold ml-2">
+                            - {t('checkout.free')}
+                          </span>
+                        </div>
+                      </label>
+                    )}
+                    {availableLocations.includes('kobuleti') && (
+                      <label className="flex items-center space-x-3 cursor-pointer">
+                        <input
+                          type="radio"
+                          name="delivery"
+                          value="kobuleti"
+                          checked={deliveryOption === 'kobuleti'}
+                          onChange={(e) => setDeliveryOption(e.target.value)}
+                          className="text-[#438c71]"
+                        />
+                        <div>
+                          <span className="font-medium">{t('productDetail.locations.kobuleti')}</span>
+                          <span className="text-gray-600 ml-2">({t('productDetail.locations.kobuletiAddress')})</span>
+                          <span className="text-[#438c71] font-semibold ml-2">
+                            - {t('checkout.free')}
+                          </span>
+                        </div>
+                      </label>
+                    )}
                   </div>
                 ) : (
                   <p className="text-red-500">{t('checkout.noDeliveryLocations')}</p>
@@ -404,19 +535,42 @@ const SummaryPage = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3">
-                  <label className="flex items-center space-x-3 cursor-pointer">
+                <div className="space-y-4">
+                  <label className="flex items-center space-x-3 cursor-pointer p-3 border border-gray-200 rounded-lg hover:border-[#438c71] transition-colors">
                     <input
                       type="radio"
                       name="payment"
                       value="card"
                       checked={paymentMethod === 'card'}
-                      onChange={(e) => setPaymentMethod(e.target.value)}
+                      onChange={async (e) => {
+                        const value = e.target.value;
+                        setPaymentMethod(value);
+
+                        if (value === 'card') {
+                          try {
+                            await handleBOGPayment();
+                          } catch (err) {
+                            console.error('Payment init error:', err);
+                            toast.error('გადახდის ინიცირება ვერ მოხერხდა');
+                          }
+                        }
+                      }}
                       className="text-[#438c71]"
                     />
-                    <span className="font-medium">{t('checkout.creditCard')}</span>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <CreditCard className="h-5 w-5 text-[#438c71]" />
+                        <span className="font-semibold text-lg">
+                          {t('checkout.creditCard')}
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-600 mt-1">
+                        საკრედიტო/დებეტური ბარათი - BOG გადახდის სისტემა
+                      </p>
+                    </div>
                   </label>
-                  <label className="flex items-center space-x-3 cursor-pointer">
+
+                  <label className="flex items-center space-x-3 cursor-pointer p-3 border border-gray-200 rounded-lg hover:border-[#438c71] transition-colors">
                     <input
                       type="radio"
                       name="payment"
@@ -425,7 +579,15 @@ const SummaryPage = () => {
                       onChange={(e) => setPaymentMethod(e.target.value)}
                       className="text-[#438c71]"
                     />
-                    <span className="font-medium">{t('checkout.cashOnDelivery')}</span>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <Truck className="h-5 w-5 text-[#438c71]" />
+                        <span className="font-semibold text-lg">{t('checkout.cashOnDelivery')}</span>
+                      </div>
+                      <p className="text-sm text-gray-600 mt-1">
+                        ნაღდი ფულით გადახდა მიტანისას
+                      </p>
+                    </div>
                   </label>
                 </div>
               </CardContent>
@@ -483,13 +645,13 @@ const SummaryPage = () => {
                     <span className="text-bold text-[18px]">{t('checkout.subtotal')}</span>
                     <span className="font-semibold">{formatPrice(cart.itemsPrice)}</span>
                   </div>
-                 
-                                     <div className="flex justify-between">
-                     <span className="text-bold text-[18px]">{t('checkout.delivery')}</span>
-                     <span className="font-semibold">
-                       {deliveryOption ? formatPrice(calculateDeliveryPrice(deliveryOption).toString()) : '-'}
-                     </span>
-                   </div>
+
+                  <div className="flex justify-between">
+                    <span className="text-bold text-[18px]">{t('checkout.delivery')}</span>
+                    <span className="font-semibold">
+                      {deliveryOption ? formatPrice(calculateDeliveryPrice(deliveryOption).toString()) : '-'}
+                    </span>
+                  </div>
                   <Separator />
                   <div className="flex justify-between text-lg font-bold">
                     <span className="text-bold text-[18px]">{t('checkout.total')}</span>
@@ -501,7 +663,7 @@ const SummaryPage = () => {
 
                 <Button
                   onClick={handlePlaceOrder}
-                  disabled={!deliveryOption || processing}
+                  disabled={!deliveryOption || !paymentMethod || processing}
                   className="w-full flex text-[20px] font-bold items-center justify-center gap-2 px-6 py-3 text-lg  text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {processing ? (
@@ -513,11 +675,38 @@ const SummaryPage = () => {
                     <>
                       <Lock className="h-5 w-5" />
                       <span className="text-[20px] font-bold">
-                        {t('checkout.placeOrder')}
+                        {paymentMethod === 'card' ? 'გადახდა BOG-ით' : t('checkout.placeOrder')}
                       </span>
                     </>
                   )}
                 </Button>
+
+                {/* Pending Payment Section */}
+                {pendingPayment && (
+                  <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                    <h3 className="font-semibold text-yellow-800 mb-2">
+                      Pending Payment Available
+                    </h3>
+                    <p className="text-sm text-yellow-700 mb-3">
+                      You have a saved payment that you can continue with.
+                    </p>
+                    <div className="space-y-2">
+                      <Button
+                        onClick={handlePendingPayment}
+                        className="w-full bg-yellow-600 hover:bg-yellow-700 text-white"
+                      >
+                        Continue with BOG Payment
+                      </Button>
+                      <Button
+                        onClick={clearPendingPayment}
+                        variant="outline"
+                        className="w-full"
+                      >
+                        Clear Pending Payment
+                      </Button>
+                    </div>
+                  </div>
+                )}
 
                 <p className="text-xs text-gray-500 text-center">
                   {t('checkout.securePayment')}
