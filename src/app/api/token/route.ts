@@ -3,8 +3,8 @@ import axios from 'axios';
 import qs from 'qs'; // npm install qs
 
 export async function GET(req: NextRequest) {
-  const client_id = '10002062';
-  const client_secret = '9XIHAVHT0Iby';
+  const client_id = process.env.BOG_CLIENT_ID || '10002062';
+  const client_secret = process.env.BOG_CLIENT_SECRET || '9XIHAVHT0Iby';
 
   // base64 encode
   const credentials = Buffer.from(`${client_id}:${client_secret}`).toString('base64');

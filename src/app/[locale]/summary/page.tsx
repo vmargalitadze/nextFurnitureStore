@@ -339,21 +339,44 @@ const SummaryPage = () => {
   }
 
   const handleBOGPayment = async () => {
-    const tokenRes = await fetch('/api/token');
-    const { access_token } = await tokenRes.json();
+    try {
+      // Get BOG access token
+      const tokenRes = await fetch('/api/token');
+      const tokenData = await tokenRes.json();
+      
+      if (!tokenRes.ok) {
+        console.error('Token error:', tokenData);
+        alert('გადახდის სისტემაში შედის ვერ მოხერხდა. გთხოვთ სცადოთ მოგვიანებით.');
+        return;
+      }
 
-    const orderRes = await fetch('/api/create-order', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token: access_token }),
-    });
+      const { access_token } = tokenData;
 
-    const { redirectUrl } = await orderRes.json();
+      // Create BOG order
+      const orderRes = await fetch('/api/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: access_token }),
+      });
 
-    if (redirectUrl) {
-      window.location.href = redirectUrl;
-    } else {
-      alert('გადახდის შექმნა ვერ მოხერხდა');
+      const orderData = await orderRes.json();
+
+      if (!orderRes.ok) {
+        console.error('Order creation error:', orderData);
+        alert('შეკვეთის შექმნა ვერ მოხერხდა. გთხოვთ სცადოთ მოგვიანებით.');
+        return;
+      }
+
+      const { redirectUrl } = orderData;
+
+      if (redirectUrl) {
+        window.location.href = redirectUrl;
+      } else {
+        alert('გადახდის ბმული ვერ მოიძებნა');
+      }
+    } catch (error) {
+      console.error('Payment error:', error);
+      alert('გადახდის პროცესში შეცდომა მოხდა. გთხოვთ სცადოთ მოგვიანებით.');
     }
   };
 
