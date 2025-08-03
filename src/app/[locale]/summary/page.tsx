@@ -351,6 +351,10 @@ const SummaryPage = () => {
       }
 
       const { access_token } = tokenData;
+      
+      // Console log the token in frontend
+      console.log('🔑 BOG Access Token received:', access_token);
+      console.log('Token length:', access_token?.length || 0);
 
       // Create BOG order
       const orderRes = await fetch('/api/create-order', {

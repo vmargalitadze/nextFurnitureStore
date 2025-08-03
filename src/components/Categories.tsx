@@ -78,6 +78,7 @@ export default function Categories() {
     fetchProductCounts();
   }, []);
 
+
   const getLocalizedCategoryLabel = (type: string) => {
     const category = CategoriesList.find((cat) => cat.type === type);
     if (!category) return type;

@@ -34,7 +34,7 @@ const HomePage = () => {
         <Suspense fallback={<LoadingSpinner />}>
           <BrandSlider />
         </Suspense>
-
+        
         <div className="">
           <Suspense fallback={<LoadingSpinner />}>
             <ProductList />
