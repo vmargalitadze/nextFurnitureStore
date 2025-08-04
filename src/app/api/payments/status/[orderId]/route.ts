@@ -17,7 +17,7 @@ export async function GET(
     const { access_token } = tokenData;
     const orderId = params.orderId;
 
-    // Get payment status from BOG
+    // Get payment status from BOG using original API
     const response = await axios.get(
       `https://api.bog.ge/payments/v1/ecommerce/orders/${orderId}`,
       {
