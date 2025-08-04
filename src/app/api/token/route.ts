@@ -3,8 +3,8 @@ import axios from 'axios';
 import qs from 'qs'; // npm install qs
 
 export async function GET(req: NextRequest) {
-  const client_id = '10002062'; // ← პირდაპირი ჩანაწერი
-const client_secret = '9XIHAVHT0Iby';
+  const client_id = process.env.BOG_CLIENT_ID;
+  const client_secret = process.env.BOG_CLIENT_SECRET;
 
   // Console log environment variables (without exposing secrets)
   console.log('🔧 Environment Variables Check:');

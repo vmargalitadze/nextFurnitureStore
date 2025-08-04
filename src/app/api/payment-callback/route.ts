@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'
+import { prisma } from '@/lib/prisma'
 
 const PUBLIC_KEY = `
 -----BEGIN PUBLIC KEY-----
@@ -18,7 +19,7 @@ export async function POST(req: NextRequest) {
   const rawBody = await req.text()
 
   try {
-    // ვალიდაცია ხელმოწერის
+    // Validate signature
     const verify = crypto.createVerify("RSA-SHA256")
     verify.update(rawBody)
     verify.end()
@@ -31,9 +32,59 @@ export async function POST(req: NextRequest) {
     }
 
     const data = JSON.parse(rawBody)
-
-    // ✅ აქ ამუშავებ გადახდის მონაცემებს (შეკვეთის update, ბილინგი და ა.შ.)
     console.log("✅ VALID PAYMENT CALLBACK RECEIVED:", data)
+
+    // Extract payment information
+    const { event, body } = data
+    const { order_id, external_order_id, status, amount } = body
+
+    if (event === 'order_payment') {
+      // Find the order in your database
+      const order = await prisma.order.findFirst({
+        where: { 
+          id: external_order_id 
+        }
+      })
+
+      if (!order) {
+        console.error(`❌ Order not found: ${external_order_id}`)
+        return NextResponse.json({ error: "Order not found" }, { status: 404 })
+      }
+
+      // Update order status based on payment status
+      let isPaid = false
+
+      switch (status) {
+        case 'APPROVED':
+        case 'COMPLETED':
+          isPaid = true
+          break
+        case 'DECLINED':
+        case 'FAILED':
+        case 'CANCELLED':
+          isPaid = false
+          break
+        default:
+          isPaid = false
+      }
+
+      // Update the order in database
+      await prisma.order.update({
+        where: { id: external_order_id },
+        data: {
+          isPaid,
+          paidAt: isPaid ? new Date() : null,
+          paymentResult: {
+            bogOrderId: order_id,
+            status: status,
+            amount: amount,
+            processedAt: new Date().toISOString()
+          }
+        }
+      })
+
+      console.log(`✅ Order ${external_order_id} updated with payment status: ${status}`)
+    }
 
     return new NextResponse("OK", { status: 200 })
   } catch (err) {

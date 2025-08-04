@@ -340,6 +340,28 @@ const SummaryPage = () => {
 
   const handleBOGPayment = async () => {
     try {
+      // Validate required data
+      if (!address || !deliveryOption || !cart) {
+        alert('გთხოვთ შეავსოთ ყველა საჭირო ველი');
+        return;
+      }
+
+      // Calculate delivery price
+      const deliveryPrice = calculateDeliveryPrice(deliveryOption);
+
+      // Calculate total amount
+      const totalAmount = calculateTotalPrice();
+
+      // Prepare order data
+      const orderData = {
+        cart,
+        address,
+        deliveryOption,
+        deliveryPrice,
+        totalAmount,
+        orderId: `order_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`
+      };
+
       // Get BOG access token
       const tokenRes = await fetch('/api/token');
       const tokenData = await tokenRes.json();
@@ -360,23 +382,41 @@ const SummaryPage = () => {
       const orderRes = await fetch('/api/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token: access_token }),
+        body: JSON.stringify({ 
+          token: access_token,
+          orderData: orderData
+        }),
       });
 
-      const orderData = await orderRes.json();
+      const orderDataResponse = await orderRes.json();
 
       if (!orderRes.ok) {
-        console.error('Order creation error:', orderData);
+        console.error('Order creation error:', orderDataResponse);
         alert('შეკვეთის შექმნა ვერ მოხერხდა. გთხოვთ სცადოთ მოგვიანებით.');
         return;
       }
 
-      const { redirectUrl } = orderData;
+      if (orderDataResponse.success && orderDataResponse.redirectUrl) {
+        console.log('Payment order created successfully:', orderDataResponse);
+        
+        // Ask user if they want to proceed to payment
+        const proceedToPayment = confirm('გსურთ BOG გადახდის გვერდზე გადასვლა? (Do you want to proceed to BOG payment page?)');
 
-      if (redirectUrl) {
-        window.location.href = redirectUrl;
+        if (proceedToPayment) {
+          window.location.href = orderDataResponse.redirectUrl; // Redirect to BOG payment page
+        } else {
+          // Store payment info for later use
+          sessionStorage.setItem('pendingPayment', JSON.stringify({
+            redirectUrl: orderDataResponse.redirectUrl,
+            orderId: orderDataResponse.orderId,
+            bogOrderId: orderDataResponse.bogOrderId
+          }));
+
+          toast.success('გადახდა შენახულია. შეგიძლიათ მოგვიანებით გააგრძელოთ. (Payment saved. You can continue later.)');
+        }
       } else {
-        alert('გადახდის ბმული ვერ მოიძებნა');
+        console.error('Payment order creation failed:', orderDataResponse);
+        alert(orderDataResponse.error || 'დაფიქსირდა შეცდომა გადახდის დაწყებისას');
       }
     } catch (error) {
       console.error('Payment error:', error);
