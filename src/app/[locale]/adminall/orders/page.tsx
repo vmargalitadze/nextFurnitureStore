@@ -74,15 +74,7 @@ async function getAllOrders(searchParams?: { bog?: string }) {
     }
   });
 
-  console.log('Total orders found:', orders.length);
-  console.log('Orders with BOG payment method:', orders.filter(o => o.paymentMethod?.includes('BOG')).length);
-  console.log('Sample orders:', orders.slice(0, 3).map(o => ({ 
-    id: o.id, 
-    paymentMethod: o.paymentMethod, 
-    userId: o.userId,
-    createdAt: o.createdAt 
-  })));
-  console.log('================================');
+
 
   // Convert Decimal objects to numbers
   return orders.map(order => ({
@@ -194,14 +186,14 @@ export default async function OrdersPage({
                 <div className="mt-2">
                   <Badge variant="default" className="bg-blue-600">
                     <FaCreditCard className="w-3 h-3 mr-1" />
-                    BOG Filter Active
+                   აქტიური 
                   </Badge>
                 </div>
               )}
             </div>
           <Link href="/adminall">
             <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="outline">
-              Back to Dashboard
+             უკან დაბრუნება
             </Button>
           </Link>
         </div>
@@ -213,11 +205,11 @@ export default async function OrdersPage({
                <div className="flex items-center justify-between">
                  <div>
                    <p className="text-blue-100 text-sm">
-                     {searchParams?.bog === 'true' ? 'BOG Orders' : 'Total Orders'}
+                     {searchParams?.bog === 'true' ? 'ბარათით გადახდილი შეკვეთები' : 'ყველა შეკვეთა'}
                    </p>
                    <p className="text-2xl font-bold">{orders.length}</p>
                    <p className="text-blue-200 text-xs">
-                     {searchParams?.bog === 'true' ? 'BOG payments only' : 'Across all users'}
+                     {searchParams?.bog === 'true' ? 'ბარათით გადახდილი შეკვეთები მხოლოდ' : 'ყველა შეკვეთა'}
                    </p>
                  </div>
                  <div className="text-blue-200">
@@ -232,13 +224,13 @@ export default async function OrdersPage({
                <div className="flex items-center justify-between">
                  <div>
                    <p className="text-green-100 text-sm">
-                     {searchParams?.bog === 'true' ? 'BOG Revenue' : 'Total Revenue'}
+                     {searchParams?.bog === 'true' ? 'ბარათით გადახდილი შეკვეთები' : 'ყველა შეკვეთა'}
                    </p>
                    <p className="text-2xl font-bold">
                      ₾{orders.reduce((sum, order) => sum + Number(order.totalPrice), 0).toFixed(2)}
                    </p>
                    <p className="text-green-200 text-xs">
-                     {searchParams?.bog === 'true' ? 'From BOG orders' : 'From all orders'}
+                     {searchParams?.bog === 'true' ? 'ბარათით გადახდილი შეკვეთები მხოლოდ' : 'ყველა შეკვეთა'}
                    </p>
                  </div>
                  <div className="text-green-200">
@@ -252,9 +244,9 @@ export default async function OrdersPage({
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-purple-100 text-sm">Active Customers</p>
+                  <p className="text-purple-100 text-sm">მომხმარებლები</p>
                   <p className="text-2xl font-bold">{uniqueCustomers}</p>
-                  <p className="text-purple-200 text-xs">With orders</p>
+                  <p className="text-purple-200 text-xs">შეკვეთებით</p>
                 </div>
                 <div className="text-purple-200">
                   <FaUsers className="text-2xl" />
@@ -267,9 +259,9 @@ export default async function OrdersPage({
              <CardContent className="p-6">
                <div className="flex items-center justify-between">
                  <div>
-                   <p className="text-orange-100 text-sm">Pending Orders</p>
+                   <p className="text-orange-100 text-sm">მიმდინარე შეკვეთები</p>
                    <p className="text-2xl font-bold">{stats.pendingOrders}</p>
-                   <p className="text-orange-200 text-xs">Awaiting payment</p>
+                   <p className="text-orange-200 text-xs">გადახდის მიმდინარე</p>
                  </div>
                  <div className="text-orange-200">
                    <FaClock className="text-2xl" />
@@ -282,7 +274,7 @@ export default async function OrdersPage({
              <CardContent className="p-6">
                <div className="flex items-center justify-between">
                  <div>
-                   <p className="text-purple-100 text-sm">BOG Orders</p>
+                   <p className="text-purple-100 text-sm">ბარათით გადახდილი შეკვეთები</p>
                    <p className="text-2xl font-bold">{bogOrders.length}</p>
                    <p className="text-purple-200 text-xs">
                      {bogPaidOrders.length} paid, {bogPendingOrders.length} pending
@@ -301,10 +293,10 @@ export default async function OrdersPage({
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <FaUsers className="text-blue-500" />
-              Top Customers by Order Count
+             მომხმარებლები შეკვეთებით
             </CardTitle>
             <CardDescription>
-              Users with the most orders
+             მომხმარებლები შეკვეთებით
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -337,12 +329,12 @@ export default async function OrdersPage({
                              <div>
                  <CardTitle className="flex items-center gap-2">
                    <FaShoppingCart className="text-blue-500" />
-                   {searchParams?.bog === 'true' ? 'BOG Orders' : 'All Users Orders'} ({orders.length})
+                   {searchParams?.bog === 'true' ? 'ბარათით გადახდილი შეკვეთები' : 'ყველა შეკვეთა'} ({orders.length})
                  </CardTitle>
                  <CardDescription>
                    {searchParams?.bog === 'true' 
-                     ? 'BOG payment orders only' 
-                     : 'Complete order history from all customers with detailed information'
+                     ? 'ბარათით გადახდილი შეკვეთები მხოლოდ'    
+                     : 'ყველა შეკვეთა'
                    }
                  </CardDescription>
                </div>
@@ -350,7 +342,7 @@ export default async function OrdersPage({
                    <div className="relative">
                      <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                      <Input
-                       placeholder="Search orders..."
+                       placeholder="შეკვეთების ძებნა..."
                        className="pl-10 w-64"
                      />
                    </div>
@@ -369,15 +361,15 @@ export default async function OrdersPage({
                 <table className="w-full">
                   <thead>
                     <tr className="border-b bg-gray-50">
-                      <th className="text-left p-4 font-semibold">Order ID</th>
-                      <th className="text-left p-4 font-semibold">Customer Info</th>
-                      <th className="text-left p-4 font-semibold">Order Details</th>
-                      <th className="text-left p-4 font-semibold">Items</th>
-                      <th className="text-left p-4 font-semibold">Total</th>
-                      <th className="text-left p-4 font-semibold">Payment Status</th>
-                      <th className="text-left p-4 font-semibold">Delivery Status</th>
-                      <th className="text-left p-4 font-semibold">Date</th>
-                      <th className="text-left p-4 font-semibold">Actions</th>
+                      <th className="text-left p-4 font-semibold">შეკვეთის ID</th>
+                      <th className="text-left p-4 font-semibold">მომხმარებლის ინფო</th>
+                      <th className="text-left p-4 font-semibold">შეკვეთის დეტალები</th>
+                      <th className="text-left p-4 font-semibold">ნივთები</th>
+                      <th className="text-left p-4 font-semibold">სულ</th>
+                      <th className="text-left p-4 font-semibold">გადახდის სტატუსი</th>
+                      <th className="text-left p-4 font-semibold">მიწოდების სტატუსი</th>
+                      <th className="text-left p-4 font-semibold">თარიღი</th>
+                      <th className="text-left p-4 font-semibold">მოქმედებები</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -390,11 +382,11 @@ export default async function OrdersPage({
                            <p className="font-mono text-sm font-medium">#{order.id.slice(-8)}</p>
                            {order.paymentMethod?.includes('BOG') && (
                              <Badge variant="outline" className="text-xs bg-blue-100 text-blue-700 border-blue-300">
-                               BOG
+                              ბარათით გადახდა
                              </Badge>
                            )}
                          </div>
-                         <p className="text-xs text-gray-500">Full: {order.id}</p>
+                         <p className="text-xs text-gray-500">სრული: {order.id}</p>
                        </td>
                         <td className="p-4">
                           <div className="space-y-1">
@@ -402,7 +394,7 @@ export default async function OrdersPage({
                               <FaUser className="w-3 h-3 text-gray-500" />
                               <p className="font-medium">{order.user.name}</p>
                               {order.user.role === 'admin' && (
-                                <Badge variant="default" className="text-xs">Admin</Badge>
+                                <Badge variant="default" className="text-xs">ადმინი</Badge>
                               )}
                             </div>
                             <div className="flex items-center gap-2">
@@ -410,7 +402,7 @@ export default async function OrdersPage({
                               <p className="text-sm text-gray-600">{order.user.email}</p>
                             </div>
                             <p className="text-xs text-gray-500">
-                              Member since: {format(new Date(order.user.createdAt), 'MMM yyyy')}
+                             მომხმარებელი დღემდე: {format(new Date(order.user.createdAt), 'MMM yyyy')}
                             </p>
                           </div>
                         </td>
@@ -424,7 +416,7 @@ export default async function OrdersPage({
                                <div className="flex items-center gap-2">
                                  <FaSyncAlt className="w-3 h-3 text-orange-500" />
                                  <Badge variant="outline" className="text-xs">
-                                   {order.isPaid ? 'BOG Completed' : 'BOG Processing'}
+                                   {order.isPaid ? 'ბარათით გადახდილი' : 'ბარათით გადახდილი'}
                                  </Badge>
                                </div>
                              )}
@@ -444,7 +436,7 @@ export default async function OrdersPage({
                         <td className="p-4">
                           <div className="space-y-2">
                             <p className="text-sm font-medium">
-                              {order.orderitems.length} items
+                              {order.orderitems.length} ნივთი
                             </p>
                             <div className="space-y-1">
                               {order.orderitems.slice(0, 3).map((item, index) => (
@@ -466,7 +458,7 @@ export default async function OrdersPage({
                               ))}
                               {order.orderitems.length > 3 && (
                                 <p className="text-xs text-gray-500">
-                                  +{order.orderitems.length - 3} more items
+                                  +{order.orderitems.length - 3} ნივთი
                                 </p>
                               )}
                             </div>
@@ -476,9 +468,9 @@ export default async function OrdersPage({
                           <div className="space-y-1">
                             <p className="font-bold text-lg">₾{Number(order.totalPrice).toFixed(2)}</p>
                             <div className="text-xs text-gray-500 space-y-0.5">
-                              <p>Items: ₾{Number(order.itemsPrice).toFixed(2)}</p>
-                              <p>Shipping: ₾{Number(order.shippingPrice).toFixed(2)}</p>
-                              <p>Tax: ₾{Number(order.taxPrice).toFixed(2)}</p>
+                              <p>ნივთები: ₾{Number(order.itemsPrice).toFixed(2)}</p>
+                              <p>მიწოდება: ₾{Number(order.shippingPrice).toFixed(2)}</p>
+                              <p>საჭე: ₾{Number(order.taxPrice).toFixed(2)}</p>
                             </div>
                           </div>
                         </td>
@@ -490,17 +482,17 @@ export default async function OrdersPage({
                                  {order.isPaid ? (
                                    <Badge variant="default" className="w-full justify-center">
                                      <FaCheckCircle className="w-3 h-3 mr-1" />
-                                     BOG გადახდილი
+                                     ბარათით გადახდილი
                                    </Badge>
                                  ) : (
                                    <Badge variant="secondary" className="w-full justify-center">
                                      <FaClock className="w-3 h-3 mr-1" />
-                                     BOG მუშავდება
+                                      ბარათით გადახდილი
                                    </Badge>
                                  )}
                                  <div className="text-xs text-center">
                                    <Badge variant="outline" className="text-xs">
-                                     BOG Card Payment
+                                   ბარათით გადახდა
                                    </Badge>
                                  </div>
                                </div>
@@ -532,12 +524,12 @@ export default async function OrdersPage({
                             {order.isDelivered ? (
                               <Badge variant="default" className="w-full justify-center">
                                 <FaTruck className="w-3 h-3 mr-1" />
-                                Delivered
+                               მიწოდებული
                               </Badge>
                             ) : (
                               <Badge variant="outline" className="w-full justify-center">
                                 <FaTruck className="w-3 h-3 mr-1" />
-                                In Transit
+                               ტრანზიტში
                               </Badge>
                             )}
                             {order.deliveredAt && (
@@ -582,8 +574,8 @@ export default async function OrdersPage({
                 <div className="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
                   <FaShoppingCart className="text-gray-400 text-2xl" />
                 </div>
-                <h3 className="text-lg font-medium text-gray-900 mb-2">No orders yet</h3>
-                <p className="text-gray-500 mb-6">Orders will appear here when customers make purchases</p>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">შეკვეთები არ არის</h3>
+                <p className="text-gray-500 mb-6">შეკვეთები გამოჩნდება აქ, როცა მომხმარებლები შეიძენენ</p>
               </div>
             )}
           </CardContent>

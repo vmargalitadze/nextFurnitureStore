@@ -64,8 +64,21 @@ export default async function ProfilePage() {
   }
 
   const isAdmin = user.role === "admin";
-  const orderCount = user.Order?.length || 0;
-  const cartItemCount = user.Cart?.[0]?.items?.length || 0;
+      const orderCount = user.Order?.length || 0;
+    const cartItemCount = user.Cart?.[0]?.items?.length || 0;
+    
+    // Convert cart data to plain objects to avoid Decimal serialization issues
+    const cartData = user.Cart?.[0] ? {
+      ...user.Cart[0],
+      itemsPrice: parseFloat(user.Cart[0].itemsPrice?.toString() || '0'),
+      totalPrice: parseFloat(user.Cart[0].totalPrice?.toString() || '0'),
+      shippingPrice: parseFloat(user.Cart[0].shippingPrice?.toString() || '0'),
+      taxPrice: parseFloat(user.Cart[0].taxPrice?.toString() || '0'),
+      items: (user.Cart[0].items || []).map((item: any) => ({
+        ...item,
+        price: parseFloat(item.price?.toString() || '0')
+      }))
+    } : null;
 
   return (
     <div className="min-h-screen mt-9 bg-gradient-to-br from-blue-50 via-white to-purple-50 py-20 px-4 sm:px-6 lg:px-8">
@@ -254,7 +267,11 @@ export default async function ProfilePage() {
                 isPaid: order.isPaid,
                 isDelivered: order.isDelivered,
                 paymentMethod: order.paymentMethod,
-                orderitems: order.orderitems || []
+                orderitems: (order.orderitems || []).map(item => ({
+                  ...item,
+                  price: parseFloat(item.price.toString()),
+                  qty: parseInt(item.qty.toString())
+                }))
               })) || []}
             />
 

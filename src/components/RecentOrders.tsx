@@ -13,14 +13,14 @@ interface OrderItem {
   orderId: string;
   productId: string;
   qty: number;
-  price: any; // Decimal from Prisma
+  price: number; // Converted from Decimal
   title: string;
 }
 
 interface Order {
   id: string;
   createdAt: string | Date;
-  totalPrice: any; // Decimal from Prisma
+  totalPrice: number; // Converted from Decimal
   isPaid: boolean;
   isDelivered: boolean;
   paymentMethod: string;
@@ -179,7 +179,7 @@ const RecentOrders: React.FC<RecentOrdersProps> = ({ orders, onOrdersUpdate }) =
                   </p>
                   <p className="text-sm text-gray-500">
                     {t("recentOrders.total", {
-                      amount: typeof order.totalPrice === 'object' ? order.totalPrice.toString() : order.totalPrice,
+                      amount: order.totalPrice,
                     })}
                   </p>
                   <p className="text-xs text-gray-400">
