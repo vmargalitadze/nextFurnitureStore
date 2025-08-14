@@ -82,15 +82,15 @@ const CartPage = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to update quantity");
+        throw new Error("რაოდენობის განახლება ვერ მოხერხდა");
       }
 
       // Force refresh cart to ensure sync with server
       await refreshCart(true);
-      toast.success("Cart updated");
+      toast.success("კალათა განახლდა");
     } catch (error) {
       console.error("Error updating quantity:", error);
-      toast.error("Failed to update quantity");
+      toast.error("რაოდენობის განახლება ვერ მოხერხდა");
 
       // Rollback to original state on error
       if (originalCart) {
@@ -117,14 +117,14 @@ const CartPage = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to remove item");
+        throw new Error("პროდუქტის წაშლა ვერ მოხერხდა");
       }
 
       await refreshCart();
-      toast.success("Item removed from cart");
+      toast.success("პროდუქტი წაშლილია კალათიდან");
     } catch (error) {
       console.error("Error removing item:", error);
-      toast.error("Failed to remove item");
+      toast.error("პროდუქტის წაშლა ვერ მოხერხდა");
       // Refresh cart to revert optimistic update on error
       await refreshCart();
     } finally {
@@ -139,20 +139,20 @@ const CartPage = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to clear cart");
+        throw new Error("კალათის გასუფთავება ვერ მოხერხდა");
       }
 
       await refreshCart();
-      toast.success("Cart cleared");
+      toast.success("კალათა გასუფთავდა");
     } catch (error) {
       console.error("Error clearing cart:", error);
-      toast.error("Failed to clear cart");
+      toast.error("კალათის გასუფთავება ვერ მოხერხდა");
     }
   };
 
   const handleCheckout = () => {
     if (!cart || cart.items.length === 0) {
-      toast.error("Cart is empty");
+      toast.error("კალათა ცარიელია");
       return;
     }
     router.push(`/${params.locale}/checkout/personal`);

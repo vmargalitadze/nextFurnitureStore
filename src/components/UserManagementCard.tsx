@@ -114,7 +114,7 @@ const UserManagementCard: React.FC<UserManagementCardProps> = ({ user, currentUs
       });
 
       if (response.ok) {
-        toast.success('User deleted successfully');
+        toast.success('წაშლა წარმატებით განხორციელდა');
         // Refresh the page to update the user list
         window.location.reload();
       } else {

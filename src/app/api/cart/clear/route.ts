@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error clearing cart:', error);
     return NextResponse.json(
-      { error: 'Failed to clear cart' },
+      { error: 'კალათის გასუფთავება ვერ მოხერხდა' },
       { status: 500 }
     );
   }

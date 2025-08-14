@@ -31,9 +31,20 @@ import { Link } from "@/i18n/navigation";
 import { prisma } from "@/lib/prisma";
 import { format } from "date-fns";
 import Image from "next/image";
+import { FaSyncAlt } from "react-icons/fa";
+import BOGFilterButton from "@/components/BOGFilterButton";
+import BOGRefreshButton from "@/components/BOGRefreshButton";
 
-async function getAllOrders() {
+async function getAllOrders(searchParams?: { bog?: string }) {
+  console.log('=== ADMIN ORDERS PAGE DEBUG ===');
+  console.log('Search params:', searchParams);
+  
+  const whereClause = searchParams?.bog === 'true' 
+    ? { paymentMethod: { contains: 'BOG' } }
+    : {};
+  
   const orders = await prisma.order.findMany({
+    where: whereClause,
     include: {
       user: {
         select: {
@@ -62,6 +73,16 @@ async function getAllOrders() {
       createdAt: 'desc'
     }
   });
+
+  console.log('Total orders found:', orders.length);
+  console.log('Orders with BOG payment method:', orders.filter(o => o.paymentMethod?.includes('BOG')).length);
+  console.log('Sample orders:', orders.slice(0, 3).map(o => ({ 
+    id: o.id, 
+    paymentMethod: o.paymentMethod, 
+    userId: o.userId,
+    createdAt: o.createdAt 
+  })));
+  console.log('================================');
 
   // Convert Decimal objects to numbers
   return orders.map(order => ({
@@ -126,7 +147,11 @@ async function getOrderStatistics() {
   };
 }
 
-export default async function OrdersPage() {
+export default async function OrdersPage({
+  searchParams,
+}: {
+  searchParams: { bog?: string };
+}) {
   const session = await auth();
   
   if (!session?.user?.id) {
@@ -137,23 +162,43 @@ export default async function OrdersPage() {
     redirect("/");
   }
 
-  const orders = await getAllOrders();
+  const orders = await getAllOrders(searchParams);
   const stats = await getOrderStatistics();
 
   // Calculate additional statistics
   const averageOrderValue = stats.totalOrders > 0 ? Number(stats.totalRevenue) / stats.totalOrders : 0;
   const uniqueCustomers = new Set(orders.map(order => order.user.id)).size;
   const recentOrders = orders.slice(0, 10); // Latest 10 orders
+  
+  // BOG specific statistics
+  const bogOrders = orders.filter(order => order.paymentMethod?.includes('BOG'));
+  const bogPaidOrders = bogOrders.filter(order => order.isPaid);
+  const bogPendingOrders = bogOrders.filter(order => !order.isPaid);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        {/* Header Section */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">All Users Order Management</h1>
-            <p className="text-gray-600">Comprehensive view of all customer orders across the website</p>
-          </div>
+                 {/* Header Section */}
+         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
+                      <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                {searchParams?.bog === 'true' ? 'BOG შეკვეთების მართვა' : 'შეკვეთების მართვა - BOG ინტეგრაციით'}
+              </h1>
+              <p className="text-gray-600">
+                {searchParams?.bog === 'true' 
+                  ? 'მხოლოდ BOG გადახდის შეკვეთების ნახვა' 
+                  : 'ყველა მომხმარებლის შეკვეთების ნახვა BOG გადახდის სტატუსით'
+                }
+              </p>
+              {searchParams?.bog === 'true' && (
+                <div className="mt-2">
+                  <Badge variant="default" className="bg-blue-600">
+                    <FaCreditCard className="w-3 h-3 mr-1" />
+                    BOG Filter Active
+                  </Badge>
+                </div>
+              )}
+            </div>
           <Link href="/adminall">
             <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="outline">
               Back to Dashboard
@@ -163,35 +208,45 @@ export default async function OrdersPage() {
 
         {/* Enhanced Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-blue-100 text-sm">Total Orders</p>
-                  <p className="text-2xl font-bold">{stats.totalOrders}</p>
-                  <p className="text-blue-200 text-xs">Across all users</p>
-                </div>
-                <div className="text-blue-200">
-                  <FaShoppingCart className="text-2xl" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+                     <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+             <CardContent className="p-6">
+               <div className="flex items-center justify-between">
+                 <div>
+                   <p className="text-blue-100 text-sm">
+                     {searchParams?.bog === 'true' ? 'BOG Orders' : 'Total Orders'}
+                   </p>
+                   <p className="text-2xl font-bold">{orders.length}</p>
+                   <p className="text-blue-200 text-xs">
+                     {searchParams?.bog === 'true' ? 'BOG payments only' : 'Across all users'}
+                   </p>
+                 </div>
+                 <div className="text-blue-200">
+                   <FaShoppingCart className="text-2xl" />
+                 </div>
+               </div>
+             </CardContent>
+           </Card>
 
-          <Card className="bg-gradient-to-r from-green-500 to-green-600 text-white">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-green-100 text-sm">Total Revenue</p>
-                  <p className="text-2xl font-bold">₾{Number(stats.totalRevenue).toFixed(2)}</p>
-                  <p className="text-green-200 text-xs">From all orders</p>
-                </div>
-                <div className="text-green-200">
-                  <FaMoneyBillWave className="text-2xl" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+                     <Card className="bg-gradient-to-r from-green-500 to-green-600 text-white">
+             <CardContent className="p-6">
+               <div className="flex items-center justify-between">
+                 <div>
+                   <p className="text-green-100 text-sm">
+                     {searchParams?.bog === 'true' ? 'BOG Revenue' : 'Total Revenue'}
+                   </p>
+                   <p className="text-2xl font-bold">
+                     ₾{orders.reduce((sum, order) => sum + Number(order.totalPrice), 0).toFixed(2)}
+                   </p>
+                   <p className="text-green-200 text-xs">
+                     {searchParams?.bog === 'true' ? 'From BOG orders' : 'From all orders'}
+                   </p>
+                 </div>
+                 <div className="text-green-200">
+                   <FaMoneyBillWave className="text-2xl" />
+                 </div>
+               </div>
+             </CardContent>
+           </Card>
 
           <Card className="bg-gradient-to-r from-purple-500 to-purple-600 text-white">
             <CardContent className="p-6">
@@ -208,20 +263,37 @@ export default async function OrdersPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-r from-orange-500 to-orange-600 text-white">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-orange-100 text-sm">Pending Orders</p>
-                  <p className="text-2xl font-bold">{stats.pendingOrders}</p>
-                  <p className="text-orange-200 text-xs">Awaiting payment</p>
-                </div>
-                <div className="text-orange-200">
-                  <FaClock className="text-2xl" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+                     <Card className="bg-gradient-to-r from-orange-500 to-orange-600 text-white">
+             <CardContent className="p-6">
+               <div className="flex items-center justify-between">
+                 <div>
+                   <p className="text-orange-100 text-sm">Pending Orders</p>
+                   <p className="text-2xl font-bold">{stats.pendingOrders}</p>
+                   <p className="text-orange-200 text-xs">Awaiting payment</p>
+                 </div>
+                 <div className="text-orange-200">
+                   <FaClock className="text-2xl" />
+                 </div>
+               </div>
+             </CardContent>
+           </Card>
+           
+           <Card className="bg-gradient-to-r from-purple-500 to-purple-600 text-white">
+             <CardContent className="p-6">
+               <div className="flex items-center justify-between">
+                 <div>
+                   <p className="text-purple-100 text-sm">BOG Orders</p>
+                   <p className="text-2xl font-bold">{bogOrders.length}</p>
+                   <p className="text-purple-200 text-xs">
+                     {bogPaidOrders.length} paid, {bogPendingOrders.length} pending
+                   </p>
+                 </div>
+                 <div className="text-purple-200">
+                   <FaCreditCard className="text-2xl" />
+                 </div>
+               </div>
+             </CardContent>
+           </Card>
         </div>
 
         {/* Top Customers Section */}
@@ -262,28 +334,33 @@ export default async function OrdersPage() {
         <Card>
           <CardHeader>
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-              <div>
-                <CardTitle className="flex items-center gap-2">
-                  <FaShoppingCart className="text-blue-500" />
-                  All Users Orders ({orders.length})
-                </CardTitle>
-                <CardDescription>
-                  Complete order history from all customers with detailed information
-                </CardDescription>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="relative">
-                  <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                  <Input
-                    placeholder="Search orders..."
-                    className="pl-10 w-64"
-                  />
-                </div>
-                <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="outline" size="sm">
-                  <FaFilter className="mr-2" />
-                  Filter
-                </Button>
-              </div>
+                             <div>
+                 <CardTitle className="flex items-center gap-2">
+                   <FaShoppingCart className="text-blue-500" />
+                   {searchParams?.bog === 'true' ? 'BOG Orders' : 'All Users Orders'} ({orders.length})
+                 </CardTitle>
+                 <CardDescription>
+                   {searchParams?.bog === 'true' 
+                     ? 'BOG payment orders only' 
+                     : 'Complete order history from all customers with detailed information'
+                   }
+                 </CardDescription>
+               </div>
+                                              <div className="flex items-center gap-2">
+                   <div className="relative">
+                     <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                     <Input
+                       placeholder="Search orders..."
+                       className="pl-10 w-64"
+                     />
+                   </div>
+                   <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="outline" size="sm">
+                     <FaFilter className="mr-2" />
+                     ფილტრი
+                   </Button>
+                                       <BOGFilterButton />
+                                                                       <BOGRefreshButton />
+               </div>
             </div>
           </CardHeader>
           <CardContent>
@@ -305,11 +382,20 @@ export default async function OrdersPage() {
                   </thead>
                   <tbody>
                     {orders.map((order) => (
-                      <tr key={order.id} className="border-b hover:bg-gray-50 transition-colors">
-                        <td className="p-4">
-                          <p className="font-mono text-sm font-medium">#{order.id.slice(-8)}</p>
-                          <p className="text-xs text-gray-500">Full: {order.id}</p>
-                        </td>
+                                           <tr key={order.id} className={`border-b hover:bg-gray-50 transition-colors ${
+                       order.paymentMethod?.includes('BOG') ? 'bg-blue-50 border-l-4 border-l-blue-500' : ''
+                     }`}>
+                       <td className="p-4">
+                         <div className="flex items-center gap-2">
+                           <p className="font-mono text-sm font-medium">#{order.id.slice(-8)}</p>
+                           {order.paymentMethod?.includes('BOG') && (
+                             <Badge variant="outline" className="text-xs bg-blue-100 text-blue-700 border-blue-300">
+                               BOG
+                             </Badge>
+                           )}
+                         </div>
+                         <p className="text-xs text-gray-500">Full: {order.id}</p>
+                       </td>
                         <td className="p-4">
                           <div className="space-y-1">
                             <div className="flex items-center gap-2">
@@ -328,25 +414,33 @@ export default async function OrdersPage() {
                             </p>
                           </div>
                         </td>
-                        <td className="p-4">
-                          <div className="space-y-1">
-                            <div className="flex items-center gap-2">
-                              <FaCreditCard className="w-3 h-3 text-[#438c71]" />
-                              <span className="text-sm font-medium">{order.paymentMethod}</span>
-                            </div>
-                            {order.shippingAddress && (
-                              <div className="flex items-center gap-2">
-                                <FaMapMarkerAlt className="w-3 h-3 text-[#438c71]" />
-                                <p className="text-xs text-gray-600">
-                                  {typeof order.shippingAddress === 'object' && order.shippingAddress !== null
-                                    ? `${(order.shippingAddress as any).city || 'N/A'}`
-                                    : 'Address saved'
-                                  }
-                                </p>
-                              </div>
-                            )}
-                          </div>
-                        </td>
+                                                 <td className="p-4">
+                           <div className="space-y-1">
+                             <div className="flex items-center gap-2">
+                               <FaCreditCard className="w-3 h-3 text-[#438c71]" />
+                               <span className="text-sm font-medium">{order.paymentMethod}</span>
+                             </div>
+                             {order.paymentMethod?.includes('BOG') && (
+                               <div className="flex items-center gap-2">
+                                 <FaSyncAlt className="w-3 h-3 text-orange-500" />
+                                 <Badge variant="outline" className="text-xs">
+                                   {order.isPaid ? 'BOG Completed' : 'BOG Processing'}
+                                 </Badge>
+                               </div>
+                             )}
+                             {order.shippingAddress && (
+                               <div className="flex items-center gap-2">
+                                 <FaMapMarkerAlt className="w-3 h-3 text-[#438c71]" />
+                                 <p className="text-xs text-gray-600">
+                                   {typeof order.shippingAddress === 'object' && order.shippingAddress !== null
+                                     ? `${(order.shippingAddress as any).city || 'N/A'}`
+                                     : 'Address saved'
+                                   }
+                                 </p>
+                               </div>
+                             )}
+                           </div>
+                         </td>
                         <td className="p-4">
                           <div className="space-y-2">
                             <p className="text-sm font-medium">
@@ -388,26 +482,51 @@ export default async function OrdersPage() {
                             </div>
                           </div>
                         </td>
-                        <td className="p-4">
-                          <div className="space-y-2">
-                            {order.isPaid ? (
-                              <Badge variant="default" className="w-full justify-center">
-                                <FaCheckCircle className="w-3 h-3 mr-1" />
-                                Paid
-                              </Badge>
-                            ) : (
-                              <Badge variant="secondary" className="w-full justify-center">
-                                <FaClock className="w-3 h-3 mr-1" />
-                                Pending
-                              </Badge>
-                            )}
-                            {order.paidAt && (
-                              <p className="text-xs text-gray-500 text-center">
-                                {format(new Date(order.paidAt), 'MMM dd, yyyy')}
-                              </p>
-                            )}
-                          </div>
-                        </td>
+                                                 <td className="p-4">
+                           <div className="space-y-2">
+                             {order.paymentMethod?.includes('BOG') ? (
+                               // BOG Payment Status
+                               <div className="space-y-1">
+                                 {order.isPaid ? (
+                                   <Badge variant="default" className="w-full justify-center">
+                                     <FaCheckCircle className="w-3 h-3 mr-1" />
+                                     BOG გადახდილი
+                                   </Badge>
+                                 ) : (
+                                   <Badge variant="secondary" className="w-full justify-center">
+                                     <FaClock className="w-3 h-3 mr-1" />
+                                     BOG მუშავდება
+                                   </Badge>
+                                 )}
+                                 <div className="text-xs text-center">
+                                   <Badge variant="outline" className="text-xs">
+                                     BOG Card Payment
+                                   </Badge>
+                                 </div>
+                               </div>
+                             ) : (
+                               // Regular Payment Status
+                               <>
+                                 {order.isPaid ? (
+                                   <Badge variant="default" className="w-full justify-center">
+                                     <FaCheckCircle className="w-3 h-3 mr-1" />
+                                     გადახდილი
+                                   </Badge>
+                                 ) : (
+                                   <Badge variant="secondary" className="w-full justify-center">
+                                     <FaClock className="w-3 h-3 mr-1" />
+                                     მიმდინარე
+                                   </Badge>
+                                 )}
+                               </>
+                             )}
+                             {order.paidAt && (
+                               <p className="text-xs text-gray-500 text-center">
+                                 {format(new Date(order.paidAt), 'MMM dd, yyyy')}
+                               </p>
+                             )}
+                           </div>
+                         </td>
                         <td className="p-4">
                           <div className="space-y-2">
                             {order.isDelivered ? (

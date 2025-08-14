@@ -168,7 +168,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error adding to cart:', error);
     return NextResponse.json(
-      { error: 'Failed to add item to cart' },
+      { error: 'პროდუქტის კალათაში დამატება ვერ მოხერხდა' },
       { status: 500 }
     );
   }

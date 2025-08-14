@@ -19,7 +19,8 @@ import {
   FaTruck,
   FaCheckCircle,
   FaClock,
-  FaUsers
+  FaUsers,
+  FaCreditCard
 } from "react-icons/fa";
 import { Link } from "@/i18n/navigation";
 import { prisma } from "@/lib/prisma";
@@ -141,6 +142,12 @@ export default async function AdminAllPage() {
     }, 0);
   }, 0);
 
+  // Calculate BOG orders statistics
+  const bogOrders = orders.filter(order => order.paymentMethod?.includes('BOG'));
+  const bogPaidOrders = bogOrders.filter(order => order.isPaid);
+  const bogPendingOrders = bogOrders.filter(order => !order.isPaid);
+  const bogTotalRevenue = bogOrders.reduce((sum, order) => sum + Number(order.totalPrice), 0);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -150,16 +157,19 @@ export default async function AdminAllPage() {
             <h1 className="text-3xl font-bold text-gray-900 mb-2">ადმინის პანელი</h1>
             <p className="text-gray-600">მართეთ თქვენი პროდუქტები, შეკვეთები და მომხმარებლები</p>
           </div>
-          <Link href="/new">
-            <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="default">
-              <FaPlus className="mr-2" />
-              პროდუქტის დამატება
-            </Button>
-          </Link>
+          <div className="flex gap-4">
+            <Link href="/new">
+              <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="default">
+                <FaPlus className="mr-2" />
+                პროდუქტის დამატება
+              </Button>
+            </Link>
+ 
+          </div>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-6 gap-6 mb-8">
           <Card className="bg-white border-2 border-orange-400 text-orange-400">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
@@ -225,6 +235,21 @@ export default async function AdminAllPage() {
                 </div>
                 <div className="text-2xl text-orange-400">
                   <FaUsers className="text-2xl" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-white border-2 border-blue-400 text-blue-400">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-blue-400">BOG შეკვეთები</p>
+                  <p className="text-2xl font-bold text-blue-500">{bogOrders.length}</p>
+                  <p className="text-xs text-blue-400">{bogPaidOrders.length} paid, {bogPendingOrders.length} pending</p>
+                </div>
+                <div className="text-2xl text-blue-400">
+                  <FaCreditCard className="text-2xl" />
                 </div>
               </div>
             </CardContent>
@@ -371,46 +396,97 @@ export default async function AdminAllPage() {
           </TabsContent>
 
           <TabsContent value="orders" className="space-y-6">
-            {/* Enhanced Orders Section */}
-            <Card>
+            {/* BOG Orders Section */}
+            <Card className="border-l-4 border-l-blue-500">
               <CardHeader>
-                <CardTitle>ყველა შეკვეთა</CardTitle>
-                <CardDescription>
-                 დაამატეთ ან გამართეთ ყველა შეკვეთა
-                </CardDescription>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle className="flex items-center gap-2">
+                      <FaCreditCard className="text-blue-500" />
+                      ბარათით შეკვეთები
+                    </CardTitle>
+                    <CardDescription>
+                    ბარათით გადახდის მეთოდით შექმნილი შეკვეთები
+                    </CardDescription>
+                  </div>
+              
+                </div>
               </CardHeader>
               <CardContent>
-                {orders.length > 0 ? (
-                  <div className="space-y-6">
-                    {orders.map((order) => (
-                      <OrderManagementCard
-                        key={order.id}
-                        order={{
-                          ...order,
-                          deliveryLocation: order.deliveryLocation ?? undefined,
-                          itemsPrice: order.itemsPrice.toString(),
-                          shippingPrice: order.shippingPrice.toString(),
-                          taxPrice: order.taxPrice.toString(),
-                          totalPrice: order.totalPrice.toString(),
-                          orderitems: order.orderitems.map(item => ({
-                            ...item,
-                            price: Number(item.price)
-                          }))
-                        }}
-                      />
-                    ))}
+                {bogOrders.length > 0 ? (
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                      <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                        <div className="flex items-center gap-2">
+                          <FaCreditCard className="text-blue-600" />
+                          <span className="font-semibold text-blue-800">ყველა ბარათით გადახდილი შეკვეთა</span>
+                        </div>
+                        <p className="text-2xl font-bold text-blue-600">{bogOrders.length}</p>
+                      </div>
+                      <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                        <div className="flex items-center gap-2">
+                          <FaCheckCircle className="text-green-600" />
+                          <span className="font-semibold text-green-800">გადახდილი</span>
+                        </div>
+                        <p className="text-2xl font-bold text-green-600">{bogOrders.filter(o => o.isPaid).length}</p>
+                      </div>
+                      <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
+                        <div className="flex items-center gap-2">
+                          <FaClock className="text-orange-600" />
+                          <span className="font-semibold text-orange-800">მუშავდება</span>
+                        </div>
+                        <p className="text-2xl font-bold text-orange-600">{bogOrders.filter(o => !o.isPaid).length}</p>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      {bogOrders.slice(0, 3).map((order) => (
+                        <div key={order.id} className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-200">
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                              <FaCreditCard className="text-blue-600 text-sm" />
+                            </div>
+                            <div>
+                              <p className="font-medium text-blue-900">Order #{order.id.slice(-8)}</p>
+                              <p className="text-sm text-blue-600">{order.user.name}</p>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-bold text-blue-900">₾{Number(order.totalPrice).toFixed(2)}</p>
+                            <Badge variant={order.isPaid ? "default" : "secondary"} className="text-xs">
+                              {order.isPaid ? 'BOG გადახდილი' : 'BOG მუშავდება'}
+                            </Badge>
+                          </div>
+                        </div>
+                      ))}
+                      {bogOrders.length > 3 && (
+                        <div className="text-center py-2">
+                          <Link href="/adminall/orders?bog=true">
+                            <Button variant="outline" size="sm" className="text-blue-600 border-blue-300 hover:bg-blue-50">
+                             {bogOrders.length} ბარათით გადახდილი შეკვეთები
+                            </Button>
+                          </Link>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 ) : (
-                  <div className="text-center py-12">
-                    <div className="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                      <FaShoppingCart className="text-gray-400 text-2xl" />
+                  <div className="text-center py-8">
+                    <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                      <FaCreditCard className="text-blue-500 text-2xl" />
                     </div>
-                    <h3 className="text-lg font-medium text-gray-900 mb-2">No orders yet</h3>
-                    <p className="text-gray-500 mb-6">Orders will appear here when customers make purchases</p>
+                    <h3 className="text-lg font-medium text-blue-900 mb-2">ბარათით გადახდილი შეკვეთები გამოვიდეს მომხმარებლების შეკვეთების შემდეგ</h3>
+                    <p className="text-blue-600 mb-4">ბარათით გადახდილი შეკვეთები გამოვიდეს მომხმარებლების შეკვეთების შემდეგ</p>
+                    <Link href="/adminall/orders">
+                      <Button variant="outline" className="text-blue-600 border-blue-300 hover:bg-blue-50">
+                       ყველა შეკვეთა
+                      </Button>
+                    </Link>
                   </div>
                 )}
               </CardContent>
             </Card>
+
+        
           </TabsContent>
 
           <TabsContent value="users" className="space-y-6">

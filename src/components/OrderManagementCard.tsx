@@ -169,7 +169,7 @@ const OrderManagementCard: React.FC<OrderManagementCardProps> = ({
       if (!response.ok) {
         throw new Error("Failed to delete order");
       }
-      toast.success("Order deleted successfully");
+      toast.success("წაშლა წარმატებით განხორციელდა");
       if (onDelete) {
         onDelete(order.id);
       }

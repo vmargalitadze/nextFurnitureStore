@@ -46,12 +46,7 @@ export async function GET(req: NextRequest) {
   // base64 encode
   const credentials = Buffer.from(`${client_id}:${client_secret}`).toString('base64');
   
-  // Debug: Log what we're sending (without exposing secrets)
-  console.log('🔍 Request Details:');
-  console.log('Client ID:', client_id);
-  console.log('Client Secret (first 3 chars):', client_secret?.substring(0, 3) + '...');
-  console.log('Base64 credentials (first 10 chars):', credentials.substring(0, 10) + '...');
-  console.log('Request URL:', 'https://oauth2.bog.ge/auth/realms/bog/protocol/openid-connect/token');
+ 
 
   try {
     const response = await axios.post(
@@ -68,12 +63,7 @@ export async function GET(req: NextRequest) {
 
     const { access_token, token_type, expires_in } = response.data;
 
-    // Console log the token information
-    console.log('✅ BOG Token obtained successfully:');
-    console.log('Token Type:', token_type);
-    console.log('Expires In:', expires_in, 'seconds');
-    console.log('Access Token (first 20 chars):', access_token.substring(0, 20) + '...');
-    console.log('Full Access Token:', access_token);
+ 
 
     return NextResponse.json({
       access_token,
@@ -82,12 +72,7 @@ export async function GET(req: NextRequest) {
       success: true,
     });
   } catch (error: any) {
-    console.error('BOG Token error:', {
-      status: error.response?.status,
-      data: error.response?.data,
-      headers: error.response?.headers,
-      message: error.message,
-    });
+    console.error('BOG Token error:',);
 
     // Provide more specific error messages
     let errorMessage = 'Failed to get BOG access token';

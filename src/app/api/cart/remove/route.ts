@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error removing from cart:', error);
     return NextResponse.json(
-      { error: 'Failed to remove item from cart' },
+      { error: 'პროდუქტის კალათიდან წაშლა ვერ მოხერხდა' },
       { status: 500 }
     );
   }

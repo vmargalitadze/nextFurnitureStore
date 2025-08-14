@@ -301,21 +301,16 @@ const SummaryPage = () => {
       if (data.success && data.redirectUrl) {
         console.log('Payment order created successfully:', data)
 
-        // Ask user if they want to proceed to payment
-        const proceedToPayment = confirm('გსურთ BOG გადახდის გვერდზე გადასვლა? (Do you want to proceed to BOG payment page?)')
-
-        if (proceedToPayment) {
-          window.location.href = data.redirectUrl // Redirect to BOG payment page
-        } else {
-          // Store payment info for later use
-          sessionStorage.setItem('pendingPayment', JSON.stringify({
-            redirectUrl: data.redirectUrl,
-            orderId: data.orderId,
-            bogOrderId: data.bogOrderId
-          }))
-
-          toast.success('გადახდა შენახულია. შეგიძლიათ მოგვიანებით გააგრძელოთ. (Payment saved. You can continue later.)')
-        }
+        // Automatically redirect to BOG payment page without confirmation
+        console.log('Redirecting to BOG payment page:', data.redirectUrl);
+        window.location.href = data.redirectUrl;
+        
+        // Also store payment info as backup (in case redirect fails)
+        sessionStorage.setItem('pendingPayment', JSON.stringify({
+          redirectUrl: data.redirectUrl,
+          orderId: data.orderId,
+          bogOrderId: data.bogOrderId
+        }));
       } else {
         console.error('Payment order creation failed:', data)
         toast.error(data.error || 'დაფიქსირდა შეცდომა გადახდის დაწყებისას')
@@ -374,10 +369,8 @@ const SummaryPage = () => {
 
       const { access_token } = tokenData;
       
-      // Console log the token in frontend
-      console.log('🔑 BOG Access Token received:', access_token);
-      console.log('Token length:', access_token?.length || 0);
-
+   
+      
       // Create BOG order
       const orderRes = await fetch('/api/create-order', {
         method: 'POST',
@@ -387,33 +380,44 @@ const SummaryPage = () => {
           orderData: orderData
         }),
       });
+      
+      console.log('=== ORDER CREATION RESPONSE ===');
+      console.log('Response status:', orderRes.status);
+      console.log('Response ok:', orderRes.ok);
 
       const orderDataResponse = await orderRes.json();
 
       if (!orderRes.ok) {
-        console.error('Order creation error:', orderDataResponse);
-        alert('შეკვეთის შექმნა ვერ მოხერხდა. გთხოვთ სცადოთ მოგვიანებით.');
+        console.error('=== ORDER CREATION ERROR ===');
+        console.error('Response status:', orderRes.status);
+        console.error('Response data:', orderDataResponse);
+        console.error('Error details:', orderDataResponse.details);
+        console.error('Timestamp:', orderDataResponse.timestamp);
+        console.error('============================');
+        
+        // Show more detailed error message
+        const errorMessage = orderDataResponse.error || 'შეკვეთის შექმნა ვერ მოხერხდა';
+        const detailsMessage = orderDataResponse.details ? `\n\nDetails: ${JSON.stringify(orderDataResponse.details, null, 2)}` : '';
+        alert(`${errorMessage}${detailsMessage}\n\nგთხოვთ სცადოთ მოგვიანებით.`);
         return;
       }
 
       if (orderDataResponse.success && orderDataResponse.redirectUrl) {
         console.log('Payment order created successfully:', orderDataResponse);
         
-        // Ask user if they want to proceed to payment
-        const proceedToPayment = confirm('გსურთ BOG გადახდის გვერდზე გადასვლა? (Do you want to proceed to BOG payment page?)');
-
-        if (proceedToPayment) {
-          window.location.href = orderDataResponse.redirectUrl; // Redirect to BOG payment page
-        } else {
-          // Store payment info for later use
-          sessionStorage.setItem('pendingPayment', JSON.stringify({
-            redirectUrl: orderDataResponse.redirectUrl,
-            orderId: orderDataResponse.orderId,
-            bogOrderId: orderDataResponse.bogOrderId
-          }));
-
-          toast.success('გადახდა შენახულია. შეგიძლიათ მოგვიანებით გააგრძელოთ. (Payment saved. You can continue later.)');
-        }
+        // Cart will be cleared automatically in the backend after order creation
+        console.log('BOG order created successfully, cart will be cleared automatically');
+        
+        // Automatically redirect to BOG payment page without confirmation
+        console.log('Redirecting to BOG payment page:', orderDataResponse.redirectUrl);
+        window.location.href = orderDataResponse.redirectUrl;
+        
+        // Also store payment info as backup (in case redirect fails)
+        sessionStorage.setItem('pendingPayment', JSON.stringify({
+          redirectUrl: orderDataResponse.redirectUrl,
+          orderId: orderDataResponse.orderId,
+          bogOrderId: orderDataResponse.bogOrderId
+        }));
       } else {
         console.error('Payment order creation failed:', orderDataResponse);
         alert(orderDataResponse.error || 'დაფიქსირდა შეცდომა გადახდის დაწყებისას');
@@ -632,7 +636,7 @@ const SummaryPage = () => {
                         </span>
                       </div>
                       <p className="text-sm text-gray-600 mt-1">
-                        საკრედიტო/დებეტური ბარათი - BOG გადახდის სისტემა
+                        ბარათით გადახდა
                       </p>
                     </div>
                   </label>
@@ -742,7 +746,7 @@ const SummaryPage = () => {
                     <>
                       <Lock className="h-5 w-5" />
                       <span className="text-[20px] font-bold">
-                        {paymentMethod === 'card' ? 'გადახდა BOG-ით' : t('checkout.placeOrder')}
+                        {paymentMethod === 'card' ? 'გადახდა ბარათით' : t('checkout.placeOrder')}
                       </span>
                     </>
                   )}
@@ -752,24 +756,24 @@ const SummaryPage = () => {
                 {pendingPayment && (
                   <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
                     <h3 className="font-semibold text-yellow-800 mb-2">
-                      Pending Payment Available
+                      გადახდის მონაცემების გასუფთავება
                     </h3>
                     <p className="text-sm text-yellow-700 mb-3">
-                      You have a saved payment that you can continue with.
+                      გადახდის მონაცემების გასუფთავება
                     </p>
                     <div className="space-y-2">
                       <Button
                         onClick={handlePendingPayment}
                         className="w-full bg-yellow-600 hover:bg-yellow-700 text-white"
                       >
-                        Continue with BOG Payment
+                      გააგრძელეთ გადახდა ბარათით
                       </Button>
                       <Button
                         onClick={clearPendingPayment}
                         variant="outline"
                         className="w-full"
                       >
-                        Clear Pending Payment
+                          გადახდის მონაცემების გასუფთავება
                       </Button>
                     </div>
                   </div>

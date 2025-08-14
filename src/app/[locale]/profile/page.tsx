@@ -24,21 +24,33 @@ import { prisma } from "@/lib/prisma";
 import { format } from "date-fns";
 import { getTranslations } from "next-intl/server";
 import SignOutButton from "@/components/SignOutButton";
+import { getUserOrdersWithBOGStatus } from "@/lib/actions/order.actions";
+import RecentOrders from "@/components/RecentOrders";
 
 async function getCurrentUser() {
   const session = await auth();
   if (!session?.user?.id) return null;
 
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    include: {
-      Order: {
-        take: 5,
-        orderBy: { createdAt: "desc" },
-      },
-      Cart: true,
-    },
-  });
+  console.log('=== PROFILE PAGE DEBUG ===');
+  console.log('Session user ID:', session.user.id);
+
+  // Use the new function to get orders with refreshed BOG statuses
+  const user = await getUserOrdersWithBOGStatus();
+
+  if (user) {
+    console.log('User found:', user.id);
+    console.log('User orders count:', user.Order?.length || 0);
+    console.log('User orders with status:', user.Order?.map(o => ({ 
+      id: o.id, 
+      paymentMethod: o.paymentMethod, 
+      isPaid: o.isPaid,
+      isDelivered: o.isDelivered,
+      createdAt: o.createdAt 
+    })));
+  } else {
+    console.log('User not found');
+  }
+  console.log('==========================');
 
   return user;
 }
@@ -234,76 +246,17 @@ export default async function ProfilePage() {
             )}
 
             {/* Recent Orders */}
-            <Card>
-              <CardHeader>
-                <div className="text-[20px] font-bold">
-                  {t("recentOrders.title")}
-                </div>
-
-                <CardDescription>
-                  {t("recentOrders.description")}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {user.Order && user.Order.length > 0 ? (
-                  <div className="space-y-4">
-                    {user.Order.map((order: {
-                      id: string;
-                      createdAt: string | Date;
-                      totalPrice: any; // or Decimal if you import it
-                      isPaid: boolean;
-                      isDelivered: boolean;
-                    }) => (
-                      <Link
-                        key={order.id}
-                        href={`/order-confirmation?orderId=${order.id}`}
-                        className="block"
-                      >
-                        <div className="flex items-center justify-between p-3.5 border rounded-lg hover:bg-gray-50 transition">
-                          <div>
-                            <p className="font-medium">
-                              {t("recentOrders.orderNumber", {
-                                number: order.id.slice(-8),
-                              })}
-                            </p>
-                            <p className="text-[16px] text-gray-500">
-                              {format(new Date(order.createdAt), "MMM dd, yyyy")}
-                            </p>
-                            <p className="text-sm text-gray-500">
-                              {t("recentOrders.total", {
-                                amount: order.totalPrice.toString(),
-                              })}
-                            </p>
-                          </div>
-                          <div className="text-right">
-                            <Badge
-                           className="text-[16px]"   variant={order.isPaid ? "default" : "secondary"}
-                            >
-                              {order.isPaid
-                                ? t("recentOrders.paid")
-                                : t("recentOrders.pending")}
-                            </Badge>
-                            {order.isDelivered && (
-                              <Badge variant="outline" className="ml-2">
-                                {t("recentOrders.delivered")}
-                              </Badge>
-                            )}
-                          </div>
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-8 text-gray-500">
-                    <ShoppingCart className="mx-auto text-4xl mb-4 text-gray-300" />
-                    <p>{t("recentOrders.noOrders")}</p>
-                    <p className="text-sm">
-                      {t("recentOrders.noOrdersDescription")}
-                    </p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+            <RecentOrders 
+              orders={user.Order?.map(order => ({
+                id: order.id,
+                createdAt: order.createdAt,
+                totalPrice: parseFloat(order.totalPrice.toString()),
+                isPaid: order.isPaid,
+                isDelivered: order.isDelivered,
+                paymentMethod: order.paymentMethod,
+                orderitems: order.orderitems || []
+              })) || []}
+            />
 
             {/* Quick Actions */}
             <Card>

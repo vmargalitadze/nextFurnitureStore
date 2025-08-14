@@ -159,7 +159,7 @@ const Page = (props: { params: { id: string; locale: string } }) => {
     const finalPrice = getDiscountedPrice();
 
     // Show toast immediately for better UX
-    toast.success("Added to cart successfully!");
+    toast.success("პროდუქტი დამატებულია კალათაში");
 
     // Optimistically update the cart UI
     const newItem: CartItem = {
@@ -188,14 +188,17 @@ const Page = (props: { params: { id: string; locale: string } }) => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to add to cart");
+        throw new Error("კალათაში დამატება ვერ მოხერხდა");
       }
 
       // Refresh cart to get the actual server state
       await refreshCart();
+      
+      // Show success message
+      toast.success("პროდუქტი დაემატა კალათაში");
     } catch (error) {
       console.error("Error adding to cart:", error);
-      toast.error("Failed to add to cart");
+      toast.error("კალათაში დამატება ვერ მოხერხდა");
       // Refresh cart to revert optimistic update on error
       await refreshCart();
     } finally {

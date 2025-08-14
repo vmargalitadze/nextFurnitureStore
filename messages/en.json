@@ -101,7 +101,7 @@
     "paymentMethod": "Payment Method",
     "creditCard": "Credit/Debit Card",
     "cashOnDelivery": "Cash on Delivery",
-    "placeOrder": "Place Order",
+    "placeOrder": "Delivery",
     "processingOrder": "Processing Order..."
   },
   "checkout": {

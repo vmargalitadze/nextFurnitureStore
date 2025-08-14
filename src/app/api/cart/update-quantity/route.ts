@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Error updating cart quantity:', error);
     return NextResponse.json(
-      { error: 'Failed to update cart quantity' },
+      { error: 'კალათის რაოდენობის განახლება ვერ მოხერხდა' },
       { status: 500 }
     );
   }
