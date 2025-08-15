@@ -5,6 +5,7 @@ import ProductList from "@/components/ProductList";
 
 import React, { useState, Suspense, useEffect } from "react";
 import { getAllProducts } from "@/lib/actions/actions";
+import ElegantHeroSlider from "@/components/ElegantHeroSlider";
 
 // Loading component for Suspense boundaries
 const LoadingSpinner = () => (
@@ -27,6 +28,7 @@ const HomePage = () => {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Main Content Area */}
+      <ElegantHeroSlider />
       <div className="w-full">
         <Suspense fallback={<LoadingSpinner />}>
           <Categories />
