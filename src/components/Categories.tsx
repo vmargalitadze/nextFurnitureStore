@@ -201,7 +201,7 @@ export default function Categories() {
             <div className="flex gap-8">
               {/* Filter Sidebar */}
               <div className="w-80 flex-shrink-0">
-                <div className="sticky top-24 bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                <div className="sticky top-24 bg-[#FFF6E9] rounded-2xl shadow-lg p-6 ">
                   <h3 className="text-xl font-semibold mb-6 text-gray-800">
                     {locale === "en" ? "Filters" : "ფილტრები"}
                   </h3>
