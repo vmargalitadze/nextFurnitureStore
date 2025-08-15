@@ -21,7 +21,7 @@ export default function VerifyEmailForm() {
  
       
       if (!token) {
-        console.log('❌ No token provided');
+   
         setStatus('error');
         setMessage(t('noToken'));
         return;
@@ -52,7 +52,7 @@ export default function VerifyEmailForm() {
           setMessage(data.error || t('verificationFailed'));
         }
       } catch (error) {
-        console.log('❌ Error during verification:', error);
+ 
         setStatus('error');
         setMessage(t('errorOccurred'));
       }

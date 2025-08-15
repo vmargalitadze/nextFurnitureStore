@@ -31,22 +31,12 @@ async function getCurrentUser() {
   const session = await auth();
   if (!session?.user?.id) return null;
 
-  console.log('=== PROFILE PAGE DEBUG ===');
-  console.log('Session user ID:', session.user.id);
 
   // Use the new function to get orders with refreshed BOG statuses
   const user = await getUserOrdersWithBOGStatus();
 
   if (user) {
-    console.log('User found:', user.id);
-    console.log('User orders count:', user.Order?.length || 0);
-    console.log('User orders with status:', user.Order?.map(o => ({ 
-      id: o.id, 
-      paymentMethod: o.paymentMethod, 
-      isPaid: o.isPaid,
-      isDelivered: o.isDelivered,
-      createdAt: o.createdAt 
-    })));
+
   } else {
     console.log('User not found');
   }

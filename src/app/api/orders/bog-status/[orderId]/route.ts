@@ -77,12 +77,12 @@ function mapBogStatusToOrder(bogData: any) {
     const hasTransactionId = bogData.payment_detail?.transaction_id;
     
     if (hasPaymentAmount && hasTransactionId) {
-      console.log(`Found payment amount (${hasPaymentAmount}) and transaction ID (${hasTransactionId}), marking as paid`);
+    
       isPaid = true;
     }
   }
   
-  console.log(`Status mapping result: isPaid=${isPaid}, isRefunded=${isRefunded}, isFailed=${isFailed}`);
+
   
   return { isPaid, isRefunded, isFailed, status };
 }
@@ -148,12 +148,6 @@ export async function GET(
 
       const bogOrderData = bogOrderResponse.data;
 
-      console.log("=== BOG API Response Debug ===");
-      console.log("Full BOG response:", JSON.stringify(bogOrderData, null, 2));
-      console.log("BOG order_status.key:", bogOrderData.order_status?.key);
-      console.log("BOG order_status.value:", bogOrderData.order_status?.value);
-      console.log("BOG order_status:", bogOrderData.order_status);
-      console.log("=================================");
 
       const { isPaid, isRefunded, isFailed, status } =
         mapBogStatusToOrder(bogOrderData);
@@ -171,11 +165,10 @@ export async function GET(
       );
 
       const bogReceiptData = bogReceiptResponse.data;
-      console.log("BOG receipt:", JSON.stringify(bogReceiptData, null, 2));
+
 
       const bogData = bogOrderResponse.data;
-      console.log("BOG full response:", JSON.stringify(bogData, null, 2));
-      console.log("BOG order_status.key:", bogData.order_status?.key);
+   
 
       // Update the order in database
       const updatedOrder = await prisma.order.update({

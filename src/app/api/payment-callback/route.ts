@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
     }
 
     const data = JSON.parse(rawBody)
-    console.log("✅ VALID PAYMENT CALLBACK RECEIVED:", data)
+
 
     // Extract payment information
     const { event, body } = data
@@ -83,7 +83,7 @@ export async function POST(req: NextRequest) {
         }
       })
 
-      console.log(`✅ Order ${external_order_id} updated with payment status: ${status}`)
+
     }
 
     return new NextResponse("OK", { status: 200 })

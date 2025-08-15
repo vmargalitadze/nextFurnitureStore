@@ -299,10 +299,7 @@ const SummaryPage = () => {
       const data = await res.json()
 
       if (data.success && data.redirectUrl) {
-        console.log('Payment order created successfully:', data)
-
-        // Automatically redirect to BOG payment page without confirmation
-        console.log('Redirecting to BOG payment page:', data.redirectUrl);
+   
         window.location.href = data.redirectUrl;
         
         // Also store payment info as backup (in case redirect fails)
@@ -336,10 +333,7 @@ const SummaryPage = () => {
   const handleBOGPayment = async () => {
     if (processing) return; // Prevent multiple clicks
     
-    console.log('=== STARTING BOG PAYMENT ===');
-    console.log('Address:', address);
-    console.log('Delivery option:', deliveryOption);
-    console.log('Cart:', cart);
+
     
     setProcessing(true);
     try {
@@ -366,12 +360,10 @@ const SummaryPage = () => {
         orderId: `order_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`
       };
 
-      // Get BOG access token
-      console.log('=== REQUESTING BOG TOKEN ===');
+  
       const tokenRes = await fetch('/api/token');
       const tokenData = await tokenRes.json();
-      console.log('Token response status:', tokenRes.status);
-      console.log('Token response data:', tokenData);
+   
       
       if (!tokenRes.ok) {
         console.error('Token error:', tokenData);
@@ -381,13 +373,7 @@ const SummaryPage = () => {
       }
 
       const { access_token } = tokenData;
-      console.log('Token received successfully');
-      
-   
-      
-      // Create BOG order
-      console.log('=== CREATING BOG ORDER ===');
-      console.log('Order data being sent:', orderData);
+  
       
       const orderRes = await fetch('/api/create-order', {
         method: 'POST',
