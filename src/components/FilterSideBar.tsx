@@ -80,7 +80,7 @@ export default function FilterSidebar({ onFilterChange }: FilterSidebarProps) {
   // Memoize localized category labels
   const getLocalizedCategoryLabel = useCallback((category: string) => {
     const map: Record<string, { en: string; ge: string }> = {
-      'bundle': { en: 'Bundle', ge: 'კომპლექტი' },
+      
       'pillow': { en: 'Pillow', ge: 'ბალიში' },
       'mattress': { en: 'Mattress', ge: 'მატრასი' },
       'bed': { en: 'Bed', ge: 'ლოგინი' },

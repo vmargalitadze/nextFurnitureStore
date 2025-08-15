@@ -91,7 +91,7 @@ export default function Categories() {
           PILLOW: "pillow",
           QUILT: "quilt",
           PAD: "quilt",
-          bundle: "bundle",
+        
           BED: "bed",
           OTHERS: "OTHERS",
         };
@@ -214,7 +214,7 @@ export default function Categories() {
                       {locale === "en" ? "Category" : "კატეგორია"}
                     </label>
                     <div className="space-y-2">
-                      {['all', 'mattress', 'pillow', 'quilt', 'bed', 'bundle', 'OTHERS'].map((cat) => (
+                      {['all', 'mattress', 'pillow', 'quilt', 'bed',  'OTHERS'].map((cat) => (
                         <label key={cat} className="flex items-center">
                           <input
                             type="radio"

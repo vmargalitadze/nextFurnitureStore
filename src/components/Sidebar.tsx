@@ -139,7 +139,7 @@ const SideBar: React.FC<SideBarProps> = ({
       }
 
       const map: Record<string, { en: string; ge: string }> = {
-        bundle: { en: "Bundle", ge: "კომპლექტი" },
+    
         pillow: { en: "Pillow", ge: "ბალიში" },
         mattress: { en: "Mattress", ge: "მატრასი" },
         bed: { en: "Bed", ge: "საწოლი" },
