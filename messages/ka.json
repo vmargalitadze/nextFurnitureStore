@@ -136,8 +136,8 @@
   },
   "common": {
     "filter": "ფილტრი",
-    "clearAllFilters": "ყველა ფილტრის გასუფთავება",
-    "clearFilters": "ფილტრების გასუფთავება",
+    "clearAllFilters": " გასუფთავება",
+    "clearFilters": "გასუფთავება",
     "found": "ნაპოვნია",
     "products": "პროდუქტი",
     "activeFilters": "აქტიური ფილტრები",
@@ -145,7 +145,14 @@
     "newest": "ახალი",
     "priceLowToHigh": "ფასი: დაბალიადან მაღლად",
     "priceHighToLow": "ფასი: მაღლადან დაბალად",
-    "nameAZ": "სახელი: A-Z"
+    "nameAZ": "სახელი: A-Z",
+    "minPrice": "მინიმალური ფასი",
+    "maxPrice": "მაქსიმალური ფასი",
+    "category": "კატეგორია",
+    "brand": "ბრენდი",
+    "priceRange": "ფასის დიაპაზონი",
+    "allBrands": "ყველა ბრენდი",
+    "allCategories": "ყველა კატეგორია"
   },
   "productDetail": {
     "breadcrumb": {
@@ -214,7 +221,7 @@
         "allBrands": "ყველა ბრენდი"
       },
       "others": "სხვა",
-      "clearFilters": "ფილტრების გასუფთავება"
+      "clearFilters": "გასუფთავება"
     },
     "results": {
       "found": "ნაპოვნია",

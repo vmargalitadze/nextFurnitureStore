@@ -22,7 +22,7 @@ const PaginationArrow: FC<PaginationArrowProps> = React.memo(
     return (
       <Button  variant="outline"
         onClick={onClick}
-        className="flex items-center justify-center w-10 h-10 bg-white text-gray-700 hover:bg-gray-50 shadow-md hover:shadow-lg border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed rounded-full transition-all duration-300 transform hover:scale-105"
+        className="flex items-center justify-center w-10 h-10 bg-white text-gray-700  shadow-md hover:shadow-lg border border-gray-200 disabled:opacity-50 disabled:cursor-not-allowed rounded-full transition-all duration-300 transform hover:scale-105"
         aria-label={isLeft ? "Previous page" : "Next page"}
         disabled={isDisabled}
       >
@@ -114,8 +114,8 @@ const PaginationContent: FC<PaginationProps> = ({ pageCount }) => {
               onClick={() => goToPage(page as number)}
               className={`flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 transform hover:scale-105 ${
                 currentPage === page
-                  ? 'bg-gradient-to-r from-primary to-primary/80 text-white shadow-lg shadow-primary/25'
-                  : 'bg-white text-gray-700 hover:bg-gray-50 shadow-md hover:shadow-lg border border-gray-200'
+                  ? 'bg-[#FF7A00] hover:bg-[#FF7A00]/80 text-white shadow-lg shadow-primary/25'
+                  : 'bg-white text-gray-700  shadow-md hover:shadow-lg border border-gray-200'
               }`}
             >
               {page}
@@ -140,7 +140,7 @@ const PaginationComponent: FC<PaginationProps> = ({ pageCount }) => {
   return (
     <Suspense fallback={
       <div className="flex justify-center items-center py-4">
-        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+        <div className="animate-spin rounded-full h-6 w-6 border-b-2 bg-[#FF7A00]"></div>
       </div>
     }>
       <PaginationContent pageCount={pageCount} />

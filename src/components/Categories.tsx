@@ -201,28 +201,16 @@ export default function Categories() {
             <div className="flex gap-8">
               {/* Filter Sidebar */}
               <div className="w-80 flex-shrink-0">
-                <div className="sticky top-24 bg-[#FFF6E9] rounded-2xl shadow-lg p-6 ">
-                  <h3 className="text-xl font-semibold mb-6 text-gray-800">
+                <div className="sticky top-24 bg-gray-200 rounded-2xl shadow-lg p-6 ">
+                  <h3 className="text-[20px] font-semibold mb-6 text-black">
                     {locale === "en" ? "Filters" : "ფილტრები"}
                   </h3>
 
-                  {/* Search */}
-                  <div className="mb-6">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      {locale === "en" ? "Search" : "ძიება"}
-                    </label>
-                    <input
-                      type="text"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder={locale === "en" ? "Search products..." : "პროდუქტების ძიება..."}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
-                  </div>
+                 
 
                   {/* Category Filter */}
                   <div className="mb-6">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-[18px] font-medium text-black mb-2">
                       {locale === "en" ? "Category" : "კატეგორია"}
                     </label>
                     <div className="space-y-2">
@@ -236,7 +224,7 @@ export default function Categories() {
                             onChange={(e) => setSelectedCategory(e.target.value)}
                             className="mr-2 text-blue-600"
                           />
-                          <span className="text-sm text-gray-700">
+                          <span className="text-[18px] text-gray-700">
                             {cat === 'all' ? (locale === "en" ? "All Categories" : "ყველა კატეგორია") : getLocalizedCategoryLabel(cat)}
                           </span>
                         </label>
@@ -246,7 +234,7 @@ export default function Categories() {
 
                   {/* Brand Filter */}
                   <div className="mb-6">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-[18px] font-medium text-black mb-2">
                       {locale === "en" ? "Brands" : "ბრენდები"}
                     </label>
                     <div className="space-y-2 max-h-32 overflow-y-auto">
@@ -266,7 +254,7 @@ export default function Categories() {
                               }}
                               className="mr-2 text-blue-600"
                             />
-                            <span className="text-sm text-gray-700">{brand}</span>
+                            <span className="text-[18px] text-gray-700">{brand}</span>
                           </label>
                         ))
                       ) : (
@@ -279,7 +267,7 @@ export default function Categories() {
 
                   {/* Price Range */}
                   <div className="mb-6">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-[18px] font-medium text-black mb-2">
                       {locale === "en" ? "Price Range" : "ფასის დიაპაზონი"}
                     </label>
                     <div className="flex gap-2">
@@ -302,7 +290,7 @@ export default function Categories() {
 
                   {/* Availability Filters */}
                   <div className="mb-6">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-[18px] font-medium text-black mb-2">
                       {locale === "en" ? "Availability" : "ხელმისაწვდომობა"}
                     </label>
                     <div className="space-y-2">
@@ -313,7 +301,7 @@ export default function Categories() {
                           onChange={(e) => setInStockOnly(e.target.checked)}
                           className="mr-2 text-blue-600"
                         />
-                        <span className="text-sm text-gray-700">
+                        <span className="text-[18px] text-gray-700">
                           {locale === "en" ? "In Stock Only" : "მხოლოდ მარაგში"}
                         </span>
                       </label>
@@ -324,7 +312,7 @@ export default function Categories() {
                           onChange={(e) => setComingSoonOnly(e.target.checked)}
                           className="mr-2 text-blue-600"
                         />
-                        <span className="text-sm text-gray-700">
+                        <span className="text-[18px] text-gray-700">
                           {locale === "en" ? "Coming Soon" : "მალე ხელმისაწვდომი"}
                         </span>
                       </label>
@@ -335,15 +323,15 @@ export default function Categories() {
                   <div className="space-y-3">
                     <button
                       onClick={handleSearch}
-                      className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                      className="bg-[#f3983e] md:text-[20px] text-[18px] w-full border-radius:20px  px-4 sm:px-6 md:px-8 py-2 text-black  rounded-xl font-bold  transition-all duration-300 transform shadow-lg "
                     >
-                      {locale === "en" ? "Apply Filters" : "ფილტრების გამოყენება"}
+                      {locale === "en" ? "Apply Filters" : "ფილტრი"}
                     </button>
                     <button
                       onClick={clearFilters}
-                      className="w-full bg-gray-200 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors font-medium"
+                      className="w-full md:text-[20px] border-radius:20px text-[18px] bg-[#2E3A47] text-white py-2 px-4 rounded-xl  transition-colors text-white font-bold"
                     >
-                      {locale === "en" ? "Clear All" : "ყველაფრის გასუფთავება"}
+                      {locale === "en" ? "Clear All" : " გასუფთავება"}
                     </button>
                   </div>
                 </div>
@@ -385,8 +373,6 @@ export default function Categories() {
 
 
 
-                          {/* Floating Content Bubble */}
-                          {/* Modern Content Overlay */}
                           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500">
                             <div className="absolute bottom-0 left-0 right-0 p-6">
                               <motion.div
@@ -399,13 +385,13 @@ export default function Categories() {
                                 <h3 className="text-xl md:text-2xl font-bold text-white mb-2">
                                   {getLocalizedCategoryLabel(category.type)}
                                 </h3>
-                                <p className="text-white/90 text-sm md:text-base mb-4">
+                                <p className="text-white/90 text-[18px] md:text-base mb-4">
                                   {getProductCount(category.type)} {locale === "en" ? "products" : "პროდუქტი"}
                                 </p>
                                 <motion.button
                                   whileHover={{ scale: 1.05, y: -2 }}
                                   whileTap={{ scale: 0.95 }}
-                                  className="bg-white text-black px-6 py-3 rounded-xl font-semibold 
+                                  className="bg-white md:text-[20px] text-[18px] text-black px-6 py-3 rounded-xl font-semibold 
                                    transition-all duration-300 shadow-lg"
                                 >
                                   {locale === "en" ? "Explore" : "ნახვა"}
@@ -431,11 +417,7 @@ export default function Categories() {
       {/* Mobile View – Swiper */}
       <div className="md:hidden">
         <div className="container pt-10 mx-auto">
-          <div className="pt-14">
-            <h2 className="text-2xl font-serif font-bold text-center mb-4">
-              {locale === "en" ? "Product Categories" : "პროდუქტების კატეგორიები"}
-            </h2>
-          </div>
+          
           <div className="relative mt-5">
             <Swiper
               modules={[Pagination]}

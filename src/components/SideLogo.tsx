@@ -5,7 +5,7 @@ export default function SideLogo() {
   const phoneNumber = "+995568613022";
 
   return (
-    <div className="fixed bottom-[75px] right-[20px] md:right-[59px] z-50">
+    <div className="fixed bottom-[75px] right-[20px] md:right-[30px] z-50">
       <Link
         href={`https://wa.me/${phoneNumber}`}
         target="_blank"

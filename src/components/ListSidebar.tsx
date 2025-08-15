@@ -153,26 +153,26 @@ const ListSideBar: React.FC<FilterProps> = ({ isOpen, toggleSidebar, onFilterCha
         <div className="p-4 space-y-6 overflow-y-auto h-[calc(100vh-120px)]">
           {/* Search */}
           <div>
-            <h3 className="text-[18px] font-bold text-gray-700 mb-3">{t("search")}</h3>
+            <h3 className="md:text-[20px] text-[16px] font-bold text-gray-700 mb-3">{t("search")}</h3>
             <div className="relative">
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={t("searchPlaceholder")}
-                   className="w-full px-4 py-2 pl-17 md:pl-10 border-2 border-gray-200 rounded-lg text-gray-800 transition-all duration-300 placeholder-gray-400"
+                   className="w-full px-4 py-2 pl-17 md:pl-10 border-2 border-gray-200 rounded-lg text-black transition-all duration-300 placeholder-gray-400 text-[16px] md:text-[18px]"
                 onKeyDown={handleKeyPress}
               />
-               <Search className="absolute  md:left-3  top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+               <Search className="absolute  md:left-3  top-1/2 transform -translate-y-1/2 text-black w-4 h-4" />
             </div>
           </div>
 
           {/* Categories */}
           <div>
-            <h3 className="text-[18px] font-bold text-gray-700 mb-3">{t("categories.title")} ({categories.length})</h3>
+            <h3 className="md:text-[20px] text-[16px] font-bold text-gray-700 mb-3">{t("categories.title")} ({categories.length})</h3>
             <div className="space-y-2">
               {categories.map((category) => (
-                <label key={category} className="flex items-center text-sm text-gray-600 hover:text-gray-800 cursor-pointer">
+                <label key={category} className="flex items-center text-[16px] md:text-[18px] text-gray-600 hover:text-gray-800 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={selectedCategories.includes(category)}
@@ -187,10 +187,10 @@ const ListSideBar: React.FC<FilterProps> = ({ isOpen, toggleSidebar, onFilterCha
 
           {/* Brands */}
           <div>
-            <h3 className="text-[18px] font-bold text-gray-700 mb-3">{t("brand.title")} ({brands.length})</h3>
+            <h3 className="md:text-[20px] text-[16px] font-bold text-gray-700 mb-3">{t("brand.title")} ({brands.length})</h3>
             <div className="space-y-2 max-h-48 overflow-y-auto border border-gray-200 rounded-md p-2">
               {brands.map((brand) => (
-                <label key={brand} className="flex items-center text-sm text-gray-600 hover:text-gray-800 cursor-pointer">
+                <label key={brand} className="flex items-center text-[16px] md:text-[18px] text-gray-600 hover:text-gray-800 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={selectedBrands.includes(brand)}
@@ -205,7 +205,7 @@ const ListSideBar: React.FC<FilterProps> = ({ isOpen, toggleSidebar, onFilterCha
 
           {/* Price */}
           <div>
-            <h3 className="text-[18px] font-bold text-gray-700 mb-3">{t("priceRange.title")}</h3>
+            <h3 className=" md:text-[20px] text-[16px] font-bold text-gray-700 mb-3">{t("priceRange.title")}</h3>
             <div className="flex gap-2 mb-2">
               <input
                 type="number"
@@ -213,7 +213,7 @@ const ListSideBar: React.FC<FilterProps> = ({ isOpen, toggleSidebar, onFilterCha
                 min={priceRange.min}
                 max={priceRange.max}
                 onChange={(e) => setCurrentPriceRange(prev => ({ ...prev, min: parseInt(e.target.value) || 0 }))}
-                className="w-1/2 px-3 py-2 border font-normal  border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#438c71]"
+                className="w-1/2 px-3 py-2 border font-normal  border-gray-300 rounded-md text-[16px] md:text-[18px] focus:outline-none focus:ring-2 focus:ring-[#438c71]"
                 placeholder="Min"
               />
               <input
@@ -222,29 +222,29 @@ const ListSideBar: React.FC<FilterProps> = ({ isOpen, toggleSidebar, onFilterCha
                 min={priceRange.min}
                 max={priceRange.max}
                 onChange={(e) => setCurrentPriceRange(prev => ({ ...prev, max: parseInt(e.target.value) || 0 }))}
-                className="w-1/2 px-3 py-2 border font-normal border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#438c71]"
+                  className="w-1/2 px-3 py-2 border font-normal border-gray-300 rounded-md text-[16px] md:text-[18px] focus:outline-none focus:ring-2 focus:ring-[#438c71]"
                 placeholder="Max"
               />
             </div>
-            <div className="text-xs text-gray-500">
+                <div className="text-[16px] md:text-[18px] text-black">
               ₾{currentPriceRange.min} - ₾{currentPriceRange.max}
             </div>
           </div>
 
           {/* Buttons */}
           <div className="pt-4 border-t space-y-2">
-            <Button  variant="outline"
+            <button
               onClick={applyFilters} 
-              className="w-full px-4 py-2 text-[18px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+              className="bg-[#f3983e] font-bold md:text-[20px] text-[18px] md:text-[18px] w-full border-radius:20px  px-4 sm:px-6 md:px-8 py-2 text-black  rounded-xl   transition-all duration-300 transform shadow-lg "
             >
               {t("search")}
-            </Button>
-            <Button  variant="outline"
+            </button>
+            <button
               onClick={clearFilters} 
-              className="w-full px-4 py-2 text-[18px] font-bold border border-[#438c71] text-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors flex items-center justify-center gap-2"
+ className="w-full md:text-[20px] border-radius:20px text-[18px] md:text-[18px] bg-[#2E3A47] text-white py-2 px-4 rounded-xl flex justify-center items-center gap-2 transition-colors text-white font-bold"
             >
               <Trash2 size={16} /> {t("clearFilters")}
-            </Button>
+            </button>
           </div>
         </div>
       </div>

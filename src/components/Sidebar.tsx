@@ -331,7 +331,7 @@ const SideBar: React.FC<SideBarProps> = ({
               urlCategory ||
               urlBrand ||
               urlQuery) && (
-              <span className="px-2 py-1 text-xs bg-[#438c71] text-white rounded-full">
+              <span className="px-2 py-1 text-xs bg-[#f3983e] text-white rounded-full">
                 {selectedCategories.length +
                   selectedBrands.length +
                   (currentPriceRange.min !== priceRange.min ||
@@ -516,14 +516,14 @@ const SideBar: React.FC<SideBarProps> = ({
             {/* Search Button */}
             <button
               onClick={handleSearch}
-              className="w-full px-4 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+             className="bg-[#f3983e] md:text-[20px] font-bold text-[18px] w-full border-radius:20px  px-4 sm:px-6 md:px-8 py-2 text-black  rounded-xl   transition-all duration-300 transform shadow-lg "
             >
               {labels.search}
             </button>
 
               <button
                 onClick={clearFilters}
-              className="w-full mt-4 mb-14 px-4 py-2 text-[20px] font-bold text-[#438c71] bg-white border-2 border-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors flex items-center justify-center gap-2"
+              className="w-full text-[16px] md:text-[18px] border-radius:20px text-[18px] bg-[#2E3A47] text-white py-2 px-4 rounded-xl  transition-colors text-white font-bold"
               >
                 {labels.clearFilters}
               </button>

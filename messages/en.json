@@ -534,7 +534,14 @@
     "newest": "Newest",
     "priceLowToHigh": "Price: Low to High",
     "priceHighToLow": "Price: High to Low",
-    "nameAZ": "Name: A-Z"
+    "nameAZ": "Name: A-Z",
+    "minPrice": "Min Price",
+    "maxPrice": "Max Price",
+    "category": "Category",
+    "brand": "Brand",
+    "priceRange": "Price Range",
+    "allBrands": "All Brands",
+    "allCategories": "All Categories"
   },
   "profile": {
     "title": "Profile Dashboard",

@@ -326,8 +326,6 @@ function PageContentWrapper() {
   // Apply initial filters when products load or URL params change
   useEffect(() => {
     if (products.length > 0) {
-
-
       // Parse multiple categories and brands from comma-separated values
       const selectedCategories = category
         ? category.split(",").map((c) => c.trim())
@@ -355,12 +353,44 @@ function PageContentWrapper() {
           product.brand.toLowerCase().includes(query.toLowerCase()) ||
           product.category.toLowerCase().includes(query.toLowerCase());
 
-
-
         return matchesCategory && matchesBrand && matchesQuery;
       }); setFilteredProducts(filtered);
     }
   }, [products, category, brand, query]);
+
+  // Apply desktop filters when they change
+  useEffect(() => {
+    if (products.length > 0) {
+      const filtered = products.filter((product) => {
+        // Category filter
+        const matchesCategory = !selectedType || product.category === selectedType;
+        
+        // Brand filter
+        const matchesBrand = !selectedBrand || product.brand === selectedBrand;
+        
+        // Price range filter
+        const priceRange = getProductPriceRange(product);
+        const matchesPrice = 
+          (!selectedPrice.min || priceRange.min >= selectedPrice.min) &&
+          (!selectedPrice.max || priceRange.max <= selectedPrice.max);
+        
+        // Search query filter (from URL)
+        const matchesQuery =
+          !query ||
+          product.title.toLowerCase().includes(query.toLowerCase()) ||
+          product.titleEn.toLowerCase().includes(query.toLowerCase()) ||
+          product.description.toLowerCase().includes(query.toLowerCase()) ||
+          product.descriptionEn.toLowerCase().includes(query.toLowerCase()) ||
+          product.brand.toLowerCase().includes(query.toLowerCase()) ||
+          product.category.toLowerCase().includes(query.toLowerCase());
+
+        return matchesCategory && matchesBrand && matchesPrice && matchesQuery;
+      });
+      
+      setFilteredProducts(filtered);
+      setCurrentPage(1); // Reset to first page when filters change
+    }
+  }, [products, selectedType, selectedBrand, selectedPrice, query]);
 
   // Loading state
   if (loading) {
@@ -426,7 +456,7 @@ function PageContentWrapper() {
         <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 mb-8">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-2 h-8 bg-primary rounded-full"></div>
+              <div className="w-2 h-8 bg-[#FF7A00] rounded-full"></div>
               <div>
                 <p className="text-gray-600 text-[18px]">
                   {t("found")}{" "}
@@ -438,7 +468,7 @@ function PageContentWrapper() {
                 </p>
 
                 {activeFiltersCount > 0 && (
-                  <p className="text-primary text-sm font-medium">
+                  <p className="text-primary text-[18px] font-medium">
                     {activeFiltersCount} {t("activeFilters")}
                   </p>
                 )}
@@ -447,19 +477,7 @@ function PageContentWrapper() {
             <div className="hidden md:block ">
               <div className="flex justify-center   flex-col sm:flex-row items-center gap-4">
                 <div className="flex items-center gap-2">
-                  <svg
-                    className="w-5 h-5 text-gray-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M3 4h18M3 8h18M3 12h18M3 16h18"
-                    />
-                  </svg>
+                  
                   <label className="text-[18px] font-medium text-gray-700">
                     {t("sortBy")}
                   </label>
@@ -492,13 +510,13 @@ function PageContentWrapper() {
                   </div>
                 )}
                 {shouldShowSidebar && (
-                  <Button
-                    variant="outline"
+                  <button
+                  
                     onClick={handleClearFilters}
-                    className="w-full flex mx-auto items-center justify-center gap-3 px-4  py-1 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+                   className="bg-[#FF7A00] w-full border-radius:20px  text-white px-4 sm:px-6 md:px-8 py-2 sm:py-3 md:py-4 rounded-xl font-medium flex items-center justify-center gap-2 transition-all duration-300 transform shadow-lg text-sm sm:text-base"
                   >
                     <Trash2 size={16} /> {t("clearFilters")}
-                  </Button>
+                  </button>
                 )}
               </div>
 
@@ -506,19 +524,7 @@ function PageContentWrapper() {
             <div className="block md:hidden">
               <div className="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto">
                 <div className="flex items-center gap-2">
-                  <svg
-                    className="w-5 h-5 text-gray-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M3 4h18M3 8h18M3 12h18M3 16h18"
-                    />
-                  </svg>
+                 
                   <label className="text-base lg:text-lg font-medium text-gray-700 whitespace-nowrap">
                     {t("sortBy")}
                   </label>
@@ -528,7 +534,7 @@ function PageContentWrapper() {
                   onChange={(e) => {
                     setSortBy(e.target.value);
                   }}
-                  className="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all bg-white font-medium text-sm lg:text-base"
+                  className="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all bg-white font-medium text-[18px] lg:text-base"
                 >
                   <option value="newest">{t("newest")}</option>
                   <option value="price-low">{t("priceLowToHigh")}</option>
@@ -540,85 +546,157 @@ function PageContentWrapper() {
           </div>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-8">
-          {isListPage && isListPage1 && (
-            <div className="mb-6">
-              <Button
-                variant="outline"
-                onClick={handleViewListSidebar}
-                className="w-full px-4 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
-              >
-                {t("filter")}
-              </Button>
-            </div>
-          )}
-          <ListSideBar
-            isOpen={listSidebarOpen}
-            toggleSidebar={handleViewListSidebar}
-            onFilterChange={handleListFilterChange}
-          />
-          {/* SideBar Toggle Button - Only show when category or brand parameters exist */}
-          {shouldShowSidebar && (
-            <>
-              <div className="mb-6">
-                <Button
-                  variant="outline"
-                  onClick={handleViewSidebar}
-                  className="w-full px-4 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
-                >
-                  {t("filter")}
-                </Button>
-              </div>
-
-              <SideBar
-                isOpen={sidebarOpen}
-                toggleSidebar={handleViewSidebar}
-                onFilterChange={() => { }}
-                ref={sidebarRef}
-              />
-            </>
-          )}
-
-          <div className={`${shouldShowSidebar ? "lg:w-full" : "w-full"}`}>
-            {transformedProducts.length > 0 ? (
-              <>
-                <div className="mt-0">
-                  <ProductHelper items={transformedProducts} sliderId={"list"} />
-                </div>
-
-                {isLargeScreen && totalPages > 1 && (
-                  <div className="mb-10 mt-10 flex justify-center">
-                    <Pagination pageCount={totalPages} />
+          <div className="flex flex-col lg:flex-row gap-8">
+            {/* Filter Sidebar - Always visible on large screens */}
+            <div className="lg:w-64 lg:flex-shrink-0">
+              {isListPage && (
+                <>
+                  {/* Mobile Filter Button */}
+                  <div className="mb-6 lg:hidden">
+                    <Button
+                      variant="outline"
+                      onClick={handleViewListSidebar}
+                      className="bg-[#f3983e] md:text-[20px] text-[18px] w-full border-radius:20px  px-4 sm:px-6 md:px-8 py-2 text-black  rounded-xl font-medium  transition-all duration-300 transform shadow-lg "
+                    >
+                      {t("filter")}
+                    </Button>
                   </div>
-                )}
-              </>
-            ) : (
-              <div className="text-center flex flex-col md:ml-[100px] justify-center items-center py-12">
-                <div className="text-gray-400 mb-4">
-                  <svg
-                    className="w-20 h-20 mx-auto"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
-                    />
-                  </svg>
-                </div>
-                <h3 className="text-2xl text-center  font-bold text-gray-900 mb-3">
-                  No products found
-                </h3>
-                <p className="text-gray-600">
-                  Try adjusting your search criteria or filters
-                </p>
+                  
+                  {/* Desktop Filter Sidebar - Always visible */}
+                  <div className="hidden lg:block">
+                    <div className="bg-gray-200 rounded-2xl shadow-lg p-6 rounded-xl shadow-lg  p-6">
+                      <h3 className="text-[20px] font-semibold text-black mb-4">{t("filter")}</h3>
+                      <div className="space-y-4">
+                        {/* Category Filter */}
+                        <div>
+                            <label className="block text-[18px] font-medium text-black mb-2">{t("category")}</label>
+                          <select 
+                            value={selectedType} 
+                            onChange={(e) => setSelectedType(e.target.value)}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#438c71]/50 focus:border-[#438c71]"
+                          >
+                            <option value="">{t("allCategories")}</option>
+                            {Array.from(new Set(products.map(p => p.category).filter(Boolean))).map((category) => (
+                              <option key={category} value={category}>
+                                {category}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        
+                        {/* Brand Filter */}
+                        <div>
+                          <label className="block text-[18px] font-medium text-black mb-2">{t("brand")}</label>
+                          <select 
+                            value={selectedBrand} 
+                            onChange={(e) => setSelectedBrand(e.target.value)}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#438c71]/50 focus:border-[#438c71]"
+                          >
+                            <option value="">{t("allBrands")}</option>
+                            {Array.from(new Set(products.map(p => p.brand).filter(Boolean))).map((brand) => (
+                              <option key={brand} value={brand}>
+                                {brand}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        
+                        {/* Price Range Filter */}
+                        <div>
+                          <label className="block text-[18px] font-medium text-black mb-2">{t("priceRange")}</label>
+                          <div className="space-y-2">
+                            <input
+                              type="number"
+                              placeholder={t("minPrice")}
+                              value={selectedPrice.min || ''}
+                              onChange={(e) => setSelectedPrice(prev => ({ ...prev, min: e.target.value ? Number(e.target.value) : null }))}
+                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#438c71]/50 focus:border-[#438c71]"
+                            />
+                            <input
+                              type="number"
+                              placeholder={t("maxPrice")}
+                              value={selectedPrice.max || ''}
+                              onChange={(e) => setSelectedPrice(prev => ({ ...prev, max: e.target.value ? Number(e.target.value) : null }))}
+                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#438c71]/50 focus:border-[#438c71]"
+                            />
+                          </div>
+                        </div>
+                        
+                        {/* Clear Filters Button */}
+                        <button
+                          onClick={handleClearFilters}
+                          
+                         className="bg-[#f3983e] md:text-[20px] text-[18px] w-full border-radius:20px  px-4 sm:px-6 md:px-8 py-2 text-black  rounded-xl font-medium  transition-all duration-300 transform shadow-lg "
+                        >
+                          {t("clearAllFilters")}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+              
+              {/* Mobile Sidebar - Controlled by state */}
+              <div className="lg:hidden">
+                <ListSideBar
+                  isOpen={listSidebarOpen}
+                  toggleSidebar={handleViewListSidebar}
+                  onFilterChange={handleListFilterChange}
+                />
               </div>
+            </div>
+
+            {/* Main Sidebar Toggle Button - Only show when category or brand parameters exist */}
+            {shouldShowSidebar && (
+              <>
+                <div className="mb-6 lg:hidden">
+                  <Button
+                    variant="outline"
+                    onClick={handleViewSidebar}
+                    className="w-full px-4 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+                  >
+                    {t("filter")}
+                  </Button>
+                </div>
+
+                <SideBar
+                  isOpen={sidebarOpen}
+                  toggleSidebar={handleViewSidebar}
+                  onFilterChange={() => { }}
+                  ref={sidebarRef}
+                />
+              </>
             )}
+
+            {/* Products Section */}
+            <div className="flex-1">
+              {transformedProducts.length > 0 ? (
+                <>
+                  <div className="mt-0">
+                    <ProductHelper items={transformedProducts} sliderId={"list"} />
+                  </div>
+
+                  {isLargeScreen && totalPages > 1 && (
+                    <div className="mb-10 mt-10 flex justify-center">
+                      <Pagination pageCount={totalPages} />
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="text-center flex flex-col md:ml-[100px] justify-center items-center py-12">
+                  <div className="text-gray-400 mb-4">
+                   
+                  </div>
+                  <h3 className="text-2xl text-center  font-bold text-gray-900 mb-3">
+                    No products found
+                  </h3>
+                  <p className="text-gray-600">
+                    Try adjusting your search criteria or filters
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
       </div>
     </>
   );
