@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "../../../../../../auth";
 import { prisma } from "@/lib/prisma";
 import axios from "axios";
+import { bogTokenManager } from "@/lib/bog-token";
 
 // helper for mapping BOG status
 function mapBogStatusToOrder(bogData: any) {
@@ -121,48 +122,42 @@ export async function GET(
       );
     }
 
-    // Get BOG token
-    const tokenRes = await fetch(`${request.nextUrl.origin}/api/token`);
-    const tokenData = await tokenRes.json();
-
-    if (!tokenData.access_token) {
-      return NextResponse.json(
-        { error: "Failed to get BOG token" },
-        { status: 500 }
-      );
-    }
-
-    // Try to get BOG receipt using external_order_id (our order ID)
+    // Use token manager for automatic token refresh and retry
     try {
-      // სტატუსის წამოღება
-      const bogOrderResponse = await axios.get(
-        `https://api.bog.ge/payments/v1/ecommerce/orders/${orderId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${tokenData.access_token}`,
-            "Accept-Language": "ka",
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      console.log('🔑 Checking BOG order status using token manager');
+      
+      // Get BOG order status using token manager
+      const bogOrderResponse = await bogTokenManager.makeAuthenticatedRequest(async (validToken) => {
+        console.log('🔑 Using BOG token for order status check');
+        return axios.get(
+          `https://api.bog.ge/payments/v1/ecommerce/orders/${orderId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${validToken}`,
+              "Accept-Language": "ka",
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      });
 
       const bogOrderData = bogOrderResponse.data;
+      const { isPaid, isRefunded, isFailed, status } = mapBogStatusToOrder(bogOrderData);
 
-
-      const { isPaid, isRefunded, isFailed, status } =
-        mapBogStatusToOrder(bogOrderData);
-
-      // ჩეკის წამოღება სურვილისამებრ
-      const bogReceiptResponse = await axios.get(
-        `https://api.bog.ge/payments/v1/receipt/${orderId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${tokenData.access_token}`,
-            "Accept-Language": "ka",
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      // Get BOG receipt using token manager
+      const bogReceiptResponse = await bogTokenManager.makeAuthenticatedRequest(async (validToken) => {
+        console.log('🔑 Using BOG token for receipt check');
+        return axios.get(
+          `https://api.bog.ge/payments/v1/receipt/${orderId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${validToken}`,
+              "Accept-Language": "ka",
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      });
 
       const bogReceiptData = bogReceiptResponse.data;
 

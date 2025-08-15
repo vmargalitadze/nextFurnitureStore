@@ -8,6 +8,7 @@ import { prisma } from '@/lib/prisma';
 import { Prisma } from '@prisma/client';
 import { sendOrderReceipt } from '@/lib/email';
 import { sendOrderToAdmin } from '@/lib/email';
+import { bogTokenManager } from '@/lib/bog-token';
 
 export async function POST(req: NextRequest) {
   
@@ -91,18 +92,21 @@ export async function POST(req: NextRequest) {
       },
     };
     
-    // Original BOG e-commerce API structure
-    const response = await axios.post(
-      'https://api.bog.ge/payments/v1/ecommerce/orders',
-      bogRequestData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Accept-Language': 'ka',
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    // Use token manager for automatic token refresh and retry
+    const response = await bogTokenManager.makeAuthenticatedRequest(async (validToken) => {
+      console.log('🔑 Using BOG token for API call');
+      return axios.post(
+        'https://api.bog.ge/payments/v1/ecommerce/orders',
+        bogRequestData,
+        {
+          headers: {
+            Authorization: `Bearer ${validToken}`,
+            'Accept-Language': 'ka',
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+    });
     
     console.log('=== BOG API RESPONSE RECEIVED ===');
     console.log('Response status:', response.status);

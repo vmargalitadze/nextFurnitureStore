@@ -255,6 +255,7 @@ const SummaryPage = () => {
   }
   const getToken = async () => {
     try {
+      // Use the token manager endpoint that handles automatic refresh
       const res = await fetch('/api/token')
       const data = await res.json()
 
