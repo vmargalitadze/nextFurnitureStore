@@ -127,7 +127,7 @@ const ElegantHeroSlider = () => {
                 transition={{ duration: 0.6 }}
                 className="flex flex-col items-start"
               >
-                <h1 className=" md:text-[30px] text-[20px] font-serif font-bold text-white mb-4 sm:mb-6 leading-tight drop-shadow-2xl">
+                <h1 className=" md:text-[38px] text-[24px]  font-serif font-bold text-white mb-4 sm:mb-6 leading-tight drop-shadow-2xl">
                   ძილი, რომელიც იმსახურებ
                 </h1>
                 

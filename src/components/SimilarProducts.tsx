@@ -129,11 +129,11 @@ const SimilarProducts: React.FC<SimilarProductsProps> = ({
     return (
       <div className="mt-20">
         <div className="container mx-auto px-4">
-          <h2 className="text-[45px] font-bold text-gray-900 mb-6 text-center">
+          <h2 className="text-[45px] font-bold text-white mb-6 text-center">
             {getTranslation("similarProducts.title", "Similar Products")}
           </h2>
           <div className="text-center py-8">
-            <div className="text-gray-500 text-lg mb-2">
+            <div className="text-white text-lg mb-2">
               {getTranslation(
                 "similarProducts.noProducts",
                 "No similar products found"
@@ -148,7 +148,7 @@ const SimilarProducts: React.FC<SimilarProductsProps> = ({
   return (
     <div className="py-8  mx-auto">
       <div className="text-center">
-          <h2 className="text-[20px] md:text-[30px] font-bold text-gray-900 mb-6">
+          <h2 className="text-[20px] md:text-[30px] font-bold text-white mb-6">
             {getTranslation("similarProducts.title", "Similar Products")}
           </h2>
       </div>

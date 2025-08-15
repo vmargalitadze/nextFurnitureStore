@@ -71,7 +71,7 @@ function ProductHelper({ items, sliderId }: ProductListProps) {
                   </Link>
                 </h3>
                 <div className="flex justify-between items-center">
-                  <span className="text-[16px] font-bold text-[#438c71]">
+                  <span className="text-[16px] font-bold text-black">
                     ₾{item.price.toFixed(2)}
                   </span>
                 </div>
@@ -132,7 +132,7 @@ function ProductHelper({ items, sliderId }: ProductListProps) {
                       </Link>
                     </h3>
                     <div className="flex justify-between items-center">
-                      <span className="text-[16px] font-bold text-[#438c71]">
+                      <span className="text-[16px] font-bold text-black">
                         ₾{item.price.toFixed(2)}
                       </span>
                     </div>

@@ -243,7 +243,7 @@ const Page = (props: { params: { id: string; locale: string } }) => {
               {/* Product Title */}
               <div className="pb-2">
                 <div className="flex items-center gap-3 mb-2">
-                  <h1 className="text-[20px] font-semibold text-gray-900 leading-tight">
+                  <h1 className="text-[20px] font-semibold text-white leading-tight">
                     {localizedTitle}
                   </h1>
                   {product.sales && product.sales > 0 && (
@@ -255,17 +255,17 @@ const Page = (props: { params: { id: string; locale: string } }) => {
 
                 {/* Brand - only show for non-OTHERS products */}
                 {!isOthersProduct() && product.brand && (
-                  <p className="text-[18px]  font-bold  mb-1">
+                  <p className="text-[18px]  font-bold  mb-1 text-white">
                     {getTranslation("product.brand", "Brand")}:{" "}
-                    <span className="font-medium uppercase text-gray-900">
+                    <span className="font-medium uppercase text-white">
                       {product.brand}
                     </span>
                   </p>
                 )}
 
-                <p className="text-[18px]  font-bold ">
+                <p className="text-[18px]  font-bold text-white">
                   {getTranslation("product.category", "Category")}:{" "}
-                  <span className="font-medium uppercase text-gray-900">
+                  <span className="font-medium uppercase text-white">
                     {product.category}
                   </span>
                 </p>
@@ -275,7 +275,7 @@ const Page = (props: { params: { id: string; locale: string } }) => {
               <div className="flex flex-col gap-2 mb-4">
                 {!isOthersProduct() && (
                   <div className="flex flex-row items-start gap-2">
-                    <span className="text-[18px] font-semibold">
+                    <span className="text-[18px] text-white font-semibold">
                       {getTranslation("product.size", "Size")}:
                     </span>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
@@ -284,8 +284,8 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                           key={size.id}
                           onClick={() => setSelectedSize(size.id)}
                           className={`px-3 py-1 rounded-lg font-bold text-[18px] ${selectedSize === size.id
-                              ? "bg-[#438c71] text-white"
-                              : "bg-white text-[#438c71]"
+                              ? "bg-[#f3983e] text-black"
+                              : "bg-gray-200 text-black"
                             }`}
                         >
                           {formatSizeDisplay(size.size)}
@@ -295,14 +295,14 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                   </div>
                 )}
                 <div className="flex items-center gap-2">
-                  <span className="text-[18px] font-semibold">
+                  <span className="text-[18px] text-white font-semibold">
                     {getTranslation("product.price", "Price")}:
                   </span>
-                  <span className="text-[20px] font-bold text-[#438c71]">
+                  <span className="text-[20px] font-bold text-[#f3983e]">
                     ₾{getDiscountedPrice().toFixed(2)}
                   </span>
                   {product.sales && product.sales > 0 && (
-                    <span className="text-sm line-through text-gray-500 ml-2">
+                    <span className="text-sm line-through text-white ml-2">
                       ₾{getProductPrice().toFixed(2)}
                     </span>
                   )}
@@ -313,19 +313,19 @@ const Page = (props: { params: { id: string; locale: string } }) => {
 
               {/* Availability */}
               <div className="pb-2">
-                <h3 className="text-[18px] md:text-[20px] sm:text-base font-semibold text-gray-900 mb-2">
+                <h3 className="text-[18px] md:text-[20px] sm:text-base font-semibold text-white mb-2">
                   {getTranslation("product.availability", "Availability")}
                 </h3>
                 <div className="space-y-1">
                   {product?.tbilisi && (
-                    <div className="flex items-center justify-between p-2 bg-[#f8f5f0] rounded-lg border border-gray-200">
+                    <div className="flex items-center justify-between p-2 bg-gray-200 rounded-lg border border-gray-200">
                       <div className="flex items-center space-x-2">
-                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                        <span className="text-[18px] md:text-[20px] font-medium text-gray-900">
+                        <div className="w-2 h-2 bg-[#f3983e] rounded-full"></div>
+                        <span className="text-[18px] md:text-[20px] font-medium text-black">
                           {getTranslation("locations.tbilisi", "Tbilisi")}
                         </span>
                       </div>
-                      <span className=" text-[18px] md:text-[20px] text-gray-600">
+                      <span className=" text-[18px] md:text-[20px] text-black">
                         {getTranslation(
                           "locations.tbilisiAddress",
                           "Tbilisi, T. Eristavi 1"
@@ -335,14 +335,14 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                   )}
 
                   {product?.batumi && (
-                    <div className="flex items-center justify-between p-2 bg-[#f8f5f0] rounded-lg border border-gray-200">
+                    <div className="flex items-center justify-between p-2 bg-gray-200 rounded-lg border border-gray-200">
                       <div className="flex items-center space-x-2">
-                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                        <span className="text-[16px] md:text-[20px] sm:text-base font-medium text-gray-900">
+                        <div className="w-2 h-2 bg-[#f3983e] rounded-full"></div>
+                        <span className="text-[16px] md:text-[20px] sm:text-base font-medium text-black">
                           {getTranslation("locations.batumi", "Batumi")}
                         </span>
                       </div>
-                      <span className="text-[16px] md:text-[20px] text-gray-600">
+                      <span className="text-[16px] md:text-[20px] text-black">
                         {getTranslation(
                           "locations.batumiAddress",
                           " A. Pushkin 117"
@@ -352,14 +352,14 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                     </div>
                   )}
                   {product?.batumi44 && (
-                    <div className="flex items-center justify-between p-2 bg-[#f8f5f0] rounded-lg border border-gray-200">
+                    <div className="flex items-center justify-between p-2 bg-gray-200 rounded-lg border border-gray-200">
                       <div className="flex items-center space-x-2">
-                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                        <span className="text-[16px] md:text-[20px] sm:text-base font-medium text-gray-900">
+                        <div className="w-2 h-2 bg-[#f3983e] rounded-full"></div>
+                        <span className="text-[16px] md:text-[20px] sm:text-base font-medium text-black">
                           {getTranslation("locations.batumi", "Batumi")}
                         </span>
                       </div>
-                      <span className="text-[16px] md:text-[20px] text-gray-600">
+                      <span className="text-[16px] md:text-[20px] text-black">
                         {getTranslation(
                           "locations.batumiAddress2",
                           " A. Pushkin 44"
@@ -370,14 +370,14 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                   )}
 
                   {product?.qutaisi && (
-                    <div className="flex items-center justify-between p-2 bg-[#f8f5f0] rounded-lg border border-gray-200">
+                    <div className="flex items-center justify-between p-2 bg-gray-200 rounded-lg border border-gray-200">
                       <div className="flex items-center space-x-2">
-                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                        <span className="text-[16px] md:text-[20px] font-medium text-gray-900">
+                        <div className="w-2 h-2 bg-[#f3983e] rounded-full"></div>
+                        <span className="text-[16px] md:text-[20px] font-medium text-black">
                           {getTranslation("locations.qutaisi", "Kutaisi")}
                         </span>
                       </div>
-                      <span className="text-[16px] md:text-[20px] text-gray-600">
+                      <span className="text-[16px] md:text-[20px] text-black">
                         {getTranslation(
                           "locations.qutaisiAddress",
                           "Kutaisi, Z. Purtzeladze 15"
@@ -387,14 +387,14 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                   )}
 
                   {product?.kobuleti && (
-                    <div className="flex items-center justify-between p-2 bg-[#f8f5f0] rounded-lg border border-gray-200">
+                    <div className="flex items-center justify-between p-2 bg-gray-200 rounded-lg border border-gray-200">
                       <div className="flex items-center space-x-2">
-                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                        <span className="text-[16px] md:text-[20px] font-medium text-gray-900">
+                        <div className="w-2 h-2 bg-[#f3983e] rounded-full"></div>
+                        <span className="text-[16px] md:text-[20px] font-medium text-black">
                           {getTranslation("locations.kobuleti", "Kobuleti")}
                         </span>
                       </div>
-                      <span className="text-[16px] md:text-[20px] text-gray-600">
+                      <span className="text-[16px] md:text-[20px] text-black">
                         {getTranslation(
                           "locations.kobuletiAddress",
                           "Kobuleti, Central Street 15"
@@ -438,13 +438,13 @@ const Page = (props: { params: { id: string; locale: string } }) => {
               {/* Add to Cart Button */}
               {session && (
                 <div className="pt-1">
-                  <Button
+                  <button
                     onClick={handleAddToCart}
                     disabled={
                       (!isOthersProduct() && !selectedSize) || addingToCart
                     }
-                    className={`w-full md:w-[50%] px-4 py-2 text-[20px] md:text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors ${(isOthersProduct() || selectedSize) && !addingToCart
-                        ? "bg-[#438c71] text-white"
+                    className={`w-full md:w-[50%] px-4 py-2 text-[20px] md:text-[20px] font-bold text-black bg-[#f3983e] rounded-lg  transition-colors ${(isOthersProduct() || selectedSize) && !addingToCart
+                        ? "bg-[#f3983e] text-white"
                         : "bg-gray-400 cursor-not-allowed"
                       }`}
                   >
@@ -453,14 +453,14 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                         ? "Adding..."
                         : getTranslation("product.addToCart", "Add to Cart")}
                     </span>
-                  </Button>
+                  </button>
                 </div>
               )}
               {!session && (
                 <div className="pt-1">
                   <Button
                     variant="outline"
-                    className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+                    className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#f3983e] rounded-lg  transition-colors"
                   >
                     <Link href="/sign-in">შედით თქვენ აქაუნთზე</Link>
                   </Button>
@@ -471,10 +471,10 @@ const Page = (props: { params: { id: string; locale: string } }) => {
           <div className="container mx-auto mt-6">
             <div className="max-w-7xl mx-auto">
               <div className="pb-2">
-                <h3 className="text-[20px] md:text-[30px] text-center  font-semibold text-gray-900 mb-2">
+                <h3 className="text-[20px] md:text-[30px] text-center  font-semibold text-white mb-2">
                   {getTranslation("product.description", "Description")}
                 </h3>
-                <p className="text-[18px] md:text-[20px]  leading-relaxed text-gray-700  md:line-clamp-none">
+                <p className="text-[18px] md:text-[20px]  leading-relaxed text-white  md:line-clamp-none">
                   {localizedDescription}
                 </p>
               </div>
