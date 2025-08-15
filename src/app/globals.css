@@ -110,9 +110,6 @@ button:focus {
   overflow: hidden;
 }
 
-.custom-swiper-pagination .swiper-pagination-bullet-active {
-  background-color: #3a7a5f !important;
-}
 
 
 
@@ -816,4 +813,8 @@ img {
 .scrollbar-hidden {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;     /* Firefox */
+}
+
+.custom-swiper-pagination .swiper-pagination-bullet-active {
+  background-color: #f3983e !important;
 }

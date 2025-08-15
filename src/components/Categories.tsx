@@ -355,8 +355,8 @@ export default function Categories() {
                   {filteredCategories.map((category, index) => (
                     <motion.div
                       key={category.id}
-            
-                    
+
+
                       viewport={{ once: true }}
                       transition={{
                         duration: 0.6,
@@ -365,11 +365,11 @@ export default function Categories() {
                         stiffness: 100
                       }}
                       className={`relative group overflow-hidden rounded-3xl shadow-2xl hover:shadow-3xl transition-all duration-1000 ${index === 0 ? 'col-span-12 md:col-span-8 row-span-2' :
-                          index === 1 ? 'col-span-12 md:col-span-4 row-span-2' :
-                            index === 2 ? 'col-span-12 md:col-span-4 row-span-1' :
-                              index === 3 ? 'col-span-12 md:col-span-4 row-span-1' :
-                                index === 4 ? 'col-span-12 md:col-span-4 row-span-1' :
-                                  'col-span-12 md:col-span-6 row-span-1'
+                        index === 1 ? 'col-span-12 md:col-span-4 row-span-2' :
+                          index === 2 ? 'col-span-12 md:col-span-4 row-span-1' :
+                            index === 3 ? 'col-span-12 md:col-span-4 row-span-1' :
+                              index === 4 ? 'col-span-12 md:col-span-4 row-span-1' :
+                                'col-span-12 md:col-span-6 row-span-1'
                         }`}
                     >
                       <Link href={`/list?cat=${category.type}`}>
@@ -405,7 +405,8 @@ export default function Categories() {
                                 <motion.button
                                   whileHover={{ scale: 1.05, y: -2 }}
                                   whileTap={{ scale: 0.95 }}
-                                  className="bg-white text-black px-6 py-3 rounded-xl font-semibold  transition-all duration-300 shadow-lg"
+                                  className="bg-white text-black px-6 py-3 rounded-xl font-semibold 
+                                   transition-all duration-300 shadow-lg"
                                 >
                                   {locale === "en" ? "Explore" : "ნახვა"}
                                 </motion.button>
@@ -443,8 +444,9 @@ export default function Categories() {
               pagination={{
                 clickable: true,
                 el: ".custom-swiper-pagination",
-                renderBullet: (index, className) =>
-                  `<span class="${className} w-3 h-3 rounded-full bg-gray-300 transition-all duration-300 hover:bg-gray-400"></span>`,
+                renderBullet: (index, className) => {
+                  return `<span class="${className} w-3 h-3 rounded-full bg-gray-300 transition-all duration-300 hover:bg-[#e67e22]"></span>`;
+                },
               }}
               className="pb-12"
             >
