@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { FaSyncAlt, FaClock, FaCheckCircle, FaTruck } from "react-icons/fa";
+
+import {  FaClock, FaCheckCircle, FaTruck } from "react-icons/fa";
 import { format } from "date-fns";
 import { useTranslations } from "next-intl";
 
@@ -149,18 +149,7 @@ const RecentOrders: React.FC<RecentOrdersProps> = ({ orders, onOrdersUpdate }) =
               {t("recentOrders.description")}
             </CardDescription>
           </div>
-          {localOrders.some(order => order.paymentMethod?.includes('BOG')) && (
-            <Button
-              onClick={refreshBOGOrders}
-              disabled={isRefreshing}
-              variant="outline"
-              size="sm"
-              className="flex items-center gap-2"
-            >
-              <FaSyncAlt className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
-              {isRefreshing ? 'Refreshing...' : 'Refresh BOG Status'}
-            </Button>
-          )}
+        
         </div>
       </CardHeader>
       <CardContent>

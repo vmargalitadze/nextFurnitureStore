@@ -29,7 +29,9 @@ export async function refreshBOGOrderStatuses() {
     const refreshedOrders = await Promise.all(
       bogOrders.map(async (order) => {
         try {
-          const response = await fetch(`/api/orders/bog-status/${order.id}`);
+          // Use absolute URL for server-side fetch
+          const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
+          const response = await fetch(`${baseUrl}/api/orders/bog-status/${order.id}`);
           if (response.ok) {
             const data = await response.json();
             return data.order;
