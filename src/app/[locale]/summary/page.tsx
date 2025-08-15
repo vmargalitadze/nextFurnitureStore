@@ -334,10 +334,19 @@ const SummaryPage = () => {
   }
 
   const handleBOGPayment = async () => {
+    if (processing) return; // Prevent multiple clicks
+    
+    console.log('=== STARTING BOG PAYMENT ===');
+    console.log('Address:', address);
+    console.log('Delivery option:', deliveryOption);
+    console.log('Cart:', cart);
+    
+    setProcessing(true);
     try {
       // Validate required data
       if (!address || !deliveryOption || !cart) {
-        alert('გთხოვთ შეავსოთ ყველა საჭირო ველი');
+        toast.error('გთხოვთ შეავსოთ ყველა საჭირო ველი');
+        setProcessing(false);
         return;
       }
 
@@ -358,20 +367,28 @@ const SummaryPage = () => {
       };
 
       // Get BOG access token
+      console.log('=== REQUESTING BOG TOKEN ===');
       const tokenRes = await fetch('/api/token');
       const tokenData = await tokenRes.json();
+      console.log('Token response status:', tokenRes.status);
+      console.log('Token response data:', tokenData);
       
       if (!tokenRes.ok) {
         console.error('Token error:', tokenData);
-        alert('გადახდის სისტემაში შედის ვერ მოხერხდა. გთხოვთ სცადოთ მოგვიანებით.');
+        toast.error('გადახდის სისტემაში შედის ვერ მოხერხდა. გთხოვთ სცადოთ მოგვიანებით.');
+        setProcessing(false);
         return;
       }
 
       const { access_token } = tokenData;
+      console.log('Token received successfully');
       
    
       
       // Create BOG order
+      console.log('=== CREATING BOG ORDER ===');
+      console.log('Order data being sent:', orderData);
+      
       const orderRes = await fetch('/api/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -397,8 +414,9 @@ const SummaryPage = () => {
         
         // Show more detailed error message
         const errorMessage = orderDataResponse.error || 'შეკვეთის შექმნა ვერ მოხერხდა';
-        const detailsMessage = orderDataResponse.details ? `\n\nDetails: ${JSON.stringify(orderDataResponse.details, null, 2)}` : '';
-        alert(`${errorMessage}${detailsMessage}\n\nგთხოვთ სცადოთ მოგვიანებით.`);
+        toast.error(errorMessage);
+        console.error('Order creation failed:', orderDataResponse);
+        setProcessing(false);
         return;
       }
 
@@ -420,11 +438,15 @@ const SummaryPage = () => {
         }));
       } else {
         console.error('Payment order creation failed:', orderDataResponse);
-        alert(orderDataResponse.error || 'დაფიქსირდა შეცდომა გადახდის დაწყებისას');
+        toast.error(orderDataResponse.error || 'დაფიქსირდა შეცდომა გადახდის დაწყებისას');
+        setProcessing(false);
+        return;
       }
     } catch (error) {
       console.error('Payment error:', error);
-      alert('გადახდის პროცესში შეცდომა მოხდა. გთხოვთ სცადოთ მოგვიანებით.');
+      toast.error('გადახდის პროცესში შეცდომა მოხდა. გთხოვთ სცადოთ მოგვიანებით.');
+    } finally {
+      setProcessing(false);
     }
   };
 
@@ -613,18 +635,8 @@ const SummaryPage = () => {
                       name="payment"
                       value="card"
                       checked={paymentMethod === 'card'}
-                      onChange={async (e) => {
-                        const value = e.target.value;
-                        setPaymentMethod(value);
-
-                        if (value === 'card') {
-                          try {
-                            await handleBOGPayment();
-                          } catch (err) {
-                            console.error('Payment init error:', err);
-                            toast.error('გადახდის ინიცირება ვერ მოხერხდა');
-                          }
-                        }
+                      onChange={(e) => {
+                        setPaymentMethod(e.target.value);
                       }}
                       className="text-[#438c71]"
                     />
@@ -733,7 +745,7 @@ const SummaryPage = () => {
                 </div>
 
                 <Button
-                  onClick={handlePlaceOrder}
+                  onClick={paymentMethod === 'card' ? handleBOGPayment : handlePlaceOrder}
                   disabled={!deliveryOption || !paymentMethod || processing}
                   className="w-full flex text-[20px] font-bold items-center justify-center gap-2 px-6 py-3 text-lg  text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >

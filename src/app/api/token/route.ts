@@ -46,9 +46,17 @@ export async function GET(req: NextRequest) {
   // base64 encode
   const credentials = Buffer.from(`${client_id}:${client_secret}`).toString('base64');
   
+  console.log('🔑 BOG Token Request Debug:');
+  console.log('Client ID:', client_id ? `${client_id.substring(0, 3)}...` : 'NOT SET');
+  console.log('Client Secret:', client_secret ? `${client_secret.substring(0, 3)}...` : 'NOT SET');
+  console.log('Credentials length:', credentials.length);
+  
  
 
   try {
+    console.log('🌐 Making BOG API request to:', 'https://oauth2.bog.ge/auth/realms/bog/protocol/openid-connect/token');
+    console.log('📤 Request body:', qs.stringify({ grant_type: 'client_credentials' }));
+    
     const response = await axios.post(
       'https://oauth2.bog.ge/auth/realms/bog/protocol/openid-connect/token',
       qs.stringify({ grant_type: 'client_credentials' }), // Body – correct encoding
@@ -63,7 +71,10 @@ export async function GET(req: NextRequest) {
 
     const { access_token, token_type, expires_in } = response.data;
 
- 
+    console.log('✅ BOG Token received successfully');
+    console.log('Token type:', token_type);
+    console.log('Expires in:', expires_in, 'seconds');
+    console.log('Access token length:', access_token ? access_token.length : 0);
 
     return NextResponse.json({
       access_token,
@@ -72,7 +83,11 @@ export async function GET(req: NextRequest) {
       success: true,
     });
   } catch (error: any) {
-    console.error('BOG Token error:',);
+    console.error('❌ BOG Token error:', error);
+    console.error('Error response status:', error.response?.status);
+    console.error('Error response data:', error.response?.data);
+    console.error('Error message:', error.message);
+    console.error('Error code:', error.code);
 
     // Provide more specific error messages
     let errorMessage = 'Failed to get BOG access token';
