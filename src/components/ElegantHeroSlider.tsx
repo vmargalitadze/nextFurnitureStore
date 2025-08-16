@@ -4,53 +4,63 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { useParams } from "next/navigation";
 
 interface Slide {
   id: number;
   leftImage: string;
-  rightImage: string;
-  leftAlt: string;
-  rightAlt: string;
-  title: string;
-  subtitle: string;
-  ctaText: string;
 }
 
 const ElegantHeroSlider = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const params = useParams();
+  const locale = params.locale as string;
 
   const slides: Slide[] = [
     {
       id: 1,
-      leftImage: "/slider/1.jpg",
-      rightImage: "/slider/2.jpg",
-      leftAlt: "Modern hallway with wooden panels and natural light",
-      rightAlt: "Elegant bathroom vanity with marble tiles",
-      title: "TRANSFORM YOUR SPACE WITH ELEGANCE",
-      subtitle: "For the Modern Home.",
-      ctaText: "DISCOVER OUR BATHROOM"
+      leftImage: "/slider/4.jpg"
+     
     },
     {
       id: 2,
-      leftImage: "/slider/2.jpg",
-      rightImage: "/slider/3.jpg",
-      leftAlt: "Contemporary living space with clean lines",
-      rightAlt: "Modern bedroom with premium furniture",
-      title: "CREATE YOUR DREAM INTERIOR",
-      subtitle: "Where Style Meets Comfort.",
-      ctaText: "EXPLORE COLLECTION"
+      leftImage: "/slider/2.jpg"
+   
+  
     },
     {
       id: 3,
-      leftImage: "/slider/3.jpg",
-      rightImage: "/slider/1.jpg",
-      leftAlt: "Luxury bedroom with elegant furnishings",
-      rightAlt: "Sophisticated dining area with natural materials",
-      title: "ELEVATE YOUR LIFESTYLE",
-      subtitle: "Timeless Design, Modern Living.",
-      ctaText: "VIEW GALLERY"
-    }
+      leftImage: "/slider/3.jpg"
+  
+    },
+    {
+      id: 4,
+      leftImage: "/slider/1.jpg"
+  
+   
+    },
+    {
+      id: 5,
+      leftImage: "/slider/5.jpg"
+  
+   
+    } 
   ];
+
+  const getLocalizedContent = () => {
+    if (locale === "en") {
+      return {
+        title: "Good Night, Pleasant Morning",
+        description: "Our products are designed to give you maximum comfort and highest quality — so every morning is pleasant",
+        buttonText: "Choose Your Comfort"
+      };
+    }
+    return {
+      title: "მშვიდი ღამე, სასიამოვნო დილა",
+      description: "ჩვენი პროდუქცია შექმნილია იმისთვის, რომ გაჩუქოთ მაქსიმალური კომფორტი და უმაღლესი ხარისხი — რათა ყოველი დილა იყოს სასიამოვნო",
+      buttonText: "შეარჩიე შენი კომფორტი"
+    };
+  };
 
   const nextSlide = () => {
     if (currentSlide === slides.length - 1) {
@@ -72,7 +82,7 @@ const ElegantHeroSlider = () => {
     setCurrentSlide(index);
   };
 
-
+  const content = getLocalizedContent();
 
   return (
     <section className="relative 
@@ -120,7 +130,7 @@ const ElegantHeroSlider = () => {
           <div className="max-w-lg sm:max-w-xl md:max-w-2xl text-left">
             <AnimatePresence mode="wait">
               <motion.div
-                key={currentSlide}
+                key={`${currentSlide}-${locale}`}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -30 }}
@@ -128,18 +138,18 @@ const ElegantHeroSlider = () => {
                 className="flex flex-col items-start"
               >
                 <h1 className="drop-shadow-2xl md:text-[38px] text-[24px]  font-serif font-bold text-white mb-4 sm:mb-6 leading-tight drop-shadow-2xl">
-                  მშვიდი ღამე, სასიამოვნო დილა
+                  {content.title}
                 </h1>
 
-                <p className=" md:text-[20px] text-[18px] font-serif italic text-black mb-8 sm:mb-10 max-w-lg leading-relaxed drop-shadow-lg">
-                  ჩვენი პროდუქცია შექმნილია იმისთვის, რომ გაჩუქოთ მაქსიმალური კომფორტი და უმაღლესი ხარისხი — რათა ყოველი დილა იყოს სასიამოვნო
+                <p className=" md:text-[20px] text-[18px] font-serif italic text-white mb-8 sm:mb-10 max-w-lg leading-relaxed drop-shadow-lg">
+                  {content.description}
                 </p>
 
                 <Link
                   href="/list"
                   className=" text-center  bg-[#f3983e] md:text-[20px] text-[18px] w-full md:w-[70%] border-radius:20px  px-4 sm:px-6 md:px-8 py-2 text-black  rounded-xl font-bold  transition-all duration-300 transform shadow-lg "
                 >
-                  შეარჩიე შენი კომფორტი
+                  {content.buttonText}
 
                 </Link>
               </motion.div>
