@@ -318,21 +318,21 @@ function ProductList({
           {/* Tab Navigation */}
           <div className="hidden md:block">
             <div className="flex justify-center mb-8">
-              <div className="bg-gray-200  rounded-2xl p-2 shadow-lg">
+              <div className="bg-[#f7f1e7] rounded-2xl p-2 shadow-lg">
                 <div className="flex space-x-2">
                   {visibleTabs.map((tab) => (
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
                       className={`px-6 py-3 rounded-xl font-bold md:text-[20px] border-radius:20px text-[18px] transition-all font-bold duration-200 ${activeTab === tab.id
-                        ? "bg-[#f3983e] text-black shadow-md"
-                        : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
+                        ? "bg-[#2E3A47] text-white shadow-md"
+                        : "text-black "
                         }`}
                     >
                       {/* bg-[#f3983e] md:text-[20px] text-[18px] w-full border-radius:20px  px-4 sm:px-6 md:px-8 py-2 text-black  rounded-xl font-bold  transition-all duration-300 transform shadow-lg  */}
                       {tab.label}
                       {tab.count > 0 && (
-                        <span className="ml-2 text-xs bg-white/20 px-2 py-1 rounded-full">
+                        <span className="ml-2 text-[16px] bg-white/20 px-4 py-3 rounded-full">
                           {tab.count}
                         </span>
                       )}
@@ -345,20 +345,20 @@ function ProductList({
           </div>
           <div className="block md:hidden">
             <div className="flex justify-center mb-8 px-2">
-              <div className="bg-white rounded-2xl p-2 shadow-lg w-full max-w-3xl">
+              <div className="bg-[#f7f1e7] rounded-2xl p-2 shadow-lg w-full max-w-3xl">
                 <div className="flex flex-wrap gap-2 justify-center">
                   {visibleTabs.map((tab) => (
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
                       className={`px-6 py-3 rounded-xl font-bold md:text-[20px] border-radius:20px text-[18px] transition-all font-bold duration-200 ${activeTab === tab.id
-                        ? "bg-[#f3983e] text-black shadow-md"
-                        : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
+                        ? "bg-[#2E3A47] text-white shadow-md"
+                        : "text-black "
                         }`}
                     >
                       {tab.label}
                       {tab.count > 0 && (
-                        <span className="ml-2 text-xs bg-white/20 px-2 py-1 rounded-full">
+                        <span className="ml-2 text-[16px] bg-white/20 px-4 py-3  rounded-full">
                           {tab.count}
                         </span>
                       )}
@@ -378,11 +378,11 @@ function ProductList({
                 <div key={index} className="flex flex-col items-center">
                   <div className="animate-pulse">
                     {/* Skeleton Image */}
-                    <div className="w-full h-[192px] bg-gray-200 rounded-3xl mb-3"></div>
+                    <div className="w-full h-[192px] bg-[#f7f1e7] rounded-3xl mb-3"></div>
                     {/* Skeleton Title */}
-                    <div className="w-[70%] h-4 bg-gray-200 rounded mb-2 mx-auto"></div>
+                    <div className="w-[70%] h-4 bg-[#f7f1e7] rounded mb-2 mx-auto"></div>
                     {/* Skeleton Price */}
-                    <div className="w-[40%] h-6 bg-gray-200 rounded mx-auto"></div>
+                    <div className="w-[40%] h-6 bg-[#f7f1e7] rounded mx-auto"></div>
                   </div>
                 </div>
               ))}

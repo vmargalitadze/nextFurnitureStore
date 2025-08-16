@@ -235,14 +235,14 @@ const SummaryPage = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
           <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 rounded w-1/4 mb-8"></div>
+            <div className="h-8 bg-[#f7f1e7] rounded w-1/4 mb-8"></div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               <div className="lg:col-span-2 space-y-4">
                 {[1, 2, 3].map((i) => (
-                  <div key={i} className="h-32 bg-gray-200 rounded"></div>
+                  <div key={i} className="h-32 bg-[#f7f1e7] rounded"></div>
                 ))}
               </div>
-              <div className="h-64 bg-gray-200 rounded"></div>
+              <div className="h-64 bg-[#f7f1e7] rounded"></div>
             </div>
           </div>
         </div>

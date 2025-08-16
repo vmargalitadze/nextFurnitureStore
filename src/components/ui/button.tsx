@@ -14,7 +14,7 @@ const buttonVariants = cva(
         destructive:
           "bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg shadow-red-500/25 hover:shadow-xl hover:shadow-red-500/30",
         outline:
-          "bg-white text-[#438c71] hover:bg-[#438c71]/10 shadow-md hover:shadow-lg border border-[#438c71]",
+          "bg-white text-[#438c71]  shadow-md hover:shadow-lg border border-[#438c71]",
         secondary:
           "bg-[#438c71] text-white shadow-lg shadow-[#438c71]/25 hover:shadow-xl ",
         ghost: "hover:bg-[#438c71]/10 hover:text-[#438c71]",

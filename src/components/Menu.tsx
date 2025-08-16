@@ -34,8 +34,8 @@ const Menu = () => {
       />
       <div className="">
         {open && (
-          <div className="absolute bg-white text-black left-0 w-full h-[calc(100vh-80px)] flex flex-col items-center justify-start gap-8 text-xl z-[50] top-20">
-            <div className="mt-[20px] text-[18px] font-semibold flex flex-col items-center gap-8 georgian-text">
+          <div className="absolute bg-[#FAF3E0] text-black left-0 w-full h-[calc(100vh-80px)] flex flex-col items-center justify-start gap-8 text-xl z-[50] top-20">
+            <div className="mt-[20px] text-[18px] bg-[#f7f1e7] font-semibold flex flex-col items-center gap-8 georgian-text">
               <Link href="/contact" onClick={handleClose}> {t('contact')} </Link>
               <Link href="/list" onClick={handleClose}> {t('products')} </Link>
               {session ? (

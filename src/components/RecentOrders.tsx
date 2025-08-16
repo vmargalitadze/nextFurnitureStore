@@ -156,7 +156,7 @@ const RecentOrders: React.FC<RecentOrdersProps> = ({ orders, onOrdersUpdate }) =
         <div className="space-y-4">
           {localOrders.map((order) => (
             <div key={order.id} className="block">
-              <div className="flex items-center justify-between p-3.5 border rounded-lg hover:bg-gray-50 transition">
+              <div className="flex items-center border-black justify-between p-3.5 border rounded-lg  transition">
                 <div>
                   <p className="font-medium">
                     {t("recentOrders.orderNumber", {

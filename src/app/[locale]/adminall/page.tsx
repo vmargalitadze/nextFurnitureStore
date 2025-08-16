@@ -278,7 +278,7 @@ export default async function AdminAllPage() {
                   <div className="overflow-x-auto">
                     <table className="w-full">
                       <thead>
-                        <tr className="border-b">
+                        <tr className="border-b bg-[#f7f1e7]">
                           <th className="text-left p-4 font-semibold">პროდუქტი</th>
                           <th className="text-left p-4 font-semibold">კატეგორია</th>
                           <th className="text-left p-4 font-semibold">ბრენდი</th>
@@ -290,7 +290,7 @@ export default async function AdminAllPage() {
                       </thead>
                       <tbody>
                         {products.map((product) => (
-                          <tr key={product.id} className="border-b hover:bg-gray-50">
+                          <tr key={product.id} className="border-b bg-[#f7f1e7]">
                             <td className="p-4">
                               <div className="flex items-center space-x-3">
                                 {product.images && product.images.length > 0 && (

@@ -71,16 +71,16 @@ export default async function ProfilePage() {
     } : null;
 
   return (
-    <div className="min-h-screen mt-9 bg-gradient-to-br from-blue-50 via-white to-purple-50 py-20 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen mt-9  py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
         {/* Header Section */}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* User Info Card */}
           <div className="lg:col-span-1">
-            <Card className="h-fit">
+              <Card className="h-fit bg-[#f7f1e7]">
               <CardHeader className="text-center pb-4">
-                <div className="mx-auto w-24 h-24  bg-orange-400 rounded-full flex items-center justify-center mb-4">
+                <div className="mx-auto w-24 h-24  bg-[#f3983e] rounded-full flex items-center justify-center mb-4">
                   <User className="text-white text-3xl" />
                 </div>
                 <CardTitle className="text-2xl">{user.name}</CardTitle>
@@ -106,9 +106,9 @@ export default async function ProfilePage() {
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                  <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
-                      <FaEnvelope className="w-6 h-6 text-orange-600" />
+                <div className="flex items-center border border-black gap-3 p-3 bg-[#f7f1e7] rounded-lg">
+                  <div className="w-12 h-12 bg-[#f3983e] rounded-full flex items-center justify-center">
+                      <FaEnvelope className="w-6 h-6 text-white" />
                     </div>
                   <div>
                     <p className="text-[16px] font-bold">{t("email")}</p>
@@ -116,9 +116,9 @@ export default async function ProfilePage() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                  <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
-                      <FaCalendarAlt className="w-6 h-6 text-orange-600" />
+                <div className="flex items-center border border-black gap-3 p-3 bg-[#f7f1e7] rounded-lg">
+                  <div className="w-12 h-12 bg-[#f3983e] rounded-full flex items-center justify-center">
+                      <FaCalendarAlt className="w-6 h-6 text-white" />
                     </div>
                   <div>
                     <p className="text-[16px] font-bold">{t("memberSince")}</p>
@@ -129,9 +129,9 @@ export default async function ProfilePage() {
                 </div>
 
                 {user.address && (
-                  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                    <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
-                      <FaMapMarkerAlt className="w-6 h-6 text-orange-600" />
+                  <div className="flex items-center gap-3 p-3 bg-[#f7f1e7] rounded-lg">
+                    <div className="w-12 h-12 bg-[#f3983e] rounded-full flex items-center justify-center">
+                      <FaMapMarkerAlt className="w-6 h-6 text-white" />
                     </div>
                     
                     <div>
@@ -147,9 +147,9 @@ export default async function ProfilePage() {
                 )}
 
                 {user.paymentMethod && (
-                  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                    <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
-                      <FaCreditCard className="w-6 h-6 text-orange-600" />
+                  <div className="flex items-center gap-3 p-3 bg-[#f7f1e7] rounded-lg">
+                    <div className="w-12 h-12 bg-[#f3983e] rounded-full flex items-center justify-center">
+                      <FaCreditCard className="w-6 h-6 text-white" />
                     </div>
                     <div>
                       <p className="text-[16px] font-bold">
@@ -179,8 +179,8 @@ export default async function ProfilePage() {
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
             {/* Quick Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Card className="bg-white border-2 border-orange-400 text-orange-400">
+            <div className="grid bg-[#f7f1e7] rounded-xl grid-cols-1 md:grid-cols-3 gap-4">
+            <Card className="bg-[#f7f1e7] border border-black rounded-xl border-2 border-orange-400 text-orange-400">
   <CardContent className="p-6">
     <div className="flex items-center justify-between">
       <div>
@@ -193,9 +193,9 @@ export default async function ProfilePage() {
 </Card>
 
 
-              <Card className="bg-white border-2 border-orange-400 text-orange-400">
+              <Card className="bg-[#f7f1e7] rounded-xl border-2 border-orange-400 text-orange-400">
                 <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
+                  <div className="flex  bg-[#f7f1e7] items-center justify-between">
                     <div>
                       <p className="text-sm text-orange-400">{t("cartItems")}</p>
                       <p className="text-[20px] font-bold text-orange-500">{cartItemCount}</p>
@@ -210,7 +210,7 @@ export default async function ProfilePage() {
 
             {/* Admin Actions */}
             {isAdmin && (
-              <Card>
+              <Card className="bg-[#f7f1e7]">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                
@@ -227,7 +227,7 @@ export default async function ProfilePage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <Link href="/new">
                       <Button
-                        className="w-full px-4  py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+                        className="w-full px-4  py-2 text-[20px] font-bold text-white bg-[#f3983e] rounded-lg  transition-colors"
                         variant="default"
                       >
                         <FaPlus className="mr-2" />
@@ -236,7 +236,7 @@ export default async function ProfilePage() {
                     </Link>
                     <Link href="/adminall">
                       <Button
-                        className="w-full px-4  py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+                        className="w-full px-4  py-2 text-[20px] font-bold text-white bg-[#2E3A47] rounded-lg  transition-colors"
                         variant="outline"
                       >
                         <List className="mr-2" />

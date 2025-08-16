@@ -201,7 +201,7 @@ export default function Categories() {
             <div className="flex gap-8">
               {/* Filter Sidebar */}
               <div className="w-80 flex-shrink-0">
-                <div className="sticky top-24 bg-gray-200 rounded-2xl shadow-lg p-6 ">
+                <div className="sticky top-24 bg-[#f7f1e7] rounded-2xl shadow-lg p-6 ">
                   <h3 className="text-[20px] font-semibold mb-6 text-black">
                     {locale === "en" ? "Filters" : "ფილტრები"}
                   </h3>
@@ -323,13 +323,13 @@ export default function Categories() {
                   <div className="space-y-3">
                     <button
                       onClick={handleSearch}
-                      className="bg-[#f3983e] md:text-[20px] text-[18px] w-full border-radius:20px  px-4 sm:px-6 md:px-8 py-2 text-black  rounded-xl font-bold  transition-all duration-300 transform shadow-lg "
+                      className="bg-[#2E3A47] md:text-[20px] text-[18px] w-full border-radius:20px  px-4 sm:px-6 md:px-8 py-2 text-white  rounded-xl font-bold  transition-all duration-300 transform shadow-lg "
                     >
                       {locale === "en" ? "Apply Filters" : "ფილტრი"}
                     </button>
                     <button
                       onClick={clearFilters}
-                      className="w-full md:text-[20px] border-radius:20px text-[18px] bg-[#2E3A47] text-white py-2 px-4 rounded-xl  transition-colors text-white font-bold"
+                      className="w-full md:text-[20px]  border-radius:[40px] text-[18px] border border-[#2E3A47] border-2 text-black py-2 px-4 rounded-xl  transition-colors  font-bold"
                     >
                       {locale === "en" ? "Clear All" : " გასუფთავება"}
                     </button>

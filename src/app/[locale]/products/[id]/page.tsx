@@ -285,7 +285,7 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                           onClick={() => setSelectedSize(size.id)}
                           className={`px-3 py-1 rounded-lg font-bold text-[18px] ${selectedSize === size.id
                               ? "bg-[#f3983e] text-black"
-                              : "bg-gray-200 text-black"
+                              : "bg-bg-[#f7f1e7] text-black"
                             }`}
                         >
                           {formatSizeDisplay(size.size)}
@@ -318,7 +318,7 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                 </h3>
                 <div className="space-y-1">
                   {product?.tbilisi && (
-                    <div className="flex items-center justify-between p-2 bg-gray-200 rounded-lg border border-gray-200">
+                    <div className="flex items-center justify-between p-2 bg-[#f7f1e7] rounded-lg border border-gray-200">
                       <div className="flex items-center space-x-2">
                         <div className="w-2 h-2 bg-[#f3983e] rounded-full"></div>
                         <span className="text-[18px] md:text-[20px] font-medium text-black">
@@ -335,7 +335,7 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                   )}
 
                   {product?.batumi && (
-                    <div className="flex items-center justify-between p-2 bg-gray-200 rounded-lg border border-gray-200">
+                    <div className="flex items-center justify-between p-2 bg-[#f7f1e7] rounded-lg border border-gray-200">
                       <div className="flex items-center space-x-2">
                         <div className="w-2 h-2 bg-[#f3983e] rounded-full"></div>
                         <span className="text-[16px] md:text-[20px] sm:text-base font-medium text-black">
@@ -352,7 +352,7 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                     </div>
                   )}
                   {product?.batumi44 && (
-                    <div className="flex items-center justify-between p-2 bg-gray-200 rounded-lg border border-gray-200">
+                    <div className="flex items-center justify-between p-2 bg-[#f7f1e7] rounded-lg border border-gray-200">
                       <div className="flex items-center space-x-2">
                         <div className="w-2 h-2 bg-[#f3983e] rounded-full"></div>
                         <span className="text-[16px] md:text-[20px] sm:text-base font-medium text-black">
@@ -370,7 +370,7 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                   )}
 
                   {product?.qutaisi && (
-                    <div className="flex items-center justify-between p-2 bg-gray-200 rounded-lg border border-gray-200">
+                    <div className="flex items-center justify-between p-2 bg-[#f7f1e7] rounded-lg border border-gray-200">
                       <div className="flex items-center space-x-2">
                         <div className="w-2 h-2 bg-[#f3983e] rounded-full"></div>
                         <span className="text-[16px] md:text-[20px] font-medium text-black">
@@ -387,7 +387,7 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                   )}
 
                   {product?.kobuleti && (
-                    <div className="flex items-center justify-between p-2 bg-gray-200 rounded-lg border border-gray-200">
+                    <div className="flex items-center justify-between p-2 bg-[#f7f1e7] rounded-lg border border-gray-200">
                       <div className="flex items-center space-x-2">
                         <div className="w-2 h-2 bg-[#f3983e] rounded-full"></div>
                         <span className="text-[16px] md:text-[20px] font-medium text-black">
