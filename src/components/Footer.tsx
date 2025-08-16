@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
-import { FaFacebook, FaInstagram, FaTiktok, FaPhone, FaMapMarkerAlt } from "react-icons/fa";
+import { FaPhone, FaMapMarkerAlt } from "react-icons/fa";
 import { useTranslations } from "next-intl";
 
 const Footer = () => {
@@ -86,21 +86,7 @@ const Footer = () => {
           </div>
 
           {/* Social Media */}
-          <div className="text-center border-t border-gray-600 pt-8 w-full">
-
-            <div className="flex justify-center space-x-6">
-              <a href="#" className="w-14 h-14 bg-gray-700 hover:bg-[#ce7c2a] rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110" aria-label="Facebook">
-                <FaFacebook className="w-7 h-7" />
-              </a>
-              <a href="#" className="w-14 h-14 bg-gray-700 hover:bg-[#ce7c2a] rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110" aria-label="Instagram">
-                <FaInstagram className="w-7 h-7" />
-              </a>
-              <a href="#" className="w-14 h-14 bg-gray-700 hover:bg-[#ce7c2a] rounded-full flex items-center justify-center transition-all duration-300 transform hover:scale-110" aria-label="TikTok">
-                <FaTiktok className="w-7 h-7" />
-              </a>
-            </div>
-          </div>
-
+        
         </div>
       </div>
     </footer>

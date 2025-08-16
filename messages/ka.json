@@ -302,7 +302,7 @@
     }
   },
   "search": {
-    "placeholder": "პროდუქტების ძიება...",
+    "placeholder": " ძიება...",
     "suggestions": "ძიების შემოთავაზებები",
     "inMattresses": "მატრასებში",
     "inPillows": "ბალიშებში",

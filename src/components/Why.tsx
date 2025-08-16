@@ -1,4 +1,5 @@
 import React from 'react'
+import Image from 'next/image'
 
 const Why = () => {
   const whyItems = [
@@ -7,35 +8,40 @@ const Why = () => {
       title: "ხარისხი",
       titleEn: "Quality",
       description: "ჩვენ ვთავაზობთ მხოლოდ უმაღლესი ხარისხის ავეჯს",
-      descriptionEn: "We offer only the highest quality furniture"
+      descriptionEn: "We offer only the highest quality furniture",
+      icon: "/icons/high-quality.png"
     },
     {
       id: 2,
       title: "სწრაფი მიწოდება",
       titleEn: "Fast Delivery",
       description: "სწრაფი და უსაფრთხო მიწოდება მთელი საქართველოში",
-      descriptionEn: "Fast and secure delivery throughout Georgia"
+      descriptionEn: "Fast and secure delivery throughout Georgia",
+      icon: "/icons/delivery.png"
     },
     {
       id: 3,
       title: "საუკეთესო ფასები",
       titleEn: "Best Prices",
       description: "კონკურენტუნარიანი ფასები ხარისხის გარეშე",
-      descriptionEn: "Competitive prices without compromising quality"
+      descriptionEn: "Competitive prices without compromising quality",
+      icon: "/icons/price.png"
     },
     {
       id: 4,
       title: "24/7 მხარდაჭერა",
       titleEn: "24/7 Support",
       description: "ჩვენი გუნდი ყოველთვის მზადაა დაგეხმაროთ",
-      descriptionEn: "Our team is always ready to help you"
+      descriptionEn: "Our team is always ready to help you",
+      icon: "/icons/customer-support.png"
     },
     {
       id: 5,
       title: "გარანტია",
       titleEn: "Warranty",
       description: "სრული გარანტია ყველა ჩვენს პროდუქტზე",
-      descriptionEn: "Full warranty on all our products"
+      descriptionEn: "Full warranty on all our products",
+      icon: "/icons/warranty.png"
     }
   ];
 
@@ -55,9 +61,15 @@ const Why = () => {
                 className="bg-gray-200 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
               >
                 <div className="text-center">
-                  {/* Icon Placeholder */}
-                  <div className="w-16 h-16 bg-[#f3983e] rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <span className="text-white text-2xl font-bold">{item.id}</span>
+                  {/* Icon Circle */}
+                  <div className="w-16 h-16 bg-[#f3983e] rounded-full mx-auto mb-4 flex items-center justify-center shadow-md">
+                    <Image
+                      src={item.icon}
+                      alt={item.title}
+                      width={32}
+                      height={32}
+                      className="w-8 h-8"
+                    />
                   </div>
                   
                   {/* Title */}

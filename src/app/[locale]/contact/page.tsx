@@ -95,7 +95,7 @@ function ContactPage() {
       </div>
 
       {/* Main Content */}
-      <div className="py-16 md:py-24 bg-gray-50">
+      <div className="py-16 md:py-24 ">
         <div className="container mx-auto max-w-7xl px-4">
           {/* Contact Form Section */}
           <div className="grid lg:grid-cols-2 gap-12 mb-12 md:mb-16">
