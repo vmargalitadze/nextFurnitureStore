@@ -72,6 +72,7 @@ function ProductList({
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [total, setTotal] = useState(0);
+  const [activeTab, setActiveTab] = useState("new");
 
   // New filter state for FilterSidebar
   const [filterState, setFilterState] = useState({
@@ -142,7 +143,7 @@ function ProductList({
 
   // Updated filter function to work with both old and new filter interfaces
   const getFilteredProducts = useCallback(() => {
-   
+
 
     return products.filter((product) => {
       const byLegacyType =
@@ -177,7 +178,7 @@ function ProductList({
       const byNewMinPrice = priceRange.max >= filterState.priceRange.min;
       const byNewMaxPrice = priceRange.min <= filterState.priceRange.max;
 
-  
+
 
       return (
         byLegacyType &&
@@ -202,7 +203,7 @@ function ProductList({
   const filteredProducts = useMemo(() => {
     const filtered = getFilteredProducts();
 
- 
+
 
     const matress = filtered.filter((p) => p.category === "MATTRESS");
 
@@ -259,13 +260,117 @@ function ProductList({
     [filteredProducts3, transformProducts]
   );
 
-  return (
-    <section className=" px-5 md:px-20 from-gray-50 via-white to-gray-50">
-      <div className="container mx-auto ">
-        <div className="max-w-7xl mb-14 mx-auto">
-          {/* Section Header */}
+  const tabs = [
+    { id: "new", label: t("newProducts"), products: transformedProducts, count: transformedProducts.length },
+    { id: "popular", label: t("popularProducts"), products: transformedProducts2, count: transformedProducts2.length },
+    { id: "sales", label: t("salesProducts"), products: transformedProducts3, count: transformedProducts3.length },
+  ];
 
-          {/* Swiper Product Slider */}
+  // Filter out empty tabs
+  const visibleTabs = tabs.filter(tab => tab.count > 0);
+
+  // Update activeTab if current tab is empty
+  useEffect(() => {
+    if (visibleTabs.length > 0 && !visibleTabs.find(tab => tab.id === activeTab)) {
+      setActiveTab(visibleTabs[0].id);
+    }
+  }, [visibleTabs, activeTab]);
+
+  // Don't render anything if no tabs have products
+  if (visibleTabs.length === 0) {
+    return (
+      <section className="px-5 md:px-20 from-gray-50 via-white to-gray-50">
+        <div className="container mx-auto">
+          <div className="max-w-7xl pt-16 mb-14 mx-auto">
+            <div className="text-center py-12">
+              <div className="text-gray-400 mb-4">
+                <svg
+                  className="w-16 h-16 mx-auto"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-2">
+                პროდუქტი ვერ მოიძებნა
+              </h3>
+              <p className="text-white">
+                ამ კატეგორიაში პროდუქტები არ არის
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="px-5 md:px-20 from-gray-50 via-white to-gray-50">
+      <div className="container mx-auto">
+        <div className="max-w-7xl pt-16 mb-14 mx-auto">
+          {/* Tab Navigation */}
+          <div className="hidden md:block">
+            <div className="flex justify-center mb-8">
+              <div className="bg-gray-200  rounded-2xl p-2 shadow-lg">
+                <div className="flex space-x-2">
+                  {visibleTabs.map((tab) => (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      className={`px-6 py-3 rounded-xl font-bold md:text-[20px] border-radius:20px text-[18px] transition-all font-bold duration-200 ${activeTab === tab.id
+                        ? "bg-[#f3983e] text-black shadow-md"
+                        : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
+                        }`}
+                    >
+                      {/* bg-[#f3983e] md:text-[20px] text-[18px] w-full border-radius:20px  px-4 sm:px-6 md:px-8 py-2 text-black  rounded-xl font-bold  transition-all duration-300 transform shadow-lg  */}
+                      {tab.label}
+                      {tab.count > 0 && (
+                        <span className="ml-2 text-xs bg-white/20 px-2 py-1 rounded-full">
+                          {tab.count}
+                        </span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div className="block md:hidden">
+            <div className="flex justify-center mb-8 px-2">
+              <div className="bg-white rounded-2xl p-2 shadow-lg w-full max-w-3xl">
+                <div className="flex flex-wrap gap-2 justify-center">
+                  {visibleTabs.map((tab) => (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      className={`px-6 py-3 rounded-xl font-bold md:text-[20px] border-radius:20px text-[18px] transition-all font-bold duration-200 ${activeTab === tab.id
+                        ? "bg-[#f3983e] text-black shadow-md"
+                        : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
+                        }`}
+                    >
+                      {tab.label}
+                      {tab.count > 0 && (
+                        <span className="ml-2 text-xs bg-white/20 px-2 py-1 rounded-full">
+                          {tab.count}
+                        </span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Tab Content */}
           {loading || !imagesLoaded ? (
             // Skeleton Loading State
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -283,75 +388,48 @@ function ProductList({
               ))}
             </div>
           ) : (
-            <>
-              {transformedProducts.length > 0 && (
-                <div className="w-full rounded-2xl pt-10 ">
-                  <h1 className="text-[20px]  md:text-3xl   flex justify-center items-center text-bold text-white leading-tight">
-                    {t("newProducts")}
-                  </h1>
-                  <div className="mt-5">
-                    
-                    <ProductHelper items={transformedProducts} sliderId="newProducts" />
-                  </div>
-                </div>
-              )}
-
-              {transformedProducts2.length > 0 && (
-                <div className="w-full rounded-2xl pt-10 ">
-                  <h1 className="text-[20px] text-center  md:text-3xl flex justify-center items-center text-bold text-white leading-tight">
-                    {t("popularProducts")}
-                  </h1>
-                  <div className="mt-5">
-                    <ProductHelper items={transformedProducts2} sliderId="popularProducts" />
-                  </div>
-                </div>
-              )}
-
-              {transformedProducts3.length > 0 && (
-                <div className="w-full rounded-2xl pt-10 ">
-                  <h1 className="text-[20px]  md:text-3xl text-center  flex justify-center items-center text-bold text-white leading-tight">
-                    {t("salesProducts")}
-                  </h1>
-                  <div className="mt-5">
-                    <ProductHelper items={transformedProducts3} sliderId="salesProducts" />
-                  </div>
-                </div>
-              )}
-
-              {transformedProducts.length === 0 &&
-                transformedProducts2.length === 0 &&
-                transformedProducts3.length === 0 && (
-                  <div className="text-center py-4">
-                    <div className="text-gray-400 mb-4">
-                      <svg
-                        className="w-16 h-16 mx-auto"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
-                        />
-                      </svg>
+            <div className="w-full rounded-2xl pt-6">
+              {visibleTabs.map((tab) => (
+                <div
+                  key={tab.id}
+                  className={`transition-all duration-300 ${activeTab === tab.id ? "block opacity-100" : "hidden opacity-0"
+                    }`}
+                >
+                  {tab.products.length > 0 ? (
+                    <div className="mt-5">
+                      <ProductHelper items={tab.products} sliderId={tab.id} />
                     </div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                      პროდუქტი ვერ მოიძებნა
-                    </h3>
-                    <p className="text-gray-600">
-                      ამ კატეგორიაში პროდუქტები არ არის
-                    </p>
-                  </div>
-                )}
-            </>
+                  ) : (
+                    <div className="text-center py-12">
+                      <div className="text-gray-400 mb-4">
+                        <svg
+                          className="w-16 h-16 mx-auto"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
+                          />
+                        </svg>
+                      </div>
+                      <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                        პროდუქტი ვერ მოიძებნა
+                      </h3>
+                      <p className="text-gray-600">
+                        ამ კატეგორიაში პროდუქტები არ არის
+                      </p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
           )}
-
-          {/* View All Button */}
         </div>
       </div>
-   
     </section>
   );
 }

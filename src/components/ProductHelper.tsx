@@ -48,7 +48,7 @@ function ProductHelper({ items, sliderId }: ProductListProps) {
           {items.map((item) => (
             <div
               key={item.id}
-              className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300"
+              className="bg-gray-200 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300"
             >
               <Link href={`/products/${item.id}`}>
                 <div className="relative h-48 overflow-hidden">

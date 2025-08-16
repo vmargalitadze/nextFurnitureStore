@@ -104,8 +104,8 @@ const ElegantHeroSlider = () => {
               />
               {/* Enhanced Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-black/10" />
-              
-            
+
+
             </motion.div>
           </motion.div>
         </AnimatePresence>
@@ -127,29 +127,29 @@ const ElegantHeroSlider = () => {
                 transition={{ duration: 0.6 }}
                 className="flex flex-col items-start"
               >
-                <h1 className=" md:text-[38px] text-[24px]  font-serif font-bold text-white mb-4 sm:mb-6 leading-tight drop-shadow-2xl">
-                  ძილი, რომელიც იმსახურებ
+                <h1 className="drop-shadow-2xl md:text-[38px] text-[24px]  font-serif font-bold text-white mb-4 sm:mb-6 leading-tight drop-shadow-2xl">
+                  მშვიდი ღამე, სასიამოვნო დილა
                 </h1>
-                
+
                 <p className=" md:text-[20px] text-[18px] font-serif italic text-black mb-8 sm:mb-10 max-w-lg leading-relaxed drop-shadow-lg">
-                  ჩვენი პროდუქტი შექმნილია მაქსიმალური კომფორტისა და ხარისხისთვის, რომ ყოველი დილა იყოს სასიამოვნო
+                  ჩვენი პროდუქცია შექმნილია იმისთვის, რომ გაჩუქოთ მაქსიმალური კომფორტი და უმაღლესი ხარისხი — რათა ყოველი დილა იყოს სასიამოვნო
                 </p>
-                
-                <Link 
-                  href="/list" 
-                 className=" text-center  bg-[#f3983e] md:text-[20px] text-[18px] w-full md:w-[40%] border-radius:20px  px-4 sm:px-6 md:px-8 py-2 text-black  rounded-xl font-bold  transition-all duration-300 transform shadow-lg "
+
+                <Link
+                  href="/list"
+                  className=" text-center  bg-[#f3983e] md:text-[20px] text-[18px] w-full md:w-[70%] border-radius:20px  px-4 sm:px-6 md:px-8 py-2 text-black  rounded-xl font-bold  transition-all duration-300 transform shadow-lg "
                 >
-                  შეიძინე ახლა
-                
+                  შეარჩიე შენი კომფორტი
+
                 </Link>
               </motion.div>
             </AnimatePresence>
           </div>
         </motion.div>
 
-      
 
-     
+
+
 
         {/* Slide Indicators */}
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex gap-3">
@@ -157,11 +157,10 @@ const ElegantHeroSlider = () => {
             <motion.button
               key={index}
               onClick={() => goToSlide(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                index === currentSlide 
-                  ? 'bg-[#f3983e] scale-110' 
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentSlide
+                  ? 'bg-[#f3983e] scale-110'
                   : 'bg-white/50 hover:bg-white/80'
-              }`}
+                }`}
               whileHover={{ scale: 1.2 }}
               whileTap={{ scale: 0.9 }}
             />
