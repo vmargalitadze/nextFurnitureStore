@@ -43,7 +43,7 @@ export default function Categories() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const allProducts = await getAllProducts();
+        const allProducts = await getAllProducts(1, 20, true); // Use getAll=true to get all products
         setProducts(allProducts.products || []);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -91,7 +91,6 @@ export default function Categories() {
           PILLOW: "pillow",
           QUILT: "quilt",
           PAD: "quilt",
-        
           BED: "bed",
           OTHERS: "OTHERS",
         };

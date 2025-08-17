@@ -1,402 +1,172 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import {
-  useParams,
-  useRouter,
-  useSearchParams,
-  usePathname,
-} from "next/navigation";
-import React, { Suspense, useState, useEffect, useRef } from "react";
-import { X } from "lucide-react";
-
-import ProductHelper from "@/components/ProductHelper";
 import { getAllProducts } from "@/lib/actions/actions";
+import ProductHelper from "@/components/ProductHelper";
 import { useTranslations } from "next-intl";
-import SideBar from "@/components/Sidebar";
-import ListSideBar from "@/components/ListSidebar";
-import Pagination from "@/components/Pagination";
-import { Trash2 } from "lucide-react";
+import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-// SimpleDecimal class removed - now using regular numbers
+import Pagination from "@/components/Pagination";
 
-interface ProductSize {
-  id: string;
-  size: string;
-  price: number;
-}
-
-interface Product {
-  id: string;
-  title: string;
-  titleEn: string;
-  category: string;
-  images: string[];
-  brand: string;
-  description: string;
-  descriptionEn: string;
-  popular: boolean;
-  createdAt: Date;
-  tbilisi: boolean;
-  batumi: boolean;
-  qutaisi: boolean;
-  sizes?: ProductSize[];
-  // Keep old fields for backward compatibility during migration
-  size?: string;
-  price?: number;
-  sales?: number;
-}
-
-interface FilterState {
-  selectedCategories: string[];
-  selectedBrands: string[];
-  priceRange: { min: number; max: number };
-  searchQuery?: string;
-}
-
-function PageContentWrapper() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [listSidebarOpen, setListSidebarOpen] = useState(false);
+export default function ListPage() {
   const searchParams = useSearchParams();
-  const t = useTranslations("common");
-
+  const [products, setProducts] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedType, setSelectedType] = useState<string>("");
-
-  // Pagination state
+  const [selectedBrand, setSelectedBrand] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10); // Show 10 products per page
-  const [isLargeScreen, setIsLargeScreen] = useState(false);
-
-  // Responsive screen detection
-  useEffect(() => {
-    const checkScreenSize = () => {
-      setIsLargeScreen(window.innerWidth >= 1024);
-    };
-
-    // Check on mount
-    checkScreenSize();
-
-    // Add event listener for resize
-    window.addEventListener("resize", checkScreenSize);
-
-    // Cleanup
-    return () => window.removeEventListener("resize", checkScreenSize);
-  }, []);
-
-  // Handle filter changes from ListSidebar
-  const handleListFilterChange = (filters: FilterState) => {
-    const filtered = products.filter((product) => {
-      // Category filter
-      const matchesCategory =
-        filters.selectedCategories.length === 0 ||
-        filters.selectedCategories.includes(product.category);
-
-      // Brand filter
-      const matchesBrand =
-        filters.selectedBrands.length === 0 ||
-        filters.selectedBrands.includes(product.brand);
-
-      // Search query filter
-      const matchesQuery =
-        !filters.searchQuery ||
-        product.title
-          .toLowerCase()
-          .includes(filters.searchQuery.toLowerCase()) ||
-        product.titleEn
-          .toLowerCase()
-          .includes(filters.searchQuery.toLowerCase()) ||
-        product.description
-          .toLowerCase()
-          .includes(filters.searchQuery.toLowerCase()) ||
-        product.descriptionEn
-          .toLowerCase()
-          .includes(filters.searchQuery.toLowerCase()) ||
-        product.brand
-          .toLowerCase()
-          .includes(filters.searchQuery.toLowerCase()) ||
-        product.category
-          .toLowerCase()
-          .includes(filters.searchQuery.toLowerCase());
-
-      // Price range filter
-      const priceRange = getProductPriceRange(product);
-      const matchesPrice =
-        priceRange.min >= filters.priceRange.min &&
-        priceRange.max <= filters.priceRange.max;
-
-      return matchesCategory && matchesBrand && matchesQuery && matchesPrice;
-    });
-
-    setFilteredProducts(filtered);
-    setCurrentPage(1); // Reset to first page when filters change
-  };
-
-  const handleViewListSidebar = () => {
-    setListSidebarOpen(!listSidebarOpen);
-  };
-
+  const [itemsPerPage] = useState(20);
   const [selectedPrice, setSelectedPrice] = useState<{
     min: number | null;
     max: number | null;
   }>({ min: null, max: null });
-  const [selectedBrand, setSelectedBrand] = useState<string>("");
-  const [selectedSize, setSelectedSize] = useState<string>("");
   const [sortBy, setSortBy] = useState<string>("newest");
-  const params = useParams();
-  const router = useRouter();
-  const getProductPriceRange = (product: Product) => {
-    if (product.sizes && product.sizes.length > 0) {
-      const prices = product.sizes.map((s) => s.price);
-      return {
-        min: Math.min(...prices),
-        max: Math.max(...prices),
-      };
-    }
-    // Fallback to old structure
-    if (product.price) {
-      return { min: product.price, max: product.price };
-    }
-    return { min: 0, max: 0 };
-  };
-  const sidebarRef = useRef<{ clearFilters: () => void } | null>(null);
-  const handleClearFilters = () => {
-    // Reset local filter states
-    setSelectedType("");
-    setSelectedPrice({ min: null, max: null });
-    setSelectedBrand("");
-    setSelectedSize("");
-    setSortBy("newest");
+  const t = useTranslations("common");
 
-    // Show all products
-    setFilteredProducts(products);
-
-    // Clear query parameters from URL
-    router.push(`/${locale}/list`);
-
-    // Call sidebar clearFilters method (removes filters visually/sidebar state)
-    sidebarRef.current?.clearFilters();
-  };
-  const locale = params.locale as string;
-  const getActiveFiltersCount = () => {
-    let count = 0;
-    if (selectedType) count++;
-    if (selectedSize) count++;
-    if (selectedBrand) count++;
-    if (selectedPrice.min !== null) count++;
-    if (selectedPrice.max !== null) count++;
-    return count;
-  };
-
-  const activeFiltersCount = getActiveFiltersCount();
-  const getLocalizedTitle = (product: Product): string => {
-    if (locale === "en") {
-      return product.titleEn ?? product.title;
-    }
-    return product.title ?? product.titleEn ?? "";
-  };
-  const sortedProducts = [...filteredProducts].sort((a, b) => {
-    const aPriceRange = getProductPriceRange(a);
-    const bPriceRange = getProductPriceRange(b);
-
-
-
-    switch (sortBy) {
-      case "price-low":
-        return aPriceRange.min - bPriceRange.min;
-      case "price-high":
-        return bPriceRange.max - aPriceRange.max;
-      case "name":
-        // Use localized titles for sorting
-        const aTitle = getLocalizedTitle(a);
-        const bTitle = getLocalizedTitle(b);
-        return aTitle.localeCompare(bTitle);
-      default:
-        return 0;
-    }
-  });
-
-  // Pagination logic - only on large screens
-  const effectiveItemsPerPage = isLargeScreen
-    ? itemsPerPage
-    : sortedProducts.length;
-  const totalPages = Math.ceil(sortedProducts.length / effectiveItemsPerPage);
-  const startIndex = isLargeScreen
-    ? (currentPage - 1) * effectiveItemsPerPage
-    : 0;
-  const endIndex = isLargeScreen
-    ? startIndex + effectiveItemsPerPage
-    : sortedProducts.length;
-  const currentProducts = sortedProducts.slice(startIndex, endIndex);
-
-  // Handle page change
-  const handlePageChange = (page: number) => {
-    if (!isLargeScreen) return; // Only allow page changes on large screens
-    setCurrentPage(page);
-    // Update URL with page parameter
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("page", page.toString());
-    router.push(`${pathname}?${params.toString()}`);
-  };
-
-  // Update current page when URL changes
+  // Initialize current page from URL and reset pagination when filters or sorting change
   useEffect(() => {
-    const pageParam = searchParams.get("page");
-    const page = pageParam ? parseInt(pageParam) : 1;
-    setCurrentPage(page);
+    const pageFromUrl = searchParams.get("page");
+    if (pageFromUrl) {
+      setCurrentPage(Number(pageFromUrl));
+    } else {
+      setCurrentPage(1);
+    }
+  }, [searchParams, sortBy]);
+
+  // წამოღება products
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setIsLoading(true);
+      try {
+        const filters = {
+          category: searchParams.get("cat") || undefined,
+          brands: searchParams.get("brand")
+            ? searchParams.get("brand")!.split(",")
+            : undefined,
+          minPrice: searchParams.get("minPrice")
+            ? Number(searchParams.get("minPrice"))
+            : undefined,
+          maxPrice: searchParams.get("maxPrice")
+            ? Number(searchParams.get("maxPrice"))
+            : undefined,
+          inStock:
+            searchParams.get("inStock") === "true"
+              ? true
+              : searchParams.get("inStock") === "false"
+                ? false
+                : undefined,
+          comingSoon:
+            searchParams.get("comingSoon") === "true"
+              ? true
+              : searchParams.get("comingSoon") === "false"
+                ? false
+                : undefined,
+          query: searchParams.get("query") || undefined,
+        };
+
+        const res = await getAllProducts(1, 200, false, filters); // მოვიტანოთ მეტი, მერე slice ვუკეთოთ
+        setProducts(res.products || []);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchProducts();
   }, [searchParams]);
 
-  // Reset to first page when filters change or screen size changes
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [filteredProducts, isLargeScreen]);
-
-  // Get URL parameters
-  const category = searchParams.get("cat");
-  const brand = searchParams.get("brand");
-  const query = searchParams.get("query") || "";
-
-  // Check if sidebar should be shown (only when category or brand parameters exist)
-  const shouldShowSidebar = Boolean(category || brand);
-
-  const handleViewSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
-
-  const pathname = usePathname();
-
-  const isListPage = pathname?.includes("/list");
-
-  const hasFilters =
-    Array.from(searchParams.keys()).some((key) => key !== "page") ||
-    (searchParams.get("page") && searchParams.get("page") !== "1");
-
-  const isListPage1 = pathname.endsWith("/list") && !hasFilters;
-  // Transform database products to match ProductHelper interface
-  const transformedProducts = currentProducts.map((product) => {
-    const priceRange = getProductPriceRange(product);
-    return {
-      id: product.id,
-      image: product.images,
-      price: priceRange.min, // Show minimum price for display
-      title: product.title,
-    };
-  });
-
-  // Determine the page title based on filter type
   const getPageTitle = () => {
+    const query = searchParams.get("query");
+    const category = searchParams.get("cat");
+    const brand = searchParams.get("brand");
+
     if (query) return `Search: ${query}`;
     if (category) return category;
     if (brand) return brand;
     return t("products");
   };
-
-  const fetchProducts = async () => {
-    try {
-      setLoading(true);
-      const { products } = await getAllProducts();
-      // Convert the data to match the Product interface
-      const productsWithDecimalPrices = products.map((product: any) => ({
-        ...product,
-        description: product.description ?? "",
-        descriptionEn: product.descriptionEn ?? "",
-        tbilisi: product.tbilisi ?? false,
-        batumi: product.batumi ?? false,
-        qutaisi: product.qutaisi ?? false,
-        kobuleti: product.kobuleti ?? false,
-        batumi44: product.batumi44 ?? false,
-        sizes: product.sizes || [],
-        price: product.price || undefined,
-        sales: product.sales || undefined,
-      }));
-      setProducts(productsWithDecimalPrices as Product[]);
-    } catch (error) {
-      console.error("Error fetching products:", error);
-    } finally {
-      setLoading(false);
+  const filteredProducts = products.filter((product) => {
+    // Category filter
+    if (selectedType && product.category !== selectedType) {
+      return false;
     }
+
+    // Brand filter
+    if (selectedBrand && product.brand !== selectedBrand) {
+      return false;
+    }
+
+    // Price filter
+    const productPrice = product.price || product.minSizePrice || 0;
+    if (selectedPrice.min !== null && productPrice < selectedPrice.min) {
+      return false;
+    }
+    if (selectedPrice.max !== null && productPrice > selectedPrice.max) {
+      return false;
+    }
+
+    return true;
+  });
+  // sorting
+  const transformedProducts = filteredProducts
+    .sort((a, b) => {
+      switch (sortBy) {
+        case "price-low":
+          return (
+            (a.price || a.minSizePrice || 0) -
+            (b.price || b.minSizePrice || 0)
+          );
+        case "price-high":
+          return (
+            (b.price || b.minSizePrice || 0) -
+            (a.price || a.minSizePrice || 0)
+          );
+        case "name":
+          return (a.title || a.name || "").localeCompare(
+            b.title || b.name || ""
+          );
+        default:
+          return 0;
+      }
+    })
+    .map((product) => ({
+      id: product.id,
+      image: product.images || [product.image],
+      price: product.price || product.minSizePrice || 0,
+      title: product.title || product.name,
+      category: product.category,
+      brand: product.brand,
+    }));
+  // Clear all filters
+  const clearFilters = () => {
+    setSelectedType("");
+    setSelectedBrand("");
+    setSelectedPrice({ min: null, max: null });
+    setSortBy("newest");
+    setCurrentPage(1);
+  };
+  // pagination
+  const totalPages = Math.ceil(transformedProducts.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentProducts = transformedProducts.slice(startIndex, endIndex);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    // Update URL with page parameter
+    const url = new URL(window.location.href);
+    url.searchParams.set('page', page.toString());
+    window.history.pushState({}, '', url.toString());
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  // Apply initial filters when products load or URL params change
-  useEffect(() => {
-    if (products.length > 0) {
-      // Parse multiple categories and brands from comma-separated values
-      const selectedCategories = category
-        ? category.split(",").map((c) => c.trim())
-        : [];
-      const selectedBrands = brand ? brand.split(",").map((b) => b.trim()) : [];
-
-      const filtered = products.filter((product) => {
-        const matchesCategory =
-          selectedCategories.length === 0 ||
-          selectedCategories.some(
-            (cat) => product.category?.toLowerCase() === cat.toLowerCase()
-          );
-        const matchesBrand =
-          selectedBrands.length === 0 ||
-          selectedBrands.some(
-            (brandName) =>
-              product.brand?.toLowerCase() === brandName.toLowerCase()
-          );
-        const matchesQuery =
-          !query ||
-          product.title.toLowerCase().includes(query.toLowerCase()) ||
-          product.titleEn.toLowerCase().includes(query.toLowerCase()) ||
-          product.description.toLowerCase().includes(query.toLowerCase()) ||
-          product.descriptionEn.toLowerCase().includes(query.toLowerCase()) ||
-          product.brand.toLowerCase().includes(query.toLowerCase()) ||
-          product.category.toLowerCase().includes(query.toLowerCase());
-
-        return matchesCategory && matchesBrand && matchesQuery;
-      }); setFilteredProducts(filtered);
-    }
-  }, [products, category, brand, query]);
-
-  // Apply desktop filters when they change
-  useEffect(() => {
-    if (products.length > 0) {
-      const filtered = products.filter((product) => {
-        // Category filter
-        const matchesCategory = !selectedType || product.category === selectedType;
-        
-        // Brand filter
-        const matchesBrand = !selectedBrand || product.brand === selectedBrand;
-        
-        // Price range filter
-        const priceRange = getProductPriceRange(product);
-        const matchesPrice = 
-          (!selectedPrice.min || priceRange.min >= selectedPrice.min) &&
-          (!selectedPrice.max || priceRange.max <= selectedPrice.max);
-        
-        // Search query filter (from URL)
-        const matchesQuery =
-          !query ||
-          product.title.toLowerCase().includes(query.toLowerCase()) ||
-          product.titleEn.toLowerCase().includes(query.toLowerCase()) ||
-          product.description.toLowerCase().includes(query.toLowerCase()) ||
-          product.descriptionEn.toLowerCase().includes(query.toLowerCase()) ||
-          product.brand.toLowerCase().includes(query.toLowerCase()) ||
-          product.category.toLowerCase().includes(query.toLowerCase());
-
-        return matchesCategory && matchesBrand && matchesPrice && matchesQuery;
-      });
-      
-      setFilteredProducts(filtered);
-      setCurrentPage(1); // Reset to first page when filters change
-    }
-  }, [products, selectedType, selectedBrand, selectedPrice, query]);
-
-  // Loading state
-  if (loading) {
+  if (isLoading) {
     return (
       <>
-        <div className="relative flex items-center justify-center bg-overlay p-14 sm:p-16 before:bg-title before:bg-opacity-70 overflow-hidden">
+        <div className="relative flex items-center justify-center bg-overlay p-14 sm:p-16 overflow-hidden">
           <Image
             src="/bed.jpg"
             alt="Background"
@@ -404,16 +174,13 @@ function PageContentWrapper() {
             quality={80}
             className="object-cover z-0"
           />
-
           <div className="absolute inset-0 bg-black/60 z-10" />
-
           <div className="relative z-20 text-center w-full">
-            <h2 className="text-primary text-xl md:text-[40px] font-normal leading-none text-center capitalize">
+            <h2 className="text-primary text-xl md:text-[40px] font-normal capitalize">
               {getPageTitle()}
             </h2>
           </div>
         </div>
-
         <div className="container min-h-screen mt-[50px]">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {Array.from({ length: 8 }).map((_, index) => (
@@ -434,7 +201,8 @@ function PageContentWrapper() {
 
   return (
     <>
-      <div className="relative min-h-[50vh] flex items-center justify-center bg-overlay p-14 sm:p-16 before:bg-title before:bg-opacity-70 overflow-hidden">
+      {/* header */}
+      <div className="relative min-h-[50vh] flex items-center justify-center bg-overlay p-14 sm:p-16 overflow-hidden">
         <Image
           src="/bed.jpg"
           alt="Background"
@@ -442,276 +210,163 @@ function PageContentWrapper() {
           quality={80}
           className="object-cover z-0"
         />
-
         <div className="absolute inset-0 bg-black/60 z-10" />
-
         <div className="relative z-20 text-center w-full">
-          <h2 className="text-primary text-xl md:text-[45px] font-normal leading-none text-center capitalize">
+          <h2 className="text-primary text-xl md:text-[45px] font-normal capitalize">
             {getPageTitle()}
           </h2>
         </div>
       </div>
 
+      {/* content */}
       <div className="container min-h-screen mt-[50px]">
         <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 mb-8">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div className="flex items-center gap-3">
               <div className="w-2 h-8 bg-[#FF7A00] rounded-full"></div>
-              <div>
-                <p className="text-gray-600 text-[18px]">
-                  {t("found")}{" "}
-                  <span className="font-bold text-gray-900 text-[18px]">
-                    {sortedProducts.length}
-                  </span>{" "}
-                  {t("products")}
-
-                </p>
-
-                {activeFiltersCount > 0 && (
-                  <p className="text-primary text-[18px] font-medium">
-                    {activeFiltersCount} {t("activeFilters")}
-                  </p>
-                )}
-              </div>
+              <p className="text-gray-600 text-[18px]">
+                {t("found")}{" "}
+                <span className="font-bold text-gray-900 text-[18px]">
+                  {filteredProducts.length}
+                </span>{" "}
+                {t("products")}
+              </p>
             </div>
-            <div className="hidden md:block ">
-              <div className="flex justify-center   flex-col sm:flex-row items-center gap-4">
-                <div className="flex items-center gap-2">
-                  
-                  <label className="text-[18px] font-medium text-gray-700">
-                    {t("sortBy")}
-                  </label>
-                </div>
-                <select
-                  value={sortBy}
-                  onChange={(e) => {
-
-                    setSortBy(e.target.value);
-                  }}
-                  className="px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all bg-white font-medium"
-                >
-                  <option value="newest">{t("newest")}</option>
-                  <option value="price-low">{t("priceLowToHigh")}</option>
-                  <option value="price-high">{t("priceHighToLow")}</option>
-                  <option value="name">{t("nameAZ")}</option>
-                </select>
-                {query && (
-                  <div className="container  flex justify-end">
-                    <Button
-                      onClick={() => {
-                        const basePath = `/${locale}/list`;
-                        router.push(basePath); // Remove query and page
-                      }}
-                      className="w-full flex mx-auto items-center justify-center gap-3 px-4  py-1 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
-                    >
-                      <X className="w-4 h-4" />
-                      {t("clearFilters")}
-                    </Button>
-                  </div>
-                )}
-                {shouldShowSidebar && (
-                  <button
-                  
-                    onClick={handleClearFilters}
-                   className="bg-[#FF7A00] w-full border-radius:20px  text-white px-4 sm:px-6 md:px-8 py-2 sm:py-3 md:py-4 rounded-xl font-medium flex items-center justify-center gap-2 transition-all duration-300 transform shadow-lg text-sm sm:text-base"
+            <div className="hidden md:flex items-center gap-4">
+              <label className="text-[18px] font-medium text-gray-700">
+                {t("sortBy")}
+              </label>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary/50"
+              >
+                <option value="newest">{t("newest")}</option>
+                <option value="price-low">{t("priceLowToHigh")}</option>
+                <option value="price-high">{t("priceHighToLow")}</option>
+                <option value="name">{t("nameAZ")}</option>
+              </select>
+              {(searchParams.get("cat") ||
+                searchParams.get("brand") ||
+                searchParams.get("query")) && (
+                  <Button
+                    onClick={() => {
+                      const url = new URL(window.location.href);
+                      url.search = "";
+                      window.location.href = url.toString();
+                    }}
+                    className="bg-[#FF7A00] text-white px-4 py-2 rounded-xl flex items-center gap-2"
                   >
-                    <Trash2 size={16} /> {t("clearFilters")}
-                  </button>
+                    <X className="w-4 h-4" />
+                    {t("clearFilters")}
+                  </Button>
                 )}
-              </div>
-
-            </div>
-            <div className="block md:hidden">
-              <div className="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto">
-                <div className="flex items-center gap-2">
-                 
-                  <label className="text-base lg:text-lg font-medium text-gray-700 whitespace-nowrap">
-                    {t("sortBy")}
-                  </label>
-                </div>
-                <select
-                  value={sortBy}
-                  onChange={(e) => {
-                    setSortBy(e.target.value);
-                  }}
-                  className="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all bg-white font-medium text-[18px] lg:text-base"
-                >
-                  <option value="newest">{t("newest")}</option>
-                  <option value="price-low">{t("priceLowToHigh")}</option>
-                  <option value="price-high">{t("priceHighToLow")}</option>
-                  <option value="name">{t("nameAZ")}</option>
-                </select>
-              </div>
             </div>
           </div>
         </div>
 
-          <div className="flex flex-col lg:flex-row gap-8">
-            {/* Filter Sidebar - Always visible on large screens */}
-            <div className="lg:w-64 lg:flex-shrink-0">
-              {isListPage && (
-                <>
-                  {/* Mobile Filter Button */}
-                  <div className="mb-6 lg:hidden">
-                    <Button
-                      variant="outline"
-                      onClick={handleViewListSidebar}
-                      className="bg-[#f3983e] md:text-[20px] text-[18px] w-full border-radius:20px  px-4 sm:px-6 md:px-8 py-2 text-black  rounded-xl font-medium  transition-all duration-300 transform shadow-lg "
-                    >
-                      {t("filter")}
-                    </Button>
+        <div className="flex flex-col mb-14 lg:flex-row gap-8">
+          {/* Filter Sidebar */}
+          <div className="lg:w-64 lg:flex-shrink-0">
+            <div className="bg-[#f7f1e7] rounded-2xl shadow-lg p-6">
+              <h3 className="text-[20px] font-semibold text-black mb-4">{t("filter")}</h3>
+              <div className="space-y-4">
+                {/* Category Filter */}
+                <div>
+                  <label className="block text-[18px] font-medium text-black mb-2">{t("category")}</label>
+                  <select
+                    value={selectedType}
+                    onChange={(e) => setSelectedType(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#438c71]/50 focus:border-[#438c71]"
+                  >
+                    <option value="">{t("allCategories")}</option>
+                    {Array.from(new Set(products.map(p => p.category).filter(Boolean))).map((category) => (
+                      <option key={category} value={category}>
+                        {category}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Brand Filter */}
+                <div>
+                  <label className="block text-[18px] font-medium text-black mb-2">{t("brand")}</label>
+                  <select
+                    value={selectedBrand}
+                    onChange={(e) => setSelectedBrand(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#438c71]/50 focus:border-[#438c71]"
+                  >
+                    <option value="">{t("allBrands")}</option>
+                    {Array.from(new Set(products.map(p => p.brand).filter(Boolean))).map((brand) => (
+                      <option key={brand} value={brand}>
+                        {brand}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Price Range Filter */}
+                <div>
+                  <label className="block text-[18px] font-medium text-black mb-2">{t("priceRange")}</label>
+                  <div className="space-y-2">
+                    <input
+                      type="number"
+                      placeholder={t("minPrice")}
+                      value={selectedPrice.min || ''}
+                      onChange={(e) => setSelectedPrice(prev => ({ ...prev, min: e.target.value ? Number(e.target.value) : null }))}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#438c71]/50 focus:border-[#438c71]"
+                    />
+                    <input
+                      type="number"
+                      placeholder={t("maxPrice")}
+                      value={selectedPrice.max || ''}
+                      onChange={(e) => setSelectedPrice(prev => ({ ...prev, max: e.target.value ? Number(e.target.value) : null }))}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#438c71]/50 focus:border-[#438c71]"
+                    />
+
                   </div>
-                  
-                  {/* Desktop Filter Sidebar - Always visible */}
-                  <div className="hidden lg:block">
-                    <div className="bg-[#f7f1e7] rounded-2xl shadow-lg p-6 rounded-xl shadow-lg  p-6">
-                      <h3 className="text-[20px] font-semibold text-black mb-4">{t("filter")}</h3>
-                      <div className="space-y-4">
-                        {/* Category Filter */}
-                        <div>
-                            <label className="block text-[18px] font-medium text-black mb-2">{t("category")}</label>
-                          <select 
-                            value={selectedType} 
-                            onChange={(e) => setSelectedType(e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#438c71]/50 focus:border-[#438c71]"
-                          >
-                            <option value="">{t("allCategories")}</option>
-                            {Array.from(new Set(products.map(p => p.category).filter(Boolean))).map((category) => (
-                              <option key={category} value={category}>
-                                {category}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                        
-                        {/* Brand Filter */}
-                        <div>
-                          <label className="block text-[18px] font-medium text-black mb-2">{t("brand")}</label>
-                          <select 
-                            value={selectedBrand} 
-                            onChange={(e) => setSelectedBrand(e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#438c71]/50 focus:border-[#438c71]"
-                          >
-                            <option value="">{t("allBrands")}</option>
-                            {Array.from(new Set(products.map(p => p.brand).filter(Boolean))).map((brand) => (
-                              <option key={brand} value={brand}>
-                                {brand}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                        
-                        {/* Price Range Filter */}
-                        <div>
-                          <label className="block text-[18px] font-medium text-black mb-2">{t("priceRange")}</label>
-                          <div className="space-y-2">
-                            <input
-                              type="number"
-                              placeholder={t("minPrice")}
-                              value={selectedPrice.min || ''}
-                              onChange={(e) => setSelectedPrice(prev => ({ ...prev, min: e.target.value ? Number(e.target.value) : null }))}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#438c71]/50 focus:border-[#438c71]"
-                            />
-                            <input
-                              type="number"
-                              placeholder={t("maxPrice")}
-                              value={selectedPrice.max || ''}
-                              onChange={(e) => setSelectedPrice(prev => ({ ...prev, max: e.target.value ? Number(e.target.value) : null }))}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#438c71]/50 focus:border-[#438c71]"
-                            />
-                          </div>
-                        </div>
-                        
-                        {/* Clear Filters Button */}
-                        <button
-                          onClick={handleClearFilters}
-                          
-                         className="bg-[#f3983e] md:text-[20px] text-[18px] w-full border-radius:20px  px-4 sm:px-6 md:px-8 py-2 text-black  rounded-xl font-medium  transition-all duration-300 transform shadow-lg "
-                        >
-                          {t("clearAllFilters")}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </>
-              )}
-              
-              {/* Mobile Sidebar - Controlled by state */}
-              <div className="lg:hidden">
-                <ListSideBar
-                  isOpen={listSidebarOpen}
-                  toggleSidebar={handleViewListSidebar}
-                  onFilterChange={handleListFilterChange}
-                />
+                </div>
+                {(!searchParams.get("cat") && !searchParams.get("brand") && !searchParams.get("query")) && (
+                  <Button
+                    onClick={clearFilters}
+                    className="w-full bg-[#2E3A47] text-[18px] md:text-[20px] text-white font-medium py-2 px-4 rounded-xl transition-colors"
+                  >
+                    {t("clearFilters")}
+                  </Button>
+                )}
+
               </div>
             </div>
-
-            {/* Main Sidebar Toggle Button - Only show when category or brand parameters exist */}
-            {shouldShowSidebar && (
-              <>
-                <div className="mb-6 lg:hidden">
-                  <Button
-                    variant="outline"
-                    onClick={handleViewSidebar}
-                    className="w-full px-4 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
-                  >
-                    {t("filter")}
-                  </Button>
-                </div>
-
-                <SideBar
-                  isOpen={sidebarOpen}
-                  toggleSidebar={handleViewSidebar}
-                  onFilterChange={() => { }}
-                  ref={sidebarRef}
-                />
-              </>
-            )}
-
-            {/* Products Section */}
-            <div className="flex-1">
-              {transformedProducts.length > 0 ? (
-                <>
-                  <div className="mt-0">
-                    <ProductHelper items={transformedProducts} sliderId={"list"} />
-                  </div>
-
-                  {isLargeScreen && totalPages > 1 && (
-                    <div className="mb-10 mt-10 flex justify-center">
-                      <Pagination pageCount={totalPages} />
-                    </div>
-                  )}
-                </>
-              ) : (
-                <div className="text-center flex flex-col md:ml-[100px] justify-center items-center py-12">
-                  <div className="text-gray-400 mb-4">
-                   
-                  </div>
-                  <h3 className="text-2xl text-center  font-bold text-gray-900 mb-3">
-                    No products found
-                  </h3>
-                  <p className="text-gray-600">
-                    Try adjusting your search criteria or filters
-                  </p>
-                </div>
-              )}
-            </div>
           </div>
+
+          {/* Products Section */}
+          <div className="flex-1">
+            {filteredProducts.length > 0 ? (
+              <>
+                <ProductHelper items={currentProducts} sliderId="list" />
+
+                {totalPages > 1 && (
+                  <div className="mt-10 flex justify-center">
+                    <Pagination
+                      pageCount={totalPages}
+                    />
+                  </div>
+                )}
+
+              </>
+            ) : (
+              <div className="text-center py-12">
+                <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                  No products found
+                </h3>
+                <p className="text-gray-600">
+                  Try adjusting your search criteria or filters
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </>
-  );
-}
-
-export default function Page() {
-  return (
-    <Suspense
-      fallback={
-        <div className="flex justify-center items-center h-screen">
-          Loading...
-        </div>
-      }
-    >
-      <PageContentWrapper />
-    </Suspense>
   );
 }

@@ -183,33 +183,60 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
   }
 }
 
-export async function getAllProducts(page = 1, pageSize = 20, getAll = false) {
+export async function getAllProducts(page = 1, pageSize = 20, getAll = false, filters?: any) {
   try {
-    const [products, total] = await Promise.all([
-      prisma.product.findMany({
-        skip: getAll ? 0 : (page - 1) * pageSize,
-        take: getAll ? undefined : pageSize,
-        select: {
-          id: true,
-          title: true,
-          titleEn: true,
-          category: true,
-          images: true,
-          brand: true,
-          price: true,
-          sales: true,
-          popular: true,
-          createdAt: true,
-          sizes: {
-            select: {
-              price: true,
+          // Build where clause based on filters
+      const where: any = {};
+      
+      if (filters?.category) {
+        where.category = filters.category.toUpperCase();
+      }
+      
+      if (filters?.brands && filters.brands.length > 0) {
+        where.brand = { in: filters.brands };
+      }
+      
+      if (filters?.minPrice || filters?.maxPrice) {
+        where.OR = [
+          { price: { gte: filters.minPrice || 0, lte: filters.maxPrice || 999999 } },
+          { sizes: { some: { price: { gte: filters.minPrice || 0, lte: filters.maxPrice || 999999 } } } }
+        ];
+      }
+      
+      if (filters?.query) {
+        where.OR = [
+          { title: { contains: filters.query, mode: 'insensitive' } },
+          { titleEn: { contains: filters.query, mode: 'insensitive' } },
+          { brand: { contains: filters.query, mode: 'insensitive' } }
+        ];
+      }
+
+      const [products, total] = await Promise.all([
+        prisma.product.findMany({
+          where,
+          skip: getAll ? 0 : (page - 1) * pageSize,
+          take: getAll ? undefined : pageSize,
+          select: {
+            id: true,
+            title: true,
+            titleEn: true,
+            category: true,
+            images: true,
+            brand: true,
+            price: true,
+            sales: true,
+            popular: true,
+            createdAt: true,
+            sizes: {
+              select: {
+                price: true,
+              },
             },
           },
-        },
-        orderBy: { createdAt: "desc" },
-      }),
-      prisma.product.count(),
-    ]);
+          orderBy: { createdAt: "desc" },
+        }),
+        prisma.product.count({ where }),
+      ]);
 
     // For each product, calculate the minimum size price if sizes exist
     const productsWithMinPrice = products.map((product) => {
