@@ -222,32 +222,18 @@ function ProductList({
 
   const filteredProducts = useMemo(() => {
     const filtered = getFilteredProducts();
-
-
-
-    const matress = filtered.filter((p) => p.category === "MATTRESS");
-
-    return matress.slice(0, 5);
+    const mattresses = filtered.filter((p) => p.category === "MATTRESS");
+    return mattresses.slice(0, 10); // Show first 10 mattress items
   }, [getFilteredProducts, products]);
 
   const filteredProducts2 = useMemo(() => {
     const popular = products.filter((p) => p.popular === true);
-    
-    // Log all popular products for debugging
-    console.log("=== POPULAR PRODUCTS DEBUG ===");
-    console.log("Total products loaded:", products.length);
-    console.log("Products with popular=true:", popular.length);
-    console.log("All popular products:", popular);
-    console.log("Popular product IDs:", popular.map(p => p.id));
-    console.log("Popular product titles:", popular.map(p => ({ id: p.id, title: p.title, titleEn: p.titleEn, popular: p.popular })));
-    console.log("=== END DEBUG ===");
-    
-    return popular; // Remove the slice to show all popular products
+    return popular.slice(0, 10); // Show first 10 popular products
   }, [products]);
 
   const filteredProducts3 = useMemo(() => {
     const salesProducts = products.filter((p) => p.sales && p.sales > 0);
-    return salesProducts; // Remove the slice to show all sales products
+    return salesProducts.slice(0, 10); // Show first 10 sales products
   }, [products]);
 
   const transformProducts = useCallback(
@@ -402,10 +388,10 @@ function ProductList({
           </div>
 
           {/* Tab Content */}
-          {loading || !imagesLoaded ? (
-            // Skeleton Loading State
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {Array.from({ length: 8 }).map((_, index) => (
+                     {loading || !imagesLoaded ? (
+             // Skeleton Loading State
+             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+               {Array.from({ length: 10 }).map((_, index) => (
                 <div key={index} className="flex flex-col items-center">
                   <div className="animate-pulse">
                     {/* Skeleton Image */}
