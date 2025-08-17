@@ -113,6 +113,26 @@ function ProductList({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
+  // Fetch all products for popular and sales tabs
+  useEffect(() => {
+    const fetchAllProducts = async () => {
+      try {
+        const { products: allProducts } = await getAllProducts(1, 20, true);
+        const productsWithPrices = allProducts.map((product: any) => ({
+          ...product,
+          price: product.price || undefined,
+          minSizePrice: product.minSizePrice || undefined,
+          sales: product.sales || undefined,
+          sizes: product.sizes || [],
+        }));
+        setProducts(productsWithPrices as Product[]);
+      } catch (error) {
+        console.error("Error fetching all products:", error);
+      }
+    };
+    fetchAllProducts();
+  }, []);
+
   const handleLoadMore = () => {
     setPage((prev) => prev + 1);
   };
@@ -212,12 +232,22 @@ function ProductList({
 
   const filteredProducts2 = useMemo(() => {
     const popular = products.filter((p) => p.popular === true);
-    return popular.slice(0, 5);
+    
+    // Log all popular products for debugging
+    console.log("=== POPULAR PRODUCTS DEBUG ===");
+    console.log("Total products loaded:", products.length);
+    console.log("Products with popular=true:", popular.length);
+    console.log("All popular products:", popular);
+    console.log("Popular product IDs:", popular.map(p => p.id));
+    console.log("Popular product titles:", popular.map(p => ({ id: p.id, title: p.title, titleEn: p.titleEn, popular: p.popular })));
+    console.log("=== END DEBUG ===");
+    
+    return popular; // Remove the slice to show all popular products
   }, [products]);
 
   const filteredProducts3 = useMemo(() => {
     const salesProducts = products.filter((p) => p.sales && p.sales > 0);
-    return salesProducts.slice(0, 5);
+    return salesProducts; // Remove the slice to show all sales products
   }, [products]);
 
   const transformProducts = useCallback(
@@ -275,6 +305,7 @@ function ProductList({
       setActiveTab(visibleTabs[0].id);
     }
   }, [visibleTabs, activeTab]);
+
 
   // Don't render anything if no tabs have products
   if (visibleTabs.length === 0) {

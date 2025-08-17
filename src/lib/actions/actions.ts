@@ -183,12 +183,12 @@ export async function updateProduct(data: z.infer<typeof updateProductSchema>) {
   }
 }
 
-export async function getAllProducts(page = 1, pageSize = 20) {
+export async function getAllProducts(page = 1, pageSize = 20, getAll = false) {
   try {
     const [products, total] = await Promise.all([
       prisma.product.findMany({
-        skip: (page - 1) * pageSize,
-        take: pageSize,
+        skip: getAll ? 0 : (page - 1) * pageSize,
+        take: getAll ? undefined : pageSize,
         select: {
           id: true,
           title: true,

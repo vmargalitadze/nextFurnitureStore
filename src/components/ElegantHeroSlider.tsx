@@ -13,6 +13,7 @@ interface Slide {
 
 const ElegantHeroSlider = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const params = useParams();
   const locale = params.locale as string;
 
@@ -47,6 +48,24 @@ const ElegantHeroSlider = () => {
     } 
   ];
 
+  // Auto-advance slides every 8 seconds
+  useEffect(() => {
+    if (!isAutoPlaying) return;
+
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, [isAutoPlaying, slides.length]);
+
+  // Pause auto-play on user interaction
+  const pauseAutoPlay = () => {
+    setIsAutoPlaying(false);
+    // Resume auto-play after 15 seconds of inactivity
+    setTimeout(() => setIsAutoPlaying(true), 15000);
+  };
+
   const getLocalizedContent = () => {
     if (locale === "en") {
       return {
@@ -63,6 +82,7 @@ const ElegantHeroSlider = () => {
   };
 
   const nextSlide = () => {
+    pauseAutoPlay();
     if (currentSlide === slides.length - 1) {
       setCurrentSlide(0);
     } else {
@@ -71,6 +91,7 @@ const ElegantHeroSlider = () => {
   };
 
   const prevSlide = () => {
+    pauseAutoPlay();
     if (currentSlide === 0) {
       setCurrentSlide(slides.length - 1);
     } else {
@@ -79,6 +100,7 @@ const ElegantHeroSlider = () => {
   };
 
   const goToSlide = (index: number) => {
+    pauseAutoPlay();
     setCurrentSlide(index);
   };
 
@@ -120,6 +142,23 @@ const ElegantHeroSlider = () => {
           </motion.div>
         </AnimatePresence>
 
+        {/* Navigation Arrows */}
+        <button
+          onClick={prevSlide}
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-30 p-2 rounded-full bg-black/30 hover:bg-black/50 text-white transition-all duration-300 hover:scale-110"
+          aria-label="Previous slide"
+        >
+          <ChevronLeft size={24} />
+        </button>
+
+        <button
+          onClick={nextSlide}
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-30 p-2 rounded-full bg-black/30 hover:bg-black/50 text-white transition-all duration-300 hover:scale-110"
+          aria-label="Next slide"
+        >
+          <ChevronRight size={24} />
+        </button>
+
         {/* Enhanced Central Promotional Overlay */}
         <motion.div
           initial={{ opacity: 0, y: 50, scale: 0.9 }}
@@ -156,10 +195,6 @@ const ElegantHeroSlider = () => {
             </AnimatePresence>
           </div>
         </motion.div>
-
-
-
-
 
         {/* Slide Indicators */}
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex gap-3">

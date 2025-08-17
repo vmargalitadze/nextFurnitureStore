@@ -285,7 +285,7 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                           onClick={() => setSelectedSize(size.id)}
                           className={`px-3 py-1 rounded-lg font-bold text-[18px] ${selectedSize === size.id
                               ? "bg-[#f3983e] text-black"
-                              : "bg-bg-[#f7f1e7] text-black"
+                              : "bg-bg-[#f7f1e7] text-white"
                             }`}
                         >
                           {formatSizeDisplay(size.size)}
@@ -443,7 +443,7 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                     disabled={
                       (!isOthersProduct() && !selectedSize) || addingToCart
                     }
-                    className={`w-full md:w-[50%] px-4 py-2 text-[20px] md:text-[20px] font-bold text-black bg-[#f3983e] rounded-lg  transition-colors ${(isOthersProduct() || selectedSize) && !addingToCart
+                    className={`w-full md:w-[50%] px-4 py-2 text-[20px] md:text-[20px] font-bold text-white bg-[#f3983e] rounded-lg  transition-colors ${(isOthersProduct() || selectedSize) && !addingToCart
                         ? "bg-[#f3983e] text-white"
                         : "bg-gray-400 cursor-not-allowed"
                       }`}

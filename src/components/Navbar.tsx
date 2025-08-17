@@ -13,7 +13,7 @@ function Navbar() {
 
 
   return (
-    <div className='fixed top-0 left-0 w-full z-[800] h-20 px-4 md:px-8 bg-[#efe8ac] text-black shadow-sm pointer-events-auto isolate'>
+    <div className='fixed top-0 left-0 w-full z-[800] h-20 px-4 md:px-8 bg-[#f7f1e7] text-black shadow-sm pointer-events-auto isolate'>
 
       <div className="h-full flex items-center justify-between md:hidden">
 
