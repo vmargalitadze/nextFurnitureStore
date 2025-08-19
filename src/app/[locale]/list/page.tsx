@@ -6,9 +6,10 @@ import Image from "next/image";
 import { getAllProducts } from "@/lib/actions/actions";
 import ProductHelper from "@/components/ProductHelper";
 import { useTranslations } from "next-intl";
-import { X } from "lucide-react";
+import { X, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Pagination from "@/components/Pagination";
+import { motion } from "framer-motion";
 
 export default function ListPage() {
   const searchParams = useSearchParams();
@@ -23,6 +24,7 @@ export default function ListPage() {
     max: number | null;
   }>({ min: null, max: null });
   const [sortBy, setSortBy] = useState<string>("newest");
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const t = useTranslations("common");
 
   // Initialize current page from URL and reset pagination when filters or sorting change
@@ -147,6 +149,8 @@ export default function ListPage() {
     setSelectedPrice({ min: null, max: null });
     setSortBy("newest");
     setCurrentPage(1);
+    // Close mobile filter after clearing
+    setIsMobileFilterOpen(false);
   };
   // pagination
   const totalPages = Math.ceil(transformedProducts.length / itemsPerPage);
@@ -162,6 +166,84 @@ export default function ListPage() {
     window.history.pushState({}, '', url.toString());
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  // Filter component to avoid duplication
+  const FilterContent = () => (
+    <div className="space-y-4">
+      {/* Category Filter */}
+      <div>
+        <label className="block text-[16px] md:text-[18px] font-medium text-black mb-2">{t("category")}</label>
+        <select
+          value={selectedType}
+          onChange={(e) => setSelectedType(e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#438c71]/50 focus:border-[#438c71]"
+        >
+          <option value="">{t("allCategories")}</option>
+          {Array.from(new Set(products.map(p => p.category).filter(Boolean))).map((category) => (
+            <option key={category} value={category}>
+              {category}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Brand Filter */}
+      <div>
+        <label className="block text-[16px] md:text-[18px] font-medium text-black mb-2">{t("brand")}</label>
+        <select
+          value={selectedBrand}
+          onChange={(e) => setSelectedBrand(e.target.value)}
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#438c71]/50 focus:border-[#438c71]"
+        >
+          <option value="">{t("allBrands")}</option>
+          {Array.from(new Set(products.map(p => p.brand).filter(Boolean))).map((brand) => (
+            <option key={brand} value={brand}>
+              {brand}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Price Range Filter */}
+      <div>
+        <label className="block text-[16px] md:text-[18px] font-medium text-black mb-2">{t("priceRange")}</label>
+        <div className="space-y-2">
+          <input
+            type="number"
+            placeholder={t("minPrice")}
+            value={selectedPrice.min || ''}
+            onChange={(e) => setSelectedPrice(prev => ({ ...prev, min: e.target.value ? Number(e.target.value) : null }))}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#438c71]/50 focus:border-[#438c71]"
+          />
+          <input
+            type="number"
+            placeholder={t("maxPrice")}
+            value={selectedPrice.max || ''}
+            onChange={(e) => setSelectedPrice(prev => ({ ...prev, max: e.target.value ? Number(e.target.value) : null }))}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#438c71]/50 focus:border-[#438c71]"
+          />
+        </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="space-y-3 pt-4">
+        <Button
+          onClick={() => setIsMobileFilterOpen(false)}
+          className="w-full bg-[#2E3A47] text-[16px] md:text-[18px] text-white font-medium py-2 px-4 rounded-xl transition-colors"
+        >
+          ფილტრი
+        </Button>
+        {(!searchParams.get("cat") && !searchParams.get("brand") && !searchParams.get("query")) && (
+          <button
+            onClick={clearFilters}
+            className="w-full border border-[#2E3A47] text-[16px] md:text-[18px] text-[#2E3A47] font-medium py-2 px-4 rounded-xl transition-colors"
+          >
+           გასუფთავება
+          </button>
+        )}
+      </div>
+    </div>
+  );
 
   if (isLoading) {
     return (
@@ -265,77 +347,23 @@ export default function ListPage() {
           </div>
         </div>
 
+        {/* Mobile Filter Toggle Button */}
+        <div className="lg:hidden mb-6">
+          <button
+            onClick={() => setIsMobileFilterOpen(true)}
+            className="w-full bg-[#2E3A47] text-white py-3 px-4 rounded-xl font-semibold flex items-center justify-center gap-2 shadow-lg"
+          >
+            <Filter className="w-5 h-5" />
+            {t("filter")}
+          </button>
+        </div>
+
         <div className="flex flex-col mb-14 lg:flex-row gap-8">
-          {/* Filter Sidebar */}
-          <div className="lg:w-64 lg:flex-shrink-0">
+          {/* Filter Sidebar - Desktop */}
+          <div className="hidden lg:block lg:w-64 lg:flex-shrink-0">
             <div className="bg-[#e6dfd9] rounded-2xl shadow-lg p-6">
               <h3 className="text-[20px] font-semibold text-black mb-4">{t("filter")}</h3>
-              <div className="space-y-4">
-                {/* Category Filter */}
-                <div>
-                  <label className="block text-[18px] font-medium text-black mb-2">{t("category")}</label>
-                  <select
-                    value={selectedType}
-                    onChange={(e) => setSelectedType(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#438c71]/50 focus:border-[#438c71]"
-                  >
-                    <option value="">{t("allCategories")}</option>
-                    {Array.from(new Set(products.map(p => p.category).filter(Boolean))).map((category) => (
-                      <option key={category} value={category}>
-                        {category}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Brand Filter */}
-                <div>
-                  <label className="block text-[18px] font-medium text-black mb-2">{t("brand")}</label>
-                  <select
-                    value={selectedBrand}
-                    onChange={(e) => setSelectedBrand(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#438c71]/50 focus:border-[#438c71]"
-                  >
-                    <option value="">{t("allBrands")}</option>
-                    {Array.from(new Set(products.map(p => p.brand).filter(Boolean))).map((brand) => (
-                      <option key={brand} value={brand}>
-                        {brand}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Price Range Filter */}
-                <div>
-                  <label className="block text-[18px] font-medium text-black mb-2">{t("priceRange")}</label>
-                  <div className="space-y-2">
-                    <input
-                      type="number"
-                      placeholder={t("minPrice")}
-                      value={selectedPrice.min || ''}
-                      onChange={(e) => setSelectedPrice(prev => ({ ...prev, min: e.target.value ? Number(e.target.value) : null }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#438c71]/50 focus:border-[#438c71]"
-                    />
-                    <input
-                      type="number"
-                      placeholder={t("maxPrice")}
-                      value={selectedPrice.max || ''}
-                      onChange={(e) => setSelectedPrice(prev => ({ ...prev, max: e.target.value ? Number(e.target.value) : null }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#438c71]/50 focus:border-[#438c71]"
-                    />
-
-                  </div>
-                </div>
-                {(!searchParams.get("cat") && !searchParams.get("brand") && !searchParams.get("query")) && (
-                  <Button
-                    onClick={clearFilters}
-                    className="w-full bg-[#2E3A47] text-[18px] md:text-[20px] text-white font-medium py-2 px-4 rounded-xl transition-colors"
-                  >
-                    {t("clearFilters")}
-                  </Button>
-                )}
-
-              </div>
+              <FilterContent />
             </div>
           </div>
 
@@ -367,6 +395,44 @@ export default function ListPage() {
           </div>
         </div>
       </div>
+
+      {/* Mobile Filter Modal */}
+      {isMobileFilterOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          {/* Backdrop */}
+          <div 
+            className="absolute inset-0 bg-black/50"
+            onClick={() => setIsMobileFilterOpen(false)}
+          />
+          
+          {/* Filter Panel */}
+          <motion.div
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            className="absolute right-0 top-0 h-full w-[70%] max-w-sm bg-white shadow-2xl"
+          >
+            {/* Header */}
+            <div className="flex items-center  mt-20 justify-between p-4 border-b border-gray-200 ">
+              <h3 className="text-lg font-semibold text-black">
+                {t("filter")}
+              </h3>
+              <button
+                onClick={() => setIsMobileFilterOpen(false)}
+                className="p-2 rounded-full hover:bg-gray-200 transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            
+            {/* Filter Content */}
+            <div className="p-4 overflow-y-auto h-full pb-24">
+              <FilterContent />
+            </div>
+          </motion.div>
+        </div>
+      )}
     </>
   );
 }

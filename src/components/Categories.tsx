@@ -33,6 +33,9 @@ export default function Categories() {
   const [comingSoonOnly, setComingSoonOnly] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
+  // Mobile filter state
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
@@ -169,6 +172,8 @@ export default function Categories() {
     }
     const url = `/list${params.toString() ? `?${params.toString()}` : ""}`;
     router.push(url);
+    // Close mobile filter after search
+    setIsMobileFilterOpen(false);
   };
 
   // Show all categories (no filtering on main page)
@@ -176,6 +181,152 @@ export default function Categories() {
     if (item.type === "all") return false;
     return true; // Show all categories
   });
+
+  // Filter component to avoid duplication
+  const FilterContent = () => (
+    <>
+      {/* Search Input */}
+      <div className="mb-6">
+        <label className="block text-[16px] md:text-[18px] font-medium text-black mb-2">
+          {locale === "en" ? "Search" : "ძიება"}
+        </label>
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder={locale === "en" ? "Search products..." : "პროდუქტების ძიება..."}
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        />
+      </div>
+
+      {/* Category Filter */}
+      <div className="mb-6">
+        <label className="block text-[16px] md:text-[18px] font-medium text-black mb-2">
+          {locale === "en" ? "Category" : "კატეგორია"}
+        </label>
+        <div className="space-y-2">
+          {['all', 'mattress', 'pillow', 'quilt', 'bed',  'OTHERS'].map((cat) => (
+            <label key={cat} className="flex items-center">
+              <input
+                type="radio"
+                name="category"
+                value={cat}
+                checked={selectedCategory === cat}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="mr-2 text-blue-600"
+              />
+              <span className="text-[16px] md:text-[18px] text-black">
+                {cat === 'all' ? (locale === "en" ? "All Categories" : "ყველა კატეგორია") : getLocalizedCategoryLabel(cat)}
+              </span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Brand Filter */}
+      <div className="mb-6">
+        <label className="block text-[16px] md:text-[18px] font-medium text-black mb-2">
+          {locale === "en" ? "Brands" : "ბრენდები"}
+        </label>
+        <div className="space-y-2 max-h-32 overflow-y-auto">
+          {brands.length > 0 ? (
+            brands.map((brand) => (
+              <label key={brand} className="flex items-center">
+                <input
+                  type="checkbox"
+                  value={brand}
+                  checked={selectedBrands.includes(brand)}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setSelectedBrands([...selectedBrands, brand]);
+                    } else {
+                      setSelectedBrands(selectedBrands.filter(b => b !== brand));
+                    }
+                  }}
+                  className="mr-2 text-blue-600"
+                />
+                <span className="text-[16px] md:text-[18px] text-black">{brand}</span>
+              </label>
+            ))
+          ) : (
+            <p className="text-sm text-black">
+              {locale === "en" ? "No brands found" : "ბრენდები ვერ მოიძებნა"}
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* Price Range */}
+      <div className="mb-6">
+        <label className="block text-[16px] md:text-[18px] font-medium text-black mb-2">
+          {locale === "en" ? "Price Range" : "ფასის დიაპაზონი"}
+        </label>
+        <div className="flex gap-2">
+          <input
+            type="number"
+            value={priceRangeInputs.min}
+            onChange={(e) => setPriceRangeInputs({ ...priceRangeInputs, min: Number(e.target.value) })}
+            placeholder="Min"
+            className="w-1/2 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+          <input
+            type="number"
+            value={priceRangeInputs.max}
+            onChange={(e) => setPriceRangeInputs({ ...priceRangeInputs, max: Number(e.target.value) })}
+            placeholder="Max"
+            className="w-1/2 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+      </div>
+
+      {/* Availability Filters */}
+      <div className="mb-6">
+        <label className="block text-[16px] md:text-[18px] font-medium text-black mb-2">
+          {locale === "en" ? "Availability" : "ხელმისაწვდომობა"}
+        </label>
+        <div className="space-y-2">
+          <label className="flex items-center">
+            <input
+              type="checkbox"
+              checked={inStockOnly}
+              onChange={(e) => setInStockOnly(e.target.checked)}
+              className="mr-2 text-blue-600"
+            />
+            <span className="text-[16px] md:text-[18px] text-black">
+              {locale === "en" ? "In Stock Only" : "მხოლოდ მარაგში"}
+            </span>
+          </label>
+          <label className="flex items-center">
+            <input
+              type="checkbox"
+              checked={comingSoonOnly}
+              onChange={(e) => setComingSoonOnly(e.target.checked)}
+              className="mr-2 text-blue-600"
+            />
+            <span className="text-[16px] md:text-[18px] text-black">
+              {locale === "en" ? "Coming Soon" : "მალე ხელმისაწვდომი"}
+            </span>
+          </label>
+        </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="space-y-3">
+        <button
+          onClick={handleSearch}
+          className="bg-[#2E3A47] md:text-[20px] text-[18px] w-full border-radius:20px  px-4 sm:px-6 md:px-8 py-2 text-white  rounded-xl font-bold  transition-all duration-300 transform shadow-lg "
+        >
+          {locale === "en" ? "Apply Filters" : "ფილტრი"}
+        </button>
+        <button
+          onClick={clearFilters}
+          className="w-full md:text-[20px]  border-radius:[40px] text-[18px] border border-[#2E3A47] border-2 text-black py-2 px-4 rounded-xl  transition-colors  font-bold"
+        >
+          {locale === "en" ? "Clear All" : " გასუფთავება"}
+        </button>
+      </div>
+    </>
+  );
 
   if (isLoading) {
     return (
@@ -205,134 +356,7 @@ export default function Categories() {
                     {locale === "en" ? "Filters" : "ფილტრები"}
                   </h3>
 
-                 
-
-                  {/* Category Filter */}
-                  <div className="mb-6">
-                    <label className="block text-[18px] md:text-[20px] font-medium text-black mb-2">
-                      {locale === "en" ? "Category" : "კატეგორია"}
-                    </label>
-                    <div className="space-y-2">
-                      {['all', 'mattress', 'pillow', 'quilt', 'bed',  'OTHERS'].map((cat) => (
-                        <label key={cat} className="flex items-center">
-                          <input
-                            type="radio"
-                            name="category"
-                            value={cat}
-                            checked={selectedCategory === cat}
-                            onChange={(e) => setSelectedCategory(e.target.value)}
-                            className="mr-2 text-blue-600"
-                          />
-                          <span className="text-[18px] text-black">
-                            {cat === 'all' ? (locale === "en" ? "All Categories" : "ყველა კატეგორია") : getLocalizedCategoryLabel(cat)}
-                          </span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Brand Filter */}
-                  <div className="mb-6">
-                    <label className="block text-[18px] md:text-[20px] font-medium text-black mb-2">
-                      {locale === "en" ? "Brands" : "ბრენდები"}
-                    </label>
-                    <div className="space-y-2 max-h-32 overflow-y-auto">
-                      {brands.length > 0 ? (
-                        brands.map((brand) => (
-                          <label key={brand} className="flex items-center">
-                            <input
-                              type="checkbox"
-                              value={brand}
-                              checked={selectedBrands.includes(brand)}
-                              onChange={(e) => {
-                                if (e.target.checked) {
-                                  setSelectedBrands([...selectedBrands, brand]);
-                                } else {
-                                  setSelectedBrands(selectedBrands.filter(b => b !== brand));
-                                }
-                              }}
-                              className="mr-2 text-blue-600"
-                            />
-                            <span className="text-[18px] text-black">{brand}</span>
-                          </label>
-                        ))
-                      ) : (
-                        <p className="text-sm text-black">
-                          {locale === "en" ? "No brands found" : "ბრენდები ვერ მოიძებნა"}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Price Range */}
-                  <div className="mb-6">
-                    <label className="block text-[18px] md:text-[20px] font-medium text-black mb-2">
-                      {locale === "en" ? "Price Range" : "ფასის დიაპაზონი"}
-                    </label>
-                    <div className="flex gap-2">
-                      <input
-                        type="number"
-                        value={priceRangeInputs.min}
-                        onChange={(e) => setPriceRangeInputs({ ...priceRangeInputs, min: Number(e.target.value) })}
-                        placeholder="Min"
-                        className="w-1/2 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                      <input
-                        type="number"
-                        value={priceRangeInputs.max}
-                        onChange={(e) => setPriceRangeInputs({ ...priceRangeInputs, max: Number(e.target.value) })}
-                        placeholder="Max"
-                        className="w-1/2 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Availability Filters */}
-                  <div className="mb-6">
-                    <label className="block text-[18px] md:text-[20px] font-medium text-black mb-2">
-                      {locale === "en" ? "Availability" : "ხელმისაწვდომობა"}
-                    </label>
-                    <div className="space-y-2">
-                      <label className="flex items-center">
-                        <input
-                          type="checkbox"
-                          checked={inStockOnly}
-                          onChange={(e) => setInStockOnly(e.target.checked)}
-                          className="mr-2 text-blue-600"
-                        />
-                        <span className="text-[18px] text-black">
-                          {locale === "en" ? "In Stock Only" : "მხოლოდ მარაგში"}
-                        </span>
-                      </label>
-                      <label className="flex items-center">
-                        <input
-                          type="checkbox"
-                          checked={comingSoonOnly}
-                          onChange={(e) => setComingSoonOnly(e.target.checked)}
-                          className="mr-2 text-blue-600"
-                        />
-                        <span className="text-[18px] text-black">
-                          {locale === "en" ? "Coming Soon" : "მალე ხელმისაწვდომი"}
-                        </span>
-                      </label>
-                    </div>
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="space-y-3">
-                    <button
-                      onClick={handleSearch}
-                      className="bg-[#2E3A47] md:text-[20px] text-[18px] w-full border-radius:20px  px-4 sm:px-6 md:px-8 py-2 text-white  rounded-xl font-bold  transition-all duration-300 transform shadow-lg "
-                    >
-                      {locale === "en" ? "Apply Filters" : "ფილტრი"}
-                    </button>
-                    <button
-                      onClick={clearFilters}
-                      className="w-full md:text-[20px]  border-radius:[40px] text-[18px] border border-[#2E3A47] border-2 text-black py-2 px-4 rounded-xl  transition-colors  font-bold"
-                    >
-                      {locale === "en" ? "Clear All" : " გასუფთავება"}
-                    </button>
-                  </div>
+                  <FilterContent />
                 </div>
               </div>
 
@@ -417,6 +441,19 @@ export default function Categories() {
       <div className="md:hidden">
         <div className="container pt-10 mx-auto">
           
+          {/* Mobile Filter Toggle Button */}
+          <div className="px-4 mb-6">
+            <button
+              onClick={() => setIsMobileFilterOpen(true)}
+              className="w-full bg-[#2E3A47] text-white py-3 px-4 rounded-xl font-semibold flex items-center justify-center gap-2 shadow-lg"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+              </svg>
+              {locale === "en" ? "Show Filters" : "ფილტრების ჩვენება"}
+            </button>
+          </div>
+
           <div className="relative mt-5">
             <Swiper
               modules={[Pagination]}
@@ -470,6 +507,46 @@ export default function Categories() {
           </div>
         </div>
       </div>
+
+      {/* Mobile Filter Modal */}
+      {isMobileFilterOpen && (
+        <div className="fixed inset-0 z-50 md:hidden">
+          {/* Backdrop */}
+          <div 
+            className="absolute inset-0 bg-black/50"
+            onClick={() => setIsMobileFilterOpen(false)}
+          />
+          
+          {/* Filter Panel */}
+          <motion.div
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            className="absolute right-0 top-0 h-full w-[70%] max-w-sm bg-white shadow-2xl"
+          >
+            {/* Header */}
+            <div className="flex items-center  mt-20 justify-between p-4 border-b border-gray-200 ">
+              <h3 className="text-lg font-semibold text-black">
+                {locale === "en" ? "Filters" : "ფილტრები"}
+              </h3>
+              <button
+                onClick={() => setIsMobileFilterOpen(false)}
+                className="p-2 rounded-full hover:bg-gray-200 transition-colors"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            
+            {/* Filter Content */}
+            <div className="p-4  overflow-y-auto h-full pb-24">
+              <FilterContent />
+            </div>
+          </motion.div>
+        </div>
+      )}
     </>
   );
 }
