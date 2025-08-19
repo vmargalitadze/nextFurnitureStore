@@ -66,7 +66,7 @@ const Why = () => {
             {whyItems.map((item) => (
               <div 
                 key={item.id} 
-                className="bg-[#f7f1e7]  rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                className="bg-[#e6dfd9]  rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
               >
                 <div className="text-center">
                   {/* Icon Circle */}

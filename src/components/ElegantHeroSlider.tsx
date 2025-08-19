@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+
 import { Link } from "@/i18n/navigation";
 import { useParams } from "next/navigation";
 
@@ -21,31 +21,31 @@ const ElegantHeroSlider = () => {
     {
       id: 1,
       leftImage: "/slider/4.jpg"
-     
+
     },
     {
       id: 2,
       leftImage: "/slider/2.jpg"
-   
-  
+
+
     },
     {
       id: 3,
       leftImage: "/slider/3.jpg"
-  
+
     },
     {
       id: 4,
       leftImage: "/slider/1.jpg"
-  
-   
+
+
     },
     {
       id: 5,
       leftImage: "/slider/5.jpg"
-  
-   
-    } 
+
+
+    }
   ];
 
   // Auto-advance slides every 8 seconds
@@ -142,22 +142,7 @@ const ElegantHeroSlider = () => {
           </motion.div>
         </AnimatePresence>
 
-        {/* Navigation Arrows */}
-        <button
-          onClick={prevSlide}
-          className="absolute left-4 top-1/2 -translate-y-1/2 z-30 p-2 rounded-full bg-black/30 hover:bg-black/50 text-white transition-all duration-300 hover:scale-110"
-          aria-label="Previous slide"
-        >
-          <ChevronLeft size={24} />
-        </button>
 
-        <button
-          onClick={nextSlide}
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-30 p-2 rounded-full bg-black/30 hover:bg-black/50 text-white transition-all duration-300 hover:scale-110"
-          aria-label="Next slide"
-        >
-          <ChevronRight size={24} />
-        </button>
 
         {/* Enhanced Central Promotional Overlay */}
         <motion.div
@@ -203,8 +188,8 @@ const ElegantHeroSlider = () => {
               key={index}
               onClick={() => goToSlide(index)}
               className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentSlide
-                  ? 'bg-[#f3983e] scale-110'
-                  : 'bg-white/50 hover:bg-white/80'
+                ? 'bg-[#f3983e] scale-110'
+                : 'bg-white/50 hover:bg-white/80'
                 }`}
               whileHover={{ scale: 1.2 }}
               whileTap={{ scale: 0.9 }}

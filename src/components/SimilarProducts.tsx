@@ -114,9 +114,9 @@ const SimilarProducts: React.FC<SimilarProductsProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[...Array(4)].map((_, index) => (
               <div key={index} className="animate-pulse">
-                <div className="bg-[#f7f1e7] rounded-lg h-48 mb-3"></div>
-                <div className="bg-[#f7f1e7] h-4 rounded mb-2"></div>
-                <div className="bg-[#f7f1e7] h-4 rounded w-2/3"></div>
+                <div className="bg-[#e6dfd9] rounded-lg h-48 mb-3"></div>
+                <div className="bg-[#e6dfd9] h-4 rounded mb-2"></div>
+                <div className="bg-[#e6dfd9] h-4 rounded w-2/3"></div>
               </div>
             ))}
           </div>

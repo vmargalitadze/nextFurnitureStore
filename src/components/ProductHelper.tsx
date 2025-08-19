@@ -48,7 +48,7 @@ function ProductHelper({ items, sliderId }: ProductListProps) {
           {items.map((item) => (
             <div
               key={item.id}
-              className="bg-[#f7f1e7] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300"
+              className="bg-[#e6dfd9] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300"
             >
               <Link href={`/products/${item.id}`}>
                 <div className="relative h-48 overflow-hidden">
@@ -110,7 +110,7 @@ function ProductHelper({ items, sliderId }: ProductListProps) {
           {items.map((item) => (
             <SwiperSlide key={item.id}>
               <div className="">
-                <div className="bg-[#f7f1e7] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
+                <div className="bg-[#e6dfd9] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
                   <Link href={`/products/${item.id}`}>
                     <div className="relative h-48 overflow-hidden">
                       <Image

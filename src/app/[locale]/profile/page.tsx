@@ -78,7 +78,7 @@ export default async function ProfilePage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* User Info Card */}
           <div className="lg:col-span-1">
-              <Card className="h-fit bg-[#f7f1e7]">
+              <Card className="h-fit bg-[#e6dfd9]">
               <CardHeader className="text-center pb-4">
                 <div className="mx-auto w-24 h-24  bg-[#f3983e] rounded-full flex items-center justify-center mb-4">
                   <User className="text-white text-3xl" />
@@ -106,7 +106,7 @@ export default async function ProfilePage() {
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex items-center border border-black gap-3 p-3 bg-[#f7f1e7] rounded-lg">
+                <div className="flex items-center border border-black gap-3 p-3 bg-[#e6dfd9] rounded-lg">
                   <div className="w-12 h-12 bg-[#f3983e] rounded-full flex items-center justify-center">
                       <FaEnvelope className="w-6 h-6 text-white" />
                     </div>
@@ -116,7 +116,7 @@ export default async function ProfilePage() {
                   </div>
                 </div>
 
-                <div className="flex items-center border border-black gap-3 p-3 bg-[#f7f1e7] rounded-lg">
+                <div className="flex items-center border border-black gap-3 p-3 bg-[#e6dfd9] rounded-lg">
                   <div className="w-12 h-12 bg-[#f3983e] rounded-full flex items-center justify-center">
                       <FaCalendarAlt className="w-6 h-6 text-white" />
                     </div>
@@ -129,7 +129,7 @@ export default async function ProfilePage() {
                 </div>
 
                 {user.address && (
-                  <div className="flex items-center gap-3 p-3 bg-[#f7f1e7] rounded-lg">
+                  <div className="flex items-center gap-3 p-3 bg-[#e6dfd9] rounded-lg">
                     <div className="w-12 h-12 bg-[#f3983e] rounded-full flex items-center justify-center">
                       <FaMapMarkerAlt className="w-6 h-6 text-white" />
                     </div>
@@ -147,7 +147,7 @@ export default async function ProfilePage() {
                 )}
 
                 {user.paymentMethod && (
-                  <div className="flex items-center gap-3 p-3 bg-[#f7f1e7] rounded-lg">
+                  <div className="flex items-center gap-3 p-3 bg-[#e6dfd9] rounded-lg">
                     <div className="w-12 h-12 bg-[#f3983e] rounded-full flex items-center justify-center">
                       <FaCreditCard className="w-6 h-6 text-white" />
                     </div>
@@ -179,8 +179,8 @@ export default async function ProfilePage() {
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
             {/* Quick Stats */}
-            <div className="grid bg-[#f7f1e7] rounded-xl grid-cols-1 md:grid-cols-3 gap-4">
-            <Card className="bg-[#f7f1e7] border border-black rounded-xl border-2 border-orange-400 text-orange-400">
+            <div className="grid bg-[#e6dfd9] rounded-xl grid-cols-1 md:grid-cols-3 gap-4">
+            <Card className="bg-[#e6dfd9] border border-black rounded-xl border-2 border-orange-400 text-orange-400">
   <CardContent className="p-6">
     <div className="flex items-center justify-between">
       <div>
@@ -193,9 +193,9 @@ export default async function ProfilePage() {
 </Card>
 
 
-              <Card className="bg-[#f7f1e7] rounded-xl border-2 border-orange-400 text-orange-400">
+              <Card className="bg-[#e6dfd9] rounded-xl border-2 border-orange-400 text-orange-400">
                 <CardContent className="p-6">
-                  <div className="flex  bg-[#f7f1e7] items-center justify-between">
+                  <div className="flex  bg-[#e6dfd9] items-center justify-between">
                     <div>
                       <p className="text-sm text-orange-400">{t("cartItems")}</p>
                       <p className="text-[20px] font-bold text-orange-500">{cartItemCount}</p>
@@ -210,7 +210,7 @@ export default async function ProfilePage() {
 
             {/* Admin Actions */}
             {isAdmin && (
-              <Card className="bg-[#f7f1e7]">
+              <Card className="bg-[#e6dfd9]">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                

@@ -200,8 +200,8 @@ export default function Categories() {
             <div className="flex gap-8">
               {/* Filter Sidebar */}
               <div className="w-80 flex-shrink-0">
-                <div className="sticky top-24 bg-[#f7f1e7] rounded-2xl shadow-lg p-6 ">
-                  <h3 className="text-[20px] font-semibold mb-6 text-black">
+                <div className="sticky top-24 bg-[#e6dfd9] rounded-2xl shadow-lg p-6 ">
+                  <h3 className="text-[20px] md:text-[22 px] font-semibold mb-6 text-black">
                     {locale === "en" ? "Filters" : "ფილტრები"}
                   </h3>
 
@@ -209,7 +209,7 @@ export default function Categories() {
 
                   {/* Category Filter */}
                   <div className="mb-6">
-                    <label className="block text-[18px] font-medium text-black mb-2">
+                    <label className="block text-[18px] md:text-[20px] font-medium text-black mb-2">
                       {locale === "en" ? "Category" : "კატეგორია"}
                     </label>
                     <div className="space-y-2">
@@ -223,7 +223,7 @@ export default function Categories() {
                             onChange={(e) => setSelectedCategory(e.target.value)}
                             className="mr-2 text-blue-600"
                           />
-                          <span className="text-[18px] text-gray-700">
+                          <span className="text-[18px] text-black">
                             {cat === 'all' ? (locale === "en" ? "All Categories" : "ყველა კატეგორია") : getLocalizedCategoryLabel(cat)}
                           </span>
                         </label>
@@ -233,7 +233,7 @@ export default function Categories() {
 
                   {/* Brand Filter */}
                   <div className="mb-6">
-                    <label className="block text-[18px] font-medium text-black mb-2">
+                    <label className="block text-[18px] md:text-[20px] font-medium text-black mb-2">
                       {locale === "en" ? "Brands" : "ბრენდები"}
                     </label>
                     <div className="space-y-2 max-h-32 overflow-y-auto">
@@ -253,11 +253,11 @@ export default function Categories() {
                               }}
                               className="mr-2 text-blue-600"
                             />
-                            <span className="text-[18px] text-gray-700">{brand}</span>
+                            <span className="text-[18px] text-black">{brand}</span>
                           </label>
                         ))
                       ) : (
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-black">
                           {locale === "en" ? "No brands found" : "ბრენდები ვერ მოიძებნა"}
                         </p>
                       )}
@@ -266,7 +266,7 @@ export default function Categories() {
 
                   {/* Price Range */}
                   <div className="mb-6">
-                    <label className="block text-[18px] font-medium text-black mb-2">
+                    <label className="block text-[18px] md:text-[20px] font-medium text-black mb-2">
                       {locale === "en" ? "Price Range" : "ფასის დიაპაზონი"}
                     </label>
                     <div className="flex gap-2">
@@ -289,7 +289,7 @@ export default function Categories() {
 
                   {/* Availability Filters */}
                   <div className="mb-6">
-                    <label className="block text-[18px] font-medium text-black mb-2">
+                    <label className="block text-[18px] md:text-[20px] font-medium text-black mb-2">
                       {locale === "en" ? "Availability" : "ხელმისაწვდომობა"}
                     </label>
                     <div className="space-y-2">
@@ -300,7 +300,7 @@ export default function Categories() {
                           onChange={(e) => setInStockOnly(e.target.checked)}
                           className="mr-2 text-blue-600"
                         />
-                        <span className="text-[18px] text-gray-700">
+                        <span className="text-[18px] text-black">
                           {locale === "en" ? "In Stock Only" : "მხოლოდ მარაგში"}
                         </span>
                       </label>
@@ -311,7 +311,7 @@ export default function Categories() {
                           onChange={(e) => setComingSoonOnly(e.target.checked)}
                           className="mr-2 text-blue-600"
                         />
-                        <span className="text-[18px] text-gray-700">
+                        <span className="text-[18px] text-black">
                           {locale === "en" ? "Coming Soon" : "მალე ხელმისაწვდომი"}
                         </span>
                       </label>

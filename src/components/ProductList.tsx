@@ -335,7 +335,7 @@ function ProductList({
           {/* Tab Navigation */}
           <div className="hidden md:block">
             <div className="flex justify-center mb-8">
-              <div className="bg-[#f7f1e7] rounded-2xl p-2 shadow-lg">
+              <div className="bg-[#e6dfd9] rounded-2xl p-2 shadow-lg">
                 <div className="flex space-x-2">
                   {visibleTabs.map((tab) => (
                     <button
@@ -362,7 +362,7 @@ function ProductList({
           </div>
           <div className="block md:hidden">
             <div className="flex justify-center mb-8 px-2">
-              <div className="bg-[#f7f1e7] rounded-2xl p-2 shadow-lg w-full max-w-3xl">
+              <div className="bg-[#e6dfd9] rounded-2xl p-2 shadow-lg w-full max-w-3xl">
                 <div className="flex flex-wrap gap-2 justify-center">
                   {visibleTabs.map((tab) => (
                     <button
@@ -395,11 +395,11 @@ function ProductList({
                 <div key={index} className="flex flex-col items-center">
                   <div className="animate-pulse">
                     {/* Skeleton Image */}
-                    <div className="w-full h-[192px] bg-[#f7f1e7] rounded-3xl mb-3"></div>
+                    <div className="w-full h-[192px] bg-[#e6dfd9] rounded-3xl mb-3"></div>
                     {/* Skeleton Title */}
-                    <div className="w-[70%] h-4 bg-[#f7f1e7] rounded mb-2 mx-auto"></div>
+                    <div className="w-[70%] h-4 bg-[#e6dfd9] rounded mb-2 mx-auto"></div>
                     {/* Skeleton Price */}
-                    <div className="w-[40%] h-6 bg-[#f7f1e7] rounded mx-auto"></div>
+                    <div className="w-[40%] h-6 bg-[#e6dfd9] rounded mx-auto"></div>
                   </div>
                 </div>
               ))}

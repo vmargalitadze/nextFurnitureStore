@@ -6,7 +6,7 @@ export default function SideLogo() {
 
   return (
     <div className="fixed hidden md:block bottom-[75px] right-[0px] md:right-[15px] z-50">
-      <div className="bg-[#f7f1e7] rounded-2xl p-3 shadow-lg">
+      <div className="bg-[#e6dfd9] rounded-2xl p-3 shadow-lg">
         <div className="flex flex-col items-center gap-y-3 justify-center space-x-3">
           <Link
             href={`https://wa.me/${phoneNumber}`}

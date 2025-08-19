@@ -116,13 +116,13 @@ function ContactPage() {
 
             {/* Contact Form */}
             <div className="order-1 lg:order-2">
-              <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
+              <Card className="border-0 shadow-xl bg-[#e6dfd9] backdrop-blur-sm">
                 <CardContent className="p-8">
                   <div className="mb-8">
-                    <h2 className="text-[20px] md:text-3xl font-bold text-gray-800 mb-4">
+                    <h2 className="text-[20px] md:text-3xl font-bold text-black mb-4">
                       {t("breadcrumb.sendMessage")}
                     </h2>
-                    <p className="text-gray-600 text-lg leading-relaxed">
+                    <p className="text-black text-lg leading-relaxed">
                       {t("form.description")}
                     </p>
                   </div>
@@ -145,7 +145,7 @@ function ContactPage() {
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid sm:grid-cols-2 gap-6">
                       <div className="space-y-2">
-                        <label className="text-[18px] font-bold text-gray-700 tracking-wide">
+                        <label className="text-[18px] font-bold text-black tracking-wide">
                           {t("form.fullName")} *
                         </label>
                         <input
@@ -153,13 +153,13 @@ function ContactPage() {
                           value={formData.fullName}
                           onChange={handleInputChange}
                           required
-                          className="w-full h-12 px-4 bg-white border-2 border-gray-200 rounded-lg text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all duration-300 placeholder-gray-400"
+                          className="w-full h-12 px-4 bg-[#e6dfd9] border-2 border-black rounded-lg text-black transition-all duration-300 placeholder-gray-400 focus:bg-[#e6dfd9] focus:outline-none focus:ring-0 focus:border-black"
                           placeholder={t("form.fullNamePlaceholder")}
                           type="text"
                         />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-[18px] font-bold text-gray-700 tracking-wide">
+                        <label className="text-[18px] font-bold text-black tracking-wide">
                           {t("form.email")} *
                         </label>
                         <input
@@ -167,7 +167,7 @@ function ContactPage() {
                           value={formData.email}
                           onChange={handleInputChange}
                           required
-                          className="w-full h-12 px-4 bg-white border-2 border-gray-200 rounded-lg text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all duration-300 placeholder-gray-400"
+                          className="w-full h-12 px-4 bg-[#e6dfd9] border-2 border-black rounded-lg transition-all duration-300 placeholder-gray-400 focus:bg-[#e6dfd9] focus:outline-none focus:ring-0 focus:border-black"
                           placeholder={t("form.emailPlaceholder")}
                           type="email"
                         />
@@ -176,20 +176,20 @@ function ContactPage() {
 
                     <div className="grid sm:grid-cols-2 gap-6">
                       <div className="space-y-2">
-                        <label className="text-[18px] font-bold text-gray-700 tracking-wide">
+                        <label className="text-[18px] font-bold text-black tracking-wide">
                           {t("form.phone")}
                         </label>
                         <input
                           name="phone"
                           value={formData.phone}
                           onChange={handleInputChange}
-                          className="w-full h-12 px-4 bg-white border-2 border-gray-200 rounded-lg text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all duration-300 placeholder-gray-400"
+                          className="w-full h-12 px-4 bg-[#e6dfd9] border-2 border-black rounded-lg text-gray-800 transition-all duration-300 placeholder-gray-400 focus:bg-[#e6dfd9] focus:outline-none focus:ring-0 focus:border-black"
                           placeholder={t("form.phonePlaceholder")}
                           type="tel"
                         />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-[18px] font-bold text-gray-700 tracking-wide">
+                        <label className="text-[18px] font-bold text-black tracking-wide">
                           {t("form.subject")} *
                         </label>
                         <select
@@ -197,7 +197,7 @@ function ContactPage() {
                           value={formData.subject}
                           onChange={handleInputChange}
                           required
-                          className="w-full h-12 px-4 bg-white border-2 text-gray-400 border-gray-200 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all duration-300"
+                          className="w-full h-12 px-4 bg-[#e6dfd9] border-2 text-gray-400 border-black rounded-lg transition-all duration-300 focus:bg-[#e6dfd9] focus:outline-none focus:ring-0 focus:border-black"
                         >
                           <option className="text-gray-400" value="">
                             {t("info.selectSubject")}
@@ -219,7 +219,7 @@ function ContactPage() {
                     </div>
 
                     <div className="space-y-2">
-                      <label className="text-[18px] font-bold text-gray-700 tracking-wide">
+                      <label className="text-[18px] font-bold text-black tracking-wide">
                         {t("form.message")} *
                       </label>
                       <textarea
@@ -227,7 +227,7 @@ function ContactPage() {
                         value={formData.message}
                         onChange={handleInputChange}
                         required
-                        className="w-full h-32 px-4 py-3 bg-white border-2 border-gray-200 rounded-lg text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all duration-300 placeholder-gray-400 resize-none"
+                        className="w-full h-32 px-4 py-3 bg-[#e6dfd9] border-2 border-black rounded-lg text-gray-800 transition-all duration-300 placeholder-gray-400 resize-none focus:bg-[#e6dfd9] focus:outline-none focus:ring-0 focus:border-black"
                         placeholder={t("form.messagePlaceholder")}
                         rows={5}
                       />
@@ -236,7 +236,7 @@ function ContactPage() {
                     <Button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-[30%] mx-auto flex justify-center items-center px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-[30%] mx-auto flex justify-center items-center px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#2E3A47] rounded-lg  transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {isSubmitting ? (
                         <>
@@ -256,14 +256,14 @@ function ContactPage() {
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Contact Information Cards */}
             <div className="lg:col-span-1 space-y-6">
-              
 
-              <Card className="border-0 shadow-lg bg-white hover:shadow-xl transition-shadow duration-300">
+
+              <Card className="border-0 shadow-lg bg-[#e6dfd9] hover:shadow-xl transition-shadow duration-300">
                 <CardContent className="p-6">
                   <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
+                    <div className="w-12 h-12 bg-[#f7f1e7] rounded-full flex items-center justify-center">
                       <svg
-                        className="w-6 h-6 text-orange-600"
+                        className="w-6 h-6 text-[#2E3A47]"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -284,21 +284,21 @@ function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold  mb-1">
-                      {t("info.locations")}
+                        {t("info.locations")}
                       </h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {/* Left Column: Batumi & Kobuleti */}
                         <div className="space-y-6">
                           <div>
                             <h3 className="text-[16px] text-black font-semibold mb-2"> {t("info.kobuleti")}</h3>
-                            <p className="text-orange-600">
-                            {t("info.kobuleti3")}
+                            <p className="text-[#2E3A47]">
+                              {t("info.kobuleti3")}
                             </p>
                           </div>
                           <div>
                             <h3 className="text-[16px] text-black font-bold mb-2">{t("info.kutaisi")}</h3>
-                            <p className="text-orange-600">
-                            {t("info.kutaisi3")}
+                            <p className="text-[#2E3A47]">
+                              {t("info.kutaisi3")}
                             </p>
                           </div>
 
@@ -309,18 +309,18 @@ function ContactPage() {
                         <div className="space-y-6">
                           <div>
                             <h3 className="text-[16px] text-black font-semibold mb-2">{t("info.tbilisi")}</h3>
-                            <p className="text-orange-600">
-                            {t("info.tbilisi3")}
+                            <p className="text-[#2E3A47]">
+                              {t("info.tbilisi3")}
                             </p>
                           </div>
                           <div>
                             <h3 className="text-[16px] text-black font-bold mb-2">{t("info.batumi")}</h3>
-                            <p className="text-orange-600">
-                            {t("info.batumi4")}
-                            <p className="text-orange-600 text-[16px]">
-                            {t("info.batumi3")}
-                            </p>
-                            </p>
+                            <div className="text-[#2E3A47]">
+                              {t("info.batumi4")}
+                              <p className="text-[#2E3A47] text-[16px]">
+                                {t("info.batumi3")}
+                              </p>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -329,12 +329,12 @@ function ContactPage() {
                 </CardContent>
               </Card>
 
-              <Card className="border-0 shadow-lg bg-white hover:shadow-xl transition-shadow duration-300">
+              <Card className="border-0 shadow-lg bg-[#e6dfd9] hover:shadow-xl transition-shadow duration-300">
                 <CardContent className="p-6">
                   <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
+                    <div className="w-12 h-12 bg-[#f7f1e7] rounded-full flex items-center justify-center">
                       <svg
-                        className="w-6 h-6 text-orange-600"
+                        className="w-6 h-6 text-[#2E3A47]"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -353,7 +353,7 @@ function ContactPage() {
                       </h3>
                       <a
                         href="mailto:info@sleepandbed.ge"
-                        className="text-orange-600 hover:text-orange-700 text-[16px] transition-colors"
+                        className="text-[#2E3A47] hover:text-orange-700 text-[16px] transition-colors"
                       >
                         kipianistore@gmail.com
                       </a>
@@ -362,12 +362,12 @@ function ContactPage() {
                 </CardContent>
               </Card>
 
-              <Card className="border-0 shadow-lg bg-white hover:shadow-xl transition-shadow duration-300">
+              <Card className="border-0 shadow-lg bg-[#e6dfd9] hover:shadow-xl transition-shadow duration-300">
                 <CardContent className="p-6">
                   <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
+                    <div className="w-12 h-12 bg-[#f7f1e7] rounded-full flex items-center justify-center">
                       <svg
-                        className="w-6 h-6 text-orange-600"
+                        className="w-6 h-6 text-[#2E3A47]"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -389,14 +389,14 @@ function ContactPage() {
                         <div className="space-y-6">
                           <div>
                             <h3 className="text-[16px] text-black font-semibold mb-2">{t("info.batumi2")}</h3>
-                            <p className="text-orange-600">
+                            <p className="text-[#2E3A47]">
                               +995 557 394 374<br />
                               +995 568 613 022
                             </p>
                           </div>
                           <div>
                             <h3 className="text-[16px] text-black font-bold mb-2">{t("info.tbilisi2")}</h3>
-                            <p className="text-orange-600">
+                            <p className="text-[#2E3A47]">
                               +995 557 226 880
                             </p>
                           </div>
@@ -408,14 +408,14 @@ function ContactPage() {
                         <div className="space-y-6">
                           <div>
                             <h3 className="text-[16px] text-black font-semibold mb-2">{t("info.kobuleti2")}</h3>
-                            <p className="text-orange-600">
+                            <p className="text-[#2E3A47]">
                               +995 555 244 403<br />
                               +995 597 808 047
                             </p>
                           </div>
                           <div>
                             <h3 className="text-[16px] text-black font-bold mb-2">{t("info.kutaisi2")}</h3>
-                            <p className="text-orange-600">
+                            <p className="text-[#2E3A47]">
                               +995 514 079 898
                             </p>
                           </div>

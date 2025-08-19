@@ -149,7 +149,7 @@ const ImageUpload = ({
               <p className="text-sm text-gray-500 mt-1">Please wait while your image is being processed</p>
             </div>
             {/* Progress bar */}
-            <div className="w-full bg-[#f7f1e7] rounded-full h-2">
+            <div className="w-full bg-[#e6dfd9] rounded-full h-2">
               <div 
                 className="bg-blue-600 h-2 rounded-full transition-all duration-300"
                 style={{ width: `${uploadProgress}%` }}
@@ -168,7 +168,7 @@ const ImageUpload = ({
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
             {imageUrls.map((url, index) => (
               <div key={index} className="relative group">
-                <div className={`aspect-square rounded-lg overflow-hidden bg-[#f7f1e7] ${
+                <div className={`aspect-square rounded-lg overflow-hidden bg-[#e6dfd9] ${
                   editingIndex === index ? 'ring-2 ring-blue-500' : ''
                 }`}>
                   <Image

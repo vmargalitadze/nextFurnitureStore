@@ -185,11 +185,11 @@ export default function ListPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {Array.from({ length: 8 }).map((_, index) => (
               <div key={index} className="animate-pulse">
-                <div className="bg-[#f7f1e7] rounded-lg h-48 mb-4"></div>
+                <div className="bg-[#e6dfd9] rounded-lg h-48 mb-4"></div>
                 <div className="space-y-2">
-                  <div className="h-4 bg-[#f7f1e7] rounded"></div>
-                  <div className="h-4 bg-[#f7f1e7] rounded w-3/4"></div>
-                  <div className="h-6 bg-[#f7f1e7] rounded w-1/2"></div>
+                  <div className="h-4 bg-[#e6dfd9] rounded"></div>
+                  <div className="h-4 bg-[#e6dfd9] rounded w-3/4"></div>
+                  <div className="h-6 bg-[#e6dfd9] rounded w-1/2"></div>
                 </div>
               </div>
             ))}
@@ -220,7 +220,7 @@ export default function ListPage() {
 
       {/* content */}
       <div className="container min-h-screen mt-[50px]">
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 mb-8">
+        <div className="bg-[#e6dfd9] rounded-2xl shadow-lg border border-gray-100 p-6 mb-8">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div className="flex items-center gap-3">
               <div className="w-2 h-8 bg-[#FF7A00] rounded-full"></div>
@@ -268,7 +268,7 @@ export default function ListPage() {
         <div className="flex flex-col mb-14 lg:flex-row gap-8">
           {/* Filter Sidebar */}
           <div className="lg:w-64 lg:flex-shrink-0">
-            <div className="bg-[#f7f1e7] rounded-2xl shadow-lg p-6">
+            <div className="bg-[#e6dfd9] rounded-2xl shadow-lg p-6">
               <h3 className="text-[20px] font-semibold text-black mb-4">{t("filter")}</h3>
               <div className="space-y-4">
                 {/* Category Filter */}
