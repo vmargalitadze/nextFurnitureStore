@@ -1,10 +1,15 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import React, { useState, useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-
-import {  FaClock, FaCheckCircle, FaTruck } from "react-icons/fa";
+import { FaClock, FaCheckCircle, FaTruck } from "react-icons/fa";
 import { format } from "date-fns";
 import { useTranslations } from "next-intl";
 
@@ -13,17 +18,18 @@ interface OrderItem {
   orderId: string;
   productId: string;
   qty: number;
-  price: number; // Converted from Decimal
+  price: number;
   title: string;
 }
 
 interface Order {
   id: string;
   createdAt: string | Date;
-  totalPrice: number; // Converted from Decimal
+  totalPrice: number;
   isPaid: boolean;
   isDelivered: boolean;
   paymentMethod: string;
+  paymentStatus?: string;
   orderitems: OrderItem[];
 }
 
@@ -32,7 +38,10 @@ interface RecentOrdersProps {
   onOrdersUpdate?: (orders: Order[]) => void;
 }
 
-const RecentOrders: React.FC<RecentOrdersProps> = ({ orders, onOrdersUpdate }) => {
+const RecentOrders: React.FC<RecentOrdersProps> = ({
+  orders,
+  onOrdersUpdate,
+}) => {
   const t = useTranslations("profile");
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [localOrders, setLocalOrders] = useState<Order[]>(orders);
@@ -44,28 +53,37 @@ const RecentOrders: React.FC<RecentOrdersProps> = ({ orders, onOrdersUpdate }) =
   const refreshBOGOrders = async () => {
     setIsRefreshing(true);
     try {
-      // Refresh each BOG order status
-      const updatedOrders = await Promise.all(
-        localOrders
-          .filter(order => order.paymentMethod?.includes('BOG'))
-          .map(async (order) => {
-            try {
-              const response = await fetch(`/api/orders/bog-status/${order.id}`);
-              if (response.ok) {
-                const data = await response.json();
-                return data.order;
-              }
-            } catch (error) {
-              console.error(`Failed to refresh order ${order.id}:`, error);
-            }
-            return order;
-          })
+      const bogOrders = localOrders.filter((order) =>
+        order.paymentMethod?.includes("BOG")
       );
 
-      // Update local state
-      const newOrders = localOrders.map(order => {
-        const updatedOrder = updatedOrders.find(uo => uo.id === order.id);
-        return updatedOrder || order;
+      const updatedOrders = await Promise.all(
+        bogOrders.map(async (order) => {
+          try {
+            const response = await fetch(`/api/orders/bog-status/${order.id}`);
+            if (response.ok) {
+              const data = await response.json();
+              return data.order;
+            }
+            return order;
+          } catch (error) {
+            return order;
+          }
+        })
+      );
+
+      const newOrders = localOrders.map((order) => {
+        const updatedOrder = updatedOrders.find((uo) => uo.id === order.id);
+        if (updatedOrder) {
+          return {
+            ...order,
+            isPaid: updatedOrder.isPaid ?? order.isPaid,
+            paymentMethod: updatedOrder.paymentMethod ?? order.paymentMethod,
+            totalPrice: updatedOrder.totalPrice ?? order.totalPrice,
+            paymentStatus: updatedOrder.paymentStatus ?? order.paymentStatus,
+          };
+        }
+        return order;
       });
 
       setLocalOrders(newOrders);
@@ -73,40 +91,27 @@ const RecentOrders: React.FC<RecentOrdersProps> = ({ orders, onOrdersUpdate }) =
         onOrdersUpdate(newOrders);
       }
     } catch (error) {
-      console.error('Error refreshing BOG orders:', error);
+      alert(t("recentOrders.errorFetchingStatus"));
     } finally {
       setIsRefreshing(false);
     }
   };
 
-  const getStatusIcon = (order: Order) => {
-    if (order.isPaid) {
-      return <FaCheckCircle className="w-4 h-4 text-green-600" />;
-    } else if (order.paymentMethod?.includes('BOG')) {
-      return <FaClock className="w-4 h-4 text-orange-600" />;
-    } else {
-      return <FaClock className="w-4 h-4 text-gray-600" />;
-    }
+  const getStatusText = (order: Order) => {
+    if (order.isPaid) return t("recentOrders.paid");
+    return order.paymentStatus || t("recentOrders.pending");
   };
 
-  const getStatusText = (order: Order) => {
-    if (order.isPaid) {
-      return t("recentOrders.paid");
-    } else if (order.paymentMethod?.includes('BOG')) {
-      return 'ფიქრობს';
-    } else {
-      return t("recentOrders.pending");
-    }
+  const getStatusIcon = (order: Order) => {
+    return order.isPaid ? (
+      <FaCheckCircle className="w-4 h-4 text-green-600" />
+    ) : (
+      <FaClock className="w-4 h-4 text-gray-600" />
+    );
   };
 
   const getStatusVariant = (order: Order) => {
-    if (order.isPaid) {
-      return "default";
-    } else if (order.paymentMethod?.includes('BOG')) {
-      return "secondary";
-    } else {
-      return "secondary";
-    }
+    return order.isPaid ? "default" : "secondary";
   };
 
   if (!localOrders || localOrders.length === 0) {
@@ -116,9 +121,7 @@ const RecentOrders: React.FC<RecentOrdersProps> = ({ orders, onOrdersUpdate }) =
           <CardTitle className="flex items-center gap-2">
             {t("recentOrders.title")}
           </CardTitle>
-          <CardDescription>
-            {t("recentOrders.description")}
-          </CardDescription>
+          <CardDescription>{t("recentOrders.description")}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="text-center py-8 text-gray-500">
@@ -145,18 +148,31 @@ const RecentOrders: React.FC<RecentOrdersProps> = ({ orders, onOrdersUpdate }) =
             <CardTitle className="flex items-center gap-2">
               {t("recentOrders.title")}
             </CardTitle>
-            <CardDescription>
-              {t("recentOrders.description")}
-            </CardDescription>
+            <CardDescription>{t("recentOrders.description")}</CardDescription>
           </div>
-        
+          {localOrders.some((order) => order.paymentMethod?.includes("BOG")) && (
+            <button
+              onClick={refreshBOGOrders}
+              disabled={isRefreshing}
+              className="bg-[#2E3A47] text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 hover:bg-[#2E3A47]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isRefreshing ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                  {t("recentOrders.refreshing")}
+                </>
+              ) : (
+                <>🔄 {t("recentOrders.refreshAll")}</>
+              )}
+            </button>
+          )}
         </div>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
           {localOrders.map((order) => (
             <div key={order.id} className="block">
-              <div className="flex items-center border-black justify-between p-3.5 border rounded-lg  transition">
+              <div className="flex items-center border-black justify-between p-3.5 border rounded-lg transition">
                 <div>
                   <p className="font-medium">
                     {t("recentOrders.orderNumber", {

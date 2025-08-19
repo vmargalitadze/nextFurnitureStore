@@ -1,232 +1,88 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "../../../../../../auth";
-import { prisma } from "@/lib/prisma";
-import axios from "axios";
-import { bogTokenManager } from "@/lib/bog-token";
+import { NextRequest, NextResponse } from 'next/server';
+import axios from 'axios';
+import { prisma } from '@/lib/prisma';
+import { bogTokenManager } from '@/lib/bog-token';
 
-// helper for mapping BOG status
-function mapBogStatusToOrder(bogData: any) {
-  // Check multiple possible status fields
-  const status = bogData.order_status?.key || bogData.status?.key || bogData.payment_status?.key || bogData.payment_detail?.status?.key || bogData.purchase_units?.[0]?.status?.key;
-  const statusValue = bogData.order_status?.value || bogData.status?.value || bogData.payment_status?.value || bogData.payment_detail?.status?.value || bogData.purchase_units?.[0]?.status?.value;
-  
-  console.log(`Mapping BOG status: ${status} (${statusValue})`);
-  console.log(`Available status fields:`, {
-    'order_status.key': bogData.order_status?.key,
-    'order_status.value': bogData.order_status?.value,
-    'status.key': bogData.status?.key,
-    'status.value': bogData.status?.value,
-    'payment_status.key': bogData.payment_status?.key,
-    'payment_status.value': bogData.payment_status?.value,
-    'payment_detail.status.key': bogData.payment_detail?.status?.key,
-    'payment_detail.status.value': bogData.payment_detail?.status?.value,
-    'purchase_units[0].status.key': bogData.purchase_units?.[0]?.status?.key,
-    'purchase_units[0].status.value': bogData.purchase_units?.[0]?.status?.value
-  });
-  
-  let isPaid = false;
-  let isRefunded = false;
-  let isFailed = false;
-
-  // More comprehensive BOG status mapping
-  switch (status) {
-    case "completed":
-    case "blocked":
-    case "partial_completed":
-    case "processing":
-    case "paid":
-    case "success":
-    case "approved":
-    case "confirmed":
-    case "settled":
-    case "captured":
-    case "authorized":
-    case "charged":
-      isPaid = true;
-      break;
-
-    case "refunded":
-    case "refunded_partially":
-    case "refund":
-      isPaid = true;
-      isRefunded = true;
-      break;
-
-    case "rejected":
-    case "failed":
-    case "declined":
-    case "cancelled":
-      isFailed = true;
-      break;
-
-    case "created":
-    case "auth_requested":
-    case "pending":
-    case "waiting":
-    case "initiated":
-      // These are pending statuses
-      break;
-
-    default:
-      console.log(`Unknown BOG status: ${status}, treating as pending`);
-      break;
-  }
-
-  // Additional check: if there's a successful payment amount, consider it paid
-  if (!isPaid && !isFailed && !isRefunded) {
-    const hasPaymentAmount = bogData.purchase_units?.transfer_amount || bogData.payment_detail?.amount || bogData.amount;
-    const hasTransactionId = bogData.payment_detail?.transaction_id;
-    
-    if (hasPaymentAmount && hasTransactionId) {
-    
-      isPaid = true;
-    }
-  }
-  
-
-  
-  return { isPaid, isRefunded, isFailed, status };
-}
-
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { orderId: string } }
-) {
+export async function GET(req: NextRequest, { params }: { params: { orderId: string } }) {
   try {
-    const session = await auth();
-
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
     const orderId = params.orderId;
 
-    // Get the order from database
-    const order = await prisma.order.findFirst({
-      where: { id: orderId, userId: session.user.id },
-      include: { user: true },
-    });
-
-    if (!order) {
-      return NextResponse.json({ error: "Order not found" }, { status: 404 });
-    }
-
-    // Only check BOG orders
-    if (!order.paymentMethod?.includes("BOG")) {
+    // Verify order exists in database
+    const dbOrder = await prisma.order.findUnique({ where: { id: orderId } });
+    if (!dbOrder) {
+      console.error(`Order ${orderId} not found in database`);
       return NextResponse.json(
-        {
-          error: "Not a BOG order",
-          orderStatus: order.isPaid ? "paid" : "pending",
-        },
-        { status: 400 }
+        { error: 'Order not found in database' },
+        { status: 404 }
       );
     }
 
-    // Use token manager for automatic token refresh and retry
-    try {
-      console.log('🔑 Checking BOG order status using token manager');
-      
-      // Get BOG order status using token manager
-      const bogOrderResponse = await bogTokenManager.makeAuthenticatedRequest(async (validToken) => {
-        console.log('🔑 Using BOG token for order status check');
-        return axios.get(
-          `https://api.bog.ge/payments/v1/ecommerce/orders/${orderId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${validToken}`,
-              "Accept-Language": "ka",
-              "Content-Type": "application/json",
-            },
-          }
-        );
-      });
+    const tokenInfo = bogTokenManager.getTokenInfo();
+    console.log('Current token info:', tokenInfo);
 
-      const bogOrderData = bogOrderResponse.data;
-      const { isPaid, isRefunded, isFailed, status } = mapBogStatusToOrder(bogOrderData);
-
-      // Get BOG receipt using token manager
-      const bogReceiptResponse = await bogTokenManager.makeAuthenticatedRequest(async (validToken) => {
-        console.log('🔑 Using BOG token for receipt check');
-        return axios.get(
-          `https://api.bog.ge/payments/v1/receipt/${orderId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${validToken}`,
-              "Accept-Language": "ka",
-              "Content-Type": "application/json",
-            },
-          }
-        );
-      });
-
-      const bogReceiptData = bogReceiptResponse.data;
-
-
-      const bogData = bogOrderResponse.data;
-   
-
-      // Update the order in database
-      const updatedOrder = await prisma.order.update({
-        where: { id: orderId },
-        data: {
-          isPaid,
-          isDelivered: false,
-          paidAt: isPaid ? new Date() : null,
-          paymentResult: {
-            status,
-            transactionId: bogData.payment_detail?.transaction_id,
-            amount: bogData.purchase_units?.transfer_amount,
-            currency: bogData.purchase_units?.currency_code,
-            method: bogData.payment_detail?.transfer_method?.key,
-            cardType: bogData.payment_detail?.card_type,
-            refunded: isRefunded,
-            failed: isFailed,
-            update_time: new Date().toISOString(),
-          },
-        },
-      });
-
-      return NextResponse.json({
-        success: true,
-        order: {
-          ...updatedOrder,
-          itemsPrice: parseFloat(updatedOrder.itemsPrice.toString()),
-          shippingPrice: parseFloat(updatedOrder.shippingPrice.toString()),
-          taxPrice: parseFloat(updatedOrder.taxPrice.toString()),
-          totalPrice: parseFloat(updatedOrder.totalPrice.toString()),
-        },
-        bogStatus: {
-          orderStatus: bogData.order_status?.key,
-          orderStatusValue: bogData.order_status?.value,
-          paymentMethod: bogData.payment_detail?.transfer_method?.key,
-          transactionId: bogData.payment_detail?.transaction_id,
-          amount: bogData.purchase_units?.transfer_amount,
-          currency: bogData.purchase_units?.currency_code,
-          buyerName: bogData.buyer?.full_name,
-          buyerEmail: bogData.buyer?.email,
-          buyerPhone: bogData.buyer?.phone_number,
-        },
-      });
-    } catch (bogError: any) {
-      // If BOG API fails, return current order status
-      return NextResponse.json({
-        success: true,
-        order: {
-          ...order,
-          itemsPrice: parseFloat(order.itemsPrice.toString()),
-          shippingPrice: parseFloat(order.shippingPrice.toString()),
-          taxPrice: parseFloat(order.taxPrice.toString()),
-          totalPrice: parseFloat(order.totalPrice.toString()),
-        },
-        bogStatus: null,
-        error: "Failed to fetch BOG status",
-        message: "Order status may not be up to date",
-      });
+    // Get a valid token
+    const access_token = await bogTokenManager.getValidToken();
+    if (!access_token) {
+      console.error('Failed to obtain valid token');
+      return NextResponse.json(
+        { error: 'Failed to obtain valid token' },
+        { status: 401 }
+      );
     }
+
+    // Call BOG API
+    const response = await axios.get(
+      `https://api.bog.ge/payments/v1/receipt/${orderId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          'Accept-Language': 'ka',
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    const bogData = response.data;
+    console.log(`BOG API response for order ${orderId}:`, bogData);
+
+    // Define paid statuses
+    const paidStatuses = ['completed', 'partial_completed', 'blocked'];
+    const isPaid = paidStatuses.includes(bogData.order_status?.key);
+
+    // Update database
+    await prisma.order.update({
+      where: { id: orderId },
+      data: {
+        isPaid,
+        paymentMethod: bogData.payment_detail?.transfer_method?.value || dbOrder.paymentMethod,
+        totalPrice: parseFloat(bogData.purchase_units?.transfer_amount || dbOrder.totalPrice.toString()),
+        paymentStatus: bogData.order_status?.key || 'unknown',
+        paidAt: isPaid ? new Date() : dbOrder.paidAt,
+      },
+    });
+
+    return NextResponse.json({
+      success: true,
+      paymentStatus: bogData.order_status?.key || 'unknown',
+      statusDescription: bogData.order_status?.value || '',
+      isPaid,
+      order: {
+        id: bogData.order_id,
+        totalPrice: parseFloat(bogData.purchase_units?.transfer_amount || '0'),
+        paymentMethod: bogData.payment_detail?.transfer_method?.value || dbOrder.paymentMethod,
+        paymentStatus: bogData.order_status?.key || 'unknown',
+        buyer: bogData.buyer,
+        raw: bogData,
+      },
+      raw: bogData,
+    });
   } catch (error: any) {
+    const errorMessage = error?.response?.data || error.message;
+    const errorStatus = error.response?.status || 500;
+    console.error(`BOG order check error for ${params.orderId}:`, errorMessage);
     return NextResponse.json(
-      { error: "Failed to fetch order status" },
-      { status: 500 }
+      { error: 'Failed to fetch BOG order status', details: errorMessage },
+      { status: errorStatus }
     );
   }
 }

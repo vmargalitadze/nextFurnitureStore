@@ -261,6 +261,7 @@
     "batumiAddress": "ალ. პუშკინი 115/117",
     "batumiAddress2": "ალ. პუშკინის 44"
   },
+  
   "profile": {
     "title": "პროფილის დეშბორდი",
     "welcome": "კეთილი იყოს თქვენი დაბრუნება, {name}!",
@@ -284,16 +285,33 @@
       "actions": "ადმინი"
     },
     "recentOrders": {
-      "title": "ბოლო შეკვეთები",
-      "description": "თქვენი ბოლო შეკვეთების ისტორია",
-      "orderNumber": "შეკვეთა #{number}",
-      "total": "სულ: ${amount}",
-      "paid": "გადახდილი",
-      "pending": "მიმდინარე",
-      "delivered": "მიწოდებული",
+      "title": "უახლესი შეკვეთები",
+      "description": "თქვენი უახლესი შეკვეთების ნახვა",
       "noOrders": "შეკვეთები არ არის",
-      "noOrdersDescription": "დაიწყეთ შოპინგი შეკვეთების სანახავად"
+      "noOrdersDescription": "თქვენ ჯერ არ გაგიკეთებიათ შეკვეთა.",
+      "orderNumber": "შეკვეთა #{number}",
+      "total": "ჯამი: {amount} GEL",
+      "paid": "გადახდილი",
+      "pending": "მისაღებად",
+      "delivered": "მიწოდებული",
+      "refreshing": "განახლება...",
+      "refreshAll": "განაახლეთ ყველა BOG შეკვეთა",
+      "testTargetOrder": "ტესტირება მიზნობრივი შეკვეთის",
+      "testToken": "ტოკენის ტესტირება",
+      "errorFetchingStatus": "შეცდომა BOG შეკვეთის სტატუსის მიღებისას",
+      "errorToken": "შეცდომა ტოკენის ტესტირებისას",
+      "completed": "გადახდილი",
+      "created": "შექმნილი",
+      "processing": "მუშავდება",
+      "rejected": "უარყოფილი",
+      "refund_requested": "მოთხოვნილია დაბრუნება",
+      "refunded": "დაბრუნებული",
+      "refunded_partially": "ნაწილობრივ დაბრუნებული",
+      "auth_requested": "მოთხოვნილია პრეავტორიზაცია",
+      "blocked": "დაბლოკილი",
+      "partial_completed": "ნაწილობრივ გადახდილი"
     },
+
     "quickActions": {
       "title": "სწრაფი ქმედებები",
       "description": "საერთო ამოცანები და ნავიგაცია",
