@@ -128,7 +128,7 @@ export default function DropdownMenuCheckboxes() {
           <div className="w-full">
             <Button  variant="outline"
               onClick={handleSignOut}
-              className="flex items-center w-full justify-center gap-2 px-4 py-2 mt-3 text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors shadow-md"
+              className="flex items-center w-full justify-center gap-2 px-4 py-2 mt-3 text-white bg-[#bbb272] rounded-lg  transition-colors shadow-md"
             >
               <FaSignOutAlt className="w-5 h-5" />
               <span className="text-[16px] font-medium">{t("signOut")}</span>

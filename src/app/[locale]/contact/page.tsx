@@ -116,7 +116,7 @@ function ContactPage() {
 
             {/* Contact Form */}
             <div className="order-1 lg:order-2">
-              <Card className="border-0 shadow-xl bg-[#e6dfd9] backdrop-blur-sm">
+              <Card className="border-0 shadow-xl bg-white backdrop-blur-sm">
                 <CardContent className="p-8">
                   <div className="mb-8">
                     <h2 className="text-[20px] md:text-3xl font-bold text-black mb-4">
@@ -153,7 +153,7 @@ function ContactPage() {
                           value={formData.fullName}
                           onChange={handleInputChange}
                           required
-                          className="w-full h-12 px-4 bg-[#e6dfd9] border-2 border-black rounded-lg text-black transition-all duration-300 placeholder-gray-400 focus:bg-[#e6dfd9] focus:outline-none focus:ring-0 focus:border-black"
+                          className="w-full h-12 px-4 bg-white border-2 border-black rounded-lg text-black transition-all duration-300 placeholder-gray-400 focus:bg-white focus:outline-none focus:ring-0 focus:border-black"
                           placeholder={t("form.fullNamePlaceholder")}
                           type="text"
                         />
@@ -167,7 +167,7 @@ function ContactPage() {
                           value={formData.email}
                           onChange={handleInputChange}
                           required
-                          className="w-full h-12 px-4 bg-[#e6dfd9] border-2 border-black rounded-lg transition-all duration-300 placeholder-gray-400 focus:bg-[#e6dfd9] focus:outline-none focus:ring-0 focus:border-black"
+                          className="w-full h-12 px-4 bg-white border-2 border-black rounded-lg transition-all duration-300 placeholder-gray-400 focus:bg-white focus:outline-none focus:ring-0 focus:border-black"
                           placeholder={t("form.emailPlaceholder")}
                           type="email"
                         />
@@ -183,7 +183,7 @@ function ContactPage() {
                           name="phone"
                           value={formData.phone}
                           onChange={handleInputChange}
-                          className="w-full h-12 px-4 bg-[#e6dfd9] border-2 border-black rounded-lg text-gray-800 transition-all duration-300 placeholder-gray-400 focus:bg-[#e6dfd9] focus:outline-none focus:ring-0 focus:border-black"
+                          className="w-full h-12 px-4 bg-white border-2 border-black rounded-lg text-gray-800 transition-all duration-300 placeholder-gray-400 focus:bg-white focus:outline-none focus:ring-0 focus:border-black"
                           placeholder={t("form.phonePlaceholder")}
                           type="tel"
                         />
@@ -197,7 +197,7 @@ function ContactPage() {
                           value={formData.subject}
                           onChange={handleInputChange}
                           required
-                          className="w-full h-12 px-4 bg-[#e6dfd9] border-2 text-gray-400 border-black rounded-lg transition-all duration-300 focus:bg-[#e6dfd9] focus:outline-none focus:ring-0 focus:border-black"
+                          className="w-full h-12 px-4 bg-white border-2 text-gray-400 border-black rounded-lg transition-all duration-300 focus:bg-white focus:outline-none focus:ring-0 focus:border-black"
                         >
                           <option className="text-gray-400" value="">
                             {t("info.selectSubject")}
@@ -227,7 +227,7 @@ function ContactPage() {
                         value={formData.message}
                         onChange={handleInputChange}
                         required
-                        className="w-full h-32 px-4 py-3 bg-[#e6dfd9] border-2 border-black rounded-lg text-gray-800 transition-all duration-300 placeholder-gray-400 resize-none focus:bg-[#e6dfd9] focus:outline-none focus:ring-0 focus:border-black"
+                        className="w-full h-32 px-4 py-3 bg-white border-2 border-black rounded-lg text-gray-800 transition-all duration-300 placeholder-gray-400 resize-none focus:bg-white focus:outline-none focus:ring-0 focus:border-black"
                         placeholder={t("form.messagePlaceholder")}
                         rows={5}
                       />
@@ -236,7 +236,7 @@ function ContactPage() {
                     <Button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-[30%] mx-auto flex justify-center items-center px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#2E3A47] rounded-lg  transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-[30%] mx-auto flex justify-center items-center px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#bbb272] rounded-lg  transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {isSubmitting ? (
                         <>
@@ -258,12 +258,12 @@ function ContactPage() {
             <div className="lg:col-span-1 space-y-6">
 
 
-              <Card className="border-0 shadow-lg bg-[#e6dfd9] hover:shadow-xl transition-shadow duration-300">
+              <Card className="border-0 shadow-lg bg-white hover:shadow-xl transition-shadow duration-300">
                 <CardContent className="p-6">
                   <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 bg-[#f7f1e7] rounded-full flex items-center justify-center">
+                    <div className="w-12 h-12 bg-[#bbb272] rounded-full flex items-center justify-center">
                       <svg
-                        className="w-6 h-6 text-[#2E3A47]"
+                        className="w-6 h-6 text-white"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -329,12 +329,12 @@ function ContactPage() {
                 </CardContent>
               </Card>
 
-              <Card className="border-0 shadow-lg bg-[#e6dfd9] hover:shadow-xl transition-shadow duration-300">
+              <Card className="border-0 shadow-lg bg-white hover:shadow-xl transition-shadow duration-300">
                 <CardContent className="p-6">
                   <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 bg-[#f7f1e7] rounded-full flex items-center justify-center">
+                    <div className="w-12 h-12 bg-[#bbb272] rounded-full flex items-center justify-center">
                       <svg
-                        className="w-6 h-6 text-[#2E3A47]"
+                        className="w-6 h-6 text-white"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -362,12 +362,12 @@ function ContactPage() {
                 </CardContent>
               </Card>
 
-              <Card className="border-0 shadow-lg bg-[#e6dfd9] hover:shadow-xl transition-shadow duration-300">
+              <Card className="border-0 shadow-lg bg-white hover:shadow-xl transition-shadow duration-300">
                 <CardContent className="p-6">
                   <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 bg-[#f7f1e7] rounded-full flex items-center justify-center">
+                    <div className="w-12 h-12 bg-[#bbb272] rounded-full flex items-center justify-center">
                       <svg
-                        className="w-6 h-6 text-[#2E3A47]"
+                        className="w-6 h-6 text-white"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"

@@ -235,13 +235,13 @@ const ListSideBar: React.FC<FilterProps> = ({ isOpen, toggleSidebar, onFilterCha
           <div className="pt-4 border-t space-y-2">
             <button
               onClick={applyFilters} 
-              className="bg-[#f3983e] font-bold md:text-[20px] text-[18px] md:text-[18px] w-full border-radius:20px  px-4 sm:px-6 md:px-8 py-2 text-black  rounded-xl   transition-all duration-300 transform shadow-lg "
+              className="bg-[#bbb272] font-bold md:text-[20px] text-[18px] md:text-[18px] w-full border-radius:20px  px-4 sm:px-6 md:px-8 py-2 text-black  rounded-xl   transition-all duration-300 transform shadow-lg "
             >
               {t("search")}
             </button>
             <button
               onClick={clearFilters} 
- className="w-full md:text-[20px] border-radius:20px text-[18px] md:text-[18px] bg-[#2E3A47] text-white py-2 px-4 rounded-xl flex justify-center items-center gap-2 transition-colors text-white font-bold"
+ className="w-full md:text-[20px] border-radius:20px text-[18px] md:text-[18px] bg-[#bbb272]  text-white py-2 px-4 rounded-xl flex justify-center items-center gap-2 transition-colors text-white font-bold"
             >
               <Trash2 size={16} /> {t("clearFilters")}
             </button>

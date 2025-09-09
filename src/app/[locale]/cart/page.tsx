@@ -171,10 +171,10 @@ const CartPage = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           <div className="animate-pulse">
-            <div className="h-8 bg-[#e6dfd9] rounded w-1/4 mb-8"></div>
+            <div className="h-8 bg-white rounded w-1/4 mb-8"></div>
             <div className="space-y-4">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="h-32 bg-[#e6dfd9] rounded"></div>
+                <div key={i} className="h-32 bg-white rounded"></div>
               ))}
             </div>
           </div>
@@ -211,7 +211,7 @@ const CartPage = () => {
     <div className="container min-h-screen mx-auto px-2 sm:px-4 py-4 sm:py-8">
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col sm:flex-row items-center mt-[60px] sm:mt-[100px] justify-between mb-6 sm:mb-8 gap-4 sm:gap-0">
-          <h1 className="text-[20px] md:text-3xl mt-5 md:mt-0  font-bold text-gray-900 w-full sm:w-auto text-center sm:text-left">
+          <h1 className="text-[20px] md:text-3xl mt-5 md:mt-0  font-bold text-white w-full sm:w-auto text-center sm:text-left">
             {t("cart.title")}
           </h1>
           <Button

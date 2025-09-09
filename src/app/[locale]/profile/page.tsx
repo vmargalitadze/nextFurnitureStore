@@ -79,9 +79,9 @@ export default async function ProfilePage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* User Info Card */}
           <div className="lg:col-span-1">
-            <Card className="h-fit bg-[#e6dfd9]">
+            <Card className="h-fit bg-white">
               <CardHeader className="text-center pb-4">
-                <div className="mx-auto w-24 h-24  bg-[#f3983e] rounded-full flex items-center justify-center mb-4">
+                <div className="mx-auto w-24 h-24  bg-[#bbb272] rounded-full flex items-center justify-center mb-4">
                   <User className="text-white text-3xl" />
                 </div>
                 <CardTitle className="text-2xl">{user.name}</CardTitle>
@@ -103,8 +103,8 @@ export default async function ProfilePage() {
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex items-center border border-black gap-3 p-3 bg-[#e6dfd9] rounded-lg">
-                  <div className="w-12 h-12 bg-[#f3983e] rounded-full flex items-center justify-center">
+                <div className="flex items-center border border-black gap-3 p-3 bg-white rounded-lg">
+                  <div className="w-12 h-12 bg-[#bbb272] rounded-full flex items-center justify-center">
                     <FaEnvelope className="w-6 h-6 text-white" />
                   </div>
                   <div>
@@ -113,8 +113,8 @@ export default async function ProfilePage() {
                   </div>
                 </div>
 
-                <div className="flex items-center border border-black gap-3 p-3 bg-[#e6dfd9] rounded-lg">
-                  <div className="w-12 h-12 bg-[#f3983e] rounded-full flex items-center justify-center">
+                <div className="flex items-center border border-black gap-3 p-3 bg-white rounded-lg">
+                  <div className="w-12 h-12 bg-[#bbb272] rounded-full flex items-center justify-center">
                     <FaCalendarAlt className="w-6 h-6 text-white" />
                   </div>
                   <div>
@@ -126,8 +126,8 @@ export default async function ProfilePage() {
                 </div>
 
                 {user.address && (
-                  <div className="flex items-center gap-3 p-3 bg-[#e6dfd9] rounded-lg">
-                    <div className="w-12 h-12 bg-[#f3983e] rounded-full flex items-center justify-center">
+                  <div className="flex items-center gap-3 p-3 bg-white rounded-lg">
+                    <div className="w-12 h-12 bg-[#bbb272] rounded-full flex items-center justify-center">
                       <FaMapMarkerAlt className="w-6 h-6 text-white" />
                     </div>
 
@@ -144,8 +144,8 @@ export default async function ProfilePage() {
                 )}
 
                 {user.paymentMethod && (
-                  <div className="flex items-center gap-3 p-3 bg-[#e6dfd9] rounded-lg">
-                    <div className="w-12 h-12 bg-[#f3983e] rounded-full flex items-center justify-center">
+                  <div className="flex items-center gap-3 p-3 bg-white rounded-lg">
+                    <div className="w-12 h-12 bg-[#bbb272] rounded-full flex items-center justify-center">
                       <FaCreditCard className="w-6 h-6 text-white" />
                     </div>
                     <div>
@@ -178,35 +178,35 @@ export default async function ProfilePage() {
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
             {/* Quick Stats */}
-            <div className="grid bg-[#e6dfd9] rounded-xl grid-cols-1 md:grid-cols-3 gap-4">
-              <Card className="bg-[#e6dfd9] border border-black rounded-xl border-2 border-orange-400 text-orange-400">
+            <div className="grid bg-white rounded-xl grid-cols-1 md:grid-cols-3 gap-4">
+              <Card className="bg-white flex justify-center items-center rounded-xl border-2 border-black">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-orange-400">
+                    <div className="flex flex-row justify-center items-center gap-3">
+                      <p className="text-sm text-black">
                         {t("totalOrders")}
                       </p>
-                      <p className="text-[20px] font-bold text-orange-500">
+                      <p className="text-[20px] font-bold text-black">
                         {orderCount}
                       </p>
                     </div>
-                    <List className="text-[20px] text-orange-400" />
+               
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="bg-[#e6dfd9] rounded-xl border-2 border-orange-400 text-orange-400">
+              <Card className="bg-white flex justify-center items-center rounded-xl border-2 border-black">
                 <CardContent className="p-6">
-                  <div className="flex  bg-[#e6dfd9] items-center justify-between">
-                    <div>
-                      <p className="text-sm text-orange-400">
+                  <div className="flex  bg-white items-center flex-row justify-between">
+                    <div className="flex flex-row justify-center items-center gap-3">
+                      <p className="text-sm text-black">
                         {t("cartItems")}
                       </p>
-                      <p className="text-[20px] font-bold text-orange-500">
+                      <p className="text-[20px] font-bold black">
                         {cartItemCount}
                       </p>
                     </div>
-                    <ShoppingCart className="text-[20px] text-orange-400" />
+                  
                   </div>
                 </CardContent>
               </Card>
@@ -214,7 +214,7 @@ export default async function ProfilePage() {
 
             {/* Admin Actions */}
             {isAdmin && (
-              <Card className="bg-[#e6dfd9]">
+              <Card className="bg-white">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <div className="text-[20px] font-bold">
@@ -229,7 +229,7 @@ export default async function ProfilePage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <Link href="/new">
                       <Button
-                        className="w-full px-4  py-2 text-[20px] font-bold text-white bg-[#f3983e] rounded-lg  transition-colors"
+                        className="w-full px-4  py-2 text-[20px] font-bold text-white bg-[#bbb272] rounded-lg  transition-colors"
                         variant="default"
                       >
                         <FaPlus className="mr-2" />
@@ -238,7 +238,7 @@ export default async function ProfilePage() {
                     </Link>
                     <Link href="/adminall">
                       <Button
-                        className="w-full px-4  py-2 text-[20px] font-bold text-white bg-[#2E3A47] rounded-lg  transition-colors"
+                        className="w-full px-4  py-2 text-[20px] font-bold text-white bg-[#bbb272] rounded-lg  transition-colors"
                         variant="outline"
                       >
                         <List className="mr-2" />
@@ -285,7 +285,7 @@ export default async function ProfilePage() {
                     className="flex  justify-center md:justify-start"
                     href="/cart"
                   >
-                    <Button className="w-full md:w-[70%]    px-4 py-2 text-[20px] font-bold text-[#438c71] bg-white border-2 border-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors gap-2">
+                    <Button className="w-full md:w-[70%]      px-4 py-2 text-[20px] font-bold text-black bg-white border-2 border-black hover:border-[#bbb272] rounded-lg  hover:bg-[#bbb272] hover:text-white transition-colors flex  gap-2">
                       <ShoppingCart className="mr-2" />
                       {t("quickActions.viewCart")}
                     </Button>

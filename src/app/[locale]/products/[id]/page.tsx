@@ -284,8 +284,8 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                           key={size.id}
                           onClick={() => setSelectedSize(size.id)}
                           className={`px-3 py-1 rounded-lg font-bold text-[18px] ${selectedSize === size.id
-                              ? "bg-[#f3983e] text-black"
-                              : "bg-[#e6dfd9] text-white"
+                              ? "bg-[#bbb272] text-black"
+                              : "bg-white text-black"
                             }`}
                         >
                           {formatSizeDisplay(size.size)}
@@ -298,7 +298,7 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                   <span className="text-[18px] text-white font-semibold">
                     {getTranslation("product.price", "Price")}:
                   </span>
-                  <span className="text-[20px] font-bold text-[#f3983e]">
+                  <span className="text-[20px] font-bold text-[#bbb272]">
                     ₾{getDiscountedPrice().toFixed(2)}
                   </span>
                   {product.sales && product.sales > 0 && (
@@ -318,9 +318,9 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                 </h3>
                 <div className="space-y-1">
                   {product?.tbilisi && (
-                    <div className="flex items-center justify-between p-2 bg-[#e6dfd9] rounded-lg border border-gray-200">
+                    <div className="flex items-center justify-between p-2 bg-white rounded-lg border border-gray-200">
                       <div className="flex items-center space-x-2">
-                        <div className="w-2 h-2 bg-[#f3983e] rounded-full"></div>
+                        <div className="w-2 h-2 bg-[#bbb272] rounded-full"></div>
                         <span className="text-[18px] md:text-[20px] font-medium text-black">
                           {getTranslation("locations.tbilisi", "Tbilisi")}
                         </span>
@@ -335,9 +335,9 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                   )}
 
                   {product?.batumi && (
-                    <div className="flex items-center justify-between p-2 bg-[#e6dfd9] rounded-lg border border-gray-200">
+                    <div className="flex items-center justify-between p-2 bg-white rounded-lg border border-gray-200">
                       <div className="flex items-center space-x-2">
-                        <div className="w-2 h-2 bg-[#f3983e] rounded-full"></div>
+                        <div className="w-2 h-2 bg-[#bbb272] rounded-full"></div>
                         <span className="text-[16px] md:text-[20px] sm:text-base font-medium text-black">
                           {getTranslation("locations.batumi", "Batumi")}
                         </span>
@@ -352,9 +352,9 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                     </div>
                   )}
                   {product?.batumi44 && (
-                    <div className="flex items-center justify-between p-2 bg-[#e6dfd9] rounded-lg border border-gray-200">
+                    <div className="flex items-center justify-between p-2 bg-white rounded-lg border border-gray-200">
                       <div className="flex items-center space-x-2">
-                        <div className="w-2 h-2 bg-[#f3983e] rounded-full"></div>
+                        <div className="w-2 h-2 bg-[#bbb272] rounded-full"></div>
                         <span className="text-[16px] md:text-[20px] sm:text-base font-medium text-black">
                           {getTranslation("locations.batumi", "Batumi")}
                         </span>
@@ -370,9 +370,9 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                   )}
 
                   {product?.qutaisi && (
-                    <div className="flex items-center justify-between p-2 bg-[#e6dfd9] rounded-lg border border-gray-200">
+                    <div className="flex items-center justify-between p-2 bg-white rounded-lg border border-gray-200">
                       <div className="flex items-center space-x-2">
-                        <div className="w-2 h-2 bg-[#f3983e] rounded-full"></div>
+                        <div className="w-2 h-2 bg-[#bbb272] rounded-full"></div>
                         <span className="text-[16px] md:text-[20px] font-medium text-black">
                           {getTranslation("locations.qutaisi", "Kutaisi")}
                         </span>
@@ -387,9 +387,9 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                   )}
 
                   {product?.kobuleti && (
-                    <div className="flex items-center justify-between p-2 bg-[#e6dfd9] rounded-lg border border-gray-200">
+                    <div className="flex items-center justify-between p-2 bg-white rounded-lg border border-gray-200">
                       <div className="flex items-center space-x-2">
-                        <div className="w-2 h-2 bg-[#f3983e] rounded-full"></div>
+                        <div className="w-2 h-2 bg-[#bbb272] rounded-full"></div>
                         <span className="text-[16px] md:text-[20px] font-medium text-black">
                           {getTranslation("locations.kobuleti", "Kobuleti")}
                         </span>
@@ -443,14 +443,14 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                     disabled={
                       (!isOthersProduct() && !selectedSize) || addingToCart
                     }
-                    className={`w-full md:w-[50%] px-4 py-2 text-[20px] md:text-[20px] font-bold text-white bg-[#f3983e] rounded-lg  transition-colors ${(isOthersProduct() || selectedSize) && !addingToCart
-                        ? "bg-[#f3983e] text-white"
+                    className={`w-full md:w-[50%] px-4 py-2 text-[20px] md:text-[20px] font-bold text-white bg-[#bbb272] rounded-lg  transition-colors ${(isOthersProduct() || selectedSize) && !addingToCart
+                        ? "bg-[#bbb272] text-white"
                         : "bg-gray-400 cursor-not-allowed"
                       }`}
                   >
                     <span>
                       {addingToCart
-                        ? "Adding..."
+                        ? "დამატება..."
                         : getTranslation("product.addToCart", "Add to Cart")}
                     </span>
                   </button>
@@ -460,7 +460,7 @@ const Page = (props: { params: { id: string; locale: string } }) => {
                 <div className="pt-1">
                   <Button
                     variant="outline"
-                    className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#f3983e] rounded-lg  transition-colors"
+                    className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#bbb272] rounded-lg  transition-colors"
                   >
                     <Link href="/sign-in">შედით თქვენ აქაუნთზე</Link>
                   </Button>

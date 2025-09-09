@@ -66,11 +66,11 @@ const Why = () => {
             {whyItems.map((item) => (
               <div 
                 key={item.id} 
-                className="bg-[#e6dfd9]  rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                className="bg-white  rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
               >
                 <div className="text-center">
                   {/* Icon Circle */}
-                  <div className="w-16 h-16 bg-[#f3983e] rounded-full mx-auto mb-4 flex items-center justify-center shadow-md">
+                  <div className="w-16 h-16 bg-[#bbb272] rounded-full mx-auto mb-4 flex items-center justify-center shadow-md">
                     <Image
                       src={item.icon}
                       alt={getLocalizedTitle(item)}

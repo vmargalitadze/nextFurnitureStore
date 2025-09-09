@@ -229,7 +229,7 @@ export default function ListPage() {
       <div className="space-y-3 pt-4">
         <Button
           onClick={() => setIsMobileFilterOpen(false)}
-          className="w-full bg-[#2E3A47] text-[16px] md:text-[18px] text-white font-medium py-2 px-4 rounded-xl transition-colors"
+          className="w-full bg-[#bbb272] text-[16px] md:text-[18px] text-white font-medium py-2 px-4 rounded-xl transition-colors"
         >
           ფილტრი
         </Button>
@@ -302,10 +302,10 @@ export default function ListPage() {
 
       {/* content */}
       <div className="container min-h-screen mt-[50px]">
-        <div className="bg-[#e6dfd9] rounded-2xl shadow-lg border border-gray-100 p-6 mb-8">
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 mb-8">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div className="flex items-center gap-3">
-              <div className="w-2 h-8 bg-[#FF7A00] rounded-full"></div>
+              <div className="w-2 h-8 bg-[#bbb272] rounded-full"></div>
               <p className="text-gray-600 text-[18px]">
                 {t("found")}{" "}
                 <span className="font-bold text-gray-900 text-[18px]">
@@ -337,7 +337,7 @@ export default function ListPage() {
                       url.search = "";
                       window.location.href = url.toString();
                     }}
-                    className="bg-[#FF7A00] text-white px-4 py-2 rounded-xl flex items-center gap-2"
+                    className="bg-[#bbb272] text-white px-4 py-2 rounded-xl flex items-center gap-2"
                   >
                     <X className="w-4 h-4" />
                     {t("clearFilters")}
@@ -351,7 +351,7 @@ export default function ListPage() {
         <div className="lg:hidden mb-6">
           <button
             onClick={() => setIsMobileFilterOpen(true)}
-            className="w-full bg-[#2E3A47] text-white py-3 px-4 rounded-xl font-semibold flex items-center justify-center gap-2 shadow-lg"
+            className="w-full bg-[#bbb272] text-white py-3 px-4 rounded-xl font-semibold flex items-center justify-center gap-2 shadow-lg"
           >
             <Filter className="w-5 h-5" />
             {t("filter")}
@@ -361,7 +361,7 @@ export default function ListPage() {
         <div className="flex flex-col mb-14 lg:flex-row gap-8">
           {/* Filter Sidebar - Desktop */}
           <div className="hidden lg:block lg:w-64 lg:flex-shrink-0">
-            <div className="bg-[#e6dfd9] rounded-2xl shadow-lg p-6">
+            <div className="bg-white rounded-2xl shadow-lg p-6">
               <h3 className="text-[20px] font-semibold text-black mb-4">{t("filter")}</h3>
               <FilterContent />
             </div>

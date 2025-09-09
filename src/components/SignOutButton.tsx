@@ -34,7 +34,7 @@ const SignOutButton = () => {
 
   return (
     <Button 
-    className="w-[70%] flex justify-center mx-auto items-center  px-4 py-2 text-[20px] font-bold text-[#438c71] bg-white border-2 border-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors flex items-center justify-center gap-2"
+    className="w-[70%] flex justify-center mx-auto items-center  px-4 py-2 text-[20px] font-bold text-black bg-white border-2 border-black hover:border-[#bbb272] rounded-lg  hover:bg-[#bbb272] hover:text-white transition-colors flex items-center justify-center gap-2"
       onClick={handleSignOut}
    
     >

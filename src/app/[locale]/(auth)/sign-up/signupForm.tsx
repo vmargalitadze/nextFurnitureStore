@@ -42,7 +42,7 @@ function SignupForm({ callbackUrl }: { callbackUrl: string }) {
   }, [data.success, data.email]);
 
   const SignUpButton = () => (
-    <Button disabled={pending} className="w-[50%] items-center flex justify-center mx-auto px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="default">
+    <Button disabled={pending} className="w-[50%] items-center flex justify-center mx-auto px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#bbb272] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="default">
       {pending ? t("creatingAccount") : t("signUpButton")}
     </Button>
   );
@@ -80,7 +80,7 @@ function SignupForm({ callbackUrl }: { callbackUrl: string }) {
       <Card className="w-full">
         <CardHeader className="space-y-4 font-bold text-center">
           <div className="flex justify-center">
-            <Mail className="h-12 w-12 text-[#438c71]" />
+            <Mail className="h-12 w-12 text-[#bbb272]" />
           </div>
           <CardTitle className="text-[18px]  font-bold">{t("checkEmail")}</CardTitle>
           <CardDescription className='text-[18px] text-black font-bold'>
@@ -96,12 +96,12 @@ function SignupForm({ callbackUrl }: { callbackUrl: string }) {
               <Button 
                 onClick={handleResendVerification}
                 variant="outline"
-                className="w-full px-4 mb-5 py-2 text-[20px] font-bold text-white bg-[#438c71] rounded-lg hover:bg-[#3a7a5f] transition-colors"
+                className="w-full px-4 mb-5 py-2 text-[20px] font-bold text-white bg-[#bbb272] rounded-lg hover:bg-[#3a7a5f] transition-colors"
               >
                 {t("resendVerification")}
               </Button>
               <Button  variant="outline"
-                 className="w-full mb-5 px-4 py-2 text-[20px] font-bold text-[#438c71] bg-white border-2 border-[#438c71] rounded-lg hover:bg-[#438c71] hover:text-white transition-colors flex items-center justify-center ">
+                 className="w-full mb-5 px-4 py-2 text-[20px] font-bold text-[#bbb272] bg-white border-2 border-[#bbb272] rounded-lg hover:bg-[#bbb272] hover:text-white transition-colors flex items-center justify-center ">
                 <Link href="/sign-in" onClick={clearVerificationState}>
                   {t("backToSignIn")}
                 </Link>

@@ -171,7 +171,7 @@ const ElegantHeroSlider = () => {
 
                 <Link
                   href="/list"
-                  className=" text-center  bg-[#f3983e] md:text-[20px] text-[18px] w-full md:w-[70%] border-radius:20px  px-4 sm:px-6 md:px-8 py-2 text-black  rounded-xl font-bold  transition-all duration-300 transform shadow-lg "
+                  className=" text-center  bg-[#bbb272] md:text-[20px] text-[18px] w-full md:w-[70%] border-radius:20px  px-4 sm:px-6 md:px-8 py-2 text-black  rounded-xl font-bold  transition-all duration-300 transform shadow-lg "
                 >
                   {content.buttonText}
 
@@ -188,7 +188,7 @@ const ElegantHeroSlider = () => {
               key={index}
               onClick={() => goToSlide(index)}
               className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentSlide
-                ? 'bg-[#f3983e] scale-110'
+                ? 'bg-[#bbb272] scale-110'
                 : 'bg-white/50 hover:bg-white/80'
                 }`}
               whileHover={{ scale: 1.2 }}
@@ -200,7 +200,7 @@ const ElegantHeroSlider = () => {
 
       {/* Enhanced Floating Accent Elements */}
       <motion.div
-        className="absolute top-16 sm:top-20 md:top-24 right-8 sm:right-16 md:right-24 w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 bg-[#f3983e]/20 rounded-full blur-3xl"
+        className="absolute top-16 sm:top-20 md:top-24 right-8 sm:right-16 md:right-24 w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 bg-[#bbb272]/20 rounded-full blur-3xl"
         animate={{
           scale: [1, 1.3, 1],
           opacity: [0.2, 0.5, 0.2],
@@ -213,7 +213,7 @@ const ElegantHeroSlider = () => {
       />
 
       <motion.div
-        className="absolute bottom-16 sm:bottom-20 md:bottom-24 left-8 sm:left-16 md:left-24 w-16  sm:h-20 md:w-28 md:h-28 bg-[#f3983e]/15 rounded-full blur-3xl"
+        className="absolute bottom-16 sm:bottom-20 md:bottom-24 left-8 sm:left-16 md:left-24 w-16  sm:h-20 md:w-28 md:h-28 bg-[#bbb272]/15 rounded-full blur-3xl"
         animate={{
           scale: [1, 1.4, 1],
           opacity: [0.15, 0.4, 0.15],

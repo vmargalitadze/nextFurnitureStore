@@ -114,7 +114,7 @@ const PaginationContent: FC<PaginationProps> = ({ pageCount }) => {
               onClick={() => goToPage(page as number)}
               className={`flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 transform hover:scale-105 ${
                 currentPage === page
-                  ? 'bg-[#FF7A00] hover:bg-[#FF7A00]/80 text-white shadow-lg shadow-primary/25'
+                  ? 'bg-[#bbb272] hover:bg-[#bbb272]/80 text-white shadow-lg shadow-primary/25'
                   : 'bg-white text-gray-700  shadow-md hover:shadow-lg border border-gray-200'
               }`}
             >

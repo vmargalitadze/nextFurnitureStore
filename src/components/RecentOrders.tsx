@@ -154,7 +154,7 @@ const RecentOrders: React.FC<RecentOrdersProps> = ({
             <button
               onClick={refreshBOGOrders}
               disabled={isRefreshing}
-              className="bg-[#2E3A47] text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 hover:bg-[#2E3A47]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-[#bbb272] text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 hover:bg-[#bbb272]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isRefreshing ? (
                 <>

@@ -314,7 +314,7 @@ export default function Categories() {
       <div className="space-y-3">
         <button
           onClick={handleSearch}
-          className="bg-[#2E3A47] md:text-[20px] text-[18px] w-full border-radius:20px  px-4 sm:px-6 md:px-8 py-2 text-white  rounded-xl font-bold  transition-all duration-300 transform shadow-lg "
+          className="bg-[#bbb272] md:text-[20px] text-[18px] w-full border-radius:20px  px-4 sm:px-6 md:px-8 py-2 text-white  rounded-xl font-bold  transition-all duration-300 transform shadow-lg "
         >
           {locale === "en" ? "Apply Filters" : "ფილტრი"}
         </button>
@@ -351,7 +351,7 @@ export default function Categories() {
             <div className="flex gap-8">
               {/* Filter Sidebar */}
               <div className="w-80 flex-shrink-0">
-                <div className="sticky top-24 bg-[#e6dfd9] rounded-2xl shadow-lg p-6 ">
+                <div className="sticky top-24 bg-white rounded-2xl shadow-lg p-6 ">
                   <h3 className="text-[20px] md:text-[22 px] font-semibold mb-6 text-black">
                     {locale === "en" ? "Filters" : "ფილტრები"}
                   </h3>
@@ -445,7 +445,7 @@ export default function Categories() {
           <div className="px-4 mb-6">
             <button
               onClick={() => setIsMobileFilterOpen(true)}
-              className="w-full bg-[#2E3A47] text-white py-3 px-4 rounded-xl font-semibold flex items-center justify-center gap-2 shadow-lg"
+              className="w-full bg-[#bbb272] text-black py-3 px-4 rounded-xl font-semibold flex items-center justify-center gap-2 shadow-lg"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
@@ -463,7 +463,7 @@ export default function Categories() {
                 clickable: true,
                 el: ".custom-swiper-pagination",
                 renderBullet: (index, className) => {
-                  return `<span class="${className} w-3 h-3 rounded-full bg-gray-300 transition-all duration-300 hover:bg-[#e67e22]"></span>`;
+                  return `<span class="${className} w-3 h-3 rounded-full bg-gray-300 transition-all duration-300 hover:bg-[#bbb272]"></span>`;
                 },
               }}
               className="pb-12"

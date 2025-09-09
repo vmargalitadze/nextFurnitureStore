@@ -52,7 +52,7 @@ const Footer = () => {
             {/* Batumi */}
             <div>
               <div className="flex flex-col items-center justify-center mb-4">
-                <h3 className="text-xl flex flex-row font-semibold">    <FaMapMarkerAlt className="w-6 h-6 text-[#ce7c2a] mr-3" /> {t("batumi")}</h3>
+                <h3 className="text-xl flex flex-row font-semibold">    <FaMapMarkerAlt className="w-6 h-6 text-[#bbb272] mr-3" /> {t("batumi")}</h3>
                 <p className="text-gray-300">{t("batumiAddress")}</p>
                 <p className="text-gray-300">{t("batumiAddress2")}</p>
               </div>
@@ -69,7 +69,7 @@ const Footer = () => {
             {/* Kobuleti */}
             <div>
               <div className="flex flex-col items-center justify-center mb-4">
-                <h3 className="text-xl flex flex-row font-semibold">    <FaMapMarkerAlt className="w-6 h-6 text-[#ce7c2a] mr-3" /> {t("kobuleti")}</h3>
+                <h3 className="text-xl flex flex-row font-semibold">    <FaMapMarkerAlt className="w-6 h-6 text-[#bbb272] mr-3" /> {t("kobuleti")}</h3>
                 <p className="text-gray-300">{t("kobuletiAddress")}</p>
               </div>
               <div className="space-y-2">
@@ -85,7 +85,7 @@ const Footer = () => {
             {/* Kutaisi */}
             <div>
               <div className="flex flex-col items-center justify-center mb-4">
-                <h3 className="text-xl flex flex-row font-semibold">    <FaMapMarkerAlt className="w-6 h-6 text-[#ce7c2a] mr-3" /> {t("kutaisi")}</h3>
+                <h3 className="text-xl flex flex-row font-semibold">    <FaMapMarkerAlt className="w-6 h-6 text-[#bbb272] mr-3" /> {t("kutaisi")}</h3>
                 <p className="text-gray-300">{t("kutaisiAddress")}</p>
               </div>
               <div className="space-y-2">
@@ -98,7 +98,7 @@ const Footer = () => {
             <div>
               <div className="flex flex-col items-center justify-center mb-4">
 
-                <h3 className="text-xl flex flex-row font-semibold">    <FaMapMarkerAlt className="w-6 h-6 text-[#ce7c2a] mr-3" /> {t("tbilisi")}</h3>
+                <h3 className="text-xl flex flex-row font-semibold">    <FaMapMarkerAlt className="w-6 h-6 text-[#bbb272] mr-3" /> {t("tbilisi")}</h3>
                 <p className="text-gray-300">{t("tbilisiAddress")}</p>
               </div>
               <div className="space-y-2">
