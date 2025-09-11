@@ -229,7 +229,7 @@ export default function ListPage() {
       <div className="space-y-3 pt-4">
         <Button
           onClick={() => setIsMobileFilterOpen(false)}
-          className="w-full bg-[#bbb272] text-[16px] md:text-[18px] text-white font-medium py-2 px-4 rounded-xl transition-colors"
+          className="w-full bg-[#869dab] text-[16px] md:text-[18px] text-white font-medium py-2 px-4 rounded-xl transition-colors"
         >
           ფილტრი
         </Button>

@@ -171,7 +171,7 @@ const ElegantHeroSlider = () => {
 
                 <Link
                   href="/list"
-                  className=" text-center  bg-[#bbb272] md:text-[20px] text-[18px] w-full md:w-[70%] border-radius:20px  px-4 sm:px-6 md:px-8 py-2 text-black  rounded-xl font-bold  transition-all duration-300 transform shadow-lg "
+                  className=" text-center  bg-[#869dab] md:text-[20px] text-[18px] w-full md:w-[70%] border-radius:20px  px-4 sm:px-6 md:px-8 py-2 text-black  rounded-xl font-bold  transition-all duration-300 transform shadow-lg "
                 >
                   {content.buttonText}
 

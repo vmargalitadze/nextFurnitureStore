@@ -342,7 +342,7 @@ function ProductList({
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
                       className={`px-6 py-3 rounded-xl font-bold md:text-[20px] border-radius:20px text-[18px] transition-all font-bold duration-200 ${activeTab === tab.id
-                        ? "bg-[#bbb272] text-white shadow-md"
+                        ? "bg-[#869dab] text-black shadow-md"
                         : "text-black "
                         }`}
                     >

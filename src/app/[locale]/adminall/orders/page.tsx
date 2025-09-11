@@ -192,7 +192,7 @@ export default async function OrdersPage({
               )}
             </div>
           <Link href="/adminall">
-            <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#bbb272] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="outline">
+            <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#869dab] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="outline">
              უკან დაბრუნება
             </Button>
           </Link>
@@ -204,15 +204,15 @@ export default async function OrdersPage({
              <CardContent className="p-6">
                <div className="flex items-center justify-between">
                  <div>
-                   <p className="text-[#bbb272] text-sm">
+                   <p className="text-[#bbb272] text-[15px]">
                      {searchParams?.bog === 'true' ? 'ბარათით გადახდილი შეკვეთები' : 'ყველა შეკვეთა'}
                    </p>
                    <p className="text-2xl font-bold">{orders.length}</p>
-                   <p className="text-[#bbb272] text-xs">
+                   <p className="text-[#bbb272] text-[15px]">
                      {searchParams?.bog === 'true' ? 'ბარათით გადახდილი შეკვეთები მხოლოდ' : 'ყველა შეკვეთა'}
                    </p>
                  </div>
-                 <div className="text-[#bbb272]">
+                 <div className="text-[#869dab]">
                    <FaShoppingCart className="text-2xl" />
                  </div>
                </div>
@@ -223,17 +223,17 @@ export default async function OrdersPage({
              <CardContent className="p-6">
                <div className="flex items-center justify-between">
                  <div>
-                   <p className="text-[#bbb272] text-sm">
+                   <p className="text-[#bbb272] text-[15px]">
                      {searchParams?.bog === 'true' ? 'ბარათით გადახდილი შეკვეთები' : 'ყველა შეკვეთა'}
                    </p>
                    <p className="text-2xl font-bold">
                      ₾{orders.reduce((sum, order) => sum + Number(order.totalPrice), 0).toFixed(2)}
                    </p>
-                   <p className="text-[#bbb272] text-xs">
+                   <p className="text-[#bbb272] text-[15px]">
                      {searchParams?.bog === 'true' ? 'ბარათით გადახდილი შეკვეთები მხოლოდ' : 'ყველა შეკვეთა'}
                    </p>
                  </div>
-                 <div className="text-[#bbb272]">
+                 <div className="text-[#869dab]">
                    <FaMoneyBillWave className="text-2xl" />
                  </div>
                </div>
@@ -244,11 +244,11 @@ export default async function OrdersPage({
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-[#bbb272] text-sm">მომხმარებლები</p>
+                  <p className="text-[#bbb272] text-[15px]">მომხმარებლები</p>
                   <p className="text-2xl font-bold">{uniqueCustomers}</p>
                   <p className="text-purple-200 text-xs">შეკვეთებით</p>
                 </div>
-                <div className="text-[#bbb272]">
+                <div className="text-[#869dab]">
                   <FaUsers className="text-2xl" />
                 </div>
               </div>
@@ -259,11 +259,11 @@ export default async function OrdersPage({
              <CardContent className="p-6">
                <div className="flex items-center justify-between">
                  <div>
-                   <p className="text-[#bbb272] text-sm">მიმდინარე შეკვეთები</p>
+                   <p className="text-[#bbb272] text-[15px]">მიმდინარე შეკვეთები</p>
                    <p className="text-2xl font-bold">{stats.pendingOrders}</p>
                    <p className="text-orange-200 text-xs">გადახდის მიმდინარე</p>
                  </div>
-                 <div className="text-[#bbb272]">
+                 <div className="text-[#869dab]">
                    <FaClock className="text-2xl" />
                  </div>
                </div>
@@ -274,13 +274,13 @@ export default async function OrdersPage({
              <CardContent className="p-6">
                <div className="flex items-center justify-between">
                  <div>
-                   <p className="text-[#bbb272] text-sm">ბარათით გადახდილი შეკვეთები</p>
+                   <p className="text-[#bbb272] text-[15px]">ბარათით გადახდილი შეკვეთები</p>
                    <p className="text-2xl font-bold">{bogOrders.length}</p>
                    <p className="text-purple-200 text-xs">
                      {bogPaidOrders.length} paid, {bogPendingOrders.length} pending
                    </p>
                  </div>
-                 <div className="text-purple-200">
+                 <div className="text-[#869dab]">
                    <FaCreditCard className="text-2xl" />
                  </div>
                </div>
@@ -346,7 +346,7 @@ export default async function OrdersPage({
                        className="pl-10 w-64"
                      />
                    </div>
-                   <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#bbb272] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="outline" size="sm">
+                   <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#869dab] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="outline" size="sm">
                      <FaFilter className="mr-2" />
                      ფილტრი
                    </Button>
@@ -381,7 +381,7 @@ export default async function OrdersPage({
                          <div className="flex items-center gap-2">
                            <p className="font-mono text-sm font-medium">#{order.id.slice(-8)}</p>
                            {order.paymentMethod?.includes('BOG') && (
-                             <Badge variant="outline" className="text-xs bg-[#bbb272] text-[#bbb272] border-[#bbb272]">
+                              <Badge variant="outline" className="text-xs bg-[#869dab] text-[#869dab] border-[#869dab]">
                               ბარათით გადახდა
                              </Badge>
                            )}

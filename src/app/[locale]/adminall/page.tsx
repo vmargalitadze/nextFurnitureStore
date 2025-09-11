@@ -159,7 +159,7 @@ export default async function AdminAllPage() {
           </div>
           <div className="flex gap-4">
             <Link href="/new">
-              <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#bbb272] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="default">
+              <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#869dab] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="default">
                 <FaPlus className="mr-2" />
                 პროდუქტის დამატება
               </Button>
@@ -358,12 +358,12 @@ export default async function AdminAllPage() {
                             <td className="p-4">
                               <div className="flex items-center space-x-2">
                                 <Link href={`/products/${product.id}`}>
-                                  <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#bbb272] rounded-lg hover:bg-[#3a7a5f] transition-colors" size="sm" variant="outline">
+                                  <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#869dab] rounded-lg hover:bg-[#3a7a5f] transition-colors" size="sm" variant="outline">
                                     <FaEye className="w-3 h-3" />
                                   </Button>
                                 </Link>
                                 <Link href={`/edit?id=${product.id}`}>
-                                  <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#bbb272] rounded-lg hover:bg-[#3a7a5f] transition-colors" size="sm" variant="outline">
+                                  <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#869dab] rounded-lg hover:bg-[#3a7a5f] transition-colors" size="sm" variant="outline">
                                     <FaEdit className="w-3 h-3" />
                                   </Button>
                                 </Link>
@@ -384,7 +384,7 @@ export default async function AdminAllPage() {
                     <h3 className="text-lg font-medium text-gray-900 mb-2">No products yet</h3>
                     <p className="text-gray-500 mb-6">Get started by adding your first product</p>
                     <Link href="/new">
-                      <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#bbb272] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="default">
+                      <Button className="w-full px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#869dab] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="default">
                         <FaPlus className="mr-2" />
                         პროდუქტის დამატება
                       </Button>
@@ -402,7 +402,7 @@ export default async function AdminAllPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <CardTitle className="flex items-center gap-2">
-                      <FaCreditCard className="text-[#bbb272]" />
+                      <FaCreditCard className="text-[#869dab]" />
                       ბარათით შეკვეთები
                     </CardTitle>
                     <CardDescription>
@@ -418,21 +418,21 @@ export default async function AdminAllPage() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                       <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
                         <div className="flex items-center gap-2">
-                          <FaCreditCard className="text-[#bbb272]" />
+                          <FaCreditCard className="text-[#869dab]" />
                           <span className="font-semibold text-blue-800">ყველა ბარათით გადახდილი შეკვეთა</span>
                         </div>
                         <p className="text-2xl font-bold text-blue-600">{bogOrders.length}</p>
                       </div>
                       <div className="bg-green-50 p-4 rounded-lg border border-green-200">
                         <div className="flex items-center gap-2">
-                          <FaCheckCircle className="text-[#bbb272]" />
+                          <FaCheckCircle className="text-[#869dab]" />
                           <span className="font-semibold text-green-800">გადახდილი</span>
                         </div>
                         <p className="text-2xl font-bold text-green-600">{bogOrders.filter(o => o.isPaid).length}</p>
                       </div>
                       <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
                         <div className="flex items-center gap-2">
-                          <FaClock className="text-[#bbb272]" />
+                          <FaClock className="text-[#869dab]" />
                           <span className="font-semibold text-orange-800">მუშავდება</span>
                         </div>
                         <p className="text-2xl font-bold text-orange-600">{bogOrders.filter(o => !o.isPaid).length}</p>
@@ -443,7 +443,7 @@ export default async function AdminAllPage() {
                         <div key={order.id} className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-200">
                           <div className="flex items-center gap-3">
                             <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                              <FaCreditCard className="text-[#bbb272] text-sm" />
+                              <FaCreditCard className="text-[#869dab] text-sm" />
                             </div>
                             <div>
                               <p className="font-medium text-blue-900">Order #{order.id.slice(-8)}</p>
@@ -461,7 +461,7 @@ export default async function AdminAllPage() {
                       {bogOrders.length > 3 && (
                         <div className="text-center py-2">
                           <Link href="/adminall/orders?bog=true">
-                            <Button variant="outline" size="sm" className="text-[#bbb272] border-[#bbb272] hover:bg-[#bbb272]">
+                            <Button variant="outline" size="sm" className="text-[#869dab] border-[#869dab] hover:bg-[#869dab]">
                              {bogOrders.length} ბარათით გადახდილი შეკვეთები
                             </Button>
                           </Link>
@@ -472,12 +472,12 @@ export default async function AdminAllPage() {
                 ) : (
                   <div className="text-center py-8">
                     <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                      <FaCreditCard className="text-[#bbb272] text-2xl" />
+                      <FaCreditCard className="text-[#869dab] text-2xl" />
                     </div>
                     <h3 className="text-lg font-medium text-blue-900 mb-2">ბარათით გადახდილი შეკვეთები გამოვიდეს მომხმარებლების შეკვეთების შემდეგ</h3>
                     <p className="text-[#bbb272] mb-4">ბარათით გადახდილი შეკვეთები გამოვიდეს მომხმარებლების შეკვეთების შემდეგ</p>
                     <Link href="/adminall/orders">
-                      <Button variant="outline" className="text-[#bbb272] border-[#bbb272] hover:bg-[#bbb272]">
+                      <Button variant="outline" className="text-[#869dab] border-[#869dab] hover:bg-[#869dab]">
                        ყველა შეკვეთა
                       </Button>
                     </Link>

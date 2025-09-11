@@ -57,7 +57,7 @@ export default function CredentialsForm({ callbackUrl }: { callbackUrl: string }
           type="button"
           onClick={handleGoogleSignIn}
           disabled={googleLoading}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2 text-lg font-semibold text-white bg-[#bbb272] rounded-lg hover:bg-[#357ae8] transition-colors"
+          className="w-full flex items-center justify-center gap-2 px-4 py-2 text-lg font-semibold text-white bg-[#869dab] rounded-lg hover:bg-[#357ae8] transition-colors"
         >
           {googleLoading ? (
             <Loader2 className="h-5 w-5 animate-spin" />
@@ -100,7 +100,7 @@ export default function CredentialsForm({ callbackUrl }: { callbackUrl: string }
             </div>
           </div>
           <div>
-            <Button disabled={loading} className="w-[50%] items-center flex justify-center mx-auto px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#bbb272] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="default">
+            <Button disabled={loading} className="w-[50%] items-center flex justify-center mx-auto px-4 mb-10 py-2 text-[20px] font-bold text-white bg-[#869dab] rounded-lg hover:bg-[#3a7a5f] transition-colors" variant="default">
               {loading ? t("signingIn") : t("signInButton")}
             </Button>
           </div>
